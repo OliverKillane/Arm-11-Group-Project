@@ -11,6 +11,7 @@ typedef uint32_t instruction;
 typedef uint16_t location;
 
 // Hold the state of the emulator
+//CPSR = NZCV
 typedef struct {
     word registers[16];
     char CPSR;
@@ -19,6 +20,11 @@ typedef struct {
 
 // declared the CPu that will be used.
 extern machineState CPU;
+
+typedef struct {
+    instruction *start;
+    instruction *end;
+} program;
 
 // Register enums for quick access
 typedef enum {
@@ -35,13 +41,13 @@ typedef enum {
     LT = 11,
     GT = 12,
     LE = 13,
-    al = 14
+    AL = 14
 } condition;
 
 // opcode mnemonics note: very messy, big dislike, not poguers
 typedef enum {
     AND = 0, EOR, SUB, RSB, ADD,
-    TST = 8,TEQ, CMP, 
+    TST = 8, TEQ, CMP,
     ORR = 12, MOV
 } opcode;
 
@@ -68,13 +74,13 @@ Return a range of bits.
 /* Return a pointer to the start of the program instructions:
     filename <- name of the file to load 
 */
-instruction *getProgram(char* filename);
+program getProgram(char* filename);
 
 
 /* Run the program starting at start
     start <- pointer to array of instructions
 */
-void runProgram(instruction *start);
+void runProgram(program prog);
 
 
 /* Check that an instruction's condition code can proceed
@@ -91,7 +97,7 @@ void processInstr(instruction instr);
 /* Execute a branch instruction
     instr <- instruction to process
 */
-void branchInstr(instruction inst);
+void branchInstr(instruction inst, instruction *currentInstr);
 
 
 /* Execute a Single Data Transfer instruction
@@ -99,18 +105,20 @@ void branchInstr(instruction inst);
 */
 void singleDataTransInstr(instruction inst);
 
+
 /* Execute a multiply instruction
     instr <- instruction to process
 */
 void multiplyInstr(instruction inst);
+
 
 /* Execute an arithmetic instruction based on opcode provided
     instr <- instruction to process
 */
 void processDataInstr(instruction inst);
 
-// MACHINE STATE ACCESS:
 
+// MACHINE STATE ACCESS:
 /* Get a pointer to a register.
     Reg <- either enum reg or 
 */
