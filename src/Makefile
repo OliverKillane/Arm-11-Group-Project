@@ -1,17 +1,22 @@
 CC      = gcc
-CFLAGS  = -Wall -g -D_POSIX_SOURCE -D_BSD_SOURCE -std=c99 -Werror -pedantic
+CFLAGS  = -Wall -g -I../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -Werror -pedantic
 
 .SUFFIXES: .c .o
 
 .PHONY: all clean
 
-all: assemble emulate
+all: stddata assemble emulate
 
-assemble: assemble.o
+assemble: assemble.o stddata.o
 
-emulate: emulate.o
+emulate: emulate.o stddata.o
+
+stddata:
+	cd ../lib/stddata && make library
+	cp ../lib/stddata/bin/stddata.o .
 
 clean:
 	rm -f $(wildcard *.o)
 	rm -f assemble
 	rm -f emulate
+	cd ../lib/stddata && make clean
