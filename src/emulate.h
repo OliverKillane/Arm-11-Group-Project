@@ -87,7 +87,8 @@ Return a range of bits.
 program getProgram(char* filename);
 
 
-/* Run the program starting at start
+/* Run the program starting at start, determine instruction condition and 
+format, and send to relevant function.
     start <- pointer to array of instructions
 */
 void runProgram(program prog);
@@ -97,12 +98,6 @@ void runProgram(program prog);
     cond <- condition code
 */
 bool checkCond(condition cond);
-
-
-/* Determine the type of instruction and run function accordingly
-    instr <- instruction to process
-*/
-void processInstr(instruction instr);
 
 
 /* Execute a branch instruction

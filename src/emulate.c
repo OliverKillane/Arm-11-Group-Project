@@ -43,16 +43,50 @@ program getProgram(char* filename) {
 }
 
 void runProgram(program prog) {
-  instruction *currentInstr = prog.start;
+  instruction *currentPointer = prog.start;
+  instruction currentInstruction;
 
-  while (*currentInstr != 0) {
+  do {
+    if (prog.end < currentPointer) {
+      perror("Program does not terminate, has surpassed instructions without halt");
+      exit(NON_TERMINATION);
+    }
 
+    currentInstruction = *currentPointer;
 
+    currentPointer++;
 
-  }
+    if(GETBITS(currentInstruction, 24, 4) == 0xA) {
+      
+      //Branch
+      branchInstr(currentInstruction, &currentPointer);
 
+    } else if(GETBITS(currentInstruction, 26, 2) && !GETBITS(currentInstruction, 21, 2)) {
+      
+      //Single Data Transfer
+      singleDataTransInstr(currentInstruction);
 
+    } else if(!GETBITS(currentInstruction, 22, 6) && GETBITS(currentInstruction, 4, 4) == 0x9) {
+      
+      // Multiply
+      multiplyInstr(currentInstruction);
 
+    } else if(!GETBITS(currentInstruction, 26, 2)) {
+      
+      // Data Processing
+      processDataInstr(currentInstruction);
+
+    } else {
+      
+      // Invalid instruction
+      perror("Invalid instruction no: %x", currentInstruction);
+      exit(INVALID_INSTR);
+    }
+
+    // set PC to 2 instructions ahead
+    *getReg(PC) = prog.start - currentPointer + 2;
+
+  } while(currentInstruction);
 }
 
 bool checkCond(condition cond) {
@@ -68,39 +102,7 @@ bool checkCond(condition cond) {
   }
 }
 
-//decodes instruction and calls specific function for execution
-void processInstr(instruction instr){
-
-    
-    //Branch
-    if(GETBITS(instr, 24, 4) == 0xA){
-        branchInstr(instr,getReg(PC));
-    }
-
-    //Single Data Transfer
-    else if(GETBITS(instr, 26, 2) && !GETBITS(instr, 21, 2)){
-        singleDataTransInstr(instr);
-    }
-
-    //Multiply
-    else if(!GETBITS(instr, 22, 6) && GETBITS(instr, 4, 4) == 0x9){
-        multiplyInstr(instr);
-    }
-
-    //Data Processing
-    else if(!GETBITS(instr, 26, 2)){
-        processDataInstr(instr);
-    }
-
-    //Invalid instruction
-    else{
-        fprintf(stderr, "Invalid instruction");
-    }
-}
-
-void branchInstr(instruction inst, instruction **currentInstr) {
-
-}
+void branchInstr(instruction inst, instruction **currentInstr) {}
 
 void singleDataTransInstr(instruction inst) {}
 
