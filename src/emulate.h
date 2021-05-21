@@ -59,6 +59,15 @@ typedef enum {
     ORR = 12, MOV
 } opcode;
 
+typedef enum {
+    INVALID_INSTR = 1,
+    INVALID_JUMP,
+    NON_TERMINATION,
+    INVALID_FILE,
+    CORRUPT_FILE,
+    INVALID_REG_ACCESS
+} errors;
+
 // UTILITIES:
 
 /* GETBITS
