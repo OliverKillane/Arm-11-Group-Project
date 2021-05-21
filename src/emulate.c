@@ -123,6 +123,5 @@ inline word getmem(location loc) {
   return CPU.memory[loc];
 }
 
-void printState() {
-}
+void printState() {}
 
