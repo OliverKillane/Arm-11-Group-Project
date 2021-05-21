@@ -1,10 +1,12 @@
 #ifndef ASSEMBLE_FUNCTIONGEN_H_
 #define ASSEMBLE_FUNCTIONGEN_H_
 
+#include <stddata.h>
+
 /*
  * Initializes the assembly function processing
  */
-int init_functiongen();
+void init_functiongen();
 
 /*
  * Processes a single command from assembly
@@ -14,6 +16,6 @@ int init_functiongen();
  * @param output Vector<int> representing the final executable
  * @param offset int representing the word offset of the function to process
  */
-int functiongen(Map symbols, Vector tokens, Vector output, int offset);
+void functiongen(Map symbols, Vector tokens, Vector output, int offset);
 
 #endif /* ASSEMBLE_FUNCTIONGEN_H_ */
