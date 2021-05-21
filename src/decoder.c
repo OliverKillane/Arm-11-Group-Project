@@ -2,11 +2,32 @@
 #include <stdio.h>
 #include "emulate.h"
 
-
+//decodes instruction and calls specific function for execution
 void processInstr(instruction instr){
 
-    char typeBits = GETBITS(instr, 26, 2);
-    if(typeBits == 10){
+    
+    //Branch
+    if(GETBITS(instr, 24, 4) == 0b1010){
         branchInstr(instr,getReg(PC));
+    }
+
+    //Single Data Transfer
+    else if(GETBITS(instr, 26, 2) && !GETBITS(instr, 21, 2)){
+        singleDataTransInstr(instr);
+    }
+
+    //Multiply
+    else if(!GETBITS(instr, 22, 6) && GETBITS(instr, 4, 4) == 0b1001){
+        multiplyInstr(instr);
+    }
+
+    //Data Processing
+    else if(!GETBITS(instr, 26, 2)){
+        processDataInstr(instr);
+    }
+
+    //Invalid instruction
+    else{
+        fprintf(stderr, "Invalid instruction");
     }
 }
