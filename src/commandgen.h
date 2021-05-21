@@ -6,7 +6,7 @@
 /*
  * Initializes the assembly function processing
  */
-void init_functiongen();
+void InitFunctionGen();
 
 /*
  * Processes a single command from assembly
@@ -16,6 +16,6 @@ void init_functiongen();
  * @param output Vector<int> representing the final executable
  * @param offset int representing the word offset of the function to process
  */
-void functiongen(Map symbols, Vector tokens, Vector output, int offset);
+void FunctionGen(Map symbols, Vector tokens, Vector output, int offset);
 
 #endif /* ASSEMBLE_FUNCTIONGEN_H_ */
