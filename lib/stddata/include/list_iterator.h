@@ -1,3 +1,6 @@
+#ifndef STDDATA_LIST_ITERATOR_H_
+#define STDDATA_LIST_ITERATOR_H_
+
 #include <list.h>
 #include <stdbool.h>
 
@@ -63,3 +66,5 @@ void ListIteratorInsertBefore(ListIterator iter, void* newItem);
  * The iterator must not be pointing to the end of the list
  */
 void ListIteratorRemove(ListIterator *iter);
+
+#endif /* STDDATA_LIST_ITERATOR_H_ */

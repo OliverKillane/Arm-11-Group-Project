@@ -14,7 +14,7 @@ unsigned long long StringHash(void* string_ptr) {
 }
 
 bool StringEq(void* str_a, void* str_b) {
-    return strcmp(str_a, str_b) == 0;
+    return strcmp((char*)str_a, (char*)str_b) == 0;
 }
 
 unsigned long long IntPtrHash(void* int_ptr) {
