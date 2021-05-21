@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "assert.h": "c",
+        "hash_map": "cpp"
+    }
+}
