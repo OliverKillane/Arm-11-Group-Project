@@ -18,4 +18,9 @@ void InitFunctionGen();
  */
 void FunctionGen(Map symbols, Vector tokens, Vector output, int offset);
 
+/*
+ * Deallocates all helper variables
+ */
+void FinishFunctionGen();
+
 #endif /* ASSEMBLE_FUNCTIONGEN_H_ */
