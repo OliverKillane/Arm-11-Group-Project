@@ -16,7 +16,7 @@ void InitFunctionGen();
  * @param output Vector<int> representing the final executable
  * @param offset int representing the word offset of the function to process
  */
-void FunctionGen(Map symbols, Vector tokens, Vector output, int offset);
+void FunctionGen(Map symbols, Vector tokens, Vector output, int offset, int instructions_num);
 
 /*
  * Deallocates all helper variables
