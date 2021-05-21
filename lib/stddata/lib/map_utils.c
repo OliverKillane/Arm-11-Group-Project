@@ -1,5 +1,6 @@
 #include <map_utils.h>
 #include <stdbool.h>
+#include <string.h>
 
 const long long BASE = 257;
 unsigned long long StringHash(void* string_ptr) {
