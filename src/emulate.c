@@ -2,9 +2,8 @@
 #include <stdio.h>
 #include "emulate.h"
 
-int main(int argc, char **argv) {
-  return EXIT_SUCCESS;
-}
+
+machineState CPU;
 
 // edit needs to be tested, make more robust
 program getProgram(char* filename) {
@@ -41,4 +40,17 @@ program getProgram(char* filename) {
 
   //return the program
   return prog;
+}
+
+bool checkCond(condition cond) {
+  switch(cond) {
+    case EQ: return CPU.CPSR.Z;
+    case NE: return !CPU.CPSR.Z;
+    case GE: return CPU.CPSR.N == CPU.CPSR.V;
+    case LT: return CPU.CPSR.N != CPU.CPSR.V;
+    case GT: return !CPU.CPSR.Z && (CPU.CPSR.N == CPU.CPSR.V);
+    case LE: return CPU.CPSR.Z || (CPU.CPSR.N != CPU.CPSR.V);
+    case AL: return true;
+    default: return false;
+  }
 }

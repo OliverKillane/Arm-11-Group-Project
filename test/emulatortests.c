@@ -1,17 +1,14 @@
 
 #include "testutils.c"
 #include "..\src\emulate.h"
+#include "..\src\emulate.c"
 #include <stdbool.h>
 #include <stdlib.h>
 
-// test condition checker
-void check(bool condition, char *testname) {
-    printf("\nT %s:   %c", testname, condition?'P':'F');
-}
-
+#define SETCPSR(n, z, c, v) CPU.CPSR.N = n;CPU.CPSR.Z = z;CPU.CPSR.C = c;CPU.CPSR.V = v;
 
 int main(){
-
+    
 
     starttests("Emulator Tests");
 
@@ -45,118 +42,120 @@ int main(){
     // get result checked
     //CPSR = NZCV
 
-    0000 EQ Z = 1
-    CPU.CPSR = 0b1011;
+    cpsr tst = {.N = 1, .Z = 0, .C = 1, .V = 1};
+
+    //0000 EQ Z = 1
+    CPU.CPSR = tst;
     booltest(checkCond(EQ), false, "EQ test");
 
-    CPU.CPSR = 0b1111;
+    SETCPSR(1, 1, 1, 1);
     booltest(checkCond(EQ), true, "EQ test");
 
-    CPU.CPSR = 0b0000;
+    SETCPSR(0, 0, 0, 0);
     booltest(checkCond(EQ), false, "EQ test");
 
     // 0001 NE Z = 0;
-    CPU.CPSR = 0b1011;
+    SETCPSR(1, 0, 1, 1);
     booltest(checkCond(NE), true, "NE test");
 
-    CPU.CPSR = 0b1111;
+    SETCPSR(1, 1, 1, 1);
     booltest(checkCond(NE), false, "NE test");
 
-    CPU.CPSR = 0b0000;
+    SETCPSR(0, 0, 0, 0);
     booltest(checkCond(NE), true, "NE test");
 
     // 1010 GE N = V
-    CPU.CPSR = 0b1011;
+    SETCPSR(1, 0, 1, 1);
     booltest(checkCond(GE), true, "GE test");
 
-    CPU.CPSR = 0b1111;
+    SETCPSR(1, 1, 1, 1);
     booltest(checkCond(GE), true, "GE test");
 
-    CPU.CPSR = 0b0000;
+    SETCPSR(0, 0, 0, 0);
     booltest(checkCond(GE), true, "GE test");
 
-    CPU.CPSR = 0b0011;
+    SETCPSR(0, 0, 1, 1);
     booltest(checkCond(GE), false, "GE test");
     
-    CPU.CPSR = 0b1110;
+    SETCPSR(1, 1, 1, 0);
     booltest(checkCond(GE), false, "GE test");
 
-    CPU.CPSR = 0b0001;
+    SETCPSR(0, 0, 0, 1);
     booltest(checkCond(GE), false, "GE test");
 
     // 1011 LT N != V
-    CPU.CPSR = 0b1011;
-    testbool(checkCond(LT), false, "LT test");
+    SETCPSR(1, 0, 1, 1);
+    booltest(checkCond(LT), false, "LT test");
     
-    CPU.CPSR = 0b1111;
-    testbool(checkCond(LT), false, "LT test");
+    SETCPSR(1, 1, 1, 1);
+    booltest(checkCond(LT), false, "LT test");
 
-    CPU.CPSR = 0b0000;
-    testbool(checkCond(LT), false, "LT test");
+    CPU.CPSR = ((cpsr) {.N = 0, .Z = 0, .C = 0, .V = 0});
+    booltest(checkCond(LT), false, "LT test");
     
-    CPU.CPSR = 0b0011;
-    testbool(checkCond(LT), true, "LT test");
+    SETCPSR(0, 0, 1, 1);
+    booltest(checkCond(LT), true, "LT test");
     
-    CPU.CPSR = 0b1110;
-    testbool(checkCond(LT), true, "LT test");
+    SETCPSR(1, 1, 1, 0);
+    booltest(checkCond(LT), true, "LT test");
 
-    CPU.CPSR = 0b0001;
-    testbool(checkCond(LT), true, "LT test");
+    SETCPSR(0, 0, 0, 1);
+    booltest(checkCond(LT), true, "LT test");
 
     // 1100 GTZ = 0 && (N = V)
     //NZCV
-    CPU.CPSR = 0b0000;
-    testbool(checkCond(GT), true, "GT test");
+    SETCPSR(0, 0, 0, 0);
+    booltest(checkCond(GT), true, "GT test");
 
-    CPU.CPSR = 0b0100;
-    testbool(checkCond(GT), false, "GT test");
+    SETCPSR(0, 1, 0, 0);
+    booltest(checkCond(GT), false, "GT test");
 
-    CPU.CPSR = 0b0001;
-    testbool(checkCond(GT), false, "GT test");
+    SETCPSR(0, 0, 0, 1);
+    booltest(checkCond(GT), false, "GT test");
 
-    CPU.CPSR = 0b0110;
-    testbool(checkCond(GT), false, "GT test");
+    SETCPSR(0, 1, 1, 0);
+    booltest(checkCond(GT), false, "GT test");
 
-    CPU.CPSR = 0b1001;
-    testbool(checkCond(GT), true, "GT test");
+    SETCPSR(1, 0, 0, 1);
+    booltest(checkCond(GT), true, "GT test");
     
     // 1101 LE Z || (N != V) NZCV
-    CPU.CPSR = 0b1011;
-    testbool(checkCond(LE), false, "LE test");
+    SETCPSR(1, 0, 1, 1);
+    booltest(checkCond(LE), false, "LE test");
 
-    CPU.CPSR = 0b1111;
-    testbool(checkCond(LE), true, "LE test");
+    SETCPSR(1, 1, 1, 1);
+    booltest(checkCond(LE), true, "LE test");
 
-    CPU.CPSR = 0b0000;
-    testbool(checkCond(LE), false, "LE test");
+    SETCPSR(0, 0, 0, 0);
+    booltest(checkCond(LE), false, "LE test");
 
-    CPU.CPSR = 0b0011;
-    testbool(checkCond(LE), true, "LE test");
+    SETCPSR(0, 0, 1, 1);
+    booltest(checkCond(LE), true, "LE test");
 
-    CPU.CPSR = 0b1110;
-    testbool(checkCond(LE), true, "LE test");
+    SETCPSR(1, 1, 1, 0);
+    booltest(checkCond(LE), true, "LE test");
     
-    CPU.CPSR = 0b0001;
-    testbool(checkCond(LE), false, "LE test");
+    SETCPSR(0, 0, 0, 1);
+    booltest(checkCond(LE), true, "LE test");
 
     // 1110 AL (ignored)
-    CPU.CPSR = 0b1011;
-    testbool(checkCond(AL), true, "AL test");
+    SETCPSR(1, 0, 1, 1);
+    booltest(checkCond(AL), true, "AL test");
     
-    CPU.CPSR = 0b1111;
-    testbool(checkCond(AL), true, "AL test");
+    SETCPSR(1, 1, 1, 1);
+    booltest(checkCond(AL), true, "AL test");
 
-    CPU.CPSR = 0b0000;
-    testbool(checkCond(AL), true, "AL test");
+    SETCPSR(0, 0, 0, 0);
+    booltest(checkCond(AL), true, "AL test");
 
-    CPU.CPSR = 0b0011;
-    testbool(checkCond(AL), true, "AL test");
+    SETCPSR(0, 0, 1, 1);
+    booltest(checkCond(AL), true, "AL test");
 
-    CPU.CPSR = 0b1110;
-    testbool(checkCond(AL), true, "AL test");
+    SETCPSR(1, 1, 1, 0);
+    booltest(checkCond(AL), true, "AL test");
 
-    CPU.CPSR = 0b0001;
-    testbool(checkCond(AL), true, "AL test");
+    SETCPSR(0, 0, 0, 1);
+    booltest(checkCond(AL), true, "AL test");
 
     testsection("processInstr Tests");
 

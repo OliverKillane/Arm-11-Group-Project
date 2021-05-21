@@ -12,13 +12,21 @@ typedef uint16_t location;
 
 // Hold the state of the emulator
 //CPSR = NZCV
+
+typedef struct {
+    unsigned int N : 1;
+    unsigned int Z : 1;
+    unsigned int C : 1;
+    unsigned int V : 1;
+} cpsr;
+
 typedef struct {
     word registers[16];
-    char CPSR;
+    cpsr CPSR;
     word *memory; 
 } machineState;
 
-// declared the CPu that will be used.
+// declared the CPU that will be used.
 extern machineState CPU;
 
 typedef struct {
@@ -50,14 +58,6 @@ typedef enum {
     TST = 8, TEQ, CMP,
     ORR = 12, MOV
 } opcode;
-
-// CPSR code mnemonics
-typedef enum {
-    V = 1,
-    C = 2,
-    Z = 4,
-    N = 8
-} CPSRcode;
 
 // UTILITIES:
 
