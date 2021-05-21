@@ -126,6 +126,11 @@ void* MapGet(Map map, void* key) {
     return map->data[index].value;
 }
 
+bool MapQuery(Map map, void* key) {
+    int index = MapFindIndex(map, key);
+    return map->data[index].key != NULL && map->data[index].key != MAP_SENTINEL;
+}
+
 void MapSet(Map map, void* key, void* value) {
     assert(key != MAP_SENTINEL && key != NULL);
     MapUnsafeSet(map, key, value);
