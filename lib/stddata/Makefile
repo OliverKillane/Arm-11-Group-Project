@@ -43,6 +43,7 @@ build/deque.o: lib/deque.c
 build/set_iterator.o: lib/set_iterator.c
 build/map.o: lib/map.c
 build/map_iterator.o: lib/map_iterator.c
+build/map_utils.o: lib/map_utils.c
 
 clean:
 	rm -rf build/*
@@ -54,7 +55,7 @@ test: build/tests/tests
 
 library: build/vector.o build/stack.o build/vector_iterator.o build/list_node_utils.o\
 		 build/list.o build/list_iterator.o build/set.o build/queue.o build/deque.o\
-		 build/set_iterator.o build/map.o build/map_iterator.o
+		 build/set_iterator.o build/map.o build/map_iterator.o build/map_utils.o
 	ld -relocatable $^ -o bin/stddata.o
 
 .PHONY: clean default library
