@@ -7,7 +7,7 @@ void processInstr(instruction instr){
 
     
     //Branch
-    if(GETBITS(instr, 24, 4) == 0b1010){
+    if(GETBITS(instr, 24, 4) == 0xA){
         branchInstr(instr,getReg(PC));
     }
 
@@ -17,7 +17,7 @@ void processInstr(instruction instr){
     }
 
     //Multiply
-    else if(!GETBITS(instr, 22, 6) && GETBITS(instr, 4, 4) == 0b1001){
+    else if(!GETBITS(instr, 22, 6) && GETBITS(instr, 4, 4) == 0x9){
         multiplyInstr(instr);
     }
 
