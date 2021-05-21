@@ -60,13 +60,14 @@ typedef enum {
 } CPSRcode;
 
 // UTILITIES:
+
 /* GETBITS
 Return a range of bits.
     data    <- Source string of bits
     start   <- inclusive start
     n       <- number of bits
 */
-#define GETBITS(data, start, n) ((data >> start) & (1 << n - 1))
+#define GETBITS(data, start, n) ((data >> start) & ((1 << n) - 1))
 
 
 // INSTRUCTION PROCESSING:
@@ -87,6 +88,7 @@ void runProgram(program prog);
     cond <- condition code
 */
 bool checkCond(condition cond);
+
 
 /* Determine the type of instruction and run function accordingly
     instr <- instruction to process
