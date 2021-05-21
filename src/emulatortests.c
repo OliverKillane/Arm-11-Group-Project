@@ -1,14 +1,12 @@
-
 #include "testutils.c"
-#include "..\src\emulate.h"
-#include "..\src\emulate.c"
+#include "emulate.h"
+#include "emulate.c"
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define SETCPSR(n, z, c, v) CPU.CPSR.N = n;CPU.CPSR.Z = z;CPU.CPSR.C = c;CPU.CPSR.V = v;
+// note: am aware that binary constants are a GCC only thing - only using for tests
 
 int main(){
-    
 
     starttests("Emulator Tests");
 

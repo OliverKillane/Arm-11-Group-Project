@@ -42,6 +42,8 @@ program getProgram(char* filename) {
   return prog;
 }
 
+void runProgram(program prog) {}
+
 bool checkCond(condition cond) {
   switch(cond) {
     case EQ: return CPU.CPSR.Z;
@@ -54,3 +56,22 @@ bool checkCond(condition cond) {
     default: return false;
   }
 }
+
+void processInstr(instruction instr) {}
+
+void branchInstr(instruction inst, instruction *currentInstr) {}
+
+void singleDataTransInstr(instruction inst) {}
+
+void multiplyInstr(instruction inst) {}
+
+void processDataInstr(instruction inst) {}
+
+inline word *getReg(reg Reg) {}
+
+inline void storemem(location loc, word data) {}
+
+inline word getmem(location loc) {}
+
+void printState() {}
+

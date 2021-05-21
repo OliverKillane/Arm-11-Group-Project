@@ -68,7 +68,7 @@ Return a range of bits.
     n       <- number of bits
 */
 #define GETBITS(data, start, n) ((data >> start) & ((1 << n) - 1))
-
+#define SETCPSR(n, z, c, v) CPU.CPSR.N = n;CPU.CPSR.Z = z;CPU.CPSR.C = c;CPU.CPSR.V = v;
 
 // INSTRUCTION PROCESSING:
 
