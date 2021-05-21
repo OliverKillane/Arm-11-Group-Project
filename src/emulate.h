@@ -99,7 +99,7 @@ void processInstr(instruction instr);
 /* Execute a branch instruction
     instr <- instruction to process
 */
-void branchInstr(instruction inst, instruction *currentInstr);
+void branchInstr(instruction inst, instruction **currentInstr);
 
 
 /* Execute a Single Data Transfer instruction

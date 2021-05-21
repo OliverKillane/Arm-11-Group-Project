@@ -42,7 +42,18 @@ program getProgram(char* filename) {
   return prog;
 }
 
-void runProgram(program prog) {}
+void runProgram(program prog) {
+  instruction *currentInstr = prog.start;
+
+  while (*currentInstr != 0) {
+
+
+
+  }
+
+
+
+}
 
 bool checkCond(condition cond) {
   switch(cond) {
@@ -59,19 +70,29 @@ bool checkCond(condition cond) {
 
 void processInstr(instruction instr) {}
 
-void branchInstr(instruction inst, instruction *currentInstr) {}
+void branchInstr(instruction inst, instruction **currentInstr) {
+
+}
 
 void singleDataTransInstr(instruction inst) {}
 
 void multiplyInstr(instruction inst) {}
 
-void processDataInstr(instruction inst) {}
+void processDataInstr(instruction inst) {
+}
 
-inline word *getReg(reg Reg) {}
+inline word *getReg(reg Reg) {
+  return &CPU.registers[Reg];
+}
 
-inline void storemem(location loc, word data) {}
+inline void storemem(location loc, word data) {
+  CPU.memory[loc] = data;
+}
 
-inline word getmem(location loc) {}
+inline word getmem(location loc) {
+  return CPU.memory[loc];
+}
 
-void printState() {}
+void printState() {
+}
 
