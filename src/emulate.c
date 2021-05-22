@@ -109,6 +109,87 @@ void singleDataTransInstr(instruction inst) {}
 void multiplyInstr(instruction inst) {}
 
 void processDataInstr(instruction inst) {
+  
+    bool I = GETBITS(inst, 25, 1);
+    opcode OpCode = GETBITS(inst, 21,4);
+    bool S = GETBITS(inst, 20, 1);
+    word *Rn = getReg((reg) GETBITS(inst, 16, 4));
+    word *Rd = getReg((reg) GETBITS(inst, 12, 4));
+    word operand2 = GETBITS(inst, 0, 12);
+    word ALUOut;
+    bool shiftCarryOut = 0;
+
+    
+    //Operand2 is an immediate value
+    if(I){
+      char rotate = GETBITS(operand2, 8, 4) * 2;
+      word imm = GETBITS(operand2, 0, 8);
+      imm = imm >> rotate + GETBITS(imm, 0, rotate) << (32 - rotate); 
+    }
+    //Operand2 is a register
+    else{
+      word shift = GETBITS(operand2, 4, 8);
+      word *Rm = getReg((reg) GETBITS(operand2, 0, 4));
+
+      word RmContents = *Rm;
+      char shiftType = GETBITS(shift, 5, 2);
+      word shiftAmmount;
+
+      if(!GETBITS(shift,0,1)){
+          shiftAmmount = GETBITS(shift, 7, 5);
+      }
+      else{
+        shiftAmmount = GETBITS(shift, 7, 1);
+        word *Rs = getReg((reg) GETBITS(shift, 8, 4));
+      }
+
+      switch(shiftType){
+        case 0: shiftCarryOut = GETBITS(RmContents, 31, 0);
+                RmContents << shiftAmmount;
+        case 1: shiftCarryOut = GETBITS(RmContents, shiftAmmount-1, 0);
+                RmContents >> shiftAmmount;
+        case 2: shiftCarryOut = GETBITS(RmContents, shiftAmmount-1, 0);
+                RmContents >> shiftAmmount + GETBITS(RmContents, 31, 0)? INT32_MAX << (32 - shiftAmmount):0;
+        case 3: shiftCarryOut = GETBITS(RmContents, shiftAmmount-1, 0);
+                RmContents >> shiftAmmount + GETBITS(RmContents, 0, shiftAmmount) << (32 - shiftAmmount);
+      }
+
+    }
+
+    switch(OpCode){
+      case AND: ALUOut = *Rn & operand2;
+                *Rd = ALUOut;
+      case EOR: ALUOut = *Rn ^ operand2;
+                *Rd = ALUOut;
+      case SUB: ALUOut = *Rn - operand2;
+                *Rd = ALUOut;
+      case RSB: ALUOut = operand2 - *Rn; 
+                *Rd = ALUOut;
+      case ADD: ALUOut = *Rn + operand2;
+                *Rd = ALUOut;
+      case TST: ALUOut = *Rn & operand2;  
+      case TEQ: ALUOut = *Rn ^ operand2;
+      case CMP: ALUOut = *Rn - operand2;
+      case ORR: ALUOut = *Rn | operand2;
+                *Rd = ALUOut;
+      case MOV: *Rd = operand2;
+    }
+
+    if(S){
+      if(OpCode == AND || OpCode == EOR || OpCode == ORR || OpCode == TEQ || OpCode == TST || OpCode == MOV){
+        CPU.CPSR.C = shiftCarryOut;
+      }
+      else if(OpCode == ADD || OpCode == RSB){
+        CPU.CPSR.C = GETBITS(ALUOut, 31, 0);
+      }
+      else if(OpCode == SUB || OpCode == CMP){
+        CPU.CPSR.C = !GETBITS(ALUOut, 31, 0);
+      }
+      CPU.CPSR.Z = ALUOut == 0;
+      CPU.CPSR.N = GETBITS(ALUOut, 31, 1); 
+    }
+
+
 }
 
 inline word *getReg(reg Reg) {
