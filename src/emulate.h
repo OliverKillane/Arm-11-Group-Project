@@ -9,6 +9,10 @@
 typedef uint32_t word;
 typedef uint32_t instruction;
 typedef uint16_t location;
+typedef uint8_t byte;
+
+// maximum word (all 1s)
+#define MAXINT32 0xFFFFFFFF
 
 // Hold the state of the emulator
 //CPSR = NZCV
@@ -77,6 +81,7 @@ Return a range of bits.
     n       <- number of bits
 */
 #define GETBITS(data, start, n) ((data >> start) & ((1 << n) - 1))
+#define GETBIT(data, n) ((data >> n) % 2 != 0)
 #define SETCPSR(n, z, c, v) CPU.CPSR.N = n;CPU.CPSR.Z = z;CPU.CPSR.C = c;CPU.CPSR.V = v;
 
 // INSTRUCTION PROCESSING:
@@ -111,6 +116,11 @@ void branchInstr(instruction inst, instruction **currentInstr);
 */
 void singleDataTransInstr(instruction inst);
 
+/* Given a shift pattern (bits 11-0 of data processing operand when Operand 2 is a register),
+    Compute the shift operand value.
+    shift <- Instruction bits 11-0 (inclusive)
+*/
+word shiftOperation(word shift);
 
 /* Execute a multiply instruction
     instr <- instruction to process
@@ -148,3 +158,5 @@ inline word getmem(location loc);
 void printState();
 
 #endif
+
+//TODO: instructions must be in machine memory
