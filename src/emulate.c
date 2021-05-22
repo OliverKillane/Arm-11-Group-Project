@@ -211,16 +211,19 @@ shiftRes shiftOperation(word shift) {
       };
     case 1: return (shiftRes) {
       .result = RmVal >> shiftby, 
-      .carryout = GETBITS(RmVal, 0, shiftby - 1)
+      .carryout = GETBITS(RmVal, 0, shiftby)
       };
     case 2: return (shiftRes) {
-      .result = (RmVal >> shiftby) + GETBIT(RmVal, 31)?MAXINT32 << (32 - shiftby):0,
-      .carryout = GETBITS(RmVal, 0, shiftby - 1)
+      .result = (RmVal >> shiftby) | (GETBIT(RmVal, 31)?(MAXINT32 << (32 - shiftby)):0),
+      .carryout = GETBITS(RmVal, 0, shiftby)
       };
     case 3: return (shiftRes) {
-      .result = (RmVal >> shiftby) + GETBITS(RmVal, 0, shiftby) << (MAXINT32 - shiftby),
-      .carryout = GETBITS(RmVal, 0, shiftby - 1)
+      .result = (RmVal >> shiftby) | (GETBITS(RmVal, 0, shiftby) << (MAXINT32 - shiftby)),
+      .carryout = GETBITS(RmVal, 0, shiftby)
       };
+    default:
+      fprintf(stderr, "invalid shift : %x", shift);
+      exit(INVALID_INSTR);
   }
 }
 
@@ -322,4 +325,3 @@ void processDataInstr(instruction instr) {
 }
 
 void printState() {}
-
