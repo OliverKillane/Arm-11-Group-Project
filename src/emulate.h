@@ -33,10 +33,19 @@ typedef struct {
 // declared the CPU that will be used.
 extern machineState CPU;
 
+// program struct representation (program instructions stored separately from
+// 64Kb memory, like an instruction cache)
 typedef struct {
     instruction *start;
     instruction *end;
 } program;
+
+// struct to hold shift function results.
+typedef struct {
+    word result;
+    word carryout;
+} shiftRes;
+
 
 // Register enums for quick access
 typedef enum {
@@ -74,19 +83,23 @@ typedef enum {
 
 // UTILITIES:
 
-/* GETBITS
-Return a range of bits.
+/* case match: {ops}; break;
+    For making switch statements less tedious
+*/
+#define CASEB(match, ops) case match: ops; break;
+
+/* Return a range of bits.
     data    <- Source string of bits
     start   <- inclusive start
     n       <- number of bits
 */
-#define GETBITS(data, start, n) ((data >> start) & ((1 << n) - 1))
+#define GETBITS(data, start, n) (((data) >> (start)) & ((1 << (n)) - 1))
 
 /* get bit at location in a word:
     data    <- the word you are inspecting
     n       <- bit number (0-31) 
 */
-#define GETBIT(data, n) ((data >> n) % 2 != 0)
+#define GETBIT(data, n) (((data) >> (n)) % 2 != 0)
 
 /* Set the CPSR values as once
     n   <- (N)egative bit
@@ -102,12 +115,12 @@ Return a range of bits.
 /* Get a pointer to a register.
     Reg <- either enum reg or 
 */
-#define GETREG(reg) &CPU.registers[Reg]
+#define GETREG(reg) (CPU.registers + reg)
 
 /* Get data stored at a given location
     loc <- location in 64KB memory
 */
-#define MEMLOC(loc)  CPU.memory[loc]
+#define MEMLOC(loc) CPU.memory[loc]
 
 // INSTRUCTION PROCESSING:
 
@@ -145,7 +158,7 @@ void singleDataTransInstr(instruction inst);
     Compute the shift operand value.
     shift <- Instruction bits 11-0 (inclusive)
 */
-word shiftOperation(word shift);
+shiftRes shiftOperation(word shift);
 
 /* Execute a multiply instruction
     instr <- instruction to process
@@ -157,24 +170,6 @@ void multiplyInstr(instruction inst);
     instr <- instruction to process
 */
 void processDataInstr(instruction inst);
-
-
-// MACHINE STATE ACCESS:
-/* Get a pointer to a register.
-    Reg <- either enum reg or 
-*/
-word *getReg(reg Reg);
-
-/* Store a given word in a given memory location
-    loc     <- location in 64KB memory to
-    data    <- Data top write
-*/
-void storemem(location loc, word data);
-
-/* Get data stored at a given location
-    loc <- location in 64KB memory
-*/
-word getmem(location loc);
 
 // TERMINAL OUTPUT:
 
