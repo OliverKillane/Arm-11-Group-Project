@@ -9,7 +9,7 @@ extern Map func_proc; // Map<char*, void(*func)(FUNC_PROC_ARGS)
 extern Map func_cond_codes; // Map<char*, char>
 extern Map data_proc_opcodes; // Map<char*, char>
 extern Set comp_funcs; // Set<char*>
-extern Map shift_codes;
+extern Map shift_codes; // Map<char*, char>
 #define MAX_FUNCTION_LENGTH 3
 
 /*
