@@ -79,7 +79,7 @@ void runProgram(program prog) {
     } else {
       
       // Invalid instruction
-      perror("Invalid instruction no: %x", currentInstruction);
+      fprintf(stderr,"Invalid instruction no: %x", currentInstruction);
       exit(INVALID_INSTR);
     }
 
@@ -121,6 +121,7 @@ void processDataInstr(instruction inst) {
     word operand2Value;
     word ALUOut;
     bool shiftCarryOut = 0;
+    bool ALUcarryOut = 0;
 
     
     //Operand2 is an immediate value
@@ -146,23 +147,30 @@ void processDataInstr(instruction inst) {
 
       //If last bit of shift is 1 then shift ammount is stored in a register Rs
       else{
-        shiftAmmount = GETBITS(shift, 7, 1);
-        word *Rs = getReg((reg) GETBITS(shift, 8, 4));
+        if(GETBITS(shift, 7, 1)){
+          perror("Malformed instruction");
+          exit(INVALID_INSTR);
+        }
+        shiftAmmount = *getReg((reg) GETBITS(shift, 8, 4));
       }
 
       switch(shiftType){
         //lsl
-        case 0: shiftCarryOut = GETBITS(RmContents, 31, 0);
+        case 0: shiftCarryOut = GETBITS(RmContents, (32-shiftAmmount), 0);
                 RmContents << shiftAmmount;
+                break;
         //lsr
         case 1: shiftCarryOut = GETBITS(RmContents, shiftAmmount-1, 0);
                 RmContents >> shiftAmmount;
+                break;
         //asr
         case 2: shiftCarryOut = GETBITS(RmContents, shiftAmmount-1, 0);
                 RmContents >> shiftAmmount + GETBITS(RmContents, 31, 0)? INT32_MAX << (32 - shiftAmmount):0;
+                break;
         //ror
         case 3: shiftCarryOut = GETBITS(RmContents, shiftAmmount-1, 0);
                 RmContents >> shiftAmmount + GETBITS(RmContents, 0, shiftAmmount) << (32 - shiftAmmount);
+                
       }
       operand2Value = RmContents;
     }
@@ -171,20 +179,32 @@ void processDataInstr(instruction inst) {
     switch(OpCode){
       case AND: ALUOut = *Rn & operand2Value;
                 *Rd = ALUOut;
+                break;
       case EOR: ALUOut = *Rn ^ operand2Value;
                 *Rd = ALUOut;
+                break;
       case SUB: ALUOut = *Rn - operand2Value;
                 *Rd = ALUOut;
+                break;
       case RSB: ALUOut = operand2Value - *Rn; 
                 *Rd = ALUOut;
+                break;
       case ADD: ALUOut = *Rn + operand2Value;
                 *Rd = ALUOut;
-      case TST: ALUOut = *Rn & operand2Value;  
+                break;
+      case TST: ALUOut = *Rn & operand2Value;
+                break;  
       case TEQ: ALUOut = *Rn ^ operand2Value;
+                break;
       case CMP: ALUOut = *Rn - operand2Value;
+                break;
       case ORR: ALUOut = *Rn | operand2Value;
                 *Rd = ALUOut;
+                break;
       case MOV: *Rd = operand2Value;
+                break;
+      default: fprintf(stderr, "Invalid operation");
+                exit(INVALID_INSTR);          
     }
 
     //if S set then reassign flags
@@ -193,13 +213,13 @@ void processDataInstr(instruction inst) {
         CPU.CPSR.C = shiftCarryOut;
       }
       else if(OpCode == ADD || OpCode == RSB){
-        CPU.CPSR.C = GETBITS(ALUOut, 31, 0);
+        CPU.CPSR.C = (GETBIT(*Rn, 31) || GETBIT(operand2Value, 31)) && !GETBIT(ALUOut, 31);
       }
       else if(OpCode == SUB || OpCode == CMP){
-        CPU.CPSR.C = !GETBITS(ALUOut, 31, 0);
+        CPU.CPSR.C = operand2Value > *Rn;
       }
       CPU.CPSR.Z = ALUOut == 0;
-      CPU.CPSR.N = GETBITS(ALUOut, 31, 1); 
+      CPU.CPSR.N = GETBIT(ALUOut, 31); 
     }
 
 
