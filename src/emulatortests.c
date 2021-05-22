@@ -18,16 +18,24 @@ int main(){
     11101111001101111111111101000001
     */
 
-    uint32_t test_data1 = 0b11101111001101111111111101000001;
+    uint32_t testWord = 0b11101111001101111111111101000001;
 
-    int32test(GETBITS(test_data1, 5, 0), 0, "Can get lengths of 0 bits");
-    int32test(GETBITS(test_data1, 5, 0), 0, "Can get lengths of 1 bit");
-    int32test(GETBITS(test_data1, 3, 3), 0, "");
-    int32test(GETBITS(test_data1, 7, 5), 0b11110, "");
-    int32test(GETBITS(test_data1, 7, 2), 0b10, "");
-    int32test(GETBITS(test_data1, 27, 2), 0b01, "");
-    int32test(GETBITS(test_data1, 19, 6), 0b100110, "");
-    int32test(GETBITS(test_data1, 0, 7), 0b1000001, "");
+    int32test(GETBITS(testWord, 5, 0), 0, "Can get lengths of 0 bits");
+    int32test(GETBITS(testWord, 5, 0), 0, "Can get lengths of 1 bit");
+    int32test(GETBITS(testWord, 3, 3), 0, "");
+    int32test(GETBITS(testWord, 7, 5), 0b11110, "");
+    int32test(GETBITS(testWord, 7, 2), 0b10, "");
+    int32test(GETBITS(testWord, 27, 2), 0b01, "");
+    int32test(GETBITS(testWord, 19, 6), 0b100110, "");
+    int32test(GETBITS(testWord, 0, 7), 0b1000001, "");
+
+
+    testsection("GETBIT Tests");
+
+    int32test(GETBIT(testWord, 7), 0, "");
+    int32test(GETBIT(testWord, 0), 1, "");
+    int32test(GETBIT(testWord, 31), 1, "");
+    int32test(GETBIT(testWord, 27), 1, "");
 
     testsection("getProgram Tests");
 
