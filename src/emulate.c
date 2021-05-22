@@ -108,6 +108,8 @@ void branchInstr(instruction instr, instruction **currentInstr) {
   // update the PC by offset
   *getReg(PC) += offset;
 
+  // TODO: check that jump is valid (Need more here).
+
   // the currentInstr goes to the PC's position
   *currentInstr += offset + offset > 0? 2 : -2;
 }
@@ -258,4 +260,7 @@ inline word getmem(location loc) {
 }
 
 void printState() {}
+
+
+//todo
 
