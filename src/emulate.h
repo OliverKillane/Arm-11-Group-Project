@@ -81,8 +81,33 @@ Return a range of bits.
     n       <- number of bits
 */
 #define GETBITS(data, start, n) ((data >> start) & ((1 << n) - 1))
+
+/* get bit at location in a word:
+    data    <- the word you are inspecting
+    n       <- bit number (0-31) 
+*/
 #define GETBIT(data, n) ((data >> n) % 2 != 0)
+
+/* Set the CPSR values as once
+    n   <- (N)egative bit
+    z   <- (Z)ero bit
+    c   <- (C)arry bit
+    v   <- O(v)erflow bit
+*/
 #define SETCPSR(n, z, c, v) CPU.CPSR.N = n;CPU.CPSR.Z = z;CPU.CPSR.C = c;CPU.CPSR.V = v;
+
+
+// memory access macros:
+
+/* Get a pointer to a register.
+    Reg <- either enum reg or 
+*/
+#define GETREG(reg) &CPU.registers[Reg]
+
+/* Get data stored at a given location
+    loc <- location in 64KB memory
+*/
+#define MEMLOC(loc)  CPU.memory[loc]
 
 // INSTRUCTION PROCESSING:
 
@@ -138,18 +163,18 @@ void processDataInstr(instruction inst);
 /* Get a pointer to a register.
     Reg <- either enum reg or 
 */
-inline word *getReg(reg Reg);
+word *getReg(reg Reg);
 
 /* Store a given word in a given memory location
     loc     <- location in 64KB memory to
     data    <- Data top write
 */
-inline void storemem(location loc, word data);
+void storemem(location loc, word data);
 
 /* Get data stored at a given location
     loc <- location in 64KB memory
 */
-inline word getmem(location loc);
+word getmem(location loc);
 
 // TERMINAL OUTPUT:
 

@@ -5,6 +5,7 @@
 
 machineState CPU;
 
+
 // edit needs to be tested, make more robust
 program getProgram(char* filename) {
   FILE *file = fopen(filename, "rb");
@@ -153,16 +154,16 @@ void singleDataTransInstr(instruction instr) {
   if (P) {
     // pre-indexing
     if (L) {
-      *RnSrcDst = getmem(*RdBase + offset);
+      *RnSrcDst = MEMLOC(*RdBase + offset);
     } else {
-      storemem(*RdBase + offset, *RnSrcDst);
+      MEMLOC(*RdBase + offset) =  *RnSrcDst;
     }
   } else {
     // POST Indexing
     if (L) {
-      *RnSrcDst = getmem(*RdBase);
+      *RnSrcDst = MEMLOC(*RdBase);
     } else {
-      storemem(*RdBase, *RnSrcDst);
+      MEMLOC(*RdBase) =  *RnSrcDst;
     }
     *RdBase += offset;
   }
@@ -361,20 +362,5 @@ void processDataInstr(instruction inst) {
 
 }
 
-inline word *getReg(reg Reg) {
-  return &CPU.registers[Reg]; 
-}
-
-inline void storemem(location loc, word data) {
-  CPU.memory[loc] = data;
-}
-
-inline word getmem(location loc) {
-  return CPU.memory[loc];
-}
-
 void printState() {}
-
-
-//todo
 
