@@ -15,8 +15,7 @@
 
 #ignore junk files from compiling C code
 *.o
-emulate
-assemble
+.vscode
 
 #ignore junk files from compiling Haskell code
 *.hi

@@ -1,6 +1,6 @@
 CC=gcc
 CSANITIZERS= -fsanitize=address,return,unreachable,null,bounds
-CFLAGS= -g -O3 -Wall -pedantic -std=c17 -Iinclude
+CFLAGS= -g -Wall -pedantic -std=c17 -Iinclude
 
 default: clean test library
 
