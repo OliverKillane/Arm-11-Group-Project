@@ -1,3 +1,8 @@
+/**
+ * @file stddata.h
+ * @author Bartłomiej Cieślar
+ * @brief All of the headers in stddata library combined
+ */
 #include "deque.h"
 #include "list_iterator.h"
 #include "list.h"
@@ -8,4 +13,4 @@
 #include "stack.h"
 #include "vector_iterator.h"
 #include "vector.h"
-#include "map_utils.h"
+#include "hash_utils.h"

@@ -1,0 +1,212 @@
+\hypertarget{map__iterator_8h}{}\doxysection{include/map\+\_\+iterator.h File Reference}
+\label{map__iterator_8h}\index{include/map\_iterator.h@{include/map\_iterator.h}}
+
+
+\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} and utilities related to it  
+
+
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structMapIterator}{Map\+Iterator}}
+\begin{DoxyCompactList}\small\item\em An iterator for a \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{map__iterator_8h_af12a8b7dc0faebe1050e41081895f301}{MAPFOR}}(map,  iter)
+\begin{DoxyCompactList}\small\item\em A macro for looping over a map. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} \mbox{\hyperlink{map__iterator_8h_a729c6047c465dd9ff972bad67477dfe9}{Map\+Begin}} (\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} map)
+\begin{DoxyCompactList}\small\item\em Returns an iterator at the beginning of the map. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} \mbox{\hyperlink{map__iterator_8h_acb20e7e86d4fca7e5a46957589048227}{Map\+End}} (\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} map)
+\begin{DoxyCompactList}\small\item\em Returns an iterator at the end of the map. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{map__iterator_8h_a1ef5f5b35b21480c35943f16fa2cd7b3}{Map\+Iterator\+Less}} (\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} a, \mbox{\hyperlink{structMapIterator}{Map\+Iterator}} b)
+\begin{DoxyCompactList}\small\item\em Checks if the first iterator points before the second. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{map__iterator_8h_ab21fd336fda31adaab218e003fad1091}{Map\+Iterator\+Compare}} (\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} a, \mbox{\hyperlink{structMapIterator}{Map\+Iterator}} b)
+\begin{DoxyCompactList}\small\item\em Compares two iterators. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{map__iterator_8h_a2829bf1bd74b24e152c821d22cc03521}{Map\+Iterator\+Incr}} (\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} $\ast$iter)
+\begin{DoxyCompactList}\small\item\em Moves the iterator to the next entry in the map. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{map__iterator_8h_a5d3237fab0174b3c159b1ff2f9678503}{Map\+Iterator\+Decr}} (\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} $\ast$iter)
+\begin{DoxyCompactList}\small\item\em Moves the iterator to the previous entry in the map. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structMapEntry}{Map\+Entry}} \mbox{\hyperlink{map__iterator_8h_a32fec1997f09831b973656da09eda84b}{Map\+Iterator\+Get}} (\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} iter)
+\begin{DoxyCompactList}\small\item\em Returns the entry the iterator is pointing to. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{map__iterator_8h_af12a8b7dc0faebe1050e41081895f301}\label{map__iterator_8h_af12a8b7dc0faebe1050e41081895f301}} 
+\index{map\_iterator.h@{map\_iterator.h}!MAPFOR@{MAPFOR}}
+\index{MAPFOR@{MAPFOR}!map\_iterator.h@{map\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{MAPFOR}{MAPFOR}}
+{\footnotesize\ttfamily \#define MAPFOR(\begin{DoxyParamCaption}\item[{}]{map,  }\item[{}]{iter }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \textcolor{keywordflow}{for}(\mbox{\hyperlink{structMapIterator}{MapIterator}} iter = \mbox{\hyperlink{map__iterator_8h_a729c6047c465dd9ff972bad67477dfe9}{MapBegin}}(map); \(\backslash\)}
+\DoxyCodeLine{        MapIteratorLess(iter, \mbox{\hyperlink{map__iterator_8h_acb20e7e86d4fca7e5a46957589048227}{MapEnd}}(map)); \(\backslash\)}
+\DoxyCodeLine{        MapIteratorIncr(\&iter))}
+
+\end{DoxyCode}
+
+
+A macro for looping over a map. 
+
+This macro creates a for loop header using iterators to iterate over a map. Example usage\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{map__iterator_8h_af12a8b7dc0faebe1050e41081895f301}{MAPFOR}}(map, iter) \{}
+\DoxyCodeLine{    printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, (\textcolor{keywordtype}{char}*)(\mbox{\hyperlink{map__iterator_8h_a32fec1997f09831b973656da09eda84b}{MapIteratorGet}}(iter).key));}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & the map to be iterated over \\
+\hline
+{\em iter} & the name of the iterator that will index the map \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+{\ttfamily map} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{map__iterator_8h_a729c6047c465dd9ff972bad67477dfe9}\label{map__iterator_8h_a729c6047c465dd9ff972bad67477dfe9}} 
+\index{map\_iterator.h@{map\_iterator.h}!MapBegin@{MapBegin}}
+\index{MapBegin@{MapBegin}!map\_iterator.h@{map\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{MapBegin()}{MapBegin()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMapIterator}{Map\+Iterator}} Map\+Begin (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}]{map }\end{DoxyParamCaption})}
+
+
+
+Returns an iterator at the beginning of the map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & The map to get the beginning iterator to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An iterator pointing at the first entry of the {\ttfamily map} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily map} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map__iterator_8h_acb20e7e86d4fca7e5a46957589048227}\label{map__iterator_8h_acb20e7e86d4fca7e5a46957589048227}} 
+\index{map\_iterator.h@{map\_iterator.h}!MapEnd@{MapEnd}}
+\index{MapEnd@{MapEnd}!map\_iterator.h@{map\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{MapEnd()}{MapEnd()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMapIterator}{Map\+Iterator}} Map\+End (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}]{map }\end{DoxyParamCaption})}
+
+
+
+Returns an iterator at the end of the map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & The map to get the end iterator to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An iterator pointing at the entry behind the last entry of the {\ttfamily map} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily map} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map__iterator_8h_a1ef5f5b35b21480c35943f16fa2cd7b3}\label{map__iterator_8h_a1ef5f5b35b21480c35943f16fa2cd7b3}} 
+\index{map\_iterator.h@{map\_iterator.h}!MapIteratorLess@{MapIteratorLess}}
+\index{MapIteratorLess@{MapIteratorLess}!map\_iterator.h@{map\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{MapIteratorLess()}{MapIteratorLess()}}
+{\footnotesize\ttfamily bool Map\+Iterator\+Less (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structMapIterator}{Map\+Iterator}}}]{a,  }\item[{\mbox{\hyperlink{structMapIterator}{Map\+Iterator}}}]{b }\end{DoxyParamCaption})}
+
+
+
+Checks if the first iterator points before the second. 
+
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the first iterator points before the second, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+the two iterators not pointing at the same map will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map__iterator_8h_ab21fd336fda31adaab218e003fad1091}\label{map__iterator_8h_ab21fd336fda31adaab218e003fad1091}} 
+\index{map\_iterator.h@{map\_iterator.h}!MapIteratorCompare@{MapIteratorCompare}}
+\index{MapIteratorCompare@{MapIteratorCompare}!map\_iterator.h@{map\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{MapIteratorCompare()}{MapIteratorCompare()}}
+{\footnotesize\ttfamily int Map\+Iterator\+Compare (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structMapIterator}{Map\+Iterator}}}]{a,  }\item[{\mbox{\hyperlink{structMapIterator}{Map\+Iterator}}}]{b }\end{DoxyParamCaption})}
+
+
+
+Compares two iterators. 
+
+\begin{DoxyReturn}{Returns}
+-\/1 if the first iterator points to an entry before the second iterator 0 if the two iterators point to the same entry 1 if the second iterator points to an entry before the first iterator 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+the two iterators not pointing at the same map will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map__iterator_8h_a2829bf1bd74b24e152c821d22cc03521}\label{map__iterator_8h_a2829bf1bd74b24e152c821d22cc03521}} 
+\index{map\_iterator.h@{map\_iterator.h}!MapIteratorIncr@{MapIteratorIncr}}
+\index{MapIteratorIncr@{MapIteratorIncr}!map\_iterator.h@{map\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{MapIteratorIncr()}{MapIteratorIncr()}}
+{\footnotesize\ttfamily void Map\+Iterator\+Incr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} $\ast$}]{iter }\end{DoxyParamCaption})}
+
+
+
+Moves the iterator to the next entry in the map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the pointer to the iterator to be incremented \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+trying to increment an iterator pointing at the end of the map will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map__iterator_8h_a5d3237fab0174b3c159b1ff2f9678503}\label{map__iterator_8h_a5d3237fab0174b3c159b1ff2f9678503}} 
+\index{map\_iterator.h@{map\_iterator.h}!MapIteratorDecr@{MapIteratorDecr}}
+\index{MapIteratorDecr@{MapIteratorDecr}!map\_iterator.h@{map\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{MapIteratorDecr()}{MapIteratorDecr()}}
+{\footnotesize\ttfamily void Map\+Iterator\+Decr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} $\ast$}]{iter }\end{DoxyParamCaption})}
+
+
+
+Moves the iterator to the previous entry in the map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the pointer to the iterator to be incremented \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+trying to increment an iterator pointing at the end of the map will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map__iterator_8h_a32fec1997f09831b973656da09eda84b}\label{map__iterator_8h_a32fec1997f09831b973656da09eda84b}} 
+\index{map\_iterator.h@{map\_iterator.h}!MapIteratorGet@{MapIteratorGet}}
+\index{MapIteratorGet@{MapIteratorGet}!map\_iterator.h@{map\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{MapIteratorGet()}{MapIteratorGet()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structMapEntry}{Map\+Entry}} Map\+Iterator\+Get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structMapIterator}{Map\+Iterator}}}]{iter }\end{DoxyParamCaption})}
+
+
+
+Returns the entry the iterator is pointing to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the iterator to dereference \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the entry the iterator is pointing at 
+\end{DoxyReturn}

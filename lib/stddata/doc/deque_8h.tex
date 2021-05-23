@@ -1,0 +1,287 @@
+\hypertarget{deque_8h}{}\doxysection{include/deque.h File Reference}
+\label{deque_8h}\index{include/deque.h@{include/deque.h}}
+
+
+\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} and utilities related to it  
+
+
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}
+\begin{DoxyCompactList}\small\item\em An STL-\/like Deque. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} \mbox{\hyperlink{deque_8h_a4aba2fc43a7fe818348bca7654d9c27a}{New\+Deque}} ()
+\begin{DoxyCompactList}\small\item\em Creates a new \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{deque_8h_ab8595bdfd4cec494c0e9cdb61ad1d8d4}{Delete\+Deque}} (\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} deque)
+\begin{DoxyCompactList}\small\item\em Deallocates a \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{deque_8h_a1c4e6f3178a1f0d3b5b1a89da2576890}{Deque\+Push\+Front}} (\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} deque, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Pushes an item in the front of the deque. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{deque_8h_a75da2404e71b362f765e23a631a88051}{Deque\+Push\+Back}} (\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} deque, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Pushes an item in the back of the deque. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{deque_8h_a14bd19b4d3b39fc78822947a0af71749}{Deque\+Pop\+Front}} (\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} deque)
+\begin{DoxyCompactList}\small\item\em Removes an item from the front of the deque. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{deque_8h_a450460284f6c3e008bc15673ff5b5f37}{Deque\+Pop\+Back}} (\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} deque)
+\begin{DoxyCompactList}\small\item\em Removes an item from the back of the deque. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{deque_8h_a0f4fbbc852a41900a3147f9b293f564a}{Deque\+Peek\+Front}} (\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} deque)
+\begin{DoxyCompactList}\small\item\em Returns an item from the front of the deque without removing it. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{deque_8h_a6759eff335d14d711bbd89fef037bc61}{Deque\+Peek\+Back}} (\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} deque)
+\begin{DoxyCompactList}\small\item\em Returns an item from the back of the deque without removing it. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{deque_8h_a136271a75ea6c1c77e0034781c6d0af6}{Deque\+Size}} (\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} deque)
+\begin{DoxyCompactList}\small\item\em Returns the number of items inside a deque. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{deque_8h_a93acb04d47d4dbf9f44ff6dad6cf4716}{Deque\+Empty}} (\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} deque)
+\begin{DoxyCompactList}\small\item\em Checks if the deque is empty. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{deque_8h_aebcafdfec252d8be3c2c921866b6c720}\label{deque_8h_aebcafdfec252d8be3c2c921866b6c720}} 
+\index{deque.h@{deque.h}!Deque@{Deque}}
+\index{Deque@{Deque}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{Deque}{Deque}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}}
+
+
+
+An STL-\/like Deque. 
+
+This is a linked-\/list-\/based deque, meaning all operations on it are in O(1). It supports the following operations\+:
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{deque_8h_a1c4e6f3178a1f0d3b5b1a89da2576890}{Deque\+Push\+Front}} Adds a new element to the front of the deque
+\item \mbox{\hyperlink{deque_8h_a75da2404e71b362f765e23a631a88051}{Deque\+Push\+Back}} Adds a new element to the back of the the deque
+\item \mbox{\hyperlink{deque_8h_a14bd19b4d3b39fc78822947a0af71749}{Deque\+Pop\+Front}} Removes an item from the front of the deque and returns it
+\item \mbox{\hyperlink{deque_8h_a450460284f6c3e008bc15673ff5b5f37}{Deque\+Pop\+Back}} Removes an item from the back of the deque and returns it
+\item \mbox{\hyperlink{deque_8h_a0f4fbbc852a41900a3147f9b293f564a}{Deque\+Peek\+Front}} Returns the item at the front of the deque
+\item \mbox{\hyperlink{deque_8h_a6759eff335d14d711bbd89fef037bc61}{Deque\+Peek\+Back}} Returns the item at the back of the deque
+\end{DoxyItemize}
+
+It can be created and deallocated using \mbox{\hyperlink{deque_8h_a4aba2fc43a7fe818348bca7654d9c27a}{New\+Deque}} and \mbox{\hyperlink{deque_8h_ab8595bdfd4cec494c0e9cdb61ad1d8d4}{Delete\+Deque}} respectively. To check its size and test if it is empty, use \mbox{\hyperlink{deque_8h_a136271a75ea6c1c77e0034781c6d0af6}{Deque\+Size}} and \mbox{\hyperlink{deque_8h_a93acb04d47d4dbf9f44ff6dad6cf4716}{Deque\+Empty}}
+
+\begin{DoxyNote}{Note}
+Even though this is only a typedef, do not use \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} as deque for improved code clarity 
+\end{DoxyNote}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{deque_8h_a4aba2fc43a7fe818348bca7654d9c27a}\label{deque_8h_a4aba2fc43a7fe818348bca7654d9c27a}} 
+\index{deque.h@{deque.h}!NewDeque@{NewDeque}}
+\index{NewDeque@{NewDeque}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{NewDeque()}{NewDeque()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} New\+Deque (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates a new \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}. 
+
+Dynamically allocates a new \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} using malloc.
+
+\begin{DoxyWarning}{Warning}
+In order to avoid memory leaks, please use \mbox{\hyperlink{deque_8h_ab8595bdfd4cec494c0e9cdb61ad1d8d4}{Delete\+Deque}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{deque_8h_ab8595bdfd4cec494c0e9cdb61ad1d8d4}\label{deque_8h_ab8595bdfd4cec494c0e9cdb61ad1d8d4}} 
+\index{deque.h@{deque.h}!DeleteDeque@{DeleteDeque}}
+\index{DeleteDeque@{DeleteDeque}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{DeleteDeque()}{DeleteDeque()}}
+{\footnotesize\ttfamily void Delete\+Deque (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}}]{deque }\end{DoxyParamCaption})}
+
+
+
+Deallocates a \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & The deque to be deallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Trying to use or deallocate already deallocated \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{deque_8h_a1c4e6f3178a1f0d3b5b1a89da2576890}\label{deque_8h_a1c4e6f3178a1f0d3b5b1a89da2576890}} 
+\index{deque.h@{deque.h}!DequePushFront@{DequePushFront}}
+\index{DequePushFront@{DequePushFront}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{DequePushFront()}{DequePushFront()}}
+{\footnotesize\ttfamily void Deque\+Push\+Front (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}}]{deque,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Pushes an item in the front of the deque. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & The deque to be modified \\
+\hline
+{\em new\+\_\+item} & A pointer to an item to push in front of the deque\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily deque} not being a valid allocated \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{deque_8h_a75da2404e71b362f765e23a631a88051}\label{deque_8h_a75da2404e71b362f765e23a631a88051}} 
+\index{deque.h@{deque.h}!DequePushBack@{DequePushBack}}
+\index{DequePushBack@{DequePushBack}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{DequePushBack()}{DequePushBack()}}
+{\footnotesize\ttfamily void Deque\+Push\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}}]{deque,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Pushes an item in the back of the deque. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & The deque to be modifier \\
+\hline
+{\em new\+\_\+item} & A pointer to an item to push in front of the deque\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily deque} not being a valid allocated \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{deque_8h_a14bd19b4d3b39fc78822947a0af71749}\label{deque_8h_a14bd19b4d3b39fc78822947a0af71749}} 
+\index{deque.h@{deque.h}!DequePopFront@{DequePopFront}}
+\index{DequePopFront@{DequePopFront}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{DequePopFront()}{DequePopFront()}}
+{\footnotesize\ttfamily void$\ast$ Deque\+Pop\+Front (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}}]{deque }\end{DoxyParamCaption})}
+
+
+
+Removes an item from the front of the deque. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & The deque to be modified \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the item removed from the deque 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to remove an item from an empty deque results in an undefined behaviour 
+
+{\ttfamily deque} not being a valid allocated \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{deque_8h_a450460284f6c3e008bc15673ff5b5f37}\label{deque_8h_a450460284f6c3e008bc15673ff5b5f37}} 
+\index{deque.h@{deque.h}!DequePopBack@{DequePopBack}}
+\index{DequePopBack@{DequePopBack}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{DequePopBack()}{DequePopBack()}}
+{\footnotesize\ttfamily void$\ast$ Deque\+Pop\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}}]{deque }\end{DoxyParamCaption})}
+
+
+
+Removes an item from the back of the deque. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & The deque to be modified \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the item removed from the deque 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to remove an item from an empty deque results in an undefined behaviour 
+
+{\ttfamily deque} not being a valid allocated \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{deque_8h_a0f4fbbc852a41900a3147f9b293f564a}\label{deque_8h_a0f4fbbc852a41900a3147f9b293f564a}} 
+\index{deque.h@{deque.h}!DequePeekFront@{DequePeekFront}}
+\index{DequePeekFront@{DequePeekFront}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{DequePeekFront()}{DequePeekFront()}}
+{\footnotesize\ttfamily void$\ast$ Deque\+Peek\+Front (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}}]{deque }\end{DoxyParamCaption})}
+
+
+
+Returns an item from the front of the deque without removing it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & The deque containing the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The item at the front of the deque 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to look up an item in an empty deque results in an undefined behaviour 
+
+{\ttfamily deque} not being a valid allocated \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{deque_8h_a6759eff335d14d711bbd89fef037bc61}\label{deque_8h_a6759eff335d14d711bbd89fef037bc61}} 
+\index{deque.h@{deque.h}!DequePeekBack@{DequePeekBack}}
+\index{DequePeekBack@{DequePeekBack}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{DequePeekBack()}{DequePeekBack()}}
+{\footnotesize\ttfamily void$\ast$ Deque\+Peek\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}}]{deque }\end{DoxyParamCaption})}
+
+
+
+Returns an item from the back of the deque without removing it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & The deque containing the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The item at the back of the deque 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to look up an item in an empty deque results in an undefined behaviour 
+
+{\ttfamily deque} not being a valid allocated \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{deque_8h_a136271a75ea6c1c77e0034781c6d0af6}\label{deque_8h_a136271a75ea6c1c77e0034781c6d0af6}} 
+\index{deque.h@{deque.h}!DequeSize@{DequeSize}}
+\index{DequeSize@{DequeSize}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{DequeSize()}{DequeSize()}}
+{\footnotesize\ttfamily int Deque\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}}]{deque }\end{DoxyParamCaption})}
+
+
+
+Returns the number of items inside a deque. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & The deque to check the size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the deque 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily deque} not being a valid allocated \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{deque_8h_a93acb04d47d4dbf9f44ff6dad6cf4716}\label{deque_8h_a93acb04d47d4dbf9f44ff6dad6cf4716}} 
+\index{deque.h@{deque.h}!DequeEmpty@{DequeEmpty}}
+\index{DequeEmpty@{DequeEmpty}!deque.h@{deque.h}}
+\doxysubsubsection{\texorpdfstring{DequeEmpty()}{DequeEmpty()}}
+{\footnotesize\ttfamily bool Deque\+Empty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}}}]{deque }\end{DoxyParamCaption})}
+
+
+
+Checks if the deque is empty. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em deque} & The deque to check the emptiness of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the deque has no items, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily deque} not being a valid allocated \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} results in an undefined behaviour 
+\end{DoxyWarning}

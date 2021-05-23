@@ -1,0 +1,235 @@
+\hypertarget{queue_8h}{}\doxysection{include/queue.h File Reference}
+\label{queue_8h}\index{include/queue.h@{include/queue.h}}
+
+
+\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} and utilities related to it  
+
+
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}
+\begin{DoxyCompactList}\small\item\em An STL-\/like Queue. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} \mbox{\hyperlink{queue_8h_a6f3600b4ee350dd40e542111df4d11dd}{New\+Queue}} ()
+\begin{DoxyCompactList}\small\item\em Creates a new \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{queue_8h_a1e0f7956bca711e20922fe187752ac38}{Delete\+Queue}} (\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} queue)
+\begin{DoxyCompactList}\small\item\em Deallocates a \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{queue_8h_af12217f5b87b0ca1ce5898bc11d15a83}{Queue\+Push}} (\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} queue, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Pushes an item in the back of the queue. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{queue_8h_aa99c0fe94271fb348afc2f45dc9b0640}{Queue\+Pop}} (\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} queue)
+\begin{DoxyCompactList}\small\item\em Removes an item from the front of the queue. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{queue_8h_a0f0cf1cb69b15b11b32f3f12623722a8}{Queue\+Peek\+Front}} (\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} queue)
+\begin{DoxyCompactList}\small\item\em Returns an item from the front of the queue (the one to be popped next) without removing it. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{queue_8h_aca43aa9974105064889b4d3446b2f657}{Queue\+Peek\+Back}} (\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} queue)
+\begin{DoxyCompactList}\small\item\em Returns an item from the back of the queue (the one most recently pushed) without removing it. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{queue_8h_a50ab3e4ec9fb965a8de69b54d277ef5f}{Queue\+Size}} (\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} queue)
+\begin{DoxyCompactList}\small\item\em Returns the number of items inside a queue. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{queue_8h_a1d800d56243070bc9a72733cd3598561}{Queue\+Empty}} (\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} queue)
+\begin{DoxyCompactList}\small\item\em Checks if the queue is empty. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}\label{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}} 
+\index{queue.h@{queue.h}!Queue@{Queue}}
+\index{Queue@{Queue}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{Queue}{Queue}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}}
+
+
+
+An STL-\/like Queue. 
+
+This is a linked-\/list-\/based queue, meaning all operations on it are in O(1). It supports the following operations\+:
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{queue_8h_af12217f5b87b0ca1ce5898bc11d15a83}{Queue\+Push}} Adds a new element to the back of the the queue
+\item \mbox{\hyperlink{queue_8h_aa99c0fe94271fb348afc2f45dc9b0640}{Queue\+Pop}} Removes an item from the front of the queue and returns it
+\item \mbox{\hyperlink{queue_8h_a0f0cf1cb69b15b11b32f3f12623722a8}{Queue\+Peek\+Front}} Returns the item at the front of the queue
+\item \mbox{\hyperlink{queue_8h_aca43aa9974105064889b4d3446b2f657}{Queue\+Peek\+Back}} Returns the item at the back of the queue
+\end{DoxyItemize}
+
+It can be created and deallocated using \mbox{\hyperlink{queue_8h_a6f3600b4ee350dd40e542111df4d11dd}{New\+Queue}} and \mbox{\hyperlink{queue_8h_a1e0f7956bca711e20922fe187752ac38}{Delete\+Queue}} respectively. To check its size and test if it is empty, use \mbox{\hyperlink{queue_8h_a50ab3e4ec9fb965a8de69b54d277ef5f}{Queue\+Size}} and \mbox{\hyperlink{queue_8h_a1d800d56243070bc9a72733cd3598561}{Queue\+Empty}}
+
+\begin{DoxyNote}{Note}
+Even though this is only a typedef, do not use \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} or \mbox{\hyperlink{deque_8h_aebcafdfec252d8be3c2c921866b6c720}{Deque}} as a queue for improved code clarity 
+\end{DoxyNote}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{queue_8h_a6f3600b4ee350dd40e542111df4d11dd}\label{queue_8h_a6f3600b4ee350dd40e542111df4d11dd}} 
+\index{queue.h@{queue.h}!NewQueue@{NewQueue}}
+\index{NewQueue@{NewQueue}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{NewQueue()}{NewQueue()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} New\+Queue (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates a new \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}. 
+
+Dynamically allocates a new \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} using malloc.
+
+\begin{DoxyWarning}{Warning}
+In order to avoid memory leaks, please use \mbox{\hyperlink{queue_8h_a1e0f7956bca711e20922fe187752ac38}{Delete\+Queue}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{queue_8h_a1e0f7956bca711e20922fe187752ac38}\label{queue_8h_a1e0f7956bca711e20922fe187752ac38}} 
+\index{queue.h@{queue.h}!DeleteQueue@{DeleteQueue}}
+\index{DeleteQueue@{DeleteQueue}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{DeleteQueue()}{DeleteQueue()}}
+{\footnotesize\ttfamily void Delete\+Queue (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}}]{queue }\end{DoxyParamCaption})}
+
+
+
+Deallocates a \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & The queue to be deallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Trying to use or deallocate already deallocated \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{queue_8h_af12217f5b87b0ca1ce5898bc11d15a83}\label{queue_8h_af12217f5b87b0ca1ce5898bc11d15a83}} 
+\index{queue.h@{queue.h}!QueuePush@{QueuePush}}
+\index{QueuePush@{QueuePush}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{QueuePush()}{QueuePush()}}
+{\footnotesize\ttfamily void Queue\+Push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}}]{queue,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Pushes an item in the back of the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & The queue to be modifier \\
+\hline
+{\em new\+\_\+item} & A pointer to an item to push in front of the queue\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily queue} not being a valid allocated \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{queue_8h_aa99c0fe94271fb348afc2f45dc9b0640}\label{queue_8h_aa99c0fe94271fb348afc2f45dc9b0640}} 
+\index{queue.h@{queue.h}!QueuePop@{QueuePop}}
+\index{QueuePop@{QueuePop}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{QueuePop()}{QueuePop()}}
+{\footnotesize\ttfamily void$\ast$ Queue\+Pop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}}]{queue }\end{DoxyParamCaption})}
+
+
+
+Removes an item from the front of the queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & The queue to be modified \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the item removed from the queue 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to remove an item from an empty queue results in an undefined behaviour 
+
+{\ttfamily queue} not being a valid allocated \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{queue_8h_a0f0cf1cb69b15b11b32f3f12623722a8}\label{queue_8h_a0f0cf1cb69b15b11b32f3f12623722a8}} 
+\index{queue.h@{queue.h}!QueuePeekFront@{QueuePeekFront}}
+\index{QueuePeekFront@{QueuePeekFront}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{QueuePeekFront()}{QueuePeekFront()}}
+{\footnotesize\ttfamily void$\ast$ Queue\+Peek\+Front (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}}]{queue }\end{DoxyParamCaption})}
+
+
+
+Returns an item from the front of the queue (the one to be popped next) without removing it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & The queue containing the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The item at the front of the queue 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to look up an item in an empty queue results in an undefined behaviour 
+
+{\ttfamily queue} not being a valid allocated \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{queue_8h_aca43aa9974105064889b4d3446b2f657}\label{queue_8h_aca43aa9974105064889b4d3446b2f657}} 
+\index{queue.h@{queue.h}!QueuePeekBack@{QueuePeekBack}}
+\index{QueuePeekBack@{QueuePeekBack}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{QueuePeekBack()}{QueuePeekBack()}}
+{\footnotesize\ttfamily void$\ast$ Queue\+Peek\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}}]{queue }\end{DoxyParamCaption})}
+
+
+
+Returns an item from the back of the queue (the one most recently pushed) without removing it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & The queue containing the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The item at the front of the queue 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to look up an item in an empty queue results in an undefined behaviour 
+
+{\ttfamily queue} not being a valid allocated \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{queue_8h_a50ab3e4ec9fb965a8de69b54d277ef5f}\label{queue_8h_a50ab3e4ec9fb965a8de69b54d277ef5f}} 
+\index{queue.h@{queue.h}!QueueSize@{QueueSize}}
+\index{QueueSize@{QueueSize}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{QueueSize()}{QueueSize()}}
+{\footnotesize\ttfamily int Queue\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}}]{queue }\end{DoxyParamCaption})}
+
+
+
+Returns the number of items inside a queue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & The queue to check the size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the queue 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily queue} not being a valid allocated \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{queue_8h_a1d800d56243070bc9a72733cd3598561}\label{queue_8h_a1d800d56243070bc9a72733cd3598561}} 
+\index{queue.h@{queue.h}!QueueEmpty@{QueueEmpty}}
+\index{QueueEmpty@{QueueEmpty}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{QueueEmpty()}{QueueEmpty()}}
+{\footnotesize\ttfamily bool Queue\+Empty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}}}]{queue }\end{DoxyParamCaption})}
+
+
+
+Checks if the queue is empty. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & The queue to check the emptiness of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the queue has no items, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily queue} not being a valid allocated \mbox{\hyperlink{queue_8h_aa02f3c475f67682e7fee6b14daafc7fe}{Queue}} results in an undefined behaviour 
+\end{DoxyWarning}

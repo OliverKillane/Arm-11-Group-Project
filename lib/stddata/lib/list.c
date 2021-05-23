@@ -45,9 +45,9 @@ bool ListEmpty(List restrict list) {
     return list->size == 0;
 }
 
-void ListPushBack(List restrict list, void* newItem) {
+void ListPushBack(List restrict list, void* new_item) {
     ListNode old = list->end;
-    ListNodeSet(old, newItem);
+    ListNodeSet(old, new_item);
     
     ListNode newNode = NewListNode();
     ListNodeRewireNext(old, newNode);
@@ -69,9 +69,9 @@ void* ListPopBack(List restrict list) {
     return oldItem;
 }
 
-void ListPushFront(List restrict list, void* newItem) {
+void ListPushFront(List restrict list, void* new_item) {
     ListNode newNode = NewListNode();
-    ListNodeSet(newNode, newItem);
+    ListNodeSet(newNode, new_item);
 
     ListNodeRewireNext(newNode, list->beg);
     ListNodeRewirePrevious(list->beg, newNode);
@@ -91,24 +91,24 @@ void* ListPopFront(List restrict list) {
     return oldItem;
 }
 
-void* ListGet(List restrict list, int itemNum) {
-    assert(itemNum >= 0 && itemNum < list->size);
+void* ListGet(List restrict list, int item_num) {
+    assert(item_num >= 0 && item_num < list->size);
 
     ListNode curr = list->beg;
-    for(int i = 0; i < itemNum; i++) {
+    for(int i = 0; i < item_num; i++) {
         curr = ListNodeNext(curr);
     }
     return ListNodeGet(curr);
 }
 
-void ListSet(List restrict list, int itemNum, void* newItem) {
-    assert(itemNum >= 0 && itemNum < list->size);
+void ListSet(List restrict list, int item_num, void* new_item) {
+    assert(item_num >= 0 && item_num < list->size);
 
     ListNode curr = list->beg;
-    for(int i = 0; i < itemNum; i++) {
+    for(int i = 0; i < item_num; i++) {
         curr = ListNodeNext(curr);
     }
-    ListNodeSet(curr, newItem);
+    ListNodeSet(curr, new_item);
 }
 
 void* ListFront(List restrict list) {

@@ -9,8 +9,8 @@ void DeleteStack(Stack stack) {
     DeleteVector(stack);
 }
 
-void StackPush(Stack stack, void* newItem) {
-    VectorPushBack(stack, newItem);
+void StackPush(Stack stack, void* new_item) {
+    VectorPushBack(stack, new_item);
 }
 
 void* StackPop(Stack stack) {

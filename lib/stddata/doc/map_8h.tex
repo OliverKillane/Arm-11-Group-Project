@@ -1,0 +1,330 @@
+\hypertarget{map_8h}{}\doxysection{include/map.h File Reference}
+\label{map_8h}\index{include/map.h@{include/map.h}}
+
+
+\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} and utilities related to it  
+
+
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structMapEntry}{Map\+Entry}}
+\begin{DoxyCompactList}\small\item\em A structure representing an entry in a map. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structMapRepr}{Map\+Repr}}
+\begin{DoxyCompactList}\small\item\em The structure representation of a hash map. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{structMapRepr}{Map\+Repr}} $\ast$ \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}
+\begin{DoxyCompactList}\small\item\em An STL-\/like hash map. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} \mbox{\hyperlink{map_8h_a5fd51eb954f85c4e90c8f59666c5adb7}{New\+Empty\+Map}} (unsigned long long($\ast$hash\+\_\+func)(void $\ast$), bool($\ast$eq\+\_\+func)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Creates a new empty \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} \mbox{\hyperlink{map_8h_a30fda3f2551d966e9b2bbda843f49f44}{New\+Filled\+Map}} (unsigned long long($\ast$hash\+\_\+func)(void $\ast$), bool($\ast$eq\+\_\+func)(void $\ast$, void $\ast$), int size, \mbox{\hyperlink{structMapEntry}{Map\+Entry}} values\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Creates a new \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} with {\ttfamily size} entries. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{map_8h_a90a707f413cb9c5fcd78b4d996d2e322}{Delete\+Map}} (\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} map)
+\begin{DoxyCompactList}\small\item\em Deallocates a \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{map_8h_ac88f74654453435f5d9add302d2acc9b}{Map\+Set}} (\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} map, void $\ast$key, void $\ast$value)
+\begin{DoxyCompactList}\small\item\em Sets a value under a key to a new value. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{map_8h_a857961b57b460c9d24a7896eab60b0f9}{Map\+Get}} (\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} map, void $\ast$key)
+\begin{DoxyCompactList}\small\item\em Retreives a value under a key. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{map_8h_a730e6feb7d729a61254f50f0629bd2f6}{Map\+Query}} (\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} map, void $\ast$key)
+\begin{DoxyCompactList}\small\item\em Checks if the key is in the map. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{map_8h_a1fb3dd5b0244000d3fc5439d2cc6c916}{Map\+Size}} (\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} map)
+\begin{DoxyCompactList}\small\item\em Returns the number of keys inside a map. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{map_8h_a58ceef700e04d544a1c7053306a7757d}{Map\+Alloc\+Size}} (\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} map)
+\begin{DoxyCompactList}\small\item\em Returns the allocated size of a map. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{map_8h_a77077961fe2d87eee166d8d70f818aa9}{Map\+Empty}} (\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} map)
+\begin{DoxyCompactList}\small\item\em Checks if the map has no entries. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{map_8h_ad1437751316b1361c495b0fe82edecf3}{Map\+Remove}} (\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} map, void $\ast$key)
+\begin{DoxyCompactList}\small\item\em Removes the key from the map. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}\label{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}} 
+\index{map.h@{map.h}!Map@{Map}}
+\index{Map@{Map}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{Map}{Map}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{structMapRepr}{Map\+Repr}}$\ast$ \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}
+
+
+
+An STL-\/like hash map. 
+
+This is a hash map, meaning that all operations are in amortized O(1)\+: It supports the following operations\+:
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{map_8h_a730e6feb7d729a61254f50f0629bd2f6}{Map\+Query}} Checks if a key is in the map
+\item \mbox{\hyperlink{map_8h_a857961b57b460c9d24a7896eab60b0f9}{Map\+Get}} Retreives the value of a key in the map
+\item \mbox{\hyperlink{map_8h_ac88f74654453435f5d9add302d2acc9b}{Map\+Set}} Sets a value of a key in the map
+\item \mbox{\hyperlink{map_8h_ad1437751316b1361c495b0fe82edecf3}{Map\+Remove}} Removes a key from a map
+\end{DoxyItemize}
+
+It can be created using \mbox{\hyperlink{map_8h_a5fd51eb954f85c4e90c8f59666c5adb7}{New\+Empty\+Map}} or \mbox{\hyperlink{map_8h_a30fda3f2551d966e9b2bbda843f49f44}{New\+Filled\+Map}}, and deallocated using \mbox{\hyperlink{map_8h_a90a707f413cb9c5fcd78b4d996d2e322}{Delete\+Map}} To check its size and test if it is empty, use \mbox{\hyperlink{map_8h_a1fb3dd5b0244000d3fc5439d2cc6c916}{Map\+Size}} and \mbox{\hyperlink{map_8h_a77077961fe2d87eee166d8d70f818aa9}{Map\+Empty}}
+
+\begin{DoxyNote}{Note}
+Even though this is only a typedef, do not delcare it as a pointer to \mbox{\hyperlink{structMapRepr}{Map\+Repr}} for improved code clarity 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structMapIterator}{Map\+Iterator}} to loop over a map 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{map_8h_a5fd51eb954f85c4e90c8f59666c5adb7}\label{map_8h_a5fd51eb954f85c4e90c8f59666c5adb7}} 
+\index{map.h@{map.h}!NewEmptyMap@{NewEmptyMap}}
+\index{NewEmptyMap@{NewEmptyMap}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{NewEmptyMap()}{NewEmptyMap()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} New\+Empty\+Map (\begin{DoxyParamCaption}\item[{unsigned long long($\ast$)(void $\ast$)}]{hash\+\_\+func,  }\item[{bool($\ast$)(void $\ast$, void $\ast$)}]{eq\+\_\+func }\end{DoxyParamCaption})}
+
+
+
+Creates a new empty \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} using malloc.
+
+
+\begin{DoxyParams}{Parameters}
+{\em hash\+\_\+func} & The hash function for the map keys \\
+\hline
+{\em eq\+\_\+func} & The equality function of the map to compare the keys with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+In order to avoid memory leaks, please use \mbox{\hyperlink{map_8h_a90a707f413cb9c5fcd78b4d996d2e322}{Delete\+Map}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map_8h_a30fda3f2551d966e9b2bbda843f49f44}\label{map_8h_a30fda3f2551d966e9b2bbda843f49f44}} 
+\index{map.h@{map.h}!NewFilledMap@{NewFilledMap}}
+\index{NewFilledMap@{NewFilledMap}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{NewFilledMap()}{NewFilledMap()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} New\+Filled\+Map (\begin{DoxyParamCaption}\item[{unsigned long long($\ast$)(void $\ast$)}]{hash\+\_\+func,  }\item[{bool($\ast$)(void $\ast$, void $\ast$)}]{eq\+\_\+func,  }\item[{int}]{size,  }\item[{\mbox{\hyperlink{structMapEntry}{Map\+Entry}}}]{values\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Creates a new \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} with {\ttfamily size} entries. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} using malloc, and fills it with the entries in the {\ttfamily values} array
+
+
+\begin{DoxyParams}{Parameters}
+{\em hash\+\_\+func} & The hash function of the map \\
+\hline
+{\em eq\+\_\+func} & The equality function of the map to compare the keys with \\
+\hline
+{\em size} & The size of the {\ttfamily values} array \\
+\hline
+{\em values} & The values to fill the map with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+{\ttfamily values} having keys equal to 0 or 1 will result in an undefined behaviour 
+
+In order to avoid memory leaks, please use \mbox{\hyperlink{map_8h_a90a707f413cb9c5fcd78b4d996d2e322}{Delete\+Map}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map_8h_a90a707f413cb9c5fcd78b4d996d2e322}\label{map_8h_a90a707f413cb9c5fcd78b4d996d2e322}} 
+\index{map.h@{map.h}!DeleteMap@{DeleteMap}}
+\index{DeleteMap@{DeleteMap}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{DeleteMap()}{DeleteMap()}}
+{\footnotesize\ttfamily void Delete\+Map (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}]{map }\end{DoxyParamCaption})}
+
+
+
+Deallocates a \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & The map to be deallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Trying to use or deallocate already deallocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map_8h_ac88f74654453435f5d9add302d2acc9b}\label{map_8h_ac88f74654453435f5d9add302d2acc9b}} 
+\index{map.h@{map.h}!MapSet@{MapSet}}
+\index{MapSet@{MapSet}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{MapSet()}{MapSet()}}
+{\footnotesize\ttfamily void Map\+Set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}]{map,  }\item[{void $\ast$}]{key,  }\item[{void $\ast$}]{value }\end{DoxyParamCaption})}
+
+
+
+Sets a value under a key to a new value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & the map to be modifier \\
+\hline
+{\em key} & the key to place the {\ttfamily value} under \\
+\hline
+{\em value} & the value to be inserted into the map \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily value} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily key} having a value 0 or 1 will result in an undefined behaviour 
+
+{\ttfamily map} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map_8h_a857961b57b460c9d24a7896eab60b0f9}\label{map_8h_a857961b57b460c9d24a7896eab60b0f9}} 
+\index{map.h@{map.h}!MapGet@{MapGet}}
+\index{MapGet@{MapGet}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{MapGet()}{MapGet()}}
+{\footnotesize\ttfamily void$\ast$ Map\+Get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}]{map,  }\item[{void $\ast$}]{key }\end{DoxyParamCaption})}
+
+
+
+Retreives a value under a key. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & the map to retreive the key from \\
+\hline
+{\em key} & the key to retreive value of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the key or NULL if the key is not assigned 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+if using void$\ast$ as a store for an integer check if the key is actually in the map before using this function 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{map_8h_a730e6feb7d729a61254f50f0629bd2f6}{Map\+Query}} for checking if the key is in the map 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+{\ttfamily key} having a value 0 or 1 will result in an undefined behaviour 
+
+{\ttfamily map} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map_8h_a730e6feb7d729a61254f50f0629bd2f6}\label{map_8h_a730e6feb7d729a61254f50f0629bd2f6}} 
+\index{map.h@{map.h}!MapQuery@{MapQuery}}
+\index{MapQuery@{MapQuery}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{MapQuery()}{MapQuery()}}
+{\footnotesize\ttfamily bool Map\+Query (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}]{map,  }\item[{void $\ast$}]{key }\end{DoxyParamCaption})}
+
+
+
+Checks if the key is in the map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & The map to check the key for \\
+\hline
+{\em key} & The key to check if is in a map \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the key is in the map, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Passing in a pointer to 0 or 1 results in an undefined behaviour 
+
+{\ttfamily map} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map_8h_a1fb3dd5b0244000d3fc5439d2cc6c916}\label{map_8h_a1fb3dd5b0244000d3fc5439d2cc6c916}} 
+\index{map.h@{map.h}!MapSize@{MapSize}}
+\index{MapSize@{MapSize}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{MapSize()}{MapSize()}}
+{\footnotesize\ttfamily int Map\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}]{map }\end{DoxyParamCaption})}
+
+
+
+Returns the number of keys inside a map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & The map to check the size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the map 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This is not the same as the number of actually allocated entries 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{map_8h_a58ceef700e04d544a1c7053306a7757d}{Map\+Alloc\+Size}} for the number of allocated entries 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+{\ttfamily map} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map_8h_a58ceef700e04d544a1c7053306a7757d}\label{map_8h_a58ceef700e04d544a1c7053306a7757d}} 
+\index{map.h@{map.h}!MapAllocSize@{MapAllocSize}}
+\index{MapAllocSize@{MapAllocSize}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{MapAllocSize()}{MapAllocSize()}}
+{\footnotesize\ttfamily int Map\+Alloc\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}]{map }\end{DoxyParamCaption})}
+
+
+
+Returns the allocated size of a map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & The map to check the allocated size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The allocated size of the map 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This is not the same as the number of accessible entries in a map 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{map_8h_a1fb3dd5b0244000d3fc5439d2cc6c916}{Map\+Size}} for the number of accessible entries in a map 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+{\ttfamily map} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map_8h_a77077961fe2d87eee166d8d70f818aa9}\label{map_8h_a77077961fe2d87eee166d8d70f818aa9}} 
+\index{map.h@{map.h}!MapEmpty@{MapEmpty}}
+\index{MapEmpty@{MapEmpty}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{MapEmpty()}{MapEmpty()}}
+{\footnotesize\ttfamily bool Map\+Empty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}]{map }\end{DoxyParamCaption})}
+
+
+
+Checks if the map has no entries. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & The map to check the emptiness of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the map has no entries, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily map} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{map_8h_ad1437751316b1361c495b0fe82edecf3}\label{map_8h_ad1437751316b1361c495b0fe82edecf3}} 
+\index{map.h@{map.h}!MapRemove@{MapRemove}}
+\index{MapRemove@{MapRemove}!map.h@{map.h}}
+\doxysubsubsection{\texorpdfstring{MapRemove()}{MapRemove()}}
+{\footnotesize\ttfamily void Map\+Remove (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}}]{map,  }\item[{void $\ast$}]{key }\end{DoxyParamCaption})}
+
+
+
+Removes the key from the map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em map} & The map to remove the key from \\
+\hline
+{\em key} & The key to remove from the map \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Passing in a pointer equal to 0 or 1 results in an undefined behaviour 
+
+{\ttfamily map} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}

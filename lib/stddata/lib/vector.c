@@ -19,16 +19,16 @@ static inline void VectorDoubleData(Vector restrict vector) {
     vector->data = realloc(vector->data, sizeof(void*) * (vector->alloc_size *= 2));
 }
 
-static inline void* VectorUnsafeGet(Vector restrict vector, int itemNum) {
-    return vector->data[itemNum];
+static inline void* VectorUnsafeGet(Vector restrict vector, int item_num) {
+    return vector->data[item_num];
 }
 
-static inline void VectorUnsafeSet(Vector restrict vector, int itemNum, void* newItem) {
-    vector->data[itemNum] = newItem;
+static inline void VectorUnsafeSet(Vector restrict vector, int item_num, void* new_item) {
+    vector->data[item_num] = new_item;
 }
 
 /* Function definitions */
-Vector NewVector(int size) {
+Vector NewVector(unsigned int size) {
     Vector restrict out = malloc(sizeof(VectorRepr));
     const int newAllocSize = max(size, MIN_VECTOR_SIZE);
     out -> data = malloc(sizeof(void*) * newAllocSize);
@@ -45,7 +45,7 @@ Vector NewEmptyVector() {
     return out;
 }
 
-Vector NewFilledVector(int size, void* contents[]) {
+Vector NewFilledVector(unsigned int size, void* contents[]) {
     Vector out = NewVector(size);
     memcpy(out -> data, contents, sizeof(void*) * size);
     return out;
@@ -56,14 +56,14 @@ void DeleteVector(Vector vector) {
     free(vector);
 }
 
-void* VectorGet(Vector restrict vector, int itemNum) {
-    assert(itemNum < vector->size && itemNum >= 0);
-    return VectorUnsafeGet(vector, itemNum);
+void* VectorGet(Vector restrict vector, int item_num) {
+    assert(item_num < vector->size && item_num >= 0);
+    return VectorUnsafeGet(vector, item_num);
 }
 
-void VectorSet(Vector restrict vector, int itemNum, void* newItem) {
-    assert(itemNum < vector->size && itemNum >= 0);
-    VectorUnsafeSet(vector, itemNum, newItem);
+void VectorSet(Vector restrict vector, int item_num, void* new_item) {
+    assert(item_num < vector->size && item_num >= 0);
+    VectorUnsafeSet(vector, item_num, new_item);
 }
 
 int VectorSize(Vector restrict vector) {
@@ -78,7 +78,7 @@ int VectorAllocSize(Vector restrict vector) {
     return vector->alloc_size;
 }
 
-void VectorResize(Vector restrict vector, int size) {
+void VectorResize(Vector restrict vector, unsigned int size) {
     assert(size >= 0);
     vector->size = size;
     if(vector->alloc_size >= size)
@@ -94,7 +94,7 @@ void VectorClear(Vector restrict vector) {
     VectorResize(vector, 0);
 }
 
-void VectorForcedResize(Vector restrict vector, int size) {
+void VectorForcedResize(Vector restrict vector, unsigned int size) {
     size = max(size, MIN_VECTOR_SIZE);
     vector->data = realloc(vector->data, sizeof(void*) * (vector->alloc_size = size));
 }
@@ -103,12 +103,12 @@ void VectorForcedClear(Vector restrict vector) {
     VectorForcedResize(vector, 0);
 }
 
-void VectorPushBack(Vector restrict vector, void* newItem) {
+void VectorPushBack(Vector restrict vector, void* new_item) {
     vector->size++;
     if(vector->size > vector->alloc_size) {
         VectorDoubleData(vector);
     }
-    VectorUnsafeSet(vector, vector->size - 1, newItem);
+    VectorUnsafeSet(vector, vector->size - 1, new_item);
 }
 
 void* VectorPopBack(Vector restrict vector) {

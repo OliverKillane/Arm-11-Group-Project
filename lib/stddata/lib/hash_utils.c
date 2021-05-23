@@ -1,4 +1,4 @@
-#include <map_utils.h>
+#include <hash_utils.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -17,18 +17,10 @@ bool StringEq(void* str_a, void* str_b) {
     return strcmp((char*)str_a, (char*)str_b) == 0;
 }
 
-unsigned long long IntPtrHash(void* int_ptr) {
+unsigned long long IntHash(void* int_ptr) {
     return *(int*)int_ptr;
 }
 
-bool IntPtrEq(void* int_a, void* int_b) {
+bool IntEq(void* int_a, void* int_b) {
     return *(int*)int_a == *(int*)int_b;
-}
-
-unsigned long long IntHash(void* int_val) { /* purposefull illegal conversion */
-    return int_val;
-}
-
-bool IntEq(void* int_a, void* int_b) { /* purposefull illegal conversion */
-    return int_a == int_b;
 }
