@@ -43,7 +43,7 @@ typedef struct {
 // struct to hold shift function results.
 typedef struct {
     word result;
-    word carryout;
+    bool carryout;
 } shiftRes;
 
 
