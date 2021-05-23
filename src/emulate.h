@@ -33,17 +33,6 @@ typedef struct {
 // declared the CPU that will be used.
 extern machineState CPU;
 
-/* Take the pointer to the start of the instructions in memory.
-Instructions are stored separately from the m,ain 64KB memory (like an I-Cache)
-    start           <- Pointer tyo start of instruction region
-    numInstructions <- Number of instructions present, used to prevenmt seg
-                       faults in fetch.
-*/
-typedef struct {
-    instruction *start;
-    word numInstructions;
-} program;
-
 // struct to hold shift function results.
 typedef struct {
     word result;
@@ -128,17 +117,15 @@ typedef enum {
 
 // INSTRUCTION PROCESSING:
 
-/* Return a pointer to the start of the program instructions:
-    filename <- name of the file to load 
+/* Load the program into memory
 */
-program getProgram(char* filename);
+void loadProgram(char* filename);
 
 
 /* Run the program starting at start, determine instruction condition and 
 format, and send to relevant function.
-    start <- pointer to array of instructions
 */
-void runProgram(program prog);
+void runProgram();
 
 
 /* Check that an instruction's condition code can proceed

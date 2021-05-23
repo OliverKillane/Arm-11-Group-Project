@@ -18,8 +18,11 @@ int main(int argc, char** argv) {
   CPU.memory = calloc(1 << 16, sizeof(byte));
   memset(CPU.registers, 0, 64);
 
-  // Get and run the provided program file
-  runProgram(getProgram(argv[1]));
+  // Load the selectd binary into memory
+  loadProgram(argv[1]);
+
+  // Run the program from the start;
+  runProgram();
 
   // Print out the final state of the registers and the non-zero memroy
   printState();
@@ -31,7 +34,7 @@ int main(int argc, char** argv) {
 
 
 // edit needs to be tested, make more robust
-program getProgram(char* filename) {
+void loadProgram(char* filename) {
   FILE *file = fopen(filename, "rb");
 
   if (!file) {
@@ -51,31 +54,20 @@ program getProgram(char* filename) {
     exit(CORRUPT_FILE);
   }
 
-  program prog;
-
-  // create buffer for instructions of adequet size
-  prog.start = malloc(length);
-
-  // add numer of Instructions field to the program
-  prog.numInstructions = length >> 2;
-
   // return to the start of the file
   fseek(file, 0, SEEK_SET);
 
   // read file into buffer starting at prog.instructions
-  if (fread(prog.start, 1, length, file) != length) {
+  if (fread(CPU.memory, 1, length, file) != length) {
     perror("Unable to load all instructions");
     exit(INVALID_FILE);
   }
 
   //close file
   fclose(file);
-
-  //return the program
-  return prog;
 }
 
-void runProgram(program prog) {
+void runProgram() {
   *GETREG(PC) = 2;
   word instrNo;
   instruction currentInstr;
@@ -83,14 +75,9 @@ void runProgram(program prog) {
   do {
     word instrNo = (*GETREG(PC) >> 2) - 2;
 
-    if (instrNo >= prog.numInstructions){
-      perror("Program does not terminate, has surpassed instructions without halt");
-      exit(NON_TERMINATION);
-    }
+    currentInstr = *MEMLOC(*GETREG(PC) - 8);
 
-    currentInstr = prog.start[instrNo];
-
-    (*GETREG(PC))++;
+    (*GETREG(PC)) += 4;
 
     if(GETBITS(currentInstr, 24, 4) == 0xA) {
       branchInstr(currentInstr);
@@ -128,7 +115,7 @@ void branchInstr(instruction instr) {
   int offset = (GETBITS(instr, 0, 23) - GETBIT(instr, 23) << 23) << 2;
   
   // update the PC by offset, then skip forwads 2 (so instruction at PC is executed)
-  *GETREG(PC) += offset + 2;
+  *GETREG(PC) += offset + 8;
 }
 
 // ISSUE: needs to be tested
