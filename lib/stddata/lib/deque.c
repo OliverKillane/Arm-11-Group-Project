@@ -9,12 +9,12 @@ void DeleteDeque(Deque restrict deque) {
     DeleteList(deque);
 }
 
-void DequePushFront(Deque restrict deque, void* newItem) {
-    ListPushFront(deque, newItem);
+void DequePushFront(Deque restrict deque, void* new_item) {
+    ListPushFront(deque, new_item);
 }
 
-void DequePushBack(Deque restrict deque, void* newItem) {
-    ListPushBack(deque, newItem);
+void DequePushBack(Deque restrict deque, void* new_item) {
+    ListPushBack(deque, new_item);
 }
 
 void* DequePopFront(Deque restrict deque) {

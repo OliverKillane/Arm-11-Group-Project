@@ -1,0 +1,31 @@
+\hypertarget{structListIterator}{}\doxysection{List\+Iterator Struct Reference}
+\label{structListIterator}\index{ListIterator@{ListIterator}}
+
+
+An iterator for a \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}.  
+
+
+
+
+\doxysubsection{Detailed Description}
+An iterator for a \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}. 
+
+The \mbox{\hyperlink{structListIterator}{List\+Iterator}} is mainly used for looping over a list, but might also be used to insert new items inside a list. Example usage in for loops\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{for}(\mbox{\hyperlink{structListIterator}{ListIterator}} iter = \mbox{\hyperlink{list__iterator_8h_a038fcc2539fd5fd8d4c8a679ba8a454e}{ListBegin}}(list); !\mbox{\hyperlink{list__iterator_8h_a66832bbe6676a3303204486d20176cc1}{ListIteratorEqual}}(iter, \mbox{\hyperlink{list__iterator_8h_ae2e5f68080a4f755e9c141eb5b38a207}{ListEnd}}(list)); \mbox{\hyperlink{list__iterator_8h_a7d8ba6652e6e16ee1600054767896cf8}{ListIteratorIncr}}(\&iter)) \{}
+\DoxyCodeLine{    printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, (\textcolor{keywordtype}{char}*)\mbox{\hyperlink{list__iterator_8h_afe2ccb31642c36af1057e4dab21f7b66}{ListIteratorGet}}(iter));}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+\begin{DoxyNote}{Note}
+Most of the interface functions require only the value of an iterator to be passed, except for the ones modifying it ( \mbox{\hyperlink{list__iterator_8h_a7d8ba6652e6e16ee1600054767896cf8}{List\+Iterator\+Incr}} and \mbox{\hyperlink{list__iterator_8h_a584d75a15c4b2f7d5c221b67a33728b5}{List\+Iterator\+Decr}} ) 
+
+Most of the time it will be used in combination with the LISTFOR macro 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Changing the internal variables manually outside of the interface functions will result in an undefined behaviour. 
+
+Attempting to use an uninitialized \mbox{\hyperlink{structListIterator}{List\+Iterator}} will result in an undefined behaviour 
+\end{DoxyWarning}

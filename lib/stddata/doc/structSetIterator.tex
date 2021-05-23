@@ -1,0 +1,31 @@
+\hypertarget{structSetIterator}{}\doxysection{Set\+Iterator Struct Reference}
+\label{structSetIterator}\index{SetIterator@{SetIterator}}
+
+
+An iterator for a \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}.  
+
+
+
+
+\doxysubsection{Detailed Description}
+An iterator for a \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}. 
+
+The \mbox{\hyperlink{structSetIterator}{Set\+Iterator}} is mainly used for looping over a set. Example usage in for loops\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{for}(\mbox{\hyperlink{structSetIterator}{SetIterator}} iter = \mbox{\hyperlink{set__iterator_8h_a5be9d349b7fe0267f8b59a5815cdf9f8}{SetBegin}}(set); \mbox{\hyperlink{set__iterator_8h_a28e94d74f41b6d681446ee87e15b3488}{SetIteratorLess}}(iter, \mbox{\hyperlink{set__iterator_8h_a209b2371860045ffb2bd4e2d4d2ba06c}{SetEnd}}(set)); \mbox{\hyperlink{set__iterator_8h_af948206a855a6344ff130c397adf3a68}{SetIteratorIncr}}(\&iter)) \{}
+\DoxyCodeLine{    printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, (\textcolor{keywordtype}{char}*)\mbox{\hyperlink{set__iterator_8h_a75f49966a8a0c5611e69bad1c5a4c0df}{SetIteratorGet}}(iter));}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+\begin{DoxyNote}{Note}
+Most of the interface functions require only the value of an iterator to be passed, except for the ones modifying it ( \mbox{\hyperlink{set__iterator_8h_af948206a855a6344ff130c397adf3a68}{Set\+Iterator\+Incr}} and \mbox{\hyperlink{set__iterator_8h_aa768ccb734dc825f2c2ea38eea2e4152}{Set\+Iterator\+Decr}} ) 
+
+Most of the time it will be used in combination with the SETFOR macro 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Changing the internal variables manually outside of the interface functions will result in an undefined behaviour. 
+
+Attempting to use an uninitialized \mbox{\hyperlink{structSetIterator}{Set\+Iterator}} will result in an undefined behaviour 
+\end{DoxyWarning}
