@@ -1,0 +1,212 @@
+\hypertarget{set__iterator_8h}{}\doxysection{include/set\+\_\+iterator.h File Reference}
+\label{set__iterator_8h}\index{include/set\_iterator.h@{include/set\_iterator.h}}
+
+
+\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} and utilities related to it  
+
+
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structSetIterator}{Set\+Iterator}}
+\begin{DoxyCompactList}\small\item\em An iterator for a \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{set__iterator_8h_ae8e738d2026b130e5d581638f69a4231}{SETFOR}}(set,  iter)
+\begin{DoxyCompactList}\small\item\em A macro for looping over a set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} \mbox{\hyperlink{set__iterator_8h_a5be9d349b7fe0267f8b59a5815cdf9f8}{Set\+Begin}} (\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} set)
+\begin{DoxyCompactList}\small\item\em Returns an iterator at the beginning of the set. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} \mbox{\hyperlink{set__iterator_8h_a209b2371860045ffb2bd4e2d4d2ba06c}{Set\+End}} (\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} set)
+\begin{DoxyCompactList}\small\item\em Returns an iterator at the end of the set. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{set__iterator_8h_a28e94d74f41b6d681446ee87e15b3488}{Set\+Iterator\+Less}} (\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} a, \mbox{\hyperlink{structSetIterator}{Set\+Iterator}} b)
+\begin{DoxyCompactList}\small\item\em Checks if the first iterator points before the second. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{set__iterator_8h_afb6d7286a787d9b1a82624af8b11fc1e}{Set\+Iterator\+Compare}} (\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} a, \mbox{\hyperlink{structSetIterator}{Set\+Iterator}} b)
+\begin{DoxyCompactList}\small\item\em Compares two iterators. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{set__iterator_8h_af948206a855a6344ff130c397adf3a68}{Set\+Iterator\+Incr}} (\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} $\ast$iter)
+\begin{DoxyCompactList}\small\item\em Moves the iterator to the next item in the set. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{set__iterator_8h_aa768ccb734dc825f2c2ea38eea2e4152}{Set\+Iterator\+Decr}} (\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} $\ast$iter)
+\begin{DoxyCompactList}\small\item\em Moves the iterator to the previous item in the set. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{set__iterator_8h_a75f49966a8a0c5611e69bad1c5a4c0df}{Set\+Iterator\+Get}} (\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} iter)
+\begin{DoxyCompactList}\small\item\em Returns an item the iterator is pointing to. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{set__iterator_8h_ae8e738d2026b130e5d581638f69a4231}\label{set__iterator_8h_ae8e738d2026b130e5d581638f69a4231}} 
+\index{set\_iterator.h@{set\_iterator.h}!SETFOR@{SETFOR}}
+\index{SETFOR@{SETFOR}!set\_iterator.h@{set\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{SETFOR}{SETFOR}}
+{\footnotesize\ttfamily \#define SETFOR(\begin{DoxyParamCaption}\item[{}]{set,  }\item[{}]{iter }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \textcolor{keywordflow}{for}(\mbox{\hyperlink{structSetIterator}{SetIterator}} iter = \mbox{\hyperlink{set__iterator_8h_a5be9d349b7fe0267f8b59a5815cdf9f8}{SetBegin}}(\textcolor{keyword}{set}); \(\backslash\)}
+\DoxyCodeLine{        SetIteratorLess(iter, \mbox{\hyperlink{set__iterator_8h_a209b2371860045ffb2bd4e2d4d2ba06c}{SetEnd}}(\textcolor{keyword}{set})); \(\backslash\)}
+\DoxyCodeLine{        SetIteratorIncr(\&iter))}
+
+\end{DoxyCode}
+
+
+A macro for looping over a set. 
+
+This macro creates a for loop header using iterators to iterate over a set. Example usage\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{set__iterator_8h_ae8e738d2026b130e5d581638f69a4231}{SETFOR}}(set, iter) \{}
+\DoxyCodeLine{    printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, (\textcolor{keywordtype}{char}*)\mbox{\hyperlink{set__iterator_8h_a75f49966a8a0c5611e69bad1c5a4c0df}{SetIteratorGet}}(iter));}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & the set to be iterated over \\
+\hline
+{\em iter} & the name of the iterator that will index the set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+{\ttfamily set} not being a valid allocated \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} results in an undefined behaviour 
+\end{DoxyWarning}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{set__iterator_8h_a5be9d349b7fe0267f8b59a5815cdf9f8}\label{set__iterator_8h_a5be9d349b7fe0267f8b59a5815cdf9f8}} 
+\index{set\_iterator.h@{set\_iterator.h}!SetBegin@{SetBegin}}
+\index{SetBegin@{SetBegin}!set\_iterator.h@{set\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{SetBegin()}{SetBegin()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structSetIterator}{Set\+Iterator}} Set\+Begin (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}}]{set }\end{DoxyParamCaption})}
+
+
+
+Returns an iterator at the beginning of the set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to get the beginning iterator to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An iterator pointing at the first item of the {\ttfamily set} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily set} not being a valid allocated \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set__iterator_8h_a209b2371860045ffb2bd4e2d4d2ba06c}\label{set__iterator_8h_a209b2371860045ffb2bd4e2d4d2ba06c}} 
+\index{set\_iterator.h@{set\_iterator.h}!SetEnd@{SetEnd}}
+\index{SetEnd@{SetEnd}!set\_iterator.h@{set\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{SetEnd()}{SetEnd()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structSetIterator}{Set\+Iterator}} Set\+End (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}}]{set }\end{DoxyParamCaption})}
+
+
+
+Returns an iterator at the end of the set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to get the end iterator to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An iterator pointing at the item behind the last item of the {\ttfamily set} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily set} not being a valid allocated \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set__iterator_8h_a28e94d74f41b6d681446ee87e15b3488}\label{set__iterator_8h_a28e94d74f41b6d681446ee87e15b3488}} 
+\index{set\_iterator.h@{set\_iterator.h}!SetIteratorLess@{SetIteratorLess}}
+\index{SetIteratorLess@{SetIteratorLess}!set\_iterator.h@{set\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{SetIteratorLess()}{SetIteratorLess()}}
+{\footnotesize\ttfamily bool Set\+Iterator\+Less (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structSetIterator}{Set\+Iterator}}}]{a,  }\item[{\mbox{\hyperlink{structSetIterator}{Set\+Iterator}}}]{b }\end{DoxyParamCaption})}
+
+
+
+Checks if the first iterator points before the second. 
+
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the first iterator points before the second, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+the two iterators not pointing at the same set will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set__iterator_8h_afb6d7286a787d9b1a82624af8b11fc1e}\label{set__iterator_8h_afb6d7286a787d9b1a82624af8b11fc1e}} 
+\index{set\_iterator.h@{set\_iterator.h}!SetIteratorCompare@{SetIteratorCompare}}
+\index{SetIteratorCompare@{SetIteratorCompare}!set\_iterator.h@{set\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{SetIteratorCompare()}{SetIteratorCompare()}}
+{\footnotesize\ttfamily int Set\+Iterator\+Compare (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structSetIterator}{Set\+Iterator}}}]{a,  }\item[{\mbox{\hyperlink{structSetIterator}{Set\+Iterator}}}]{b }\end{DoxyParamCaption})}
+
+
+
+Compares two iterators. 
+
+\begin{DoxyReturn}{Returns}
+-\/1 if the first iterator points to an item before the second iterator 0 if the two iterators point to the same item 1 if the second iterator points to an item before the first iterator 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+the two iterators not pointing at the same set will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set__iterator_8h_af948206a855a6344ff130c397adf3a68}\label{set__iterator_8h_af948206a855a6344ff130c397adf3a68}} 
+\index{set\_iterator.h@{set\_iterator.h}!SetIteratorIncr@{SetIteratorIncr}}
+\index{SetIteratorIncr@{SetIteratorIncr}!set\_iterator.h@{set\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{SetIteratorIncr()}{SetIteratorIncr()}}
+{\footnotesize\ttfamily void Set\+Iterator\+Incr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} $\ast$}]{iter }\end{DoxyParamCaption})}
+
+
+
+Moves the iterator to the next item in the set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the pointer to the iterator to be incremented \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+trying to increment an iterator pointing at the end of the set will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set__iterator_8h_aa768ccb734dc825f2c2ea38eea2e4152}\label{set__iterator_8h_aa768ccb734dc825f2c2ea38eea2e4152}} 
+\index{set\_iterator.h@{set\_iterator.h}!SetIteratorDecr@{SetIteratorDecr}}
+\index{SetIteratorDecr@{SetIteratorDecr}!set\_iterator.h@{set\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{SetIteratorDecr()}{SetIteratorDecr()}}
+{\footnotesize\ttfamily void Set\+Iterator\+Decr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} $\ast$}]{iter }\end{DoxyParamCaption})}
+
+
+
+Moves the iterator to the previous item in the set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the pointer to the iterator to be incremented \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+trying to increment an iterator pointing at the end of the set will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set__iterator_8h_a75f49966a8a0c5611e69bad1c5a4c0df}\label{set__iterator_8h_a75f49966a8a0c5611e69bad1c5a4c0df}} 
+\index{set\_iterator.h@{set\_iterator.h}!SetIteratorGet@{SetIteratorGet}}
+\index{SetIteratorGet@{SetIteratorGet}!set\_iterator.h@{set\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{SetIteratorGet()}{SetIteratorGet()}}
+{\footnotesize\ttfamily void$\ast$ Set\+Iterator\+Get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structSetIterator}{Set\+Iterator}}}]{iter }\end{DoxyParamCaption})}
+
+
+
+Returns an item the iterator is pointing to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the iterator to dereference \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the item the iterator is pointing at 
+\end{DoxyReturn}

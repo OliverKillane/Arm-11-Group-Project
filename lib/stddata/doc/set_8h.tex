@@ -1,0 +1,291 @@
+\hypertarget{set_8h}{}\doxysection{include/set.h File Reference}
+\label{set_8h}\index{include/set.h@{include/set.h}}
+
+
+\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} and utilities related to it  
+
+
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structSetRepr}{Set\+Repr}}
+\begin{DoxyCompactList}\small\item\em The structure representation of a hash set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{structSetRepr}{Set\+Repr}} $\ast$ \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}
+\begin{DoxyCompactList}\small\item\em An STL-\/like hash set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} \mbox{\hyperlink{set_8h_ab4e2f9c3e0c8526f2f3c2951ca2eb87e}{New\+Empty\+Set}} (unsigned long long($\ast$hash\+\_\+func)(void $\ast$), bool($\ast$eq\+\_\+func)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Creates a new empty \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} \mbox{\hyperlink{set_8h_abc3218a1be6b71dae2e3d4b0a67d0a6b}{New\+Filled\+Set}} (unsigned long long($\ast$hash\+\_\+func)(void $\ast$), bool($\ast$eq\+\_\+func)(void $\ast$, void $\ast$), int size, void $\ast$contents\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Creates a new \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} with {\ttfamily size} items. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{set_8h_a9df8e6838a095ebb986d65a4e0fe3fef}{Delete\+Set}} (\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} set)
+\begin{DoxyCompactList}\small\item\em Deallocates a \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{set_8h_af53b9fce9f4e3d6daecba1839ea2c1d5}{Set\+Size}} (\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} set)
+\begin{DoxyCompactList}\small\item\em Returns the number of items inside a set. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{set_8h_a900ef5c6d001065e262584c6238f9db5}{Set\+Alloc\+Size}} (\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} set)
+\begin{DoxyCompactList}\small\item\em Returns the allocated size of a set. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{set_8h_a05048d28a6ef10cb46fcab72b06fb24f}{Set\+Empty}} (\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} set)
+\begin{DoxyCompactList}\small\item\em Checks if the set is empty. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{set_8h_af86fef6e8408f08f962ffc291424879f}{Set\+Query}} (\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} set, void $\ast$item)
+\begin{DoxyCompactList}\small\item\em Checks if the item is in the set. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{set_8h_a8cecc1a093d2a78d4d8a33c769c8b48f}{Set\+Insert}} (\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} set, void $\ast$item)
+\begin{DoxyCompactList}\small\item\em Inserts the item into the set. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{set_8h_acf857db03e312884f6f21f093f76b1db}{Set\+Remove}} (\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} set, void $\ast$item)
+\begin{DoxyCompactList}\small\item\em Removes the item from the set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}\label{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}} 
+\index{set.h@{set.h}!Set@{Set}}
+\index{Set@{Set}!set.h@{set.h}}
+\doxysubsubsection{\texorpdfstring{Set}{Set}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{structSetRepr}{Set\+Repr}}$\ast$ \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}}
+
+
+
+An STL-\/like hash set. 
+
+This is a hash set, meaning that all operations are in amortized O(1)\+: It supports the following operations\+:
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{set_8h_af86fef6e8408f08f962ffc291424879f}{Set\+Query}} Checks if an item is in the set
+\item \mbox{\hyperlink{set_8h_a8cecc1a093d2a78d4d8a33c769c8b48f}{Set\+Insert}} Adds an item to a set
+\item \mbox{\hyperlink{set_8h_acf857db03e312884f6f21f093f76b1db}{Set\+Remove}} Removes an item from a set
+\end{DoxyItemize}
+
+It can be created using \mbox{\hyperlink{set_8h_ab4e2f9c3e0c8526f2f3c2951ca2eb87e}{New\+Empty\+Set}} or \mbox{\hyperlink{set_8h_abc3218a1be6b71dae2e3d4b0a67d0a6b}{New\+Filled\+Set}}, and deallocated using \mbox{\hyperlink{set_8h_a9df8e6838a095ebb986d65a4e0fe3fef}{Delete\+Set}} To check its size and test if it is empty, use \mbox{\hyperlink{set_8h_af53b9fce9f4e3d6daecba1839ea2c1d5}{Set\+Size}} and \mbox{\hyperlink{set_8h_a05048d28a6ef10cb46fcab72b06fb24f}{Set\+Empty}}
+
+\begin{DoxyNote}{Note}
+Even though this is only a typedef, do not delcare it as a pointer to \mbox{\hyperlink{structSetRepr}{Set\+Repr}} for improved code clarity 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structSetIterator}{Set\+Iterator}} to loop over a set 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{set_8h_ab4e2f9c3e0c8526f2f3c2951ca2eb87e}\label{set_8h_ab4e2f9c3e0c8526f2f3c2951ca2eb87e}} 
+\index{set.h@{set.h}!NewEmptySet@{NewEmptySet}}
+\index{NewEmptySet@{NewEmptySet}!set.h@{set.h}}
+\doxysubsubsection{\texorpdfstring{NewEmptySet()}{NewEmptySet()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} New\+Empty\+Set (\begin{DoxyParamCaption}\item[{unsigned long long($\ast$)(void $\ast$)}]{hash\+\_\+func,  }\item[{bool($\ast$)(void $\ast$, void $\ast$)}]{eq\+\_\+func }\end{DoxyParamCaption})}
+
+
+
+Creates a new empty \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} using malloc.
+
+
+\begin{DoxyParams}{Parameters}
+{\em hash\+\_\+func} & The hash function of the set \\
+\hline
+{\em eq\+\_\+func} & The equality function of the set to compare the items with\\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+In order to avoid memory leaks, please use \mbox{\hyperlink{set_8h_a9df8e6838a095ebb986d65a4e0fe3fef}{Delete\+Set}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set_8h_abc3218a1be6b71dae2e3d4b0a67d0a6b}\label{set_8h_abc3218a1be6b71dae2e3d4b0a67d0a6b}} 
+\index{set.h@{set.h}!NewFilledSet@{NewFilledSet}}
+\index{NewFilledSet@{NewFilledSet}!set.h@{set.h}}
+\doxysubsubsection{\texorpdfstring{NewFilledSet()}{NewFilledSet()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} New\+Filled\+Set (\begin{DoxyParamCaption}\item[{unsigned long long($\ast$)(void $\ast$)}]{hash\+\_\+func,  }\item[{bool($\ast$)(void $\ast$, void $\ast$)}]{eq\+\_\+func,  }\item[{int}]{size,  }\item[{void $\ast$}]{contents\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Creates a new \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} with {\ttfamily size} items. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} using malloc, and fills it with the entries in the {\ttfamily contents} array
+
+
+\begin{DoxyParams}{Parameters}
+{\em hash\+\_\+func} & The hash function of the set \\
+\hline
+{\em eq\+\_\+func} & The equality function of the set to compare the items with \\
+\hline
+{\em size} & The size of the {\ttfamily contents} array \\
+\hline
+{\em contents} & The values to fill the set with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Passing in an array that is not an array of void$\ast$ will, unlike with passing single elements, result in an undefined behaviour. 
+
+{\ttfamily contents} having items equal to 0 or 1 will result in an undefined behaviour 
+
+In order to avoid memory leaks, please use \mbox{\hyperlink{set_8h_a9df8e6838a095ebb986d65a4e0fe3fef}{Delete\+Set}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set_8h_a9df8e6838a095ebb986d65a4e0fe3fef}\label{set_8h_a9df8e6838a095ebb986d65a4e0fe3fef}} 
+\index{set.h@{set.h}!DeleteSet@{DeleteSet}}
+\index{DeleteSet@{DeleteSet}!set.h@{set.h}}
+\doxysubsubsection{\texorpdfstring{DeleteSet()}{DeleteSet()}}
+{\footnotesize\ttfamily void Delete\+Set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}}]{set }\end{DoxyParamCaption})}
+
+
+
+Deallocates a \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to be deallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Trying to use or deallocate already deallocated \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set_8h_af53b9fce9f4e3d6daecba1839ea2c1d5}\label{set_8h_af53b9fce9f4e3d6daecba1839ea2c1d5}} 
+\index{set.h@{set.h}!SetSize@{SetSize}}
+\index{SetSize@{SetSize}!set.h@{set.h}}
+\doxysubsubsection{\texorpdfstring{SetSize()}{SetSize()}}
+{\footnotesize\ttfamily int Set\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}}]{set }\end{DoxyParamCaption})}
+
+
+
+Returns the number of items inside a set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to check the size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the set 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This is not the same as the number of actually allocated entries 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{set_8h_a900ef5c6d001065e262584c6238f9db5}{Set\+Alloc\+Size}} for the number of allocated entries 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+{\ttfamily set} not being a valid allocated \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set_8h_a900ef5c6d001065e262584c6238f9db5}\label{set_8h_a900ef5c6d001065e262584c6238f9db5}} 
+\index{set.h@{set.h}!SetAllocSize@{SetAllocSize}}
+\index{SetAllocSize@{SetAllocSize}!set.h@{set.h}}
+\doxysubsubsection{\texorpdfstring{SetAllocSize()}{SetAllocSize()}}
+{\footnotesize\ttfamily int Set\+Alloc\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}}]{set }\end{DoxyParamCaption})}
+
+
+
+Returns the allocated size of a set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to check the allocated size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The allocated size of the set 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This is not the same as the number of accessible entries in a set 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{set_8h_af53b9fce9f4e3d6daecba1839ea2c1d5}{Set\+Size}} for the number of accessible entries in a set 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+{\ttfamily set} not being a valid allocated \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set_8h_a05048d28a6ef10cb46fcab72b06fb24f}\label{set_8h_a05048d28a6ef10cb46fcab72b06fb24f}} 
+\index{set.h@{set.h}!SetEmpty@{SetEmpty}}
+\index{SetEmpty@{SetEmpty}!set.h@{set.h}}
+\doxysubsubsection{\texorpdfstring{SetEmpty()}{SetEmpty()}}
+{\footnotesize\ttfamily bool Set\+Empty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}}]{set }\end{DoxyParamCaption})}
+
+
+
+Checks if the set is empty. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to check the emptiness of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the set has no items, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily set} not being a valid allocated \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set_8h_af86fef6e8408f08f962ffc291424879f}\label{set_8h_af86fef6e8408f08f962ffc291424879f}} 
+\index{set.h@{set.h}!SetQuery@{SetQuery}}
+\index{SetQuery@{SetQuery}!set.h@{set.h}}
+\doxysubsubsection{\texorpdfstring{SetQuery()}{SetQuery()}}
+{\footnotesize\ttfamily bool Set\+Query (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}}]{set,  }\item[{void $\ast$}]{item }\end{DoxyParamCaption})}
+
+
+
+Checks if the item is in the set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to check the item for \\
+\hline
+{\em item} & The item to check if is in a set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the item is in the set, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Passing in a pointer to 0 or 1 results in an undefined behaviour 
+
+{\ttfamily set} not being a valid allocated \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set_8h_a8cecc1a093d2a78d4d8a33c769c8b48f}\label{set_8h_a8cecc1a093d2a78d4d8a33c769c8b48f}} 
+\index{set.h@{set.h}!SetInsert@{SetInsert}}
+\index{SetInsert@{SetInsert}!set.h@{set.h}}
+\doxysubsubsection{\texorpdfstring{SetInsert()}{SetInsert()}}
+{\footnotesize\ttfamily void Set\+Insert (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}}]{set,  }\item[{void $\ast$}]{item }\end{DoxyParamCaption})}
+
+
+
+Inserts the item into the set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to insert the item into \\
+\hline
+{\em item} & The item to insert into the set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Passing in a pointer equal to 0 or 1 results in an undefined behaviour 
+
+{\ttfamily set} not being a valid allocated \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{set_8h_acf857db03e312884f6f21f093f76b1db}\label{set_8h_acf857db03e312884f6f21f093f76b1db}} 
+\index{set.h@{set.h}!SetRemove@{SetRemove}}
+\index{SetRemove@{SetRemove}!set.h@{set.h}}
+\doxysubsubsection{\texorpdfstring{SetRemove()}{SetRemove()}}
+{\footnotesize\ttfamily void Set\+Remove (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}}}]{set,  }\item[{void $\ast$}]{item }\end{DoxyParamCaption})}
+
+
+
+Removes the item from the set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to remove the item from \\
+\hline
+{\em item} & The item to remove from the set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Passing in a pointer equal to 0 or 1 results in an undefined behaviour 
+
+{\ttfamily set} not being a valid allocated \mbox{\hyperlink{set_8h_ad6f7ad6837c9bbafb49347d5a3469e96}{Set}} results in an undefined behaviour 
+\end{DoxyWarning}

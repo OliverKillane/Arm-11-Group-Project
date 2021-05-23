@@ -1,0 +1,407 @@
+\hypertarget{list_8h}{}\doxysection{include/list.h File Reference}
+\label{list_8h}\index{include/list.h@{include/list.h}}
+
+
+\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} and utilities related to it  
+
+
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structListRepr}{List\+Repr}}
+\begin{DoxyCompactList}\small\item\em The structure representation of a linked list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{structListRepr}{List\+Repr}} $\ast$ \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}
+\begin{DoxyCompactList}\small\item\em An STL-\/like Linked List. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} \mbox{\hyperlink{list_8h_a46eab2bdab734fc9931d1d7fd76bea22}{New\+Empty\+List}} ()
+\begin{DoxyCompactList}\small\item\em Creates a new empty \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} \mbox{\hyperlink{list_8h_ad775bb87a4fb893b83ac9fbebbcf176e}{New\+List}} (int size)
+\begin{DoxyCompactList}\small\item\em Creates a new \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} with {\ttfamily size} items. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} \mbox{\hyperlink{list_8h_ab18b5d535a373ad6273d947d8e327f33}{New\+Filled\+List}} (int size, void $\ast$contents\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Creates a new \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} with {\ttfamily size} items. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list_8h_ab1b1b2f3e2d98df3c4909ebda1d213ee}{Delete\+List}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list)
+\begin{DoxyCompactList}\small\item\em Deallocates a \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{list_8h_ab924e88eb714daae5c4cbd469563308e}{List\+Size}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list)
+\begin{DoxyCompactList}\small\item\em Returns the number of items inside a list. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{list_8h_a2a50dce680502655d689d279c74e3cc5}{List\+Empty}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list)
+\begin{DoxyCompactList}\small\item\em Checks if the list is empty. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list_8h_ad8b34f2e311fd172baf716d1fc0e437d}{List\+Push\+Back}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Pushes an item in the back of the list. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{list_8h_a0e21b7e0890aa1cb0cd1e550eda345a8}{List\+Pop\+Back}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list)
+\begin{DoxyCompactList}\small\item\em Removes an item from the back of the list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list_8h_ae760e2adf45640233d1cf89d9327ee5e}{List\+Push\+Front}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Pushes an item in the front of the list. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{list_8h_ab7c989cfad01ae9787828faf84a8635d}{List\+Pop\+Front}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list)
+\begin{DoxyCompactList}\small\item\em Removes an item from the front of the list. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{list_8h_ae4197c5aea01174e287d81e0a6ab73d7}{List\+Get}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list, int item\+\_\+num)
+\begin{DoxyCompactList}\small\item\em Returns an item at the given position in the list (in O(n)) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list_8h_a72580a25032c3f873b03d37d5b678db4}{List\+Set}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list, int item\+\_\+num, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Sets an item at the given position in the list (in O(n)) \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{list_8h_aa1321fa944023bf73aad868ce1415f81}{List\+Front}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list)
+\begin{DoxyCompactList}\small\item\em Returns an item from the front of the list without removing it. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{list_8h_afa9bf84f392d7efc239644857b0618ef}{List\+Back}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list)
+\begin{DoxyCompactList}\small\item\em Returns an item from the back of the list without removing it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{list_8h_a29731fb23c4f8fd187f12b1d78536c30}\label{list_8h_a29731fb23c4f8fd187f12b1d78536c30}} 
+\index{list.h@{list.h}!List@{List}}
+\index{List@{List}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{List}{List}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{structListRepr}{List\+Repr}}$\ast$ \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}
+
+
+
+An STL-\/like Linked List. 
+
+This is a linked list, meaning that all item insertion operations are in O(1), but accessing items inside of the list is in O(n). It supports the following operations\+:
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{list_8h_ae760e2adf45640233d1cf89d9327ee5e}{List\+Push\+Front}} Adds a new element to the front of the list
+\item \mbox{\hyperlink{list_8h_ad8b34f2e311fd172baf716d1fc0e437d}{List\+Push\+Back}} Adds a new element to the back of the the list
+\item \mbox{\hyperlink{list_8h_ab7c989cfad01ae9787828faf84a8635d}{List\+Pop\+Front}} Removes an item from the front of the list and returns it
+\item \mbox{\hyperlink{list_8h_a0e21b7e0890aa1cb0cd1e550eda345a8}{List\+Pop\+Back}} Removes an item from the back of the list and returns it
+\item \mbox{\hyperlink{list_8h_aa1321fa944023bf73aad868ce1415f81}{List\+Front}} Returns the item at the front of the list
+\item \mbox{\hyperlink{list_8h_afa9bf84f392d7efc239644857b0618ef}{List\+Back}} Returns the item at the back of the list
+\item \mbox{\hyperlink{list_8h_a72580a25032c3f873b03d37d5b678db4}{List\+Set}} Sets a value of the list at a specific index (in linear time complexity)
+\item \mbox{\hyperlink{list_8h_ae4197c5aea01174e287d81e0a6ab73d7}{List\+Get}} Returns a value of the list at a specific index (in linear time complexity)
+\end{DoxyItemize}
+
+It can be created using \mbox{\hyperlink{list_8h_a46eab2bdab734fc9931d1d7fd76bea22}{New\+Empty\+List}}, \mbox{\hyperlink{list_8h_ad775bb87a4fb893b83ac9fbebbcf176e}{New\+List}} or \mbox{\hyperlink{list_8h_ab18b5d535a373ad6273d947d8e327f33}{New\+Filled\+List}}, and deallocated using \mbox{\hyperlink{list_8h_ab1b1b2f3e2d98df3c4909ebda1d213ee}{Delete\+List}}. To check its size and test if it is empty, use \mbox{\hyperlink{list_8h_ab924e88eb714daae5c4cbd469563308e}{List\+Size}} and \mbox{\hyperlink{list_8h_a2a50dce680502655d689d279c74e3cc5}{List\+Empty}}
+
+\begin{DoxyNote}{Note}
+Even though this is only a typedef, do not delcare it as a pointer to \mbox{\hyperlink{structListRepr}{List\+Repr}} for improved code clarity 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structListIterator}{List\+Iterator}} to loop over a list 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{list_8h_a46eab2bdab734fc9931d1d7fd76bea22}\label{list_8h_a46eab2bdab734fc9931d1d7fd76bea22}} 
+\index{list.h@{list.h}!NewEmptyList@{NewEmptyList}}
+\index{NewEmptyList@{NewEmptyList}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{NewEmptyList()}{NewEmptyList()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} New\+Empty\+List (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates a new empty \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} using malloc.
+
+\begin{DoxyWarning}{Warning}
+In order to avoid memory leaks, please use \mbox{\hyperlink{list_8h_ab1b1b2f3e2d98df3c4909ebda1d213ee}{Delete\+List}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_ad775bb87a4fb893b83ac9fbebbcf176e}\label{list_8h_ad775bb87a4fb893b83ac9fbebbcf176e}} 
+\index{list.h@{list.h}!NewList@{NewList}}
+\index{NewList@{NewList}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{NewList()}{NewList()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} New\+List (\begin{DoxyParamCaption}\item[{int}]{size }\end{DoxyParamCaption})}
+
+
+
+Creates a new \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} with {\ttfamily size} items. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} using malloc, and fills it with {\ttfamily size} NULL pointer entries.
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The number of items to be preallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+In order to avoid memory leaks, please use \mbox{\hyperlink{list_8h_ab1b1b2f3e2d98df3c4909ebda1d213ee}{Delete\+List}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_ab18b5d535a373ad6273d947d8e327f33}\label{list_8h_ab18b5d535a373ad6273d947d8e327f33}} 
+\index{list.h@{list.h}!NewFilledList@{NewFilledList}}
+\index{NewFilledList@{NewFilledList}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{NewFilledList()}{NewFilledList()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} New\+Filled\+List (\begin{DoxyParamCaption}\item[{int}]{size,  }\item[{void $\ast$}]{contents\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Creates a new \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} with {\ttfamily size} items. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} using malloc, and fills it with the entries in the {\ttfamily contents} array
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The size of the {\ttfamily contents} array \\
+\hline
+{\em contents} & The values to fill the list with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Passing in an array that is not an array of void$\ast$ will, unlike with passing single elements, result in an undefined behaviour. 
+
+In order to avoid memory leaks, please use \mbox{\hyperlink{list_8h_ab1b1b2f3e2d98df3c4909ebda1d213ee}{Delete\+List}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_ab1b1b2f3e2d98df3c4909ebda1d213ee}\label{list_8h_ab1b1b2f3e2d98df3c4909ebda1d213ee}} 
+\index{list.h@{list.h}!DeleteList@{DeleteList}}
+\index{DeleteList@{DeleteList}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{DeleteList()}{DeleteList()}}
+{\footnotesize\ttfamily void Delete\+List (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list }\end{DoxyParamCaption})}
+
+
+
+Deallocates a \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list to be deallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Trying to use or deallocate already deallocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_ab924e88eb714daae5c4cbd469563308e}\label{list_8h_ab924e88eb714daae5c4cbd469563308e}} 
+\index{list.h@{list.h}!ListSize@{ListSize}}
+\index{ListSize@{ListSize}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{ListSize()}{ListSize()}}
+{\footnotesize\ttfamily int List\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list }\end{DoxyParamCaption})}
+
+
+
+Returns the number of items inside a list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list to check the size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the list 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_a2a50dce680502655d689d279c74e3cc5}\label{list_8h_a2a50dce680502655d689d279c74e3cc5}} 
+\index{list.h@{list.h}!ListEmpty@{ListEmpty}}
+\index{ListEmpty@{ListEmpty}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{ListEmpty()}{ListEmpty()}}
+{\footnotesize\ttfamily bool List\+Empty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list }\end{DoxyParamCaption})}
+
+
+
+Checks if the list is empty. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list to check the emptiness of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the list has no items, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_ad8b34f2e311fd172baf716d1fc0e437d}\label{list_8h_ad8b34f2e311fd172baf716d1fc0e437d}} 
+\index{list.h@{list.h}!ListPushBack@{ListPushBack}}
+\index{ListPushBack@{ListPushBack}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{ListPushBack()}{ListPushBack()}}
+{\footnotesize\ttfamily void List\+Push\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Pushes an item in the back of the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list to be modified \\
+\hline
+{\em new\+\_\+item} & A pointer to an item to push in front of the list\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_a0e21b7e0890aa1cb0cd1e550eda345a8}\label{list_8h_a0e21b7e0890aa1cb0cd1e550eda345a8}} 
+\index{list.h@{list.h}!ListPopBack@{ListPopBack}}
+\index{ListPopBack@{ListPopBack}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{ListPopBack()}{ListPopBack()}}
+{\footnotesize\ttfamily void$\ast$ List\+Pop\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list }\end{DoxyParamCaption})}
+
+
+
+Removes an item from the back of the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list to be modified \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the item removed from the list 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to remove an item from an empty list results in an undefined behaviour 
+
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_ae760e2adf45640233d1cf89d9327ee5e}\label{list_8h_ae760e2adf45640233d1cf89d9327ee5e}} 
+\index{list.h@{list.h}!ListPushFront@{ListPushFront}}
+\index{ListPushFront@{ListPushFront}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{ListPushFront()}{ListPushFront()}}
+{\footnotesize\ttfamily void List\+Push\+Front (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Pushes an item in the front of the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list to be modified \\
+\hline
+{\em new\+\_\+item} & A pointer to an item to push in front of the list\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_ab7c989cfad01ae9787828faf84a8635d}\label{list_8h_ab7c989cfad01ae9787828faf84a8635d}} 
+\index{list.h@{list.h}!ListPopFront@{ListPopFront}}
+\index{ListPopFront@{ListPopFront}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{ListPopFront()}{ListPopFront()}}
+{\footnotesize\ttfamily void$\ast$ List\+Pop\+Front (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list }\end{DoxyParamCaption})}
+
+
+
+Removes an item from the front of the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list to be modified \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the item removed from the list 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to remove an item from an empty list results in an undefined behaviour 
+
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_ae4197c5aea01174e287d81e0a6ab73d7}\label{list_8h_ae4197c5aea01174e287d81e0a6ab73d7}} 
+\index{list.h@{list.h}!ListGet@{ListGet}}
+\index{ListGet@{ListGet}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{ListGet()}{ListGet()}}
+{\footnotesize\ttfamily void$\ast$ List\+Get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list,  }\item[{int}]{item\+\_\+num }\end{DoxyParamCaption})}
+
+
+
+Returns an item at the given position in the list (in O(n)) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list containing the item to look up \\
+\hline
+{\em item\+\_\+num} & The index of an item to look up \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The looked up item 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily item\+\_\+num} being outside the list (negative or not smaller than the size of the list) will result in an undefined behaviour 
+
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structListIterator}{List\+Iterator}} to access multiple items in a list 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{list_8h_a72580a25032c3f873b03d37d5b678db4}\label{list_8h_a72580a25032c3f873b03d37d5b678db4}} 
+\index{list.h@{list.h}!ListSet@{ListSet}}
+\index{ListSet@{ListSet}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{ListSet()}{ListSet()}}
+{\footnotesize\ttfamily void List\+Set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list,  }\item[{int}]{item\+\_\+num,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Sets an item at the given position in the list (in O(n)) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list to be modified \\
+\hline
+{\em item\+\_\+num} & The index in the list to change \\
+\hline
+{\em new\+\_\+item} & The pointer to an item to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily item\+\_\+num} being outside the list (negative or not smaller than the size of the list) will result in an undefined behaviour 
+
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structListIterator}{List\+Iterator}} to access multiple items in a list 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{list_8h_aa1321fa944023bf73aad868ce1415f81}\label{list_8h_aa1321fa944023bf73aad868ce1415f81}} 
+\index{list.h@{list.h}!ListFront@{ListFront}}
+\index{ListFront@{ListFront}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{ListFront()}{ListFront()}}
+{\footnotesize\ttfamily void$\ast$ List\+Front (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list }\end{DoxyParamCaption})}
+
+
+
+Returns an item from the front of the list without removing it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list containing the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The item at the front of the list 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to look up an item in an empty list results in an undefined behaviour 
+
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list_8h_afa9bf84f392d7efc239644857b0618ef}\label{list_8h_afa9bf84f392d7efc239644857b0618ef}} 
+\index{list.h@{list.h}!ListBack@{ListBack}}
+\index{ListBack@{ListBack}!list.h@{list.h}}
+\doxysubsubsection{\texorpdfstring{ListBack()}{ListBack()}}
+{\footnotesize\ttfamily void$\ast$ List\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list }\end{DoxyParamCaption})}
+
+
+
+Returns an item from the back of the list without removing it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list containing the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The item at the back of the list 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to look up an item in an empty list results in an undefined behaviour 
+
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}

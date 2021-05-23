@@ -1,0 +1,282 @@
+\hypertarget{list__iterator_8h}{}\doxysection{include/list\+\_\+iterator.h File Reference}
+\label{list__iterator_8h}\index{include/list\_iterator.h@{include/list\_iterator.h}}
+
+
+\mbox{\hyperlink{structListIterator}{List\+Iterator}} and utilities related to it  
+
+
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structListIterator}{List\+Iterator}}
+\begin{DoxyCompactList}\small\item\em An iterator for a \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{list__iterator_8h_ae74de603751ad8f9a6db65ece1e0567b}{LISTFOR}}(list,  iter)
+\begin{DoxyCompactList}\small\item\em A macro for looping over a list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structListIterator}{List\+Iterator}} \mbox{\hyperlink{list__iterator_8h_a038fcc2539fd5fd8d4c8a679ba8a454e}{List\+Begin}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list)
+\begin{DoxyCompactList}\small\item\em Returns an iterator at the beginning of the list. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structListIterator}{List\+Iterator}} \mbox{\hyperlink{list__iterator_8h_ae2e5f68080a4f755e9c141eb5b38a207}{List\+End}} (\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} list)
+\begin{DoxyCompactList}\small\item\em Returns an iterator at the end of the list. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{list__iterator_8h_a66832bbe6676a3303204486d20176cc1}{List\+Iterator\+Equal}} (\mbox{\hyperlink{structListIterator}{List\+Iterator}} a, \mbox{\hyperlink{structListIterator}{List\+Iterator}} b)
+\begin{DoxyCompactList}\small\item\em Checks if the two list iterators are equal. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list__iterator_8h_a7d8ba6652e6e16ee1600054767896cf8}{List\+Iterator\+Incr}} (\mbox{\hyperlink{structListIterator}{List\+Iterator}} $\ast$iter)
+\begin{DoxyCompactList}\small\item\em Moves the iterator to the next item in the list. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list__iterator_8h_a584d75a15c4b2f7d5c221b67a33728b5}{List\+Iterator\+Decr}} (\mbox{\hyperlink{structListIterator}{List\+Iterator}} $\ast$iter)
+\begin{DoxyCompactList}\small\item\em Moves the iterator to the previous item in the list. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{list__iterator_8h_afe2ccb31642c36af1057e4dab21f7b66}{List\+Iterator\+Get}} (\mbox{\hyperlink{structListIterator}{List\+Iterator}} iter)
+\begin{DoxyCompactList}\small\item\em Returns an item the iterator is pointing to. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list__iterator_8h_a4330d74d02294edab6636a1f8529ba65}{List\+Iterator\+Set}} (\mbox{\hyperlink{structListIterator}{List\+Iterator}} iter, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Sets an item the iterator is pointing to. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list__iterator_8h_ad55b8ad878735504fb68e9e9f5c15f72}{List\+Iterator\+Insert\+After}} (\mbox{\hyperlink{structListIterator}{List\+Iterator}} iter, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Inserts an item after the item the iterator is pointing to. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list__iterator_8h_a5f6ae693922686541e274bae5629547c}{List\+Iterator\+Insert\+Before}} (\mbox{\hyperlink{structListIterator}{List\+Iterator}} iter, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Inserts an item before the item the iterator is pointing to. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{list__iterator_8h_a30049b3fd830a6b656461d0b062bd9bb}{List\+Iterator\+Remove}} (\mbox{\hyperlink{structListIterator}{List\+Iterator}} $\ast$iter)
+\begin{DoxyCompactList}\small\item\em Removes an item iterator is pointing to The function removes the item the iterator is pointing to from the list and moves the iterator to the next item in the list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{structListIterator}{List\+Iterator}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{list__iterator_8h_ae74de603751ad8f9a6db65ece1e0567b}\label{list__iterator_8h_ae74de603751ad8f9a6db65ece1e0567b}} 
+\index{list\_iterator.h@{list\_iterator.h}!LISTFOR@{LISTFOR}}
+\index{LISTFOR@{LISTFOR}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{LISTFOR}{LISTFOR}}
+{\footnotesize\ttfamily \#define LISTFOR(\begin{DoxyParamCaption}\item[{}]{list,  }\item[{}]{iter }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \textcolor{keywordflow}{for}(\mbox{\hyperlink{structListIterator}{ListIterator}} iter = \mbox{\hyperlink{list__iterator_8h_a038fcc2539fd5fd8d4c8a679ba8a454e}{ListBegin}}(list);\(\backslash\)}
+\DoxyCodeLine{        !\mbox{\hyperlink{list__iterator_8h_a66832bbe6676a3303204486d20176cc1}{ListIteratorEqual}}(iter, \mbox{\hyperlink{list__iterator_8h_ae2e5f68080a4f755e9c141eb5b38a207}{ListEnd}}(list));\(\backslash\)}
+\DoxyCodeLine{        ListIteratorIncr(\&iter))}
+
+\end{DoxyCode}
+
+
+A macro for looping over a list. 
+
+This macro creates a for loop header using iterators to iterate over a list. Example usage\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{list__iterator_8h_ae74de603751ad8f9a6db65ece1e0567b}{LISTFOR}}(list, iter) \{}
+\DoxyCodeLine{    printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, (\textcolor{keywordtype}{char}*)\mbox{\hyperlink{list__iterator_8h_afe2ccb31642c36af1057e4dab21f7b66}{ListIteratorGet}}(iter));}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & the list to be iterated over \\
+\hline
+{\em iter} & the name of the iterator that will index the list \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{list__iterator_8h_a038fcc2539fd5fd8d4c8a679ba8a454e}\label{list__iterator_8h_a038fcc2539fd5fd8d4c8a679ba8a454e}} 
+\index{list\_iterator.h@{list\_iterator.h}!ListBegin@{ListBegin}}
+\index{ListBegin@{ListBegin}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ListBegin()}{ListBegin()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structListIterator}{List\+Iterator}} List\+Begin (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list }\end{DoxyParamCaption})}
+
+
+
+Returns an iterator at the beginning of the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list to get the beginning iterator to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An iterator pointing at the first item of the {\ttfamily list} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list__iterator_8h_ae2e5f68080a4f755e9c141eb5b38a207}\label{list__iterator_8h_ae2e5f68080a4f755e9c141eb5b38a207}} 
+\index{list\_iterator.h@{list\_iterator.h}!ListEnd@{ListEnd}}
+\index{ListEnd@{ListEnd}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ListEnd()}{ListEnd()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structListIterator}{List\+Iterator}} List\+End (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{list }\end{DoxyParamCaption})}
+
+
+
+Returns an iterator at the end of the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em list} & The list to get the end iterator to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An iterator pointing at the item behind the last item of the {\ttfamily list} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily list} not being a valid allocated \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list__iterator_8h_a66832bbe6676a3303204486d20176cc1}\label{list__iterator_8h_a66832bbe6676a3303204486d20176cc1}} 
+\index{list\_iterator.h@{list\_iterator.h}!ListIteratorEqual@{ListIteratorEqual}}
+\index{ListIteratorEqual@{ListIteratorEqual}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ListIteratorEqual()}{ListIteratorEqual()}}
+{\footnotesize\ttfamily bool List\+Iterator\+Equal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structListIterator}{List\+Iterator}}}]{a,  }\item[{\mbox{\hyperlink{structListIterator}{List\+Iterator}}}]{b }\end{DoxyParamCaption})}
+
+
+
+Checks if the two list iterators are equal. 
+
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the two iterators point at the same place in the list, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+the two iterators not pointing at the same list will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list__iterator_8h_a7d8ba6652e6e16ee1600054767896cf8}\label{list__iterator_8h_a7d8ba6652e6e16ee1600054767896cf8}} 
+\index{list\_iterator.h@{list\_iterator.h}!ListIteratorIncr@{ListIteratorIncr}}
+\index{ListIteratorIncr@{ListIteratorIncr}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ListIteratorIncr()}{ListIteratorIncr()}}
+{\footnotesize\ttfamily void List\+Iterator\+Incr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structListIterator}{List\+Iterator}} $\ast$}]{iter }\end{DoxyParamCaption})}
+
+
+
+Moves the iterator to the next item in the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the pointer to the iterator to be incremented \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+trying to increment an iterator pointing at the end of the list will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list__iterator_8h_a584d75a15c4b2f7d5c221b67a33728b5}\label{list__iterator_8h_a584d75a15c4b2f7d5c221b67a33728b5}} 
+\index{list\_iterator.h@{list\_iterator.h}!ListIteratorDecr@{ListIteratorDecr}}
+\index{ListIteratorDecr@{ListIteratorDecr}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ListIteratorDecr()}{ListIteratorDecr()}}
+{\footnotesize\ttfamily void List\+Iterator\+Decr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structListIterator}{List\+Iterator}} $\ast$}]{iter }\end{DoxyParamCaption})}
+
+
+
+Moves the iterator to the previous item in the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the pointer to the iterator to be incremented \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+trying to increment an iterator pointing at the end of the list will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{list__iterator_8h_afe2ccb31642c36af1057e4dab21f7b66}\label{list__iterator_8h_afe2ccb31642c36af1057e4dab21f7b66}} 
+\index{list\_iterator.h@{list\_iterator.h}!ListIteratorGet@{ListIteratorGet}}
+\index{ListIteratorGet@{ListIteratorGet}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ListIteratorGet()}{ListIteratorGet()}}
+{\footnotesize\ttfamily void$\ast$ List\+Iterator\+Get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structListIterator}{List\+Iterator}}}]{iter }\end{DoxyParamCaption})}
+
+
+
+Returns an item the iterator is pointing to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the iterator to dereference \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the item the iterator is pointing at 
+\end{DoxyReturn}
+\mbox{\Hypertarget{list__iterator_8h_a4330d74d02294edab6636a1f8529ba65}\label{list__iterator_8h_a4330d74d02294edab6636a1f8529ba65}} 
+\index{list\_iterator.h@{list\_iterator.h}!ListIteratorSet@{ListIteratorSet}}
+\index{ListIteratorSet@{ListIteratorSet}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ListIteratorSet()}{ListIteratorSet()}}
+{\footnotesize\ttfamily void List\+Iterator\+Set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structListIterator}{List\+Iterator}}}]{iter,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Sets an item the iterator is pointing to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the iterator for which to set the item that it is pointing at \\
+\hline
+{\em new\+\_\+item} & the new value for the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\mbox{\Hypertarget{list__iterator_8h_ad55b8ad878735504fb68e9e9f5c15f72}\label{list__iterator_8h_ad55b8ad878735504fb68e9e9f5c15f72}} 
+\index{list\_iterator.h@{list\_iterator.h}!ListIteratorInsertAfter@{ListIteratorInsertAfter}}
+\index{ListIteratorInsertAfter@{ListIteratorInsertAfter}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ListIteratorInsertAfter()}{ListIteratorInsertAfter()}}
+{\footnotesize\ttfamily void List\+Iterator\+Insert\+After (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structListIterator}{List\+Iterator}}}]{iter,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Inserts an item after the item the iterator is pointing to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the iterator for which to insert the item after \\
+\hline
+{\em new\+\_\+item} & the value of the item to be inserted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\mbox{\Hypertarget{list__iterator_8h_a5f6ae693922686541e274bae5629547c}\label{list__iterator_8h_a5f6ae693922686541e274bae5629547c}} 
+\index{list\_iterator.h@{list\_iterator.h}!ListIteratorInsertBefore@{ListIteratorInsertBefore}}
+\index{ListIteratorInsertBefore@{ListIteratorInsertBefore}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ListIteratorInsertBefore()}{ListIteratorInsertBefore()}}
+{\footnotesize\ttfamily void List\+Iterator\+Insert\+Before (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structListIterator}{List\+Iterator}}}]{iter,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Inserts an item before the item the iterator is pointing to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the iterator for which to insert the item before \\
+\hline
+{\em new\+\_\+item} & the value of the item to be inserted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\mbox{\Hypertarget{list__iterator_8h_a30049b3fd830a6b656461d0b062bd9bb}\label{list__iterator_8h_a30049b3fd830a6b656461d0b062bd9bb}} 
+\index{list\_iterator.h@{list\_iterator.h}!ListIteratorRemove@{ListIteratorRemove}}
+\index{ListIteratorRemove@{ListIteratorRemove}!list\_iterator.h@{list\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{ListIteratorRemove()}{ListIteratorRemove()}}
+{\footnotesize\ttfamily void List\+Iterator\+Remove (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structListIterator}{List\+Iterator}} $\ast$}]{iter }\end{DoxyParamCaption})}
+
+
+
+Removes an item iterator is pointing to The function removes the item the iterator is pointing to from the list and moves the iterator to the next item in the list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the iterator for which to remove the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+the iterator pointing at the end of the list results in an undefined behaviour 
+
+if there is another iterator pointing at the same item then trying to access that iterator in any way later will result in an undefined behaviour 
+\end{DoxyWarning}

@@ -1,0 +1,500 @@
+\hypertarget{vector_8h}{}\doxysection{include/vector.h File Reference}
+\label{vector_8h}\index{include/vector.h@{include/vector.h}}
+
+
+\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} and utilities related to it  
+
+
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structVectorRepr}{Vector\+Repr}}
+\begin{DoxyCompactList}\small\item\em The structure representation of a vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{vector_8h_a497bdb031760806802fb94ec019c22a4}{MIN\+\_\+\+VECTOR\+\_\+\+SIZE}}~64
+\begin{DoxyCompactList}\small\item\em The absolute minimum size that the vector can allocate. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{structVectorRepr}{Vector\+Repr}} $\ast$ \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}
+\begin{DoxyCompactList}\small\item\em An STL-\/like Vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} \mbox{\hyperlink{vector_8h_a4e0a14677f161ddd1f0d528201cd9a49}{New\+Vector}} (unsigned int size)
+\begin{DoxyCompactList}\small\item\em Creates a new \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} with {\ttfamily size} items. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} \mbox{\hyperlink{vector_8h_a5f7dcdbcb6ee8104b7f87aa956737672}{New\+Empty\+Vector}} ()
+\begin{DoxyCompactList}\small\item\em Creates a new empty \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} \mbox{\hyperlink{vector_8h_ac6f95463b386efcad9a84297171be63a}{New\+Filled\+Vector}} (unsigned int size, void $\ast$contents\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Creates a new \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} with {\ttfamily size} items. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector_8h_a3b82fc0e73ef5a5df2397bfbd714d07c}{Delete\+Vector}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector)
+\begin{DoxyCompactList}\small\item\em Deallocates a \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{vector_8h_a14e2387ae1fdd3002aafa82de0309954}{Vector\+Get}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector, int item\+\_\+num)
+\begin{DoxyCompactList}\small\item\em Returns an item at the given position in the vector. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector_8h_a03c6b45e90461152283eb0c0d881e0af}{Vector\+Set}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector, int item\+\_\+num, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Sets an item at the given position in the vector. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{vector_8h_a550413fd2710f9f8f300596c5ec7dd81}{Vector\+Size}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector)
+\begin{DoxyCompactList}\small\item\em Returns the number of items inside a vector. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{vector_8h_acb0090322409a78caa9ddbfc6039f9a7}{Vector\+Empty}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector)
+\begin{DoxyCompactList}\small\item\em Checks if the vector is empty. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{vector_8h_ae54bbb44add8b8e078dc8e4e91d25190}{Vector\+Alloc\+Size}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector)
+\begin{DoxyCompactList}\small\item\em Returns the allocated size of a vector. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector_8h_a113c71d0357a7c9c41138d47ca8a0dfc}{Vector\+Resize}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector, unsigned int size)
+\begin{DoxyCompactList}\small\item\em Resizes the vector to a given size. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector_8h_aba41a249474323bb42de377f639e3546}{Vector\+Clear}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector)
+\begin{DoxyCompactList}\small\item\em Resizes the vector to size 0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector_8h_a75cb33aaeaa6c056db23afc8a9333c0e}{Vector\+Forced\+Resize}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector, unsigned int size)
+\begin{DoxyCompactList}\small\item\em Forces an allocated size of a vector to be as close to the actual size as possible. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector_8h_a79cef7b5ee3ba33ae24879756b4448f3}{Vector\+Forced\+Clear}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector)
+\begin{DoxyCompactList}\small\item\em Forces an allocated size of a vector to be \mbox{\hyperlink{vector_8h_a497bdb031760806802fb94ec019c22a4}{MIN\+\_\+\+VECTOR\+\_\+\+SIZE}} and the size to be 0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector_8h_a8d24971c5e38a2f8a72fa708f7b733a2}{Vector\+Push\+Back}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Pushes an item in the back of the vector. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{vector_8h_a0f81565d2fb270bb672b2a12aef6dc1d}{Vector\+Pop\+Back}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector)
+\begin{DoxyCompactList}\small\item\em Removes an item from the back of the vector. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{vector_8h_a5561d0b605fd5b4ca704af2190c165dd}{Vector\+Back}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector)
+\begin{DoxyCompactList}\small\item\em Returns an item from the back of the vector without removing it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{vector_8h_a497bdb031760806802fb94ec019c22a4}\label{vector_8h_a497bdb031760806802fb94ec019c22a4}} 
+\index{vector.h@{vector.h}!MIN\_VECTOR\_SIZE@{MIN\_VECTOR\_SIZE}}
+\index{MIN\_VECTOR\_SIZE@{MIN\_VECTOR\_SIZE}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{MIN\_VECTOR\_SIZE}{MIN\_VECTOR\_SIZE}}
+{\footnotesize\ttfamily \#define MIN\+\_\+\+VECTOR\+\_\+\+SIZE~64}
+
+
+
+The absolute minimum size that the vector can allocate. 
+
+\begin{DoxyNote}{Note}
+Can be changed in this header file if a different value is needed 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+The value must be positive 
+\end{DoxyWarning}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}\label{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}} 
+\index{vector.h@{vector.h}!Vector@{Vector}}
+\index{Vector@{Vector}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{Vector}{Vector}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{structVectorRepr}{Vector\+Repr}}$\ast$ \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}
+
+
+
+An STL-\/like Vector. 
+
+This is a vector implemented using allocated size doubling, meaning that all of the basic operations on it are in O(1) (except for \mbox{\hyperlink{vector_8h_a75cb33aaeaa6c056db23afc8a9333c0e}{Vector\+Forced\+Resize}}, \mbox{\hyperlink{vector_8h_a79cef7b5ee3ba33ae24879756b4448f3}{Vector\+Forced\+Clear}} and \mbox{\hyperlink{vector_8h_a113c71d0357a7c9c41138d47ca8a0dfc}{Vector\+Resize}} which are all pessimistically linear). It supports the following operations\+:
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{vector_8h_a03c6b45e90461152283eb0c0d881e0af}{Vector\+Set}} Sets a value of the vector at a specific index (in linear time complexity)
+\item \mbox{\hyperlink{vector_8h_a14e2387ae1fdd3002aafa82de0309954}{Vector\+Get}} Returns a value of the vector at a specific index (in linear time complexity)
+\item \mbox{\hyperlink{vector_8h_a113c71d0357a7c9c41138d47ca8a0dfc}{Vector\+Resize}} Resizes a vector
+\item \mbox{\hyperlink{vector_8h_aba41a249474323bb42de377f639e3546}{Vector\+Clear}} Resizes a vector to 0
+\item \mbox{\hyperlink{vector_8h_a75cb33aaeaa6c056db23afc8a9333c0e}{Vector\+Forced\+Resize}} Resizes a vector and reallocates it so that the allocated size is as close to the actual size as possible (no smaller than \mbox{\hyperlink{vector_8h_a497bdb031760806802fb94ec019c22a4}{MIN\+\_\+\+VECTOR\+\_\+\+SIZE}} )
+\item \mbox{\hyperlink{vector_8h_a79cef7b5ee3ba33ae24879756b4448f3}{Vector\+Forced\+Clear}} Clears a vector and reallocates it to an allocated size of \mbox{\hyperlink{vector_8h_a497bdb031760806802fb94ec019c22a4}{MIN\+\_\+\+VECTOR\+\_\+\+SIZE}}
+\item \mbox{\hyperlink{vector_8h_a8d24971c5e38a2f8a72fa708f7b733a2}{Vector\+Push\+Back}} Adds an element at the end of the vector
+\item \mbox{\hyperlink{vector_8h_a0f81565d2fb270bb672b2a12aef6dc1d}{Vector\+Pop\+Back}} Removes an element from the end of the vector
+\end{DoxyItemize}
+
+It can be created using \mbox{\hyperlink{vector_8h_a5f7dcdbcb6ee8104b7f87aa956737672}{New\+Empty\+Vector}}, \mbox{\hyperlink{vector_8h_a4e0a14677f161ddd1f0d528201cd9a49}{New\+Vector}} or \mbox{\hyperlink{vector_8h_ac6f95463b386efcad9a84297171be63a}{New\+Filled\+Vector}}, and deallocated using \mbox{\hyperlink{vector_8h_a3b82fc0e73ef5a5df2397bfbd714d07c}{Delete\+Vector}}. To check its size and test if it is empty, use \mbox{\hyperlink{vector_8h_a550413fd2710f9f8f300596c5ec7dd81}{Vector\+Size}} and \mbox{\hyperlink{vector_8h_acb0090322409a78caa9ddbfc6039f9a7}{Vector\+Empty}}
+
+\begin{DoxyNote}{Note}
+Even though this is only a typedef, do not delcare it as a pointer to \mbox{\hyperlink{structVectorRepr}{Vector\+Repr}} for improved code clarity 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} to loop over a vector 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{vector_8h_a4e0a14677f161ddd1f0d528201cd9a49}\label{vector_8h_a4e0a14677f161ddd1f0d528201cd9a49}} 
+\index{vector.h@{vector.h}!NewVector@{NewVector}}
+\index{NewVector@{NewVector}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{NewVector()}{NewVector()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} New\+Vector (\begin{DoxyParamCaption}\item[{unsigned int}]{size }\end{DoxyParamCaption})}
+
+
+
+Creates a new \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} with {\ttfamily size} items. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} using malloc entries.
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The number of items to be preallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+unlike with \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}, the new vector is not defined to be filled with any particular values 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+In order to avoid memory leaks, please use \mbox{\hyperlink{vector_8h_a3b82fc0e73ef5a5df2397bfbd714d07c}{Delete\+Vector}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_a5f7dcdbcb6ee8104b7f87aa956737672}\label{vector_8h_a5f7dcdbcb6ee8104b7f87aa956737672}} 
+\index{vector.h@{vector.h}!NewEmptyVector@{NewEmptyVector}}
+\index{NewEmptyVector@{NewEmptyVector}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{NewEmptyVector()}{NewEmptyVector()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} New\+Empty\+Vector (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates a new empty \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} using malloc.
+
+\begin{DoxyWarning}{Warning}
+In order to avoid memory leaks, please use \mbox{\hyperlink{vector_8h_a3b82fc0e73ef5a5df2397bfbd714d07c}{Delete\+Vector}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_ac6f95463b386efcad9a84297171be63a}\label{vector_8h_ac6f95463b386efcad9a84297171be63a}} 
+\index{vector.h@{vector.h}!NewFilledVector@{NewFilledVector}}
+\index{NewFilledVector@{NewFilledVector}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{NewFilledVector()}{NewFilledVector()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} New\+Filled\+Vector (\begin{DoxyParamCaption}\item[{unsigned int}]{size,  }\item[{void $\ast$}]{contents\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Creates a new \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} with {\ttfamily size} items. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} using malloc, and fills it with the entries in the {\ttfamily contents} array
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The size of the {\ttfamily contents} array \\
+\hline
+{\em contents} & The values to fill the vector with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Passing in an array that is not an array of void$\ast$ will, unlike with passing single elements, result in an undefined behaviour. 
+
+In order to avoid memory leaks, please use \mbox{\hyperlink{vector_8h_a3b82fc0e73ef5a5df2397bfbd714d07c}{Delete\+Vector}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_a3b82fc0e73ef5a5df2397bfbd714d07c}\label{vector_8h_a3b82fc0e73ef5a5df2397bfbd714d07c}} 
+\index{vector.h@{vector.h}!DeleteVector@{DeleteVector}}
+\index{DeleteVector@{DeleteVector}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{DeleteVector()}{DeleteVector()}}
+{\footnotesize\ttfamily void Delete\+Vector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector }\end{DoxyParamCaption})}
+
+
+
+Deallocates a \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to be deallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Trying to use or deallocate already deallocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_a14e2387ae1fdd3002aafa82de0309954}\label{vector_8h_a14e2387ae1fdd3002aafa82de0309954}} 
+\index{vector.h@{vector.h}!VectorGet@{VectorGet}}
+\index{VectorGet@{VectorGet}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorGet()}{VectorGet()}}
+{\footnotesize\ttfamily void$\ast$ Vector\+Get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector,  }\item[{int}]{item\+\_\+num }\end{DoxyParamCaption})}
+
+
+
+Returns an item at the given position in the vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector containing the item to look up \\
+\hline
+{\em item\+\_\+num} & The index of an item to look up \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The looked up item 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily item\+\_\+num} being outside the vector (negative or not smaller than the size of the vector) will result in an undefined behaviour 
+
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} to loop over the elements in the vector 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{vector_8h_a03c6b45e90461152283eb0c0d881e0af}\label{vector_8h_a03c6b45e90461152283eb0c0d881e0af}} 
+\index{vector.h@{vector.h}!VectorSet@{VectorSet}}
+\index{VectorSet@{VectorSet}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorSet()}{VectorSet()}}
+{\footnotesize\ttfamily void Vector\+Set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector,  }\item[{int}]{item\+\_\+num,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Sets an item at the given position in the vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to be modifier \\
+\hline
+{\em item\+\_\+num} & The index in the vector to change \\
+\hline
+{\em new\+\_\+item} & The pointer to an item to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily item\+\_\+num} being outside the vector (negative or not smaller than the size of the vector) will result in an undefined behaviour 
+
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} to loop over the elements in the vector 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{vector_8h_a550413fd2710f9f8f300596c5ec7dd81}\label{vector_8h_a550413fd2710f9f8f300596c5ec7dd81}} 
+\index{vector.h@{vector.h}!VectorSize@{VectorSize}}
+\index{VectorSize@{VectorSize}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorSize()}{VectorSize()}}
+{\footnotesize\ttfamily int Vector\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector }\end{DoxyParamCaption})}
+
+
+
+Returns the number of items inside a vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to check the size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the vector 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This is not the same as the number of actually allocated entries 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{vector_8h_ae54bbb44add8b8e078dc8e4e91d25190}{Vector\+Alloc\+Size}} for the number of allocated entries 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_acb0090322409a78caa9ddbfc6039f9a7}\label{vector_8h_acb0090322409a78caa9ddbfc6039f9a7}} 
+\index{vector.h@{vector.h}!VectorEmpty@{VectorEmpty}}
+\index{VectorEmpty@{VectorEmpty}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorEmpty()}{VectorEmpty()}}
+{\footnotesize\ttfamily bool Vector\+Empty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector }\end{DoxyParamCaption})}
+
+
+
+Checks if the vector is empty. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to check the emptiness of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the vector has no items, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_ae54bbb44add8b8e078dc8e4e91d25190}\label{vector_8h_ae54bbb44add8b8e078dc8e4e91d25190}} 
+\index{vector.h@{vector.h}!VectorAllocSize@{VectorAllocSize}}
+\index{VectorAllocSize@{VectorAllocSize}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorAllocSize()}{VectorAllocSize()}}
+{\footnotesize\ttfamily int Vector\+Alloc\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector }\end{DoxyParamCaption})}
+
+
+
+Returns the allocated size of a vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to check the allocated size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The allocated size of the vector 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This is not the same as the number of accessible entries in a vector 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{vector_8h_a550413fd2710f9f8f300596c5ec7dd81}{Vector\+Size}} for the number of accessible entries in a vector 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_a113c71d0357a7c9c41138d47ca8a0dfc}\label{vector_8h_a113c71d0357a7c9c41138d47ca8a0dfc}} 
+\index{vector.h@{vector.h}!VectorResize@{VectorResize}}
+\index{VectorResize@{VectorResize}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorResize()}{VectorResize()}}
+{\footnotesize\ttfamily void Vector\+Resize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector,  }\item[{unsigned int}]{size }\end{DoxyParamCaption})}
+
+
+
+Resizes the vector to a given size. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to be modified \\
+\hline
+{\em size} & The size to resize the vector to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This operation is pesimistically of linear time complexity -\/ unless the vector is resized to a smaller size 
+
+This does not guarantee that the allocated size will be exactly the same as the size of a vector 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{vector_8h_a75cb33aaeaa6c056db23afc8a9333c0e}{Vector\+Forced\+Resize}} to be sure that the allocated size is as close to the actual size as possible 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_aba41a249474323bb42de377f639e3546}\label{vector_8h_aba41a249474323bb42de377f639e3546}} 
+\index{vector.h@{vector.h}!VectorClear@{VectorClear}}
+\index{VectorClear@{VectorClear}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorClear()}{VectorClear()}}
+{\footnotesize\ttfamily void Vector\+Clear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector }\end{DoxyParamCaption})}
+
+
+
+Resizes the vector to size 0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to be modified \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This does not guarantee that the allocated size will be exactly 0 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{vector_8h_a75cb33aaeaa6c056db23afc8a9333c0e}{Vector\+Forced\+Resize}} to be sure that the allocated size is as small as possible 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_a75cb33aaeaa6c056db23afc8a9333c0e}\label{vector_8h_a75cb33aaeaa6c056db23afc8a9333c0e}} 
+\index{vector.h@{vector.h}!VectorForcedResize@{VectorForcedResize}}
+\index{VectorForcedResize@{VectorForcedResize}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorForcedResize()}{VectorForcedResize()}}
+{\footnotesize\ttfamily void Vector\+Forced\+Resize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector,  }\item[{unsigned int}]{size }\end{DoxyParamCaption})}
+
+
+
+Forces an allocated size of a vector to be as close to the actual size as possible. 
+
+The vector gets resized to the {\ttfamily size} and reallocated to be as close to that size as possible. The final allocated size will be min( {\ttfamily size} , \mbox{\hyperlink{vector_8h_a497bdb031760806802fb94ec019c22a4}{MIN\+\_\+\+VECTOR\+\_\+\+SIZE}} ).
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to be modified \\
+\hline
+{\em size} & The size to resize the vector to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This operation is of linear 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_a79cef7b5ee3ba33ae24879756b4448f3}\label{vector_8h_a79cef7b5ee3ba33ae24879756b4448f3}} 
+\index{vector.h@{vector.h}!VectorForcedClear@{VectorForcedClear}}
+\index{VectorForcedClear@{VectorForcedClear}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorForcedClear()}{VectorForcedClear()}}
+{\footnotesize\ttfamily void Vector\+Forced\+Clear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector }\end{DoxyParamCaption})}
+
+
+
+Forces an allocated size of a vector to be \mbox{\hyperlink{vector_8h_a497bdb031760806802fb94ec019c22a4}{MIN\+\_\+\+VECTOR\+\_\+\+SIZE}} and the size to be 0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to be modified \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This operation is of linear complexity 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_a8d24971c5e38a2f8a72fa708f7b733a2}\label{vector_8h_a8d24971c5e38a2f8a72fa708f7b733a2}} 
+\index{vector.h@{vector.h}!VectorPushBack@{VectorPushBack}}
+\index{VectorPushBack@{VectorPushBack}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorPushBack()}{VectorPushBack()}}
+{\footnotesize\ttfamily void Vector\+Push\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Pushes an item in the back of the vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to be modified \\
+\hline
+{\em new\+\_\+item} & A pointer to an item to push in front of the vector\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_a0f81565d2fb270bb672b2a12aef6dc1d}\label{vector_8h_a0f81565d2fb270bb672b2a12aef6dc1d}} 
+\index{vector.h@{vector.h}!VectorPopBack@{VectorPopBack}}
+\index{VectorPopBack@{VectorPopBack}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorPopBack()}{VectorPopBack()}}
+{\footnotesize\ttfamily void$\ast$ Vector\+Pop\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector }\end{DoxyParamCaption})}
+
+
+
+Removes an item from the back of the vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to be modified \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the item removed from the vector 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to remove an item from an empty vector results in an undefined behaviour 
+
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector_8h_a5561d0b605fd5b4ca704af2190c165dd}\label{vector_8h_a5561d0b605fd5b4ca704af2190c165dd}} 
+\index{vector.h@{vector.h}!VectorBack@{VectorBack}}
+\index{VectorBack@{VectorBack}!vector.h@{vector.h}}
+\doxysubsubsection{\texorpdfstring{VectorBack()}{VectorBack()}}
+{\footnotesize\ttfamily void$\ast$ Vector\+Back (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector }\end{DoxyParamCaption})}
+
+
+
+Returns an item from the back of the vector without removing it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector containing the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The item at the back of the vector 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to look up an item in an empty vector results in an undefined behaviour 
+
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
