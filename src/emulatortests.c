@@ -199,11 +199,11 @@ int main(){
 
   holder = shiftOperation(0b001000000100);
   int32test(6 << 4, holder.result, "LSL Register 4 (2^31 + 6) by 4 result");
-  int32test(8, holder.carryout, "LSL Register 4 (2^31 + 6) by 4 carryout");
+  int32test(0, holder.carryout, "LSL Register 4 (2^31 + 6) by 4 carryout");
 
   holder = shiftOperation(0b001000000101);
   int32test(6 << 4, holder.result, "LSL Register 4 (3^30 + 6) by 4 result");
-  int32test(12, holder.carryout, "LSL Register 4 (3^30 + 6) by 4 carryout");
+  int32test(0, holder.carryout, "LSL Register 4 (3^30 + 6) by 4 carryout");
 
   // lsr (01):
 
@@ -213,15 +213,15 @@ int main(){
   // lsr by 3
   holder = shiftOperation(0b000110100011);
   int32test(674 >> 3, holder.result, "LSR Register 3 (674) by 3 result");
-  int32test(2, holder.carryout, "LSR Register 3 (674) by 3 carryout");
+  int32test(0, holder.carryout, "LSR Register 3 (674) by 3 carryout");
 
   holder = shiftOperation(0b001000100100);
   int32test(6 >> 4, holder.result, "LSR Register 4 (6) by 4 result");
-  int32test(6, holder.carryout, "LSR Register 4 (6) by 4 carryout");
+  int32test(0, holder.carryout, "LSR Register 4 (6) by 4 carryout");
 
   holder = shiftOperation(0b001000100101);
   int32test(30 >> 4, holder.result, "LSR Register 5 (30) by 4 result");
-  int32test(14, holder.carryout, "LSR Register 5 (30) by 4 carryout");
+  int32test(1, holder.carryout, "LSR Register 5 (30) by 4 carryout");
 
   // asr (10):
 
@@ -232,13 +232,13 @@ int main(){
 
   holder = shiftOperation(0b000111000011);
   int32test(674 >> 3, holder.result, "ASR Register 3 (674) by 3 result");
-  int32test(2, holder.carryout, "ASR Register 3 (674) by 3 carryout");
+  int32test(0, holder.carryout, "ASR Register 3 (674) by 3 carryout");
 
   holder = shiftOperation(0b001011000100);
   int32test(6 >> 4, holder.result, "ASR Register 4 (6) by 4 result");
-  int32test(6, holder.carryout, "ASR Register 4 (6) by 4 carryout");
+  int32test(0, holder.carryout, "ASR Register 4 (6) by 4 carryout");
 
-  // ror (11): 
+  // ror (11):
   //below not done yet
   holder = shiftOperation(0b000011100100);
   int32test(3, holder.result, "ROR Register 4 (6) by 1 result");

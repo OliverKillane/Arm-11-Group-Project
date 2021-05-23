@@ -222,19 +222,19 @@ shiftRes shiftOperation(word shift) {
   switch(shiftType) {
     case 0: return (shiftRes) {
       .result = RmVal << shiftby, 
-      .carryout = GETBITS(RmVal, 32 - shiftby, shiftby)
+      .carryout = GETBIT(RmVal, 32 - shiftby)
       };
     case 1: return (shiftRes) {
       .result = RmVal >> shiftby, 
-      .carryout = GETBITS(RmVal, 0, shiftby)
+      .carryout = GETBIT(RmVal, shiftby - 1)
       };
     case 2: return (shiftRes) {
       .result = (RmVal >> shiftby) | (GETBIT(RmVal, 31)?(MAXINT32 << (32 - shiftby)):0),
-      .carryout = GETBITS(RmVal, 0, shiftby)
+      .carryout = GETBIT(RmVal, shiftby - 1)
       };
     case 3: return (shiftRes) {
       .result = (RmVal >> shiftby) | (GETBITS(RmVal, 0, shiftby) << (MAXINT32 - shiftby)),
-      .carryout = GETBITS(RmVal, 0, shiftby)
+      .carryout = GETBIT(RmVal, shiftby - 1)
       };
     default:
       fprintf(stderr, "invalid shift : %x", shift);
