@@ -163,6 +163,9 @@ int main(){
   booltest(checkCond(AL), true, "AL test");
 
   testsection("processInstr Tests");
+  
+
+
 
   testsection("branchInstr Tests");
 
@@ -223,7 +226,7 @@ int main(){
   *GETREG(6) = -13;
   holder = shiftOperation(0b000011000110);
   int32test(-7, holder.result, "ASR Register 6 (-13) by 1 result");
-  int32test(1, holder.carryout, "ASR Register 6 (-13) by 1 result");
+  int32test(1, holder.carryout, "ASR Register 6 (-13) by 1 carryout");
 
   holder = shiftOperation(0b000111000011);
   int32test(674 >> 3, holder.result, "ASR Register 3 (674) by 3 result");
@@ -235,18 +238,9 @@ int main(){
 
   // ror (11): 
   //below not done yet
-  holder = shiftOperation(0b000011000110);
-  int32test(
-    , holder.result, "ASR Register 6 (-13) by 1 result");
-  int32test(1, holder.carryout, "ASR Register 6 (-13) by 1 result");
-
-  holder = shiftOperation(0b000111000011);
-  int32test(674 >> 3, holder.result, "ASR Register 3 (674) by 3 result");
-  int32test(2, holder.carryout, "ASR Register 3 (674) by 3 carryout");
-
-  holder = shiftOperation(0b001011000100);
-  int32test(6 >> 4, holder.result, "ASR Register 4 (6) by 4 result");
-  int32test(6, holder.carryout, "ASR Register 4 (6) by 4 carryout");
+  holder = shiftOperation(0b000011100100);
+  int32test(3, holder.result, "ROR Register 4 (6) by 1 result");
+  int32test(0, holder.carryout, "ROR Register 4 (6) by 1 carryout");
 
   //Shift Register
   // lsl (00):
@@ -263,10 +257,4 @@ int main(){
   testsection("MultiplyInstr Tests");
 
   testsection("processDataInstr Tests");
-
-  testsection("getReg Tests");
-
-  testsection("storemem Tests");
-
-  testsection("getmem Tests");
 }

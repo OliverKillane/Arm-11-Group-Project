@@ -61,25 +61,13 @@ void runProgram(program prog) {
     *(GETREG(PC)) = prog.start - currentPointer + 2;
 
     if(GETBITS(currentInstruction, 24, 4) == 0xA) {
-      
-      //Branch
       branchInstr(currentInstruction, &currentPointer);
-
     } else if(GETBITS(currentInstruction, 26, 2) && !GETBITS(currentInstruction, 21, 2)) {
-      
-      //Single Data Transfer
       singleDataTransInstr(currentInstruction);
-
     } else if(!GETBITS(currentInstruction, 22, 6) && GETBITS(currentInstruction, 4, 4) == 0x9) {
-      
-      // Multiply
       multiplyInstr(currentInstruction);
-
     } else if(!GETBITS(currentInstruction, 26, 2)) {
-      
-      // Data Processing
       processDataInstr(currentInstruction);
-
     } else {
       
       // Invalid instruction
