@@ -3,9 +3,11 @@
 #include "common_defs.h"
 
 static inline unsigned int ProcessImmediateShift(List restrict tokens) {
-    return GetExpressionValue(
+    const int shift_value = GetExpressionValue(
         dummy, ListPopFront(tokens), false, true
-    ) << 3;
+    );
+    assert(shift_value < 32 && shift_value >= 0);
+    return shift_value << 3;
 }
 
 static inline unsigned int ProcessRegisterShift(List restrict tokens) {

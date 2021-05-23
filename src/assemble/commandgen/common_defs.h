@@ -40,7 +40,7 @@ void SetInstruction(Vector output, int instruction, int offset);
 /*
  * Retreives the raw value of an expression (might also be a label)
  */
-unsigned int GetExpressionValue(
+long long GetExpressionValue(
     Map symbols, 
     char* expression, 
     bool pureexpression, 

@@ -1,6 +1,7 @@
 #include "process_data_processing.h"
 #include <stddata.h>
 #include "common_defs.h"
+#include <stdio.h>
 
 static inline unsigned int ProcessBaseRegisters(List restrict tokens) {
     assert(ListSize(tokens) >= 2);
@@ -40,30 +41,39 @@ static inline unsigned int ProcessBaseRegisters(List restrict tokens) {
     return instruction;
 }
 
+static inline unsigned int ConvertLongToRotated(unsigned long long value) {
+    return (unsigned int)value | (value >> 32);
+}
+
 static inline unsigned int ProcessImmediate(List restrict tokens) {
     assert(ListSize(tokens) == 1);
-    unsigned int expr_value = GetExpressionValue(
+    const long long expr_value_signed = GetExpressionValue(
         dummy, ListPopFront(tokens), false, true
     );
+    assert(expr_value_signed >= 0);
+    unsigned long long expr_value = expr_value_signed;
 
-    unsigned int rotate_left = 0;
-    while((expr_value & 0b11) == 0 && expr_value > 0) {
-        rotate_left++;
-        expr_value >>= 2;
+    unsigned int rotate_right = 0;
+    while(rotate_right < 16 && ConvertLongToRotated(expr_value) >= (1<<8)) {
+        rotate_right++;
+        expr_value <<= 2;
     }
+    expr_value = ConvertLongToRotated(expr_value);
     assert(expr_value < (1<<8));
 
     int operand2 = 0;
-    operand2 |= (rotate_left == 0 ? 0 : 16 - rotate_left) << 8;
+    operand2 |= rotate_right << 8;
     operand2 |= expr_value;
 
     return operand2;
 }
 
 static inline unsigned int ProcessImmediateShift(List restrict tokens) {
-    return GetExpressionValue(
+    const int shift_value = GetExpressionValue(
         dummy, ListPopFront(tokens), false, true
-    ) << 3;
+    );
+    assert(shift_value >= 0 && shift_value < 32);
+    return shift_value << 3;
 }
 
 static inline unsigned int ProcessRegisterShift(List restrict tokens) {

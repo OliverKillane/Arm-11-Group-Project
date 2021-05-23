@@ -10,11 +10,13 @@ void ProcessMultiply(
     int offset, 
     int instructions_num
 ) {
+    assert(ListSize(tokens) >= 3);
+
     unsigned int condition;
     char func_base[MAX_FUNCTION_LENGTH + 1];
     SplitFunction(ListPopFront(tokens), func_base, &condition);
 
-    unsigned int accumulate = strcmp(func_base, "mla") == 0;
+    unsigned int accumulate = StringEq(func_base, "mla");
     assert(ListSize(tokens) - accumulate == 3);
     LISTFOR(tokens, iter) {
         assert(IsRegister(ListIteratorGet(iter)));

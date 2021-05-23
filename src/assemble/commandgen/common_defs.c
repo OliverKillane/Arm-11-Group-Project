@@ -7,6 +7,7 @@
 #include <stddata.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdio.h>
 
 Map dummy;
 Map func_proc; // Map<char*, void(*func)(FUNC_PROC_ARGS)
@@ -114,7 +115,7 @@ int GetRegisterNum(char* restrict reg) {
     assert(reg[0] == 'r' || reg[0] == 'R');
     assert(strlen(reg)>=2);
     int reg_num = atoi(reg + 1);
-    assert(reg_num >= 0 && reg_num <= 16);
+    assert(reg_num >= 0 && reg_num <= 15);
     return reg_num;
 }
 
@@ -125,7 +126,7 @@ void SetInstruction(Vector restrict output, int instruction, int offset) {
     VectorSet(output, offset, instruction);
 }
 
-unsigned int GetExpressionValue(
+long long GetExpressionValue(
     Map restrict symbols, 
     char* restrict expression, 
     bool pureexpression, 
@@ -133,54 +134,23 @@ unsigned int GetExpressionValue(
 ) {
     const int expr_len = strlen(expression);
     if(isalpha(expression[0])) {
+        assert(MapQuery(symbols, expression));
         return (int)MapGet(symbols, expression) * 4;
     }
-    int base = 10;
-    int start = 0;
-    if(!isdigit(expression[0])) {
-        assert(!pureexpression);
-        assert(expression[0] == '#' || expression[0] == '=');
-        assert((expression[0] == '#') == hashexpression);
+    char* start = expression;
+    if(hashexpression && !pureexpression) {
         assert(expr_len >= 2);
-        start = 1;
+        assert(expression[0] == '#');
+        start++;
     }
-    if(expr_len - start == 1 && expression[1] == '0') {
-        return 0;
+    if(!hashexpression && !pureexpression) {
+        assert(expr_len >= 2);
+        assert(expression[0] == '=');
+        start++;
     }
-    if(expression[start] == '0') {
-        switch(expression[start + 1]) {
-            case 'x':
-                start += 2;
-                base = 16;
-                break;
-            case 'b':
-                start += 2;
-                base = 2;
-                break;
-            case 'd':
-                start += 2;
-                break;
-            case 'o':
-                start += 2; /* pass through */
-            default:
-                base = 8;
-        }
-    }
-    unsigned long long out = 0;
-    for(; start < expr_len; start++) {
-        char c = expression[start];
-        int value;
-        if(base > 10 && c <= 'Z' && c >= 'A') {
-            value = c - 'A' + 10;
-        } else if(base > 10 && c <= 'z' && c >= 'a') {
-            value = c - 'a' + 10;
-        } else {
-            value = c - '0';
-        }
-        assert(value >= 0 && value < base);
-        out = out * base + value;
-        assert(out < ((long long)1<<32));
-    }
+    char* end;
+    long long out = strtoll(start, &end, 0);
+    assert(end - expression == expr_len);
     return out;
 }
 
@@ -210,7 +180,7 @@ bool IsImmediate(char* token, bool ispure, bool ishash) {
         return true;
     }
     
-    if(isdigit(token[0]) && ispure) {
+    if((isdigit(token[0]) || token[0] == '-' || token[0] == '+') && ispure) {
         return true;
     }
     return false;
