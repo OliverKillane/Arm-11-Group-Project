@@ -68,14 +68,11 @@ void loadProgram(char* filename) {
 }
 
 void runProgram() {
-  *GETREG(PC) = 2;
-  word instrNo;
+  *GETREG(PC) = 8;
   instruction currentInstr;
 
   do {
-    word instrNo = (*GETREG(PC) >> 2) - 2;
-
-    currentInstr = *MEMLOC(*GETREG(PC) - 8);
+    currentInstr = *MEMWORD(*GETREG(PC) - 8);
 
     (*GETREG(PC)) += 4;
 
@@ -120,6 +117,7 @@ void branchInstr(instruction instr) {
 
 // ISSUE: needs to be tested
 void singleDataTransInstr(instruction instr) {
+
   word* RdBase = GETREG(GETBITS(instr, 12, 4));
   word* RnSrcDst = GETREG(GETBITS(instr, 16, 4));
   int offset;
@@ -157,16 +155,16 @@ void singleDataTransInstr(instruction instr) {
   if (P) {
     // pre-indexing
     if (L) {
-      *RnSrcDst = *MEMLOC(*RdBase + offset);
+      *RnSrcDst = *MEMWORD(*RdBase + offset);
     } else {
-      *MEMLOC(*RdBase + offset) =  *RnSrcDst;
+      *MEMWORD(*RdBase + offset) =  *RnSrcDst;
     }
   } else {
     // POST Indexing
     if (L) {
-      *RnSrcDst = *MEMLOC(*RdBase);
+      *RnSrcDst = *MEMWORD(*RdBase);
     } else {
-      *MEMLOC(*RdBase) =  *RnSrcDst;
+      *MEMWORD(*RdBase) =  *RnSrcDst;
     }
     *RdBase += offset;
   }
@@ -326,17 +324,19 @@ void processDataInstr(instruction instr) {
     }
 }
 
+
+// For basci manual testing only as does not yet match the testing files
 void printState() {
   // print out state of all registers and the non-zero memory.
+  printf("\nCPU state:");
+  for (int registerNo = 0; registerNo < 15; registerNo++) {
+    printf("\nRegister %i: %x %i", registerNo, *GETREG(registerNo), *GETREG(registerNo));
+  }
+  printf("\nRegister PC: %x %i", *GETREG(PC), *GETREG(PC));
+  printf("\nCPSR Flags: N: %u Z: %u C: %u V: %u", CPU.CPSR.N, CPU.CPSR.Z, CPU.CPSR.C, CPU.CPSR.V);
 
-
-  // Print out registers
-
-
-  // Print out CPSR
-
-
-  // Print out non-zero mem
-
-
+  printf("\nNon-Zero memory locations:");
+  for (int loc = 0; loc < MEMSIZE; loc++) {
+    if (*MEMLOC(loc)) printf("\n<%x> %x", loc, (unsigned int)*MEMLOC(loc));
+  }
 }

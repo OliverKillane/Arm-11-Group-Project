@@ -4,12 +4,24 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+// Colours for printing:
+#define RED     "\x1b[31m"
+#define GREEN   "\x1b[32m"
+#define YELLOW  "\x1b[33m"
+#define BLUE    "\x1b[34m"
+#define MAGENTA "\x1b[35m"
+#define CYAN    "\x1b[36m"
+#define DEFAULT "\x1b[0m"
+
 // TYPE DECLARATIONS:
 // type definitions for readability
 typedef uint32_t word;
 typedef uint32_t instruction;
 typedef uint16_t location;
 typedef uint8_t byte;
+
+// 64KB memory (16 bit address)
+#define MEMSIZE (1 << 16)
 
 // maximum word (all 1s)
 #define MAXINT32 0xFFFFFFFF
@@ -113,7 +125,9 @@ typedef enum {
 /* Get data stored at a given location
     loc <- location in 64KB memory
 */
-#define MEMLOC(loc) (word *) (CPU.memory + loc)
+#define MEMLOC(loc) (CPU.memory + loc)
+
+#define MEMWORD(loc) (word *) MEMLOC(loc)
 
 // INSTRUCTION PROCESSING:
 
