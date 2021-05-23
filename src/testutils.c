@@ -47,6 +47,11 @@ void testsection(char *name) {
     printf(MAGENTA "\n%i. Test Section: %s" DEFAULT, sectionno, name);
 }
 
+void testsubsection(char *name) {
+    testno = 0;
+    printf(BLUE "\n Test Subsection: %s" DEFAULT, name);
+}
+
 /* Take expected, result and their types, check they match and print out result.
     expected    <- 
 */
