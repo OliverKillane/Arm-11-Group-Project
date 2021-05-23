@@ -14,7 +14,7 @@
 #define CYAN    "\x1b[36m"
 #define DEFAULT "\x1b[0m"
 
-#define PADLEN 30
+#define PADLEN 50
 
 // simplifying checking two of same type are equal
 #define EQUALS(exp, result, typ) (*((typ*) exp) == *((typ*) result))
