@@ -1,8 +1,10 @@
-#include "testutils.c"
-#include "emulate.h"
-#include "emulate.c"
 #include <stdbool.h>
 #include <stdlib.h>
+
+#include "testutils.c"
+
+#define TEST
+#include "emulate.c"
 
 // note: am aware that binary constants are a GCC only thing - only using for tests
 

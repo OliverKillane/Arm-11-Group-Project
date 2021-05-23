@@ -1,9 +1,33 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "emulate.h"
 
-
 machineState CPU;
+
+// include guard for including emulate.c in emulatortests.c file.
+#ifndef TEST
+int main(int argc, char** argv) {
+  if (argc != 2) {
+    perror("Invalid number of arguments provided, need only one filename");
+    exit(INVALID_ARGUMENTS);
+  }
+
+  // Setup the state of the CPU
+  SETCPSR(0,0,0,0);
+  CPU.memory = calloc(1 << 16, sizeof(byte));
+  memset(CPU.registers, 0, 64);
+
+  // Get and run the provided program file
+  runProgram(getProgram(argv[1]));
+
+  // Print out the final state of the registers and the non-zero memroy
+  printState();
+
+  //free memory section (possibly redundant)
+  free(CPU.memory);
+}
+#endif
 
 
 // edit needs to be tested, make more robust
@@ -12,11 +36,8 @@ program getProgram(char* filename) {
 
   if (!file) {
     perror("could not open file");
-    exit(EXIT_FAILURE);
+    exit(INVALID_FILE);
   }
-
-  //create program
-  program prog;
 
   // go to end of file, get length (number of bytes)
   fseek(file, 0, SEEK_END);
@@ -24,17 +45,28 @@ program getProgram(char* filename) {
   //get size in bytes of program
   int length = ftell(file);
 
+  // check that the instructions total is a multiple of 4 bytes.
+  if (length % 4 != 0) {
+    perror("File does not contain a whole number of 4 byte instructions");
+    exit(CORRUPT_FILE);
+  }
+
+  program prog;
+
   // create buffer for instructions of adequet size
   prog.start = malloc(length);
 
-  // get instruction to halt at
-  prog.end = prog.start + (length >> 2);
+  // add numer of Instructions field to the program
+  prog.numInstructions = length >> 2;
 
   // return to the start of the file
   fseek(file, 0, SEEK_SET);
 
   // read file into buffer starting at prog.instructions
-  fread(prog.start, 1, length, file);
+  if (fread(prog.start, 1, length, file) != length) {
+    perror("Unable to load all instructions");
+    exit(INVALID_FILE);
+  }
 
   //close file
   fclose(file);
@@ -44,38 +76,38 @@ program getProgram(char* filename) {
 }
 
 void runProgram(program prog) {
-  instruction *currentPointer = prog.start;
-  instruction currentInstruction;
+  *GETREG(PC) = 2;
+  word instrNo;
+  instruction currentInstr;
 
   do {
-    if (prog.end < currentPointer) {
+    word instrNo = (*GETREG(PC) >> 2) - 2;
+
+    if (instrNo >= prog.numInstructions){
       perror("Program does not terminate, has surpassed instructions without halt");
       exit(NON_TERMINATION);
     }
 
-    currentInstruction = *currentPointer;
+    currentInstr = prog.start[instrNo];
 
-    currentPointer++;
+    (*GETREG(PC))++;
 
-    // set PC to 2 instructions ahead
-    *(GETREG(PC)) = prog.start - currentPointer + 2;
-
-    if(GETBITS(currentInstruction, 24, 4) == 0xA) {
-      branchInstr(currentInstruction, &currentPointer);
-    } else if(GETBITS(currentInstruction, 26, 2) && !GETBITS(currentInstruction, 21, 2)) {
-      singleDataTransInstr(currentInstruction);
-    } else if(!GETBITS(currentInstruction, 22, 6) && GETBITS(currentInstruction, 4, 4) == 0x9) {
-      multiplyInstr(currentInstruction);
-    } else if(!GETBITS(currentInstruction, 26, 2)) {
-      processDataInstr(currentInstruction);
+    if(GETBITS(currentInstr, 24, 4) == 0xA) {
+      branchInstr(currentInstr);
+    } else if(GETBITS(currentInstr, 26, 2) && !GETBITS(currentInstr, 21, 2)) {
+      singleDataTransInstr(currentInstr);
+    } else if(!GETBITS(currentInstr, 22, 6) && GETBITS(currentInstr, 4, 4) == 0x9) {
+      multiplyInstr(currentInstr);
+    } else if(!GETBITS(currentInstr, 26, 2)) {
+      processDataInstr(currentInstr);
     } else {
       
       // Invalid instruction
-      fprintf(stderr, "Invalid instruction no: %x", currentInstruction);
+      fprintf(stderr, "Invalid instruction no: %x", currentInstr);
       exit(INVALID_INSTR);
     }
 
-  } while(currentInstruction);
+  } while(currentInstr);
 }
 
 bool checkCond(condition cond) {
@@ -92,16 +124,11 @@ bool checkCond(condition cond) {
 }
 
 //TODO change way PC is used, allow error checking on branch
-void branchInstr(instruction instr, instruction **currentInstr) {
+void branchInstr(instruction instr) {
   int offset = (GETBITS(instr, 0, 23) - GETBIT(instr, 23) << 23) << 2;
   
-  // update the PC by offset
-  *GETREG(PC) += offset;
-
-  // TODO: check that jump is valid (Need more here).
-
-  // the currentInstr goes to the PC's position
-  *currentInstr += offset + offset > 0? 2 : -2;
+  // update the PC by offset, then skip forwads 2 (so instruction at PC is executed)
+  *GETREG(PC) += offset + 2;
 }
 
 // ISSUE: needs to be tested
@@ -143,16 +170,16 @@ void singleDataTransInstr(instruction instr) {
   if (P) {
     // pre-indexing
     if (L) {
-      *RnSrcDst = MEMLOC(*RdBase + offset);
+      *RnSrcDst = *MEMLOC(*RdBase + offset);
     } else {
-      MEMLOC(*RdBase + offset) =  *RnSrcDst;
+      *MEMLOC(*RdBase + offset) =  *RnSrcDst;
     }
   } else {
     // POST Indexing
     if (L) {
-      *RnSrcDst = MEMLOC(*RdBase);
+      *RnSrcDst = *MEMLOC(*RdBase);
     } else {
-      MEMLOC(*RdBase) =  *RnSrcDst;
+      *MEMLOC(*RdBase) =  *RnSrcDst;
     }
     *RdBase += offset;
   }
@@ -279,16 +306,16 @@ void processDataInstr(instruction instr) {
 
   //perform ALU operations
   switch(OpCode){
-    CASEB(AND, ALUOut = RnVal & operand2Value; *Rd = ALUOut)
-    CASEB(EOR, ALUOut = RnVal ^ operand2Value; *Rd = ALUOut)
-    CASEB(SUB, ALUOut = RnVal - operand2Value; *Rd = ALUOut)
-    CASEB(RSB, ALUOut = operand2Value - RnVal; *Rd = ALUOut)
-    CASEB(ADD, ALUOut = RnVal + operand2Value; *Rd = ALUOut)
-    CASEB(TST, ALUOut = RnVal & operand2Value)
-    CASEB(TEQ, ALUOut = RnVal ^ operand2Value)
-    CASEB(CMP, ALUOut = RnVal - operand2Value) 
-    CASEB(ORR, ALUOut = RnVal | operand2Value; *Rd = ALUOut)
-    CASEB(MOV, *Rd = operand2Value)
+    CASEBREAK(AND, ALUOut = RnVal & operand2Value; *Rd = ALUOut);
+    CASEBREAK(EOR, ALUOut = RnVal ^ operand2Value; *Rd = ALUOut);
+    CASEBREAK(SUB, ALUOut = RnVal - operand2Value; *Rd = ALUOut);
+    CASEBREAK(RSB, ALUOut = operand2Value - RnVal; *Rd = ALUOut);
+    CASEBREAK(ADD, ALUOut = RnVal + operand2Value; *Rd = ALUOut);
+    CASEBREAK(TST, ALUOut = RnVal & operand2Value);
+    CASEBREAK(TEQ, ALUOut = RnVal ^ operand2Value);
+    CASEBREAK(CMP, ALUOut = RnVal - operand2Value);
+    CASEBREAK(ORR, ALUOut = RnVal | operand2Value; *Rd = ALUOut);
+    CASEBREAK(MOV, *Rd = operand2Value);
     default: 
       fprintf(stderr, "Invalid operation in instruction: %x", instr);
       exit(INVALID_INSTR);          
@@ -312,4 +339,17 @@ void processDataInstr(instruction instr) {
     }
 }
 
-void printState() {}
+void printState() {
+  // print out state of all registers and the non-zero memory.
+
+
+  // Print out registers
+
+
+  // Print out CPSR
+
+
+  // Print out non-zero mem
+
+
+}

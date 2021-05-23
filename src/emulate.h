@@ -27,17 +27,21 @@ typedef struct {
 typedef struct {
     word registers[16];
     cpsr CPSR;
-    word *memory; 
+    byte *memory; 
 } machineState;
 
 // declared the CPU that will be used.
 extern machineState CPU;
 
-// program struct representation (program instructions stored separately from
-// 64Kb memory, like an instruction cache)
+/* Take the pointer to the start of the instructions in memory.
+Instructions are stored separately from the m,ain 64KB memory (like an I-Cache)
+    start           <- Pointer tyo start of instruction region
+    numInstructions <- Number of instructions present, used to prevenmt seg
+                       faults in fetch.
+*/
 typedef struct {
     instruction *start;
-    instruction *end;
+    word numInstructions;
 } program;
 
 // struct to hold shift function results.
@@ -74,7 +78,7 @@ typedef enum {
 
 typedef enum {
     INVALID_INSTR = 1,
-    INVALID_JUMP,
+    INVALID_ARGUMENTS,
     NON_TERMINATION,
     INVALID_FILE,
     CORRUPT_FILE,
@@ -86,7 +90,7 @@ typedef enum {
 /* case match: {ops}; break;
     For making switch statements less tedious
 */
-#define CASEB(match, ops) case match: ops; break;
+#define CASEBREAK(match, ops) case match: ops; break;
 
 /* Return a range of bits.
     data    <- Source string of bits
@@ -120,7 +124,7 @@ typedef enum {
 /* Get data stored at a given location
     loc <- location in 64KB memory
 */
-#define MEMLOC(loc) CPU.memory[loc]
+#define MEMLOC(loc) (word *) (CPU.memory + loc)
 
 // INSTRUCTION PROCESSING:
 
@@ -146,7 +150,7 @@ bool checkCond(condition cond);
 /* Execute a branch instruction
     instr <- instruction to process
 */
-void branchInstr(instruction inst, instruction **currentInstr);
+void branchInstr(instruction inst);
 
 
 /* Execute a Single Data Transfer instruction
