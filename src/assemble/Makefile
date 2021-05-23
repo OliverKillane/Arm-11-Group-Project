@@ -9,7 +9,8 @@ all: ../../build/assemble/assemble.o\
 	 ../../build/assemble/process_data_processing.o\
 	 ../../build/assemble/process_data_transfer.o\
 	 ../../build/assemble/process_multiply.o\
-	 ../../build/assemble/process_shift.o
+	 ../../build/assemble/process_shift.o\
+	 ../../build/assemble/commandgen.o
 	cp ../../build/stddata.o ../../build/assemble/
 	$(CC) $(CFLAGS) $(wildcard ../../build/assemble/*.o) -o ../../build/assemble/assemble
 	cp ../../build/assemble/assemble ../../bin/
@@ -18,6 +19,7 @@ all: ../../build/assemble/assemble.o\
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 ../../build/assemble/assemble.o: assemble.c
+../../build/assemble/commandgen.o: commandgen/commandgen.c
 ../../build/assemble/common_defs.o: commandgen/common_defs.c
 ../../build/assemble/process_branch.o: commandgen/process_branch.c
 ../../build/assemble/process_data_processing.o: commandgen/process_data_processing.c
