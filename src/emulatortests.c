@@ -185,6 +185,8 @@ int main(){
   reg:    RRRR0TT1RRRR
   */
 
+
+  testsubsection("Constant Shift Tests");
   //Constant Shift
   // lsl (00):
   
@@ -197,9 +199,9 @@ int main(){
   int32test(674 << 3, holder.result, "LSL Register 3 (674) by 3 result");
   int32test(0, holder.carryout, "LSL Register 3 (674) by 3 carryout");
 
-  holder = shiftOperation(0b001000000100);
-  int32test(6 << 4, holder.result, "LSL Register 4 (2^31 + 6) by 4 result");
-  int32test(0, holder.carryout, "LSL Register 4 (2^31 + 6) by 4 carryout");
+  holder = shiftOperation(0b000010000100);
+  int32test(6 << 1, holder.result, "LSL Register 4 (2^31 + 6) by 1 result");
+  int32test(1, holder.carryout, "LSL Register 4 (2^31 + 6) by 1 carryout");
 
   holder = shiftOperation(0b001000000101);
   int32test(6 << 4, holder.result, "LSL Register 4 (3^30 + 6) by 4 result");
@@ -239,20 +241,89 @@ int main(){
   int32test(0, holder.carryout, "ASR Register 4 (6) by 4 carryout");
 
   // ror (11):
-  //below not done yet
   holder = shiftOperation(0b000011100100);
   int32test(3, holder.result, "ROR Register 4 (6) by 1 result");
   int32test(0, holder.carryout, "ROR Register 4 (6) by 1 carryout");
 
+  *GETREG(1) = 7;
+
+  holder = shiftOperation(0b000101100001);
+  int32test(1 + (3 << 29), holder.result, "ROR Register 1 (7) by 2 result");
+  int32test(1, holder.carryout, "ROR Register 1 (7) by 2 carryout");
+
   //Shift Register
+
+  testsubsection("Register Shift Tests");
+
   // lsl (00):
+  *GETREG(3) = 674;
+  *GETREG(1) = 3;
+  holder = shiftOperation(0b000100010011);
+  int32test(674 << 3, holder.result, "LSL Register 3 (674) by Register 1 (3) result");
+  int32test(0, holder.carryout, "LSL Register 3 (674) by Register 1 (3) carryout");
+
+  *GETREG(4) =  6;
+  *GETREG(5) = 30;
+
+  holder = shiftOperation(0b010000010101);
+  int32test(30 << 6, holder.result, "LSL Register 5 (30) by Register 4 (6) result");
+  int32test(0, holder.carryout, "LSL Register 5 (30) by Register 4 (6) carryout");
+
+
+  *GETREG(4) = (1 << 31) + 6;
+  *GETREG(2) = 1;
+
+  holder = shiftOperation(0b001000010100);
+  int32test(6 << 1, holder.result, "LSL Register 4 (2^31 + 6) by Reg 2 (1) result");
+  int32test(1, holder.carryout, "LSL Register 4 (2^31 + 6) by Reg 2 (1) carryout");
 
   // lsr (01):
 
+  *GETREG(4) =  6;
+  *GETREG(5) = 30;
+  *GETREG(7) = 4;
+
+  // lsr by 3
+  holder = shiftOperation(0b000100110011);
+  int32test(674 >> 3, holder.result, "LSR Register 3 (674) by Reg 1 (3) result");
+  int32test(0, holder.carryout, "LSR Register 3 (674) by Reg 1 (3) carryout");
+
+  holder = shiftOperation(0b011100110100);
+  int32test(6 >> 4, holder.result, "LSR Register 4 (6) by Reg 7 (4) result");
+  int32test(0, holder.carryout, "LSR Register 4 (6) by Reg 7 (4) carryout");
+
+  holder = shiftOperation(0b011100110101);
+  int32test(30 >> 4, holder.result, "LSR Register 5 (30) by Reg 7 (4) result");
+  int32test(1, holder.carryout, "LSR Register 5 (30) by Reg 7 (4) carryout");
+
   // asr (10):
+
+  *GETREG(6) = -13;
+
+  holder = shiftOperation(0b001001010110);
+  int32test(-7, holder.result, "ASR Register 6 (-13) by Reg 2 (1) result");
+  int32test(1, holder.carryout, "ASR Register 6 (-13) by Reg 2 (1) carryout");
+
+  holder = shiftOperation(0b000101010011);
+  int32test(674 >> 3, holder.result, "ASR Register 3 (674) by Reg 1 (3) result");
+  int32test(0, holder.carryout, "ASR Register 3 (674) by Reg 1 (3) carryout");
+
+  holder = shiftOperation(0b011101010100);
+  int32test(6 >> 4, holder.result, "ASR Register 4 (6) by Reg 7 (4) result");
+  int32test(0, holder.carryout, "ASR Register 4 (6) by Reg 7 (4) carryout");
 
   // ror (11):
 
+  holder = shiftOperation(0b001001110100);
+  int32test(3, holder.result, "ROR Register 4 (6) by Reg 2 (1) result");
+  int32test(0, holder.carryout, "ROR Register 4 (6) by Reg 2 (1) carryout");
+
+  *GETREG(1) = 7;
+  *GETREG(8) = 2;
+
+  holder = shiftOperation(0b100001110001);
+  int32test(1 + (3 << 29), holder.result, "ROR Register 1 (7) by Reg 8 (2) result");
+  int32test(1, holder.carryout, "ROR Register 1 (7) by Reg 8 (2) carryout");
 
 
 
