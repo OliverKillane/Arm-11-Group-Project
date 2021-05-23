@@ -1,0 +1,227 @@
+\hypertarget{stack_8h}{}\doxysection{include/stack.h File Reference}
+\label{stack_8h}\index{include/stack.h@{include/stack.h}}
+
+
+\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} and utilities related to it  
+
+
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}
+\begin{DoxyCompactList}\small\item\em An STL-\/like Stack. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} \mbox{\hyperlink{stack_8h_a8b28dfac0e0018a0a0bacd2dfec85fab}{New\+Stack}} ()
+\begin{DoxyCompactList}\small\item\em Creates a new \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{stack_8h_aee7c29baf6effa1d9e0d9f86c9f25050}{Delete\+Stack}} (\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} stack)
+\begin{DoxyCompactList}\small\item\em Deallocates a \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{stack_8h_a91973823ceed4a4168119c6dfcb21c58}{Stack\+Push}} (\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} stack, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Adds an item to the top of the stack. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{stack_8h_ad00690201a5f1a2efe7c835f3576cff3}{Stack\+Pop}} (\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} stack)
+\begin{DoxyCompactList}\small\item\em Removes an item from the top of the stack. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{stack_8h_a05998a4459363b0a1ecc32c85b59acdc}{Stack\+Peek}} (\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} stack)
+\begin{DoxyCompactList}\small\item\em Returns an item from the top of the stack without removing it. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{stack_8h_a15de68e422c2a8a50421e4244a54d758}{Stack\+Size}} (\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} stack)
+\begin{DoxyCompactList}\small\item\em Returns the number of items inside a stack. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{stack_8h_ac536c649ee974409593cfd5bab184635}{Stack\+Empty}} (\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} stack)
+\begin{DoxyCompactList}\small\item\em Returns the number of items on a stack. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{stack_8h_a23c5715a8dbd80c7c1288e18021b6922}{Stack\+Optimize}} (\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} stack)
+\begin{DoxyCompactList}\small\item\em Optimizes the size of a stack. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{stack_8h_abf32c4253c172c0ef132cc56631a7b74}\label{stack_8h_abf32c4253c172c0ef132cc56631a7b74}} 
+\index{stack.h@{stack.h}!Stack@{Stack}}
+\index{Stack@{Stack}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{Stack}{Stack}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}}
+
+
+
+An STL-\/like Stack. 
+
+This is a vector based stack, meaning all operations on it are in amortized O(1). It supports the following operations\+:
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{stack_8h_a91973823ceed4a4168119c6dfcb21c58}{Stack\+Push}} Adds a new element to the top of the stack
+\item \mbox{\hyperlink{stack_8h_ad00690201a5f1a2efe7c835f3576cff3}{Stack\+Pop}} Removes an item from the top of the stack and returns it
+\item \mbox{\hyperlink{stack_8h_a05998a4459363b0a1ecc32c85b59acdc}{Stack\+Peek}} Returns the item at the top of the stack
+\end{DoxyItemize}
+
+It can be created and deallocated using \mbox{\hyperlink{stack_8h_a8b28dfac0e0018a0a0bacd2dfec85fab}{New\+Stack}} and \mbox{\hyperlink{stack_8h_aee7c29baf6effa1d9e0d9f86c9f25050}{Delete\+Stack}} respectively. To check its size and test if it is empty, use \mbox{\hyperlink{stack_8h_a15de68e422c2a8a50421e4244a54d758}{Stack\+Size}} and \mbox{\hyperlink{stack_8h_ac536c649ee974409593cfd5bab184635}{Stack\+Empty}}. It can be optimized for size by shrinking it to the number of elements it has using \mbox{\hyperlink{stack_8h_a23c5715a8dbd80c7c1288e18021b6922}{Stack\+Optimize}}; however, this operation is in O(n).
+
+\begin{DoxyNote}{Note}
+Even though this is only a typedef, do not use \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} as stack for improved code clarity 
+\end{DoxyNote}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{stack_8h_a8b28dfac0e0018a0a0bacd2dfec85fab}\label{stack_8h_a8b28dfac0e0018a0a0bacd2dfec85fab}} 
+\index{stack.h@{stack.h}!NewStack@{NewStack}}
+\index{NewStack@{NewStack}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{NewStack()}{NewStack()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} New\+Stack (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates a new \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}. 
+
+Dynamically allocates a new \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} using malloc.
+
+\begin{DoxyWarning}{Warning}
+In order to avoid memory leaks, please use \mbox{\hyperlink{stack_8h_aee7c29baf6effa1d9e0d9f86c9f25050}{Delete\+Stack}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{stack_8h_aee7c29baf6effa1d9e0d9f86c9f25050}\label{stack_8h_aee7c29baf6effa1d9e0d9f86c9f25050}} 
+\index{stack.h@{stack.h}!DeleteStack@{DeleteStack}}
+\index{DeleteStack@{DeleteStack}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{DeleteStack()}{DeleteStack()}}
+{\footnotesize\ttfamily void Delete\+Stack (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}}]{stack }\end{DoxyParamCaption})}
+
+
+
+Deallocates a \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & The stack to be deallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Trying to use or deallocate already deallocated \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{stack_8h_a91973823ceed4a4168119c6dfcb21c58}\label{stack_8h_a91973823ceed4a4168119c6dfcb21c58}} 
+\index{stack.h@{stack.h}!StackPush@{StackPush}}
+\index{StackPush@{StackPush}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{StackPush()}{StackPush()}}
+{\footnotesize\ttfamily void Stack\+Push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}}]{stack,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Adds an item to the top of the stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & The stack to be modified \\
+\hline
+{\em new\+\_\+item} & A pointer to an item to add on top of the stack\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily stack} not being a valid allocated \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{stack_8h_ad00690201a5f1a2efe7c835f3576cff3}\label{stack_8h_ad00690201a5f1a2efe7c835f3576cff3}} 
+\index{stack.h@{stack.h}!StackPop@{StackPop}}
+\index{StackPop@{StackPop}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{StackPop()}{StackPop()}}
+{\footnotesize\ttfamily void$\ast$ Stack\+Pop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}}]{stack }\end{DoxyParamCaption})}
+
+
+
+Removes an item from the top of the stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & The stack to be modified \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to the item removed from the stack 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to remove an item from an empty stack results in an undefined behaviour 
+
+{\ttfamily stack} not being a valid allocated \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{stack_8h_a05998a4459363b0a1ecc32c85b59acdc}\label{stack_8h_a05998a4459363b0a1ecc32c85b59acdc}} 
+\index{stack.h@{stack.h}!StackPeek@{StackPeek}}
+\index{StackPeek@{StackPeek}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{StackPeek()}{StackPeek()}}
+{\footnotesize\ttfamily void$\ast$ Stack\+Peek (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}}]{stack }\end{DoxyParamCaption})}
+
+
+
+Returns an item from the top of the stack without removing it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & The stack containing the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The item at the top of the stack 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+Trying to look up an item in an empty stack results in an undefined behaviour 
+
+{\ttfamily stack} not being a valid allocated \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{stack_8h_a15de68e422c2a8a50421e4244a54d758}\label{stack_8h_a15de68e422c2a8a50421e4244a54d758}} 
+\index{stack.h@{stack.h}!StackSize@{StackSize}}
+\index{StackSize@{StackSize}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{StackSize()}{StackSize()}}
+{\footnotesize\ttfamily int Stack\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}}]{stack }\end{DoxyParamCaption})}
+
+
+
+Returns the number of items inside a stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & The stack to check the size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the stack 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily stack} not being a valid allocated \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{stack_8h_ac536c649ee974409593cfd5bab184635}\label{stack_8h_ac536c649ee974409593cfd5bab184635}} 
+\index{stack.h@{stack.h}!StackEmpty@{StackEmpty}}
+\index{StackEmpty@{StackEmpty}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{StackEmpty()}{StackEmpty()}}
+{\footnotesize\ttfamily bool Stack\+Empty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}}]{stack }\end{DoxyParamCaption})}
+
+
+
+Returns the number of items on a stack. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & The stack to check the size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the stack 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily stack} not being a valid allocated \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{stack_8h_a23c5715a8dbd80c7c1288e18021b6922}\label{stack_8h_a23c5715a8dbd80c7c1288e18021b6922}} 
+\index{stack.h@{stack.h}!StackOptimize@{StackOptimize}}
+\index{StackOptimize@{StackOptimize}!stack.h@{stack.h}}
+\doxysubsubsection{\texorpdfstring{StackOptimize()}{StackOptimize()}}
+{\footnotesize\ttfamily void Stack\+Optimize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}}}]{stack }\end{DoxyParamCaption})}
+
+
+
+Optimizes the size of a stack. 
+
+The funciton reallocated the stack to be as close to the number of items on the stack as possible. \begin{DoxyNote}{Note}
+The copying of items to the new allocation is O(n), so it should not be used excessively 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily stack} not being a valid allocated \mbox{\hyperlink{stack_8h_abf32c4253c172c0ef132cc56631a7b74}{Stack}} results in an undefined behaviour 
+\end{DoxyWarning}

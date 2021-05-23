@@ -38,6 +38,6 @@ void* VectorIteratorGet(VectorIterator iter) {
     return VectorGet(iter.vector, iter.itemNum);
 }
 
-void VectorIteratorSet(VectorIterator iter, void* newItem) {
-    VectorSet(iter.vector, iter.itemNum, newItem);
+void VectorIteratorSet(VectorIterator iter, void* new_item) {
+    VectorSet(iter.vector, iter.itemNum, new_item);
 }

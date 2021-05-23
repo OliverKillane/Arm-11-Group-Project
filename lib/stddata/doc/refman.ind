@@ -1,0 +1,415 @@
+\begin{theindex}
+
+  \item {DeleteDeque}
+    \subitem {deque.h}, \hyperpage{10}
+  \item {DeleteList}
+    \subitem {list.h}, \hyperpage{18}
+  \item {DeleteMap}
+    \subitem {map.h}, \hyperpage{31}
+  \item {DeleteQueue}
+    \subitem {queue.h}, \hyperpage{40}
+  \item {DeleteSet}
+    \subitem {set.h}, \hyperpage{46}
+  \item {DeleteStack}
+    \subitem {stack.h}, \hyperpage{55}
+  \item {DeleteVector}
+    \subitem {vector.h}, \hyperpage{62}
+  \item {Deque}
+    \subitem {deque.h}, \hyperpage{10}
+  \item {deque.h}
+    \subitem {DeleteDeque}, \hyperpage{10}
+    \subitem {Deque}, \hyperpage{10}
+    \subitem {DequeEmpty}, \hyperpage{14}
+    \subitem {DequePeekBack}, \hyperpage{13}
+    \subitem {DequePeekFront}, \hyperpage{13}
+    \subitem {DequePopBack}, \hyperpage{12}
+    \subitem {DequePopFront}, \hyperpage{12}
+    \subitem {DequePushBack}, \hyperpage{11}
+    \subitem {DequePushFront}, \hyperpage{11}
+    \subitem {DequeSize}, \hyperpage{13}
+    \subitem {NewDeque}, \hyperpage{10}
+  \item {DequeEmpty}
+    \subitem {deque.h}, \hyperpage{14}
+  \item {DequePeekBack}
+    \subitem {deque.h}, \hyperpage{13}
+  \item {DequePeekFront}
+    \subitem {deque.h}, \hyperpage{13}
+  \item {DequePopBack}
+    \subitem {deque.h}, \hyperpage{12}
+  \item {DequePopFront}
+    \subitem {deque.h}, \hyperpage{12}
+  \item {DequePushBack}
+    \subitem {deque.h}, \hyperpage{11}
+  \item {DequePushFront}
+    \subitem {deque.h}, \hyperpage{11}
+  \item {DequeSize}
+    \subitem {deque.h}, \hyperpage{13}
+
+  \indexspace
+
+  \item {include/deque.h}, \hyperpage{9}
+  \item {include/hash\_utils.h}, \hyperpage{14}
+  \item {include/list.h}, \hyperpage{15}
+  \item {include/list\_iterator.h}, \hyperpage{23}
+  \item {include/map.h}, \hyperpage{28}
+  \item {include/map\_iterator.h}, \hyperpage{35}
+  \item {include/queue.h}, \hyperpage{39}
+  \item {include/set.h}, \hyperpage{43}
+  \item {include/set\_iterator.h}, \hyperpage{49}
+  \item {include/stack.h}, \hyperpage{53}
+  \item {include/stddata.h}, \hyperpage{58}
+  \item {include/vector.h}, \hyperpage{58}
+  \item {include/vector\_iterator.h}, \hyperpage{68}
+
+  \indexspace
+
+  \item {List}
+    \subitem {list.h}, \hyperpage{16}
+  \item {list.h}
+    \subitem {DeleteList}, \hyperpage{18}
+    \subitem {List}, \hyperpage{16}
+    \subitem {ListBack}, \hyperpage{22}
+    \subitem {ListEmpty}, \hyperpage{19}
+    \subitem {ListFront}, \hyperpage{22}
+    \subitem {ListGet}, \hyperpage{21}
+    \subitem {ListPopBack}, \hyperpage{19}
+    \subitem {ListPopFront}, \hyperpage{20}
+    \subitem {ListPushBack}, \hyperpage{19}
+    \subitem {ListPushFront}, \hyperpage{20}
+    \subitem {ListSet}, \hyperpage{21}
+    \subitem {ListSize}, \hyperpage{18}
+    \subitem {NewEmptyList}, \hyperpage{17}
+    \subitem {NewFilledList}, \hyperpage{17}
+    \subitem {NewList}, \hyperpage{17}
+  \item {list\_iterator.h}
+    \subitem {ListBegin}, \hyperpage{24}
+    \subitem {ListEnd}, \hyperpage{25}
+    \subitem {LISTFOR}, \hyperpage{24}
+    \subitem {ListIteratorDecr}, \hyperpage{26}
+    \subitem {ListIteratorEqual}, \hyperpage{25}
+    \subitem {ListIteratorGet}, \hyperpage{26}
+    \subitem {ListIteratorIncr}, \hyperpage{25}
+    \subitem {ListIteratorInsertAfter}, \hyperpage{27}
+    \subitem {ListIteratorInsertBefore}, \hyperpage{27}
+    \subitem {ListIteratorRemove}, \hyperpage{28}
+    \subitem {ListIteratorSet}, \hyperpage{27}
+  \item {ListBack}
+    \subitem {list.h}, \hyperpage{22}
+  \item {ListBegin}
+    \subitem {list\_iterator.h}, \hyperpage{24}
+  \item {ListEmpty}
+    \subitem {list.h}, \hyperpage{19}
+  \item {ListEnd}
+    \subitem {list\_iterator.h}, \hyperpage{25}
+  \item {LISTFOR}
+    \subitem {list\_iterator.h}, \hyperpage{24}
+  \item {ListFront}
+    \subitem {list.h}, \hyperpage{22}
+  \item {ListGet}
+    \subitem {list.h}, \hyperpage{21}
+  \item {ListIterator}, \hyperpage{5}
+  \item {ListIteratorDecr}
+    \subitem {list\_iterator.h}, \hyperpage{26}
+  \item {ListIteratorEqual}
+    \subitem {list\_iterator.h}, \hyperpage{25}
+  \item {ListIteratorGet}
+    \subitem {list\_iterator.h}, \hyperpage{26}
+  \item {ListIteratorIncr}
+    \subitem {list\_iterator.h}, \hyperpage{25}
+  \item {ListIteratorInsertAfter}
+    \subitem {list\_iterator.h}, \hyperpage{27}
+  \item {ListIteratorInsertBefore}
+    \subitem {list\_iterator.h}, \hyperpage{27}
+  \item {ListIteratorRemove}
+    \subitem {list\_iterator.h}, \hyperpage{28}
+  \item {ListIteratorSet}
+    \subitem {list\_iterator.h}, \hyperpage{27}
+  \item {ListPopBack}
+    \subitem {list.h}, \hyperpage{19}
+  \item {ListPopFront}
+    \subitem {list.h}, \hyperpage{20}
+  \item {ListPushBack}
+    \subitem {list.h}, \hyperpage{19}
+  \item {ListPushFront}
+    \subitem {list.h}, \hyperpage{20}
+  \item {ListRepr}, \hyperpage{5}
+  \item {ListSet}
+    \subitem {list.h}, \hyperpage{21}
+  \item {ListSize}
+    \subitem {list.h}, \hyperpage{18}
+
+  \indexspace
+
+  \item {Map}
+    \subitem {map.h}, \hyperpage{29}
+  \item {map.h}
+    \subitem {DeleteMap}, \hyperpage{31}
+    \subitem {Map}, \hyperpage{29}
+    \subitem {MapAllocSize}, \hyperpage{33}
+    \subitem {MapEmpty}, \hyperpage{34}
+    \subitem {MapGet}, \hyperpage{31}
+    \subitem {MapQuery}, \hyperpage{32}
+    \subitem {MapRemove}, \hyperpage{34}
+    \subitem {MapSet}, \hyperpage{31}
+    \subitem {MapSize}, \hyperpage{33}
+    \subitem {NewEmptyMap}, \hyperpage{30}
+    \subitem {NewFilledMap}, \hyperpage{30}
+  \item {map\_iterator.h}
+    \subitem {MapBegin}, \hyperpage{36}
+    \subitem {MapEnd}, \hyperpage{37}
+    \subitem {MAPFOR}, \hyperpage{36}
+    \subitem {MapIteratorCompare}, \hyperpage{37}
+    \subitem {MapIteratorDecr}, \hyperpage{38}
+    \subitem {MapIteratorGet}, \hyperpage{39}
+    \subitem {MapIteratorIncr}, \hyperpage{38}
+    \subitem {MapIteratorLess}, \hyperpage{37}
+  \item {MapAllocSize}
+    \subitem {map.h}, \hyperpage{33}
+  \item {MapBegin}
+    \subitem {map\_iterator.h}, \hyperpage{36}
+  \item {MapEmpty}
+    \subitem {map.h}, \hyperpage{34}
+  \item {MapEnd}
+    \subitem {map\_iterator.h}, \hyperpage{37}
+  \item {MapEntry}, \hyperpage{6}
+  \item {MAPFOR}
+    \subitem {map\_iterator.h}, \hyperpage{36}
+  \item {MapGet}
+    \subitem {map.h}, \hyperpage{31}
+  \item {MapIterator}, \hyperpage{6}
+  \item {MapIteratorCompare}
+    \subitem {map\_iterator.h}, \hyperpage{37}
+  \item {MapIteratorDecr}
+    \subitem {map\_iterator.h}, \hyperpage{38}
+  \item {MapIteratorGet}
+    \subitem {map\_iterator.h}, \hyperpage{39}
+  \item {MapIteratorIncr}
+    \subitem {map\_iterator.h}, \hyperpage{38}
+  \item {MapIteratorLess}
+    \subitem {map\_iterator.h}, \hyperpage{37}
+  \item {MapQuery}
+    \subitem {map.h}, \hyperpage{32}
+  \item {MapRemove}
+    \subitem {map.h}, \hyperpage{34}
+  \item {MapRepr}, \hyperpage{7}
+  \item {MapSet}
+    \subitem {map.h}, \hyperpage{31}
+  \item {MapSize}
+    \subitem {map.h}, \hyperpage{33}
+  \item {MIN\_VECTOR\_SIZE}
+    \subitem {vector.h}, \hyperpage{60}
+
+  \indexspace
+
+  \item {NewDeque}
+    \subitem {deque.h}, \hyperpage{10}
+  \item {NewEmptyList}
+    \subitem {list.h}, \hyperpage{17}
+  \item {NewEmptyMap}
+    \subitem {map.h}, \hyperpage{30}
+  \item {NewEmptySet}
+    \subitem {set.h}, \hyperpage{45}
+  \item {NewEmptyVector}
+    \subitem {vector.h}, \hyperpage{61}
+  \item {NewFilledList}
+    \subitem {list.h}, \hyperpage{17}
+  \item {NewFilledMap}
+    \subitem {map.h}, \hyperpage{30}
+  \item {NewFilledSet}
+    \subitem {set.h}, \hyperpage{45}
+  \item {NewFilledVector}
+    \subitem {vector.h}, \hyperpage{61}
+  \item {NewList}
+    \subitem {list.h}, \hyperpage{17}
+  \item {NewQueue}
+    \subitem {queue.h}, \hyperpage{40}
+  \item {NewStack}
+    \subitem {stack.h}, \hyperpage{55}
+  \item {NewVector}
+    \subitem {vector.h}, \hyperpage{61}
+
+  \indexspace
+
+  \item {Queue}
+    \subitem {queue.h}, \hyperpage{40}
+  \item {queue.h}
+    \subitem {DeleteQueue}, \hyperpage{40}
+    \subitem {NewQueue}, \hyperpage{40}
+    \subitem {Queue}, \hyperpage{40}
+    \subitem {QueueEmpty}, \hyperpage{43}
+    \subitem {QueuePeekBack}, \hyperpage{42}
+    \subitem {QueuePeekFront}, \hyperpage{42}
+    \subitem {QueuePop}, \hyperpage{41}
+    \subitem {QueuePush}, \hyperpage{41}
+    \subitem {QueueSize}, \hyperpage{42}
+  \item {QueueEmpty}
+    \subitem {queue.h}, \hyperpage{43}
+  \item {QueuePeekBack}
+    \subitem {queue.h}, \hyperpage{42}
+  \item {QueuePeekFront}
+    \subitem {queue.h}, \hyperpage{42}
+  \item {QueuePop}
+    \subitem {queue.h}, \hyperpage{41}
+  \item {QueuePush}
+    \subitem {queue.h}, \hyperpage{41}
+  \item {QueueSize}
+    \subitem {queue.h}, \hyperpage{42}
+
+  \indexspace
+
+  \item {Set}
+    \subitem {set.h}, \hyperpage{44}
+  \item {set.h}
+    \subitem {DeleteSet}, \hyperpage{46}
+    \subitem {NewEmptySet}, \hyperpage{45}
+    \subitem {NewFilledSet}, \hyperpage{45}
+    \subitem {Set}, \hyperpage{44}
+    \subitem {SetAllocSize}, \hyperpage{47}
+    \subitem {SetEmpty}, \hyperpage{47}
+    \subitem {SetInsert}, \hyperpage{48}
+    \subitem {SetQuery}, \hyperpage{48}
+    \subitem {SetRemove}, \hyperpage{49}
+    \subitem {SetSize}, \hyperpage{46}
+  \item {set\_iterator.h}
+    \subitem {SetBegin}, \hyperpage{51}
+    \subitem {SetEnd}, \hyperpage{51}
+    \subitem {SETFOR}, \hyperpage{50}
+    \subitem {SetIteratorCompare}, \hyperpage{52}
+    \subitem {SetIteratorDecr}, \hyperpage{53}
+    \subitem {SetIteratorGet}, \hyperpage{53}
+    \subitem {SetIteratorIncr}, \hyperpage{52}
+    \subitem {SetIteratorLess}, \hyperpage{51}
+  \item {SetAllocSize}
+    \subitem {set.h}, \hyperpage{47}
+  \item {SetBegin}
+    \subitem {set\_iterator.h}, \hyperpage{51}
+  \item {SetEmpty}
+    \subitem {set.h}, \hyperpage{47}
+  \item {SetEnd}
+    \subitem {set\_iterator.h}, \hyperpage{51}
+  \item {SETFOR}
+    \subitem {set\_iterator.h}, \hyperpage{50}
+  \item {SetInsert}
+    \subitem {set.h}, \hyperpage{48}
+  \item {SetIterator}, \hyperpage{7}
+  \item {SetIteratorCompare}
+    \subitem {set\_iterator.h}, \hyperpage{52}
+  \item {SetIteratorDecr}
+    \subitem {set\_iterator.h}, \hyperpage{53}
+  \item {SetIteratorGet}
+    \subitem {set\_iterator.h}, \hyperpage{53}
+  \item {SetIteratorIncr}
+    \subitem {set\_iterator.h}, \hyperpage{52}
+  \item {SetIteratorLess}
+    \subitem {set\_iterator.h}, \hyperpage{51}
+  \item {SetQuery}
+    \subitem {set.h}, \hyperpage{48}
+  \item {SetRemove}
+    \subitem {set.h}, \hyperpage{49}
+  \item {SetRepr}, \hyperpage{7}
+  \item {SetSize}
+    \subitem {set.h}, \hyperpage{46}
+  \item {Stack}
+    \subitem {stack.h}, \hyperpage{54}
+  \item {stack.h}
+    \subitem {DeleteStack}, \hyperpage{55}
+    \subitem {NewStack}, \hyperpage{55}
+    \subitem {Stack}, \hyperpage{54}
+    \subitem {StackEmpty}, \hyperpage{57}
+    \subitem {StackOptimize}, \hyperpage{57}
+    \subitem {StackPeek}, \hyperpage{56}
+    \subitem {StackPop}, \hyperpage{56}
+    \subitem {StackPush}, \hyperpage{55}
+    \subitem {StackSize}, \hyperpage{57}
+  \item {StackEmpty}
+    \subitem {stack.h}, \hyperpage{57}
+  \item {StackOptimize}
+    \subitem {stack.h}, \hyperpage{57}
+  \item {StackPeek}
+    \subitem {stack.h}, \hyperpage{56}
+  \item {StackPop}
+    \subitem {stack.h}, \hyperpage{56}
+  \item {StackPush}
+    \subitem {stack.h}, \hyperpage{55}
+  \item {StackSize}
+    \subitem {stack.h}, \hyperpage{57}
+
+  \indexspace
+
+  \item {Vector}
+    \subitem {vector.h}, \hyperpage{60}
+  \item {vector.h}
+    \subitem {DeleteVector}, \hyperpage{62}
+    \subitem {MIN\_VECTOR\_SIZE}, \hyperpage{60}
+    \subitem {NewEmptyVector}, \hyperpage{61}
+    \subitem {NewFilledVector}, \hyperpage{61}
+    \subitem {NewVector}, \hyperpage{61}
+    \subitem {Vector}, \hyperpage{60}
+    \subitem {VectorAllocSize}, \hyperpage{64}
+    \subitem {VectorBack}, \hyperpage{68}
+    \subitem {VectorClear}, \hyperpage{65}
+    \subitem {VectorEmpty}, \hyperpage{64}
+    \subitem {VectorForcedClear}, \hyperpage{66}
+    \subitem {VectorForcedResize}, \hyperpage{66}
+    \subitem {VectorGet}, \hyperpage{62}
+    \subitem {VectorPopBack}, \hyperpage{67}
+    \subitem {VectorPushBack}, \hyperpage{67}
+    \subitem {VectorResize}, \hyperpage{65}
+    \subitem {VectorSet}, \hyperpage{63}
+    \subitem {VectorSize}, \hyperpage{63}
+  \item {vector\_iterator.h}
+    \subitem {VectorBegin}, \hyperpage{70}
+    \subitem {VectorEnd}, \hyperpage{70}
+    \subitem {VECTORFOR}, \hyperpage{69}
+    \subitem {VectorIteratorCompare}, \hyperpage{71}
+    \subitem {VectorIteratorDecr}, \hyperpage{72}
+    \subitem {VectorIteratorGet}, \hyperpage{72}
+    \subitem {VectorIteratorIncr}, \hyperpage{71}
+    \subitem {VectorIteratorLess}, \hyperpage{71}
+    \subitem {VectorIteratorSet}, \hyperpage{72}
+  \item {VectorAllocSize}
+    \subitem {vector.h}, \hyperpage{64}
+  \item {VectorBack}
+    \subitem {vector.h}, \hyperpage{68}
+  \item {VectorBegin}
+    \subitem {vector\_iterator.h}, \hyperpage{70}
+  \item {VectorClear}
+    \subitem {vector.h}, \hyperpage{65}
+  \item {VectorEmpty}
+    \subitem {vector.h}, \hyperpage{64}
+  \item {VectorEnd}
+    \subitem {vector\_iterator.h}, \hyperpage{70}
+  \item {VECTORFOR}
+    \subitem {vector\_iterator.h}, \hyperpage{69}
+  \item {VectorForcedClear}
+    \subitem {vector.h}, \hyperpage{66}
+  \item {VectorForcedResize}
+    \subitem {vector.h}, \hyperpage{66}
+  \item {VectorGet}
+    \subitem {vector.h}, \hyperpage{62}
+  \item {VectorIterator}, \hyperpage{8}
+  \item {VectorIteratorCompare}
+    \subitem {vector\_iterator.h}, \hyperpage{71}
+  \item {VectorIteratorDecr}
+    \subitem {vector\_iterator.h}, \hyperpage{72}
+  \item {VectorIteratorGet}
+    \subitem {vector\_iterator.h}, \hyperpage{72}
+  \item {VectorIteratorIncr}
+    \subitem {vector\_iterator.h}, \hyperpage{71}
+  \item {VectorIteratorLess}
+    \subitem {vector\_iterator.h}, \hyperpage{71}
+  \item {VectorIteratorSet}
+    \subitem {vector\_iterator.h}, \hyperpage{72}
+  \item {VectorPopBack}
+    \subitem {vector.h}, \hyperpage{67}
+  \item {VectorPushBack}
+    \subitem {vector.h}, \hyperpage{67}
+  \item {VectorRepr}, \hyperpage{8}
+  \item {VectorResize}
+    \subitem {vector.h}, \hyperpage{65}
+  \item {VectorSet}
+    \subitem {vector.h}, \hyperpage{63}
+  \item {VectorSize}
+    \subitem {vector.h}, \hyperpage{63}
+
+\end{theindex}

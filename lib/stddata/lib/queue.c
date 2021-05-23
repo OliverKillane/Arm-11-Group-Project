@@ -9,8 +9,8 @@ void DeleteQueue(Queue restrict queue) {
     DeleteDeque(queue);
 }
 
-void QueuePush(Queue restrict queue, void* newItem) {
-    DequePushBack(queue, newItem);
+void QueuePush(Queue restrict queue, void* new_item) {
+    DequePushBack(queue, new_item);
 }
 
 void* QueuePop(Queue restrict queue) {

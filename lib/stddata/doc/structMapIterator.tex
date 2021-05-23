@@ -1,0 +1,31 @@
+\hypertarget{structMapIterator}{}\doxysection{Map\+Iterator Struct Reference}
+\label{structMapIterator}\index{MapIterator@{MapIterator}}
+
+
+An iterator for a \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}.  
+
+
+
+
+\doxysubsection{Detailed Description}
+An iterator for a \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}}. 
+
+The \mbox{\hyperlink{structMapIterator}{Map\+Iterator}} is mainly used for looping over a map. Example usage in for loops\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{for}(\mbox{\hyperlink{structMapIterator}{MapIterator}} iter = \mbox{\hyperlink{map__iterator_8h_a729c6047c465dd9ff972bad67477dfe9}{MapBegin}}(map); \mbox{\hyperlink{map__iterator_8h_a1ef5f5b35b21480c35943f16fa2cd7b3}{MapIteratorLess}}(iter, \mbox{\hyperlink{map__iterator_8h_acb20e7e86d4fca7e5a46957589048227}{MapEnd}}(map)); \mbox{\hyperlink{map__iterator_8h_a2829bf1bd74b24e152c821d22cc03521}{MapIteratorIncr}}(\&iter)) \{}
+\DoxyCodeLine{    printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, (\textcolor{keywordtype}{char}*)(\mbox{\hyperlink{map__iterator_8h_a32fec1997f09831b973656da09eda84b}{MapIteratorGet}}(iter).key));}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+\begin{DoxyNote}{Note}
+Most of the interface functions require only the value of an iterator to be passed, except for the ones modifying it ( \mbox{\hyperlink{map__iterator_8h_a2829bf1bd74b24e152c821d22cc03521}{Map\+Iterator\+Incr}} and \mbox{\hyperlink{map__iterator_8h_a5d3237fab0174b3c159b1ff2f9678503}{Map\+Iterator\+Decr}} ) 
+
+Most of the time it will be used in combination with the MAPFOR macro 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Changing the internal variables manually outside of the interface functions will result in an undefined behaviour. 
+
+Attempting to use an uninitialized \mbox{\hyperlink{structMapIterator}{Map\+Iterator}} will result in an undefined behaviour 
+\end{DoxyWarning}
