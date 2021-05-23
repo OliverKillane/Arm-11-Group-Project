@@ -1,5 +1,6 @@
 CC      = gcc
 CSANITIZERS = -fsanitize=address,undefined,leak,pointer-subtract
+<<<<<<< HEAD
 CFLAGS  = -Wall -g3 -I../../lib/stddata/include -I../../src/assemble -I../../src/assemble/commandgen\
 		  -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -Wno-int-conversion -Wno-pointer-to-int-cast
 
@@ -41,5 +42,14 @@ all: ../../build/tests/assemble/commandgentests.o\
 ../../build/tests/assemble/common_defs.o:\
 		../../src/assemble/commandgen/common_defs.c
 
+=======
+CFLAGS  = -Wall -g -I../../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -Werror -pedantic
+
+.PHONY: all clean
+
+all:
+	cp ../../build/tests/stddata.o ../../build/tests/assemble/stddata.o
+
+>>>>>>> 2c45c69212bc643f4b54f2a58589964c28909b65
 clean:
 	rm -f $(wildcard ../../build/tests/assemble/*)
