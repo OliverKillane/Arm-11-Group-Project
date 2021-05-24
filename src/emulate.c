@@ -75,14 +75,13 @@ void loadProgram(char* filename) {
 }
 
 void runProgram() {
-  *GETREG(PC) = 8;
+  *GETREG(PC) = 4;
   instruction currentInstr;
 
   do {
+    *GETREG(PC) += 4;
 
     currentInstr = *MEMWORD(*GETREG(PC) - 8);
-
-    *GETREG(PC) += 4;
 
     if (checkCond(currentInstr)) {
       if(GETBITS(currentInstr, 24, 4) == 0xA) {
@@ -101,9 +100,6 @@ void runProgram() {
       }
     }
   } while(currentInstr);
-
-  // if a halt is detected, then it was detected in Decode, one instruction behind.
-  *(GETREG(PC)) -= 4;
 }
 
 bool checkCond(instruction instr) {
