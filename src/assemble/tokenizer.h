@@ -4,50 +4,50 @@
 #include <stdbool.h>
 
 enum TokenType {
-    INSTRUCTION,
-    REGISTER,
-    CONSTANT,
-    LABEL,
-    SIGN,
-    BRACE
+    TOKEN_INSTRUCTION,
+    TOKEN_REGISTER,
+    TOKEN_CONSTANT,
+    TOKEN_LABEL,
+    TOKEN_SIGN,
+    TOKEN_BRACE
 };
 
 enum ConstantType {
-    HASH,
-    EQUALS,
-    PURE
+    CONST_HASH,
+    CONST_EQUALS,
+    CONST_PURE
 };
 
 enum ConditionType {
-    EQ = 0x0,
-    NE = 0x1,
-    GE = 0xA,
-    LT = 0xB,
-    GT = 0xC,
-    LE = 0xD,
-    AL = 0xE
+    COND_EQ = 0x0,
+    COND_NE = 0x1,
+    COND_GE = 0xA,
+    COND_LT = 0xB,
+    COND_GT = 0xC,
+    COND_LE = 0xD,
+    COND_AL = 0xE
 };
 
 enum InstructionType {
-    BRN,
-    ADD,
-    SUB,
-    RSB,
-    AND,
-    EOR,
-    ORR,
-    MOV,
-    TST,
-    TEQ,
-    CMP,
-    MUL,
-    MLA,
-    LDR,
-    STR,
-    LSL,
-    ASR,
-    LSR,
-    ROR
+    INSTR_BRN,
+    INSTR_ADD,
+    INSTR_SUB,
+    INSTR_RSB,
+    INSTR_AND,
+    INSTR_EOR,
+    INSTR_ORR,
+    INSTR_MOV,
+    INSTR_TST,
+    INSTR_TEQ,
+    INSTR_CMP,
+    INSTR_MUL,
+    INSTR_MLA,
+    INSTR_LDR,
+    INSTR_STR,
+    INSTR_LSL,
+    INSTR_ASR,
+    INSTR_LSR,
+    INSTR_ROR
 };
 
 typedef const struct {
