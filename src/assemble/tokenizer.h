@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 typedef enum {
-    TOKEN_INSTRUCTION,
+    TOKEN_INSTRUCTION = 10, // to be able to map over them
     TOKEN_REGISTER,
     TOKEN_CONSTANT,
     TOKEN_LABEL,
@@ -13,13 +13,13 @@ typedef enum {
 } TokenType;
 
 typedef enum {
-    CONST_HASH,
+    CONST_HASH = 10, // to be able to map over them
     CONST_EQUALS,
     CONST_PURE
 } ConstantType;
 
 typedef enum {
-    COND_EQ = 0x0,
+    COND_EQ = 0x0, // to be able to map over them
     COND_NE = 0x1,
     COND_GE = 0xA,
     COND_LT = 0xB,
@@ -29,7 +29,7 @@ typedef enum {
 } ConditionType;
 
 typedef enum {
-    INSTR_BRN,
+    INSTR_BRN = 10, // to be able to map over them
     INSTR_ADD,
     INSTR_SUB,
     INSTR_RSB,
