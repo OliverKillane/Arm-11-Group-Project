@@ -3,22 +3,22 @@
 
 #include <stdbool.h>
 
-enum TokenType {
+typedef enum {
     TOKEN_INSTRUCTION,
     TOKEN_REGISTER,
     TOKEN_CONSTANT,
     TOKEN_LABEL,
     TOKEN_SIGN,
     TOKEN_BRACE
-};
+} TokenType;
 
-enum ConstantType {
+typedef enum {
     CONST_HASH,
     CONST_EQUALS,
     CONST_PURE
-};
+} ConstantType;
 
-enum ConditionType {
+typedef enum {
     COND_EQ = 0x0,
     COND_NE = 0x1,
     COND_GE = 0xA,
@@ -26,9 +26,9 @@ enum ConditionType {
     COND_GT = 0xC,
     COND_LE = 0xD,
     COND_AL = 0xE
-};
+} ConditionType;
 
-enum InstructionType {
+typedef enum {
     INSTR_BRN,
     INSTR_ADD,
     INSTR_SUB,
@@ -48,7 +48,7 @@ enum InstructionType {
     INSTR_ASR,
     INSTR_LSR,
     INSTR_ROR
-};
+} InstructionType;
 
 typedef const struct {
     TokenType type;
