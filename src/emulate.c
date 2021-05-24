@@ -26,9 +26,6 @@ int main(int argc, char** argv) {
   // Load the selectd binary into memory
   loadProgram(argv[1]);
 
-  //message
-  printf("starting emulator");
-
   // Run the program from the start;
   runProgram();
 
