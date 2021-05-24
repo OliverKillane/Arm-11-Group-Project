@@ -7,4 +7,4 @@ sub r1,r1,#1
 cmp r1,#0
 bne loop
 mov r3,#0x100
-str r2,[r3, -r4]
+str r2,[r3]
