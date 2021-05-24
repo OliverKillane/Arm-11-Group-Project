@@ -10,7 +10,7 @@ typedef enum {
     TOKEN_LABEL,
     TOKEN_SIGN,
     TOKEN_BRACE
-} TokenType;
+} TokenKind;
 
 typedef enum {
     CONST_HASH = 10, // to be able to map over them
@@ -51,7 +51,7 @@ typedef enum {
 } InstructionType;
 
 typedef const struct {
-    TokenType type;
+    TokenKind type;
     union contents {
         struct {
             ConstantType type;
@@ -74,7 +74,7 @@ Token NewToken(char* token_val);
 
 void DeleteToken(Token token);
 
-TokenType TokenType(Token token);
+TokenKind TokenType(Token token);
 
 ConstantType TokenConstantType(Token token);
 
