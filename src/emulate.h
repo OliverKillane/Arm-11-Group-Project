@@ -4,15 +4,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// Colours for printing:
-#define RED     "\x1b[31m"
-#define GREEN   "\x1b[32m"
-#define YELLOW  "\x1b[33m"
-#define BLUE    "\x1b[34m"
-#define MAGENTA "\x1b[35m"
-#define CYAN    "\x1b[36m"
-#define DEFAULT "\x1b[0m"
-
 // TYPE DECLARATIONS:
 // type definitions for readability
 typedef uint32_t word;
@@ -123,7 +114,7 @@ Set the CPSR values as once
 
 /* 
 Get a pointer to a register.
-@param Reg <- either enum reg or 
+@param Reg <- either enum reg or
 */
 #define GETREG(reg) (CPU.registers + reg)
 
@@ -186,7 +177,6 @@ Execute a multiply instruction
 @param instr instruction to process
 */
 void multiplyInstr(instruction instr);
-
 
 /* 
 Execute an arithmetic instruction based on opcode provided
