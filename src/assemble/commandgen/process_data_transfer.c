@@ -42,7 +42,7 @@ static inline unsigned int ProcessRegister(List restrict tokens) {
 unsigned int ProcessLoadMov(unsigned int condition, unsigned int reg_d, unsigned int expression) {
     unsigned int instruction = 0;
     instruction |= condition << 28;
-    instruction |= 0b111010 << 20;
+    instruction |= 0x3A << 20;
     instruction |= reg_d << 12;
     instruction |= expression;
     return instruction;
@@ -65,8 +65,8 @@ void ProcessLoadBig(
 
     unsigned int instruction = 0;
     instruction |= condition << 28;
-    instruction |= 0b01011001 << 20;
-    instruction |= 0b1111 << 16;
+    instruction |= 0x59 << 20;
+    instruction |= 0xF << 16;
     instruction |= reg_d << 12;
     instruction |= data_offset;
 
@@ -129,8 +129,8 @@ void ProcessDataTransfer(
     }
 
     unsigned int operand = 0;
-    unsigned int up_flag;
-    unsigned int immediate_flag;
+    unsigned int up_flag = 1;
+    unsigned int immediate_flag = 0;
 
     if(!ListEmpty(tokens)) {
         if(IsImmediate(ListFront(tokens), false, true)) {

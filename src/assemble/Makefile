@@ -28,5 +28,5 @@ all: ../../build/assemble/assemble.o\
 ../../build/assemble/process_shift.o: commandgen/process_shift.c
 
 clean:
-	rm -f $(wildcard ../build/assemble/*)
-	rm -f ../bin/assemble
+	rm -f $(wildcard ../../build/assemble/*)
+	rm -f ../../bin/assemble
