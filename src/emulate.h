@@ -127,7 +127,7 @@ typedef enum {
 */
 #define MEMLOC(loc) (CPU.memory + loc)
 
-#define MEMWORD(loc) (word *) MEMLOC(loc)
+#define MEMWORD(loc) ((word *) MEMLOC(loc))
 
 // INSTRUCTION PROCESSING:
 
@@ -143,21 +143,21 @@ void runProgram();
 
 
 /* Check that an instruction's condition code can proceed
-    cond <- condition code
+    instr <- instruction to check
 */
-bool checkCond(condition cond);
+bool checkCond(instruction instr);
 
 
 /* Execute a branch instruction
     instr <- instruction to process
 */
-void branchInstr(instruction inst);
+void branchInstr(instruction instr);
 
 
 /* Execute a Single Data Transfer instruction
     instr <- instruction to process
 */
-void singleDataTransInstr(instruction inst);
+void singleDataTransInstr(instruction instr);
 
 /* Given a shift pattern (bits 11-0 of data processing operand when Operand 2 is a register),
     Compute the shift operand value.
@@ -168,13 +168,13 @@ shiftRes shiftOperation(word shift);
 /* Execute a multiply instruction
     instr <- instruction to process
 */
-void multiplyInstr(instruction inst);
+void multiplyInstr(instruction instr);
 
 
 /* Execute an arithmetic instruction based on opcode provided
     instr <- instruction to process
 */
-void processDataInstr(instruction inst);
+void processDataInstr(instruction instr);
 
 // TERMINAL OUTPUT:
 

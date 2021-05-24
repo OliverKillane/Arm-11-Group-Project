@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include "emulate.h"
 
 machineState CPU;
@@ -15,11 +16,18 @@ int main(int argc, char** argv) {
 
   // Setup the state of the CPU
   SETCPSR(0,0,0,0);
-  CPU.memory = calloc(1 << 16, sizeof(byte));
+  CPU.memory = (byte*)calloc(1 << 16, 1);
+
+  // ensure memory pointer is not null
+  assert(CPU.memory);
+
   memset(CPU.registers, 0, 64);
 
   // Load the selectd binary into memory
   loadProgram(argv[1]);
+
+  //message
+  printf("starting emulator");
 
   // Run the program from the start;
   runProgram();
@@ -29,6 +37,8 @@ int main(int argc, char** argv) {
 
   //free memory section (possibly redundant)
   free(CPU.memory);
+
+  return EXIT_SUCCESS;
 }
 #endif
 
@@ -72,30 +82,35 @@ void runProgram() {
   instruction currentInstr;
 
   do {
+
     currentInstr = *MEMWORD(*GETREG(PC) - 8);
 
-    (*GETREG(PC)) += 4;
+    *GETREG(PC) += 4;
 
-    if(GETBITS(currentInstr, 24, 4) == 0xA) {
-      branchInstr(currentInstr);
-    } else if(GETBITS(currentInstr, 26, 2) && !GETBITS(currentInstr, 21, 2)) {
-      singleDataTransInstr(currentInstr);
-    } else if(!GETBITS(currentInstr, 22, 6) && GETBITS(currentInstr, 4, 4) == 0x9) {
-      multiplyInstr(currentInstr);
-    } else if(!GETBITS(currentInstr, 26, 2)) {
-      processDataInstr(currentInstr);
-    } else {
+    if (checkCond(currentInstr)) {
+      if(GETBITS(currentInstr, 24, 4) == 0xA) {
+        branchInstr(currentInstr);
+      } else if(GETBITS(currentInstr, 26, 2) && !GETBITS(currentInstr, 21, 2)) {
+        singleDataTransInstr(currentInstr);
+      } else if(!GETBITS(currentInstr, 22, 6) && GETBITS(currentInstr, 4, 4) == 0x9) {
+        multiplyInstr(currentInstr);
+      } else if(!GETBITS(currentInstr, 26, 2)) {
+        processDataInstr(currentInstr);
+      } else {
       
-      // Invalid instruction
-      fprintf(stderr, "Invalid instruction no: %x", currentInstr);
-      exit(INVALID_INSTR);
+        // Invalid instruction
+        fprintf(stderr, "Invalid instruction no: %x", currentInstr);
+        exit(INVALID_INSTR);
+      }
     }
-
   } while(currentInstr);
+
+  // if a halt is detected, then it was detected in Decode, one instruction behind.
+  *(GETREG(PC)) -= 4;
 }
 
-bool checkCond(condition cond) {
-  switch(cond) {
+bool checkCond(instruction instr) {
+  switch(GETBITS(instr, 28, 4)) {
     case EQ: return CPU.CPSR.Z;
     case NE: return !CPU.CPSR.Z;
     case GE: return CPU.CPSR.N == CPU.CPSR.V;
@@ -109,10 +124,10 @@ bool checkCond(condition cond) {
 
 //TODO change way PC is used, allow error checking on branch
 void branchInstr(instruction instr) {
-  int offset = (GETBITS(instr, 0, 23) - GETBIT(instr, 23) << 23) << 2;
+  int offset = (GETBITS(instr, 0, 23) - (GETBIT(instr, 23) << 23)) << 2;
   
   // update the PC by offset, then skip forwads 2 (so instruction at PC is executed)
-  *GETREG(PC) += offset + 8;
+  *GETREG(PC) += offset + 4;
 }
 
 // ISSUE: needs to be tested
@@ -218,7 +233,7 @@ shiftRes shiftOperation(word shift) {
       .carryout = GETBIT(RmVal, shiftby - 1)
       };
     case 3: return (shiftRes) {
-      .result = (RmVal >> shiftby) | (GETBITS(RmVal, 0, shiftby) << (MAXINT32 - shiftby)),
+      .result = (RmVal >> shiftby) | (GETBITS(RmVal, 0, shiftby) << (32 - shiftby)),
       .carryout = GETBIT(RmVal, shiftby - 1)
       };
     default:
@@ -274,14 +289,13 @@ void processDataInstr(instruction instr) {
   bool I = GETBIT(instr, 25);
   bool S = GETBIT(instr, 20);
 
-  bool shiftCarryOut = 0;
-  bool ALUcarryOut = 0;
+  bool shiftCarryOut = false;
     
   if(I){
-    // Operand2 is an immediate value (shift torate by rotate * 2)
-    byte rotate = GETBITS(instr, 8, 4) << 1;
+    // Operand2 is an immediate value (shift rotate by rotate * 2)
+    word rotate = GETBITS(instr, 8, 4) << 1;
     word imm = GETBITS(instr, 0, 8);
-    operand2Value = imm >> rotate + GETBITS(imm, 0, rotate) << (32 - rotate); 
+    operand2Value = (imm >> rotate) | (GETBITS(imm, 0, rotate) << (32 - rotate)); 
   } else {
     // Operand 2 is a shift register
     shiftRes op2 = shiftOperation(instr);
@@ -325,7 +339,7 @@ void processDataInstr(instruction instr) {
 }
 
 
-// For basci manual testing only as does not yet match the testing files
+// For basic manual testing only as does not yet match the testing files
 void printState() {
   // print out state of all registers and the non-zero memory.
   printf("\nCPU state:");
