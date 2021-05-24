@@ -88,42 +88,48 @@ typedef enum {
 
 // UTILITIES:
 
-/* case match: {ops}; break;
-    For making switch statements less tedious
+/* 
+case match: {ops}; break;
+For making switch statements less tedious
+@param match The value to match
+@param ops The code to run, and then break after
 */
 #define CASEBREAK(match, ops) case match: ops; break;
 
 /* Return a range of bits.
-    data    <- Source string of bits
-    start   <- inclusive start
-    n       <- number of bits
+@param data Source string of bits
+@param start inclusive start
+@param n number of bits
 */
 #define GETBITS(data, start, n) (((data) >> (start)) & ((1 << (n)) - 1))
 
 /* get bit at location in a word:
-    data    <- the word you are inspecting
-    n       <- bit number (0-31) 
+@param data the word you are inspecting
+@param n bit number (0-31) 
 */
 #define GETBIT(data, n) (((data) >> (n)) % 2 != 0)
 
-/* Set the CPSR values as once
-    n   <- (N)egative bit
-    z   <- (Z)ero bit
-    c   <- (C)arry bit
-    v   <- O(v)erflow bit
+/* 
+Set the CPSR values as once
+@param n (N)egative bit
+@param z (Z)ero bit
+@param c (C)arry bit
+@param v O(v)erflow bit
 */
 #define SETCPSR(n, z, c, v) CPU.CPSR.N = n;CPU.CPSR.Z = z;CPU.CPSR.C = c;CPU.CPSR.V = v;
 
 
 // memory access macros:
 
-/* Get a pointer to a register.
-    Reg <- either enum reg or 
+/* 
+Get a pointer to a register.
+@param Reg <- either enum reg or 
 */
 #define GETREG(reg) (CPU.registers + reg)
 
-/* Get data stored at a given location
-    loc <- location in 64KB memory
+/* 
+Get data stored at a given location
+@param loc location in 64KB memory
 */
 #define MEMLOC(loc) (CPU.memory + loc)
 
@@ -131,57 +137,68 @@ typedef enum {
 
 // INSTRUCTION PROCESSING:
 
-/* Load the program into memory
+/* 
+Load the program into memory
+@param filename The name/path of the binary to be loaded
 */
 void loadProgram(char* filename);
 
 
-/* Run the program starting at start, determine instruction condition and 
+/* 
+Run the program starting at start, determine instruction condition and 
 format, and send to relevant function.
 */
 void runProgram();
 
 
-/* Check that an instruction's condition code can proceed
-    instr <- instruction to check
+/* 
+Check that an instruction's condition code can proceed
+@param instr instruction to check
+@retval true if instruction should be run, false otherwise.
 */
 bool checkCond(instruction instr);
 
 
-/* Execute a branch instruction
-    instr <- instruction to process
+/* 
+Execute a branch instruction
+@param instr instruction to process
 */
 void branchInstr(instruction instr);
 
 
-/* Execute a Single Data Transfer instruction
-    instr <- instruction to process
+/* 
+Execute a Single Data Transfer instruction
+@param instr instruction to process
 */
 void singleDataTransInstr(instruction instr);
 
-/* Given a shift pattern (bits 11-0 of data processing operand when Operand 2 is a register),
-    Compute the shift operand value.
-    shift <- Instruction bits 11-0 (inclusive)
+/* 
+Given a shift pattern (bits 11-0 of data processing operand when Operand 2 is 
+a register), Compute the shift operand value.
+
+@param shift Instruction bits 11-0 (inclusive)
+@retval a struct of the shift, and overflow bit
 */
 shiftRes shiftOperation(word shift);
 
-/* Execute a multiply instruction
-    instr <- instruction to process
+/* 
+Execute a multiply instruction
+@param instr instruction to process
 */
 void multiplyInstr(instruction instr);
 
 
-/* Execute an arithmetic instruction based on opcode provided
-    instr <- instruction to process
+/* 
+Execute an arithmetic instruction based on opcode provided
+@param instr instruction to process
 */
 void processDataInstr(instruction instr);
 
 // TERMINAL OUTPUT:
 
-/* print the state of the CPU to the terminal
+/* 
+Print the state of the CPU to the terminal
 */
 void printState();
 
 #endif
-
-//TODO: instructions must be in machine memory
