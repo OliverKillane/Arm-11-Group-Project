@@ -339,15 +339,18 @@ void processDataInstr(instruction instr) {
 // For basic manual testing only as does not yet match the testing files
 void printState() {
   // print out state of all registers and the non-zero memory.
-  printf("\nCPU state:");
-  for (int registerNo = 0; registerNo < 15; registerNo++) {
-    printf("\nRegister %i: %x %i", registerNo, *GETREG(registerNo), *GETREG(registerNo));
+  printf("Registers:");
+  for (int registerNo = 0; registerNo < 13; registerNo++) {
+    printf("\n$%-3i: %10i (0x%08x)", registerNo, *GETREG(registerNo), *GETREG(registerNo));
   }
-  printf("\nRegister PC: %x %i", *GETREG(PC), *GETREG(PC));
-  printf("\nCPSR Flags: N: %u Z: %u C: %u V: %u", CPU.CPSR.N, CPU.CPSR.Z, CPU.CPSR.C, CPU.CPSR.V);
+  printf("\nPC  : %10i (0x%08x)", *GETREG(PC), *GETREG(PC));
+  word cpsrReg = (CPU.CPSR.N << 31) + (CPU.CPSR.Z << 30) + (CPU.CPSR.C << 29) + (CPU.CPSR.V << 28);
+  printf("\nCPSR: %10i (0x%08x)", cpsrReg, cpsrReg);
+  //printf("\nCPSR Flags: N: %u Z: %u C: %u V: %u", CPU.CPSR.N, CPU.CPSR.Z, CPU.CPSR.C, CPU.CPSR.V);
 
-  printf("\nNon-Zero memory locations:");
-  for (int loc = 0; loc < MEMSIZE; loc++) {
-    if (*MEMLOC(loc)) printf("\n<%x> %x", loc, (unsigned int)*MEMLOC(loc));
+  printf("\nNon-zero memory:");
+  for (int loc = 0; loc < MEMSIZE; loc+=4) {
+    word wordMem = ((unsigned int)*MEMLOC(loc) << 24) +  ((unsigned int)*MEMLOC(loc + 1) << 16) + ((unsigned int)*MEMLOC(loc + 2) << 8) + (unsigned int)*MEMLOC(loc + 3);
+    if (*MEMLOC(loc)) printf("\n0x%08x: 0x%08x", loc, wordMem);
   }
 }
