@@ -130,8 +130,8 @@ void branchInstr(instruction instr) {
 // ISSUE: needs to be tested
 void singleDataTransInstr(instruction instr) {
 
-  word* RdBase = GETREG(GETBITS(instr, 12, 4));
-  word* RnSrcDst = GETREG(GETBITS(instr, 16, 4));
+  word* RnBase = GETREG(GETBITS(instr, 16, 4));
+  word* RdSrcDst = GETREG(GETBITS(instr, 12, 4));
   int offset;
   bool I = GETBIT(instr, 25);
   bool P = GETBIT(instr, 24);
@@ -140,8 +140,8 @@ void singleDataTransInstr(instruction instr) {
 
   
   // cannot use PC as Rd, Rn
-  if (RdBase == GETREG(PC) || RnSrcDst == GETREG(PC)) {
-    fprintf(stderr, "Data Transfer instruction uses PC as Rd/Rn: %x", instr);
+  if (RdSrcDst == GETREG(PC)) {
+    fprintf(stderr, "Data Transfer instruction uses PC as Rd: %x", instr);
     exit(INVALID_INSTR);
   }
 
@@ -150,7 +150,7 @@ void singleDataTransInstr(instruction instr) {
   if (I) {
 
     // if post idexing, using shift, Rn != Rm
-    if (GETREG(GETBITS(instr, 0, 4)) == RnSrcDst && !P) {
+    if (GETREG(GETBITS(instr, 0, 4)) == RdSrcDst && !P) {
       fprintf(stderr, "Data Transfer instruction uses same register as Rn, Rm: %x", instr);
       exit(INVALID_INSTR);
     }
@@ -167,18 +167,18 @@ void singleDataTransInstr(instruction instr) {
   if (P) {
     // pre-indexing
     if (L) {
-      *RnSrcDst = *MEMWORD(*RdBase + offset);
+      *RdSrcDst = *MEMWORD(*RnBase + offset);
     } else {
-      *MEMWORD(*RdBase + offset) =  *RnSrcDst;
+      *MEMWORD(*RnBase + offset) =  *RdSrcDst;
     }
   } else {
     // POST Indexing
     if (L) {
-      *RnSrcDst = *MEMWORD(*RdBase);
+      *RdSrcDst = *MEMWORD(*RnBase);
     } else {
-      *MEMWORD(*RdBase) =  *RnSrcDst;
+      *MEMWORD(*RnBase) =  *RdSrcDst;
     }
-    *RdBase += offset;
+    *RnBase += offset;
   }
 }
 
