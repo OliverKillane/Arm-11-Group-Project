@@ -71,6 +71,8 @@ void writeBinary(Vector program, char *filename) {
 	fclose(file);
 }
 
+// List tokenize
+
 int main(int argc, char **argv) {	
 
     FILE *file;
@@ -141,20 +143,18 @@ int main(int argc, char **argv) {
 	if (line != NULL) {
 		free(line);
 	}
-	totalInstructions++;
 
 	Vector binaryVector = NewEmptyVector();
 	InitFunctionGen();
-	
+
+
 	int currInstr = 0;
 	LISTFOR(allTokens, allTokensIter) {	
 		List lineTokens = ListIteratorGet(allTokensIter);
 		
 		LISTFOR(lineTokens, lineTokensIter) {
 			char *token = ListIteratorGet(lineTokensIter);
-			printf("%s ", token);
 		}
-		printf("\n");
 		
 		FunctionGen(symbolTable, lineTokens, binaryVector, currInstr, totalInstructions);
 		
