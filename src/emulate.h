@@ -109,6 +109,9 @@ typedef enum {
 */
 #define SETCPSR(n, z, c, v) CPU.CPSR.N = n;CPU.CPSR.Z = z;CPU.CPSR.C = c;CPU.CPSR.V = v;
 
+// Get the CPSR values as an array
+#define GETCPSR(void) {CPU.CPSR.N, CPU.CPSR.Z, CPU.CPSR.C, CPU.CPSR.V}
+
 
 // memory access macros:
 

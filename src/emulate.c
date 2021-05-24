@@ -175,7 +175,7 @@ shiftRes shiftOperation(word shift) {
   byte shiftType = GETBITS(shift, 5, 2);
   word shiftby;
 
-  // Check 4th bit to determine the shoft type (integer or register)
+  // Check 4th bit to determine the shift type (integer or register)
   if (GETBIT(shift, 4) && !GETBIT(shift, 7)) {
 
     // shift by value of selected register
@@ -288,7 +288,7 @@ void processDataInstr(instruction instr) {
     CASEB(TEQ, ALUOut = RnVal ^ operand2Value)
     CASEB(CMP, ALUOut = RnVal - operand2Value) 
     CASEB(ORR, ALUOut = RnVal | operand2Value; *Rd = ALUOut)
-    CASEB(MOV, *Rd = operand2Value)
+    CASEB(MOV, ALUOut = operand2Value; *Rd = operand2Value)
     default: 
       fprintf(stderr, "Invalid operation in instruction: %x", instr);
       exit(INVALID_INSTR);          
