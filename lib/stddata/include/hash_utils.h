@@ -28,4 +28,14 @@ unsigned long long IntHash(void*);
  */
 bool IntEq(void*, void*);
 
+/**
+ * @brief Hash function for integer stored inside void* for using in @ref Map or @ref Set
+ */
+unsigned long long UnsafeIntHash(void*);
+
+/**
+ * @brief Equality function for integer stored inside void* for using in @ref Map or @ref Set
+ */
+bool UnsafeIntEq(void*, void*);
+
 #endif /* STDDATA_HASH_UTILS_H_ */
