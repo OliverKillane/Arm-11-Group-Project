@@ -4,15 +4,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// Colours for printing:
-#define RED     "\x1b[31m"
-#define GREEN   "\x1b[32m"
-#define YELLOW  "\x1b[33m"
-#define BLUE    "\x1b[34m"
-#define MAGENTA "\x1b[35m"
-#define CYAN    "\x1b[36m"
-#define DEFAULT "\x1b[0m"
-
 // TYPE DECLARATIONS:
 // type definitions for readability
 typedef uint32_t word;
@@ -123,17 +114,10 @@ Set the CPSR values as once
 
 /* 
 Get a pointer to a register.
-@param Reg <- either enum reg or 
+@param Reg <- either enum reg or
 */
 #define GETREG(reg) (CPU.registers + reg)
 
-/* 
-Get data stored at a given location
-@param loc location in 64KB memory
-*/
-#define MEMLOC(loc) (CPU.memory + loc)
-
-#define MEMWORD(loc) ((word *) MEMLOC(loc))
 
 // INSTRUCTION PROCESSING:
 
@@ -148,7 +132,7 @@ void loadProgram(char* filename);
 Run the program starting at start, determine instruction condition and 
 format, and send to relevant function.
 */
-void runProgram();
+void runProgram(void);
 
 
 /* 
@@ -187,18 +171,38 @@ Execute a multiply instruction
 */
 void multiplyInstr(instruction instr);
 
-
 /* 
 Execute an arithmetic instruction based on opcode provided
 @param instr instruction to process
 */
 void processDataInstr(instruction instr);
 
+// EMULATOR DATA ACCESS:
+
+/* return the word (32 bits) starting at byte loc (16 bit location)
+@param loc 16bit location in memory
+@retval pointer to word in memory
+*/
+word *getmemword(location loc);
+
+
+/* Get the byte at loc (16 bit location)
+@param loc 16bit location in memory
+@retval pointer to byte in memory
+*/
+byte *getmemloc(location loc);
+
+
+
 // TERMINAL OUTPUT:
 
 /* 
 Print the state of the CPU to the terminal
 */
-void printState();
+void printState(errors );
+
+/* print out result based on error code and then CPU state
+
+*/
 
 #endif

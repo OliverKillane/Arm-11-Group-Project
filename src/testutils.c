@@ -60,7 +60,6 @@ void runtest(void* expected, void* result, type typ, char * description) {
         case BOOL: passed = EQUALS(expected, result, bool); break;
     }
 
-
     int padlen = PADLEN - strlen(description);
     assert(padlen >= 0);
 
