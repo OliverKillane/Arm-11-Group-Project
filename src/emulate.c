@@ -9,7 +9,8 @@ machineState CPU;
 #ifndef TEST
 int main(int argc, char** argv) {
   if (argc != 2) {
-    perror("Invalid number of arguments provided, need only one filename");
+    printf("Error: Invalid number of arguments provided, need only one filename\n");
+    printState();
     exit(INVALID_ARGUMENTS);
   }
 
@@ -31,7 +32,8 @@ void loadProgram(char* filename) {
   FILE *file = fopen(filename, "rb");
 
   if (!file) {
-    perror("could not open file");
+    printf("Error: could not open file\n");
+    printState();
     exit(INVALID_FILE);
   }
 
@@ -42,7 +44,8 @@ void loadProgram(char* filename) {
   fseek(file, 0, SEEK_SET);
 
   if (fread(CPU.memory, 1, length, file) != length) {
-    perror("Unable to load all instructions");
+    printf("Error: Unable to load all instructions\n");
+    printState();
     exit(INVALID_FILE);
   }
 
@@ -67,7 +70,8 @@ void runProgram() {
       } else if(!GETBITS(currentInstr, 26, 2)) {
         processDataInstr(currentInstr);
       } else {
-        fprintf(stderr, "Invalid instruction no: %x", currentInstr);
+        printf("Error: Invalid instruction no: %08x", currentInstr);
+        printState();
         exit(INVALID_INSTR);
       }
     }
@@ -102,22 +106,24 @@ void singleDataTransInstr(instruction instr) {
   bool L = GETBIT(instr, 20);
 
   if (RdSrcDst == GETREG(PC)) {
-    fprintf(stderr, "Data Transfer instruction uses PC as Rd: %x", instr);
+    printf("Error: Data Transfer instruction uses PC as Rd: %08x\n", instr);
+    printState();
     exit(INVALID_INSTR);
   }
 
   if (I) {
     // if post idexing, using shift, Rn != Rm
     if (GETREG(GETBITS(instr, 0, 4)) == RdSrcDst && !P) {
-      fprintf(stderr, "Data Transfer instruction uses same register as Rn, Rm: %x", instr);
-      exit(INVALID_INSTR);
+      printf("Error: Data Transfer instruction uses same register as Rn, Rm: %08x\n", instr);
     }
     offset = shiftOperation(instr).result;
   } else {
     offset = GETBITS(instr, 0, 12);
   }
 
-  if (!U) offset = -offset;
+  if (!U) {
+    offset = -offset;
+  }
 
   word loc = P?(*RnBase + offset):*RnBase;
 
@@ -140,7 +146,7 @@ shiftRes shiftOperation(word shift) {
   word *Rm = GETREG(GETBITS(shift, 0, 4));
 
   if (Rm == GETREG(PC)) {
-    perror("Invalid instruction, shift has Rm as PC: %x");
+    printf("Error: invalid shift uses PC as Rm");
     exit(INVALID_INSTR);
   }
 
@@ -150,18 +156,24 @@ shiftRes shiftOperation(word shift) {
 
   // Check 4th bit to determine the shift type (integer or register)
   if (GETBIT(shift, 4) && !GETBIT(shift, 7)) {
+
     // shift by value of selected register
     shiftby = *(GETREG(GETBITS(shift, 8, 4)));
+
   } else if (!GETBIT(shift, 4)) {
+
     // shift by constant integer amount
     shiftby = GETBITS(shift, 7, 5);
+
   } else {
-    perror("Data processing instruction has an invalid shift.");
+
+    printf("Error: Data processing instruction has an invalid shift.\n");
     exit(INVALID_INSTR);
   }
 
   // checking for shift by zero
   if (shiftby == 0) {
+
     return (shiftRes) {
       .result = RmVal,
       .carryout = 0
@@ -186,7 +198,7 @@ shiftRes shiftOperation(word shift) {
       .carryout = GETBIT(RmVal, shiftby - 1)
       };
     default:
-      fprintf(stderr, "invalid shift : %x", shift);
+      printf("Error: Invalid shift");
       exit(INVALID_INSTR);
   }
 }
@@ -199,7 +211,7 @@ void multiplyInstr(instruction instr) {
   word *PCReg = GETREG(PC);
 
   if (Rd == Rm || PCReg == Rd || PCReg == Rm || PCReg == Rs || PCReg == Rn) {
-    fprintf(stderr, "Multiply instruction uses same register for Rd, Rm: %x", instr);
+    printf("Error: Multiply instruction uses same register for Rd, Rm: %08x\n", instr);
     exit(INVALID_INSTR);
   }
 
@@ -254,7 +266,7 @@ void processDataInstr(instruction instr) {
     CASEBREAK(ORR, ALUOut = RnVal | operand2Value; *Rd = ALUOut);
     CASEBREAK(MOV, *Rd = operand2Value);
     default: 
-      fprintf(stderr, "Invalid operation in instruction: %x", instr);
+      printf("Error: Invalid operation in instruction: %08x", instr);
       exit(INVALID_INSTR);          
   }
 

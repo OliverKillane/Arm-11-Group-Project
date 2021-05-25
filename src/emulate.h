@@ -71,7 +71,6 @@ typedef enum {
 typedef enum {
     INVALID_INSTR = 1,
     INVALID_ARGUMENTS,
-    NON_TERMINATION,
     INVALID_FILE,
     CORRUPT_FILE,
     INVALID_REG_ACCESS
