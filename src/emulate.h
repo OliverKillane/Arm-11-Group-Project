@@ -118,13 +118,6 @@ Get a pointer to a register.
 */
 #define GETREG(reg) (CPU.registers + reg)
 
-/* 
-Get data stored at a given location
-@param loc location in 64KB memory
-*/
-#define MEMLOC(loc) (CPU.memory + loc)
-
-#define MEMWORD(loc) ((word *) MEMLOC(loc))
 
 // INSTRUCTION PROCESSING:
 
@@ -184,14 +177,31 @@ Execute an arithmetic instruction based on opcode provided
 */
 void processDataInstr(instruction instr);
 
+// EMULATOR DATA ACCESS:
+
+/* return the word (32 bits) starting at byte loc (16 bit location)
+@param loc 16bit location in memory
+@retval pointer to word in memory
+*/
+word *getmemword(location loc);
+
+
+/* Get the byte at loc (16 bit location)
+@param loc 16bit location in memory
+@retval pointer to byte in memory
+*/
+byte *getmemloc(location loc);
+
+
+
 // TERMINAL OUTPUT:
 
 /* 
 Print the state of the CPU to the terminal
 */
-void printState(void);
+void printState(errors );
 
-/*
+/* print out result based on error code and then CPU state
 
 */
 
