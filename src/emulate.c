@@ -326,7 +326,7 @@ void printState() {
   byte *wordMem;
   for (int loc = 0; loc < MEMSIZE; loc += 4) {
     wordMem = getmemloc(loc);
-    if (*((word*)wordMem)){
+    if (*(word*)wordMem){
       printf("\r\n0x%08x: 0x%02x%02x%02x%02x", loc, wordMem[0], wordMem[1], wordMem[2], wordMem[3]);
     }
   }
