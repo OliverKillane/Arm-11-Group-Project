@@ -1,9 +1,9 @@
 CC      = gcc
 CSANITIZERS = -fsanitize=address,undefined,leak,pointer-subtract
 CFLAGS  = -Wall -g3 -I../../lib/stddata/include -I../../src/assemble -I../../src/assemble/commandgen\
-		  -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -Wno-int-conversion -Wno-pointer-to-int-cast
+		  -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17  -Wno-int-conversion -Wno-pointer-to-int-cast
 
-.PHONY: all clean
+.PHONY: all clean 
 
 all: ../../build/tests/assemble/commandgentests.o\
 	 ../../build/tests/assemble/commandgen.o\
@@ -13,10 +13,14 @@ all: ../../build/tests/assemble/commandgentests.o\
 	 ../../build/tests/assemble/process_multiply.o\
 	 ../../build/tests/assemble/process_shift.o\
 	 ../../build/tests/assemble/common_defs.o\
-	 ../../build/tests/assemble/stddata.o
+	 ../../build/tests/assemble/stddata.o\
+	 ../../build/tests/assemble/assemble_utils.o\
+	 ../../build/tests/assemble/assembletests.o
 	
 	$(CC) $(CSANITIZERS) $(CFLAGS) $(wildcard ../../build/tests/assemble/*.o)\
 		-o ../../build/tests/assemble/tests
+	cp ./fact.s ../../build/tests/assemble/
+	cp ./tokenTests.s ../../build/tests/assemble/
 	../../build/tests/assemble/tests
 
 ../../build/tests/assemble/stddata.o:
@@ -26,6 +30,8 @@ all: ../../build/tests/assemble/commandgentests.o\
 	$(CC) -c $(CFLAGS) $(CSANITIZERS) $^ -o $@
 
 ../../build/tests/assemble/commandgentests.o: commandgentests.c	
+../../build/tests/assemble/assembletests.o: assembletests.c	
+
 ../../build/tests/assemble/commandgen.o:\
 		../../src/assemble/commandgen/commandgen.c
 ../../build/tests/assemble/process_branch.o:\
@@ -40,6 +46,11 @@ all: ../../build/tests/assemble/commandgentests.o\
 		../../src/assemble/commandgen/process_shift.c
 ../../build/tests/assemble/common_defs.o:\
 		../../src/assemble/commandgen/common_defs.c
+../../build/tests/assemble/assemble_utils.o:\
+		../../src/assemble/assemble_utils.c
+
+
 
 clean:
 	rm -f $(wildcard ../../build/tests/assemble/*)
+

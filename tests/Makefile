@@ -2,9 +2,9 @@ CC      = gcc
 CSANITIZERS = -fsanitize=address,undefined,leak,pointer-subtract
 CFLAGS  = -Wall -g -I../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -Werror -pedantic
 
-.PHONY: all clean assemble emulate stddata
+.PHONY: all clean emulate stddata assemble
 
-all: stddata assemble emulate
+all: stddata emulate assemble
 
 assemble: stddata
 	cd assemble && $(MAKE)

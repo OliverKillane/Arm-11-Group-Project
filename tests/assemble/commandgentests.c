@@ -247,11 +247,13 @@ void ProcessShiftTests() {
     DeleteMap(symbols);
 }
 
-int main() {
+void runCommandGenTests() {
     GetExprValueTests();
     ProcessBranchTests();
     ProcessDataProcessingTests();
     ProcessMultiplyTests();
     ProcessDataTransferTests();
     ProcessShiftTests();
+
+    printf("Command Gen Tests passed.\n");
 }

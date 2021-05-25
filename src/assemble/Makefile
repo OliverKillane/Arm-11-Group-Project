@@ -4,6 +4,7 @@ CFLAGS  = -Wall -g -I../../lib/stddata/include -Icommandgen -I. -D_POSIX_SOURCE 
 .PHONY: all clean
 
 all: ../../build/assemble/assemble.o\
+	 ../../build/assemble/assemble_utils.o\
 	 ../../build/assemble/common_defs.o\
 	 ../../build/assemble/process_branch.o\
 	 ../../build/assemble/process_data_processing.o\
@@ -19,6 +20,7 @@ all: ../../build/assemble/assemble.o\
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 ../../build/assemble/assemble.o: assemble.c
+../../build/assemble/assemble_utils.o: assemble_utils.c
 ../../build/assemble/commandgen.o: commandgen/commandgen.c
 ../../build/assemble/common_defs.o: commandgen/common_defs.c
 ../../build/assemble/process_branch.o: commandgen/process_branch.c
@@ -28,5 +30,5 @@ all: ../../build/assemble/assemble.o\
 ../../build/assemble/process_shift.o: commandgen/process_shift.c
 
 clean:
-	rm -f $(wildcard ../../build/assemble/*)
-	rm -f ../../bin/assemble
+	rm -f $(wildcard ../build/assemble/*)
+	rm -f ../bin/assemble
