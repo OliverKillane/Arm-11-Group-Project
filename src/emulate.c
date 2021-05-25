@@ -119,22 +119,20 @@ void singleDataTransInstr(instruction instr) {
 
   if (!U) offset = -offset;
 
-  if (P) {
-    // pre-indexing
-    if (L) {
-      *RdSrcDst = *getmemword(*RnBase + offset);
-    } else {
-      *getmemword(*RnBase + offset) =  *RdSrcDst;
-    }
+  word loc = P?(*RnBase + offset):*RnBase;
+
+  if (loc >= MEMSIZE) {
+    printf("Error: Out of bounds memory access at address 0x%08x\n", loc);
   } else {
-    // POST Indexing
     if (L) {
-      *RdSrcDst = *getmemword(*RnBase);
+      *RdSrcDst = *getmemword(loc);
     } else {
-      *getmemword(*RnBase) =  *RdSrcDst;
+      *getmemword(loc) = *RdSrcDst;
     }
-    *RnBase += offset;
+
+    if (!P) *RnBase += offset;
   }
+ 
 }
 
 
