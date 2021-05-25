@@ -139,7 +139,7 @@ void loadProgram(char* filename);
 Run the program starting at start, determine instruction condition and 
 format, and send to relevant function.
 */
-void runProgram();
+void runProgram(void);
 
 
 /* 
@@ -189,6 +189,10 @@ void processDataInstr(instruction instr);
 /* 
 Print the state of the CPU to the terminal
 */
-void printState();
+void printState(void);
+
+/*
+
+*/
 
 #endif
