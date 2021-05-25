@@ -50,7 +50,7 @@ typedef enum {
     INSTR_ROR
 } InstructionType;
 
-typedef const struct {
+typedef struct {
     TokenKind type;
     union contents {
         struct {
@@ -65,7 +65,7 @@ typedef const struct {
         char label[512];
         bool is_plus;
         bool is_open;
-    }
+    };
 } TokenRepr;
 
 typedef TokenRepr * Token;
