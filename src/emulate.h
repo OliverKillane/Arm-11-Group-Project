@@ -61,7 +61,7 @@ typedef enum {
     AL = 14
 } condition;
 
-// opcode mnemonics note: very messy, big dislike, not poguers
+// opcode mnemonics for the processData instruction
 typedef enum {
     AND = 0, EOR, SUB, RSB, ADD,
     TST = 8, TEQ, CMP,
@@ -89,19 +89,7 @@ typedef enum {
 @param data the word you are inspecting
 @param n bit number (0-31) 
 */
-#define GETBIT(data, n) (((data) >> (n)) % 2 != 0)
-
-/* 
-Set the CPSR values as once
-@param n (N)egative bit
-@param z (Z)ero bit
-@param c (C)arry bit
-@param v O(v)erflow bit
-*/
-#define SETCPSR(n, z, c, v) CPU.CPSR.N = n;CPU.CPSR.Z = z;CPU.CPSR.C = c;CPU.CPSR.V = v;
-
-
-// memory access macros:
+#define GETBIT(data, n) (((data) >> (n)) & 1)
 
 /* 
 Get a pointer to a register.
@@ -171,6 +159,7 @@ void processDataInstr(instruction instr);
 // EMULATOR DATA ACCESS:
 
 /* return the word (32 bits) starting at byte loc (16 bit location)
+ Can never segfault as 16 bit address.
 @param loc 16bit location in memory
 @retval pointer to word in memory
 */
@@ -178,11 +167,11 @@ word *getmemword(location loc);
 
 
 /* Get the byte at loc (16 bit location)
+ Can never segfault as 16 bit address.
 @param loc 16bit location in memory
 @retval pointer to byte in memory
 */
 byte *getmemloc(location loc);
-
 
 
 // TERMINAL OUTPUT:
@@ -190,10 +179,5 @@ byte *getmemloc(location loc);
 /* 
 Print the state of the CPU to the terminal
 */
-void printState();
-
-/* print out result based on error code and then CPU state
-
-*/
-
+void printState(void);
 #endif

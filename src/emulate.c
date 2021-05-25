@@ -9,7 +9,7 @@ machineState CPU;
 #ifndef TEST
 int main(int argc, char** argv) {
   if (argc != 2) {
-    printf("Error: Invalid number of arguments provided, need only one filename\n");
+    printf("Error: Invalid number of arguments provided, need only one filename\r\n");
     printState();
     exit(INVALID_ARGUMENTS);
   }
@@ -32,7 +32,7 @@ void loadProgram(char* filename) {
   FILE *file = fopen(filename, "rb");
 
   if (!file) {
-    printf("Error: could not open file\n");
+    printf("Error: could not open file\r\n");
     printState();
     exit(INVALID_FILE);
   }
@@ -44,8 +44,7 @@ void loadProgram(char* filename) {
   fseek(file, 0, SEEK_SET);
 
   if (fread(CPU.memory, 1, length, file) != length) {
-    printf("Error: Unable to load all instructions\n");
-    printState();
+    printf("Error: Unable to load all instructions\r\n");
     exit(INVALID_FILE);
   }
 
@@ -70,7 +69,7 @@ void runProgram() {
       } else if(!GETBITS(currentInstr, 26, 2)) {
         processDataInstr(currentInstr);
       } else {
-        printf("Error: Invalid instruction no: %08x", currentInstr);
+        printf("Error: Invalid instruction no: %08x\r\n", currentInstr);
         printState();
         exit(INVALID_INSTR);
       }
@@ -92,8 +91,7 @@ bool checkCond(instruction instr) {
 }
 
 void branchInstr(instruction instr) {
-  int offset = (GETBITS(instr, 0, 23) - (GETBIT(instr, 23) << 23)) << 2;
-  *GETREG(PC) += offset + 4;
+  *GETREG(PC) += (GETBITS(instr, 0, 23) - (GETBIT(instr, 23) << 23) + 1) << 2;
 }
 
 void singleDataTransInstr(instruction instr) {
@@ -106,7 +104,7 @@ void singleDataTransInstr(instruction instr) {
   bool L = GETBIT(instr, 20);
 
   if (RdSrcDst == GETREG(PC)) {
-    printf("Error: Data Transfer instruction uses PC as Rd: %08x\n", instr);
+    printf("Error: Data Transfer instruction uses PC as Rd: %08x\r\n", instr);
     printState();
     exit(INVALID_INSTR);
   }
@@ -114,7 +112,7 @@ void singleDataTransInstr(instruction instr) {
   if (I) {
     // if post idexing, using shift, Rn != Rm
     if (GETREG(GETBITS(instr, 0, 4)) == RdSrcDst && !P) {
-      printf("Error: Data Transfer instruction uses same register as Rn, Rm: %08x\n", instr);
+      printf("Error: Data Transfer instruction uses same register as Rn, Rm: %08x\r\n", instr);
     }
     offset = shiftOperation(instr).result;
   } else {
@@ -128,7 +126,7 @@ void singleDataTransInstr(instruction instr) {
   word loc = P?(*RnBase + offset):*RnBase;
 
   if (loc >= MEMSIZE) {
-    printf("Error: Out of bounds memory access at address 0x%08x\n", loc);
+    printf("Error: Out of bounds memory access at address 0x%08x\r\n", loc);
   } else {
     if (L) {
       *RdSrcDst = *getmemword(loc);
@@ -136,7 +134,9 @@ void singleDataTransInstr(instruction instr) {
       *getmemword(loc) = *RdSrcDst;
     }
 
-    if (!P) *RnBase += offset;
+    if (!P) {
+      *RnBase += offset;
+    }
   }
  
 }
@@ -167,7 +167,7 @@ shiftRes shiftOperation(word shift) {
 
   } else {
 
-    printf("Error: Data processing instruction has an invalid shift.\n");
+    printf("Error: Data processing instruction has an invalid shift.\r\n");
     exit(INVALID_INSTR);
   }
 
@@ -211,7 +211,7 @@ void multiplyInstr(instruction instr) {
   word *PCReg = GETREG(PC);
 
   if (Rd == Rm || PCReg == Rd || PCReg == Rm || PCReg == Rs || PCReg == Rn) {
-    printf("Error: Multiply instruction uses same register for Rd, Rm: %08x\n", instr);
+    printf("Error: Multiply instruction uses same register for Rd, Rm: %08x\r\n", instr);
     exit(INVALID_INSTR);
   }
 
@@ -292,7 +292,7 @@ void processDataInstr(instruction instr) {
       *Rd = operand2Value;
       break;
     default: 
-      printf("Error: Invalid operation in instruction: %08x", instr);
+      printf("Error: Invalid operation in instruction: %08x\r\n", instr);
       exit(INVALID_INSTR);          
   }
 
@@ -315,19 +315,19 @@ void processDataInstr(instruction instr) {
 void printState() {
   printf("Registers:");
   for (int registerNo = 0; registerNo < 13; registerNo++) {
-    printf("\n$%-3i: %10i (0x%08x)", registerNo, *GETREG(registerNo), *GETREG(registerNo));
+    printf("\r\n$%-3i: %10i (0x%08x)", registerNo, *GETREG(registerNo), *GETREG(registerNo));
   }
-  printf("\nPC  : %10i (0x%08x)", *GETREG(PC), *GETREG(PC));
+  printf("\r\nPC  : %10i (0x%08x)", *GETREG(PC), *GETREG(PC));
 
   word cpsrReg = ((CPU.CPSR.N << 3) + (CPU.CPSR.Z << 2) + (CPU.CPSR.C << 1) + CPU.CPSR.V) << 28;
-  printf("\nCPSR: %10i (0x%08x)", cpsrReg, cpsrReg);
+  printf("\r\nCPSR: %10i (0x%08x)", cpsrReg, cpsrReg);
 
-  printf("\nNon-zero memory:");
+  printf("\r\nNon-zero memory:");
   byte *wordMem;
   for (int loc = 0; loc < MEMSIZE; loc += 4) {
     wordMem = getmemloc(loc);
     if (*((word*)wordMem)){
-      printf("\n0x%08x: 0x%02x%02x%02x%02x", loc, wordMem[0], wordMem[1], wordMem[2], wordMem[3]);
+      printf("\r\n0x%08x: 0x%02x%02x%02x%02x", loc, wordMem[0], wordMem[1], wordMem[2], wordMem[3]);
     }
   }
 }
@@ -339,5 +339,3 @@ word *getmemword(location loc) {
 byte *getmemloc(location loc) {
     return (CPU.memory + loc);
 }
-
-
