@@ -167,6 +167,14 @@ shiftRes shiftOperation(word shift) {
     exit(INVALID_INSTR);
   }
 
+  // checking for shift by zero
+  if (shiftby == 0) {
+    return (shiftRes) {
+      .result = RmVal,
+      .carryout = 0
+    };
+  }
+
   switch(shiftType) {
     case 0: return (shiftRes) {
       .result = RmVal << shiftby, 
@@ -276,12 +284,12 @@ void processDataInstr(instruction instr) {
 void printState() {
   printf("Registers:");
   for (int registerNo = 0; registerNo < 13; registerNo++) {
-    printf("\n$%1$-3i: %2$10i (0x%2$08x)", registerNo, *GETREG(registerNo));
+    printf("\n$%-3i: %10i (0x%08x)", registerNo, *GETREG(registerNo), *GETREG(registerNo));
   }
-  printf("\nPC  : %1$10i (0x%1$08x)", *GETREG(PC));
+  printf("\nPC  : %10i (0x%08x)", *GETREG(PC), *GETREG(PC));
 
   word cpsrReg = ((CPU.CPSR.N << 3) + (CPU.CPSR.Z << 2) + (CPU.CPSR.C << 1) + CPU.CPSR.V) << 28;
-  printf("\nCPSR: %1$10i (0x%1$08x)", cpsrReg);
+  printf("\nCPSR: %10i (0x%08x)", cpsrReg, cpsrReg);
 
   printf("\nNon-zero memory:");
   byte *wordMem;
@@ -292,3 +300,5 @@ void printState() {
     }
   }
 }
+
+
