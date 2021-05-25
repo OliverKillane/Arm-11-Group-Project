@@ -39,11 +39,6 @@ void loadProgram(char* filename) {
 
   int length = ftell(file);
 
-  if (length % 4 != 0) {
-    perror("File does not contain a whole number of 4 byte instructions");
-    exit(CORRUPT_FILE);
-  }
-
   fseek(file, 0, SEEK_SET);
 
   if (fread(CPU.memory, 1, length, file) != length) {
@@ -60,7 +55,7 @@ void runProgram() {
 
   do {
     *GETREG(PC) += 4;
-    currentInstr = *MEMWORD(*GETREG(PC) - 8);
+    currentInstr = *getmemword(*GETREG(PC) - 8);
 
     if (checkCond(currentInstr)) {
       if(GETBITS(currentInstr, 24, 4) == 0xA) {
@@ -127,16 +122,16 @@ void singleDataTransInstr(instruction instr) {
   if (P) {
     // pre-indexing
     if (L) {
-      *RdSrcDst = *MEMWORD(*RnBase + offset);
+      *RdSrcDst = *getmemword(*RnBase + offset);
     } else {
-      *MEMWORD(*RnBase + offset) =  *RdSrcDst;
+      *getmemword(*RnBase + offset) =  *RdSrcDst;
     }
   } else {
     // POST Indexing
     if (L) {
-      *RdSrcDst = *MEMWORD(*RnBase);
+      *RdSrcDst = *getmemword(*RnBase);
     } else {
-      *MEMWORD(*RnBase) =  *RdSrcDst;
+      *getmemword(*RnBase) =  *RdSrcDst;
     }
     *RnBase += offset;
   }
@@ -294,11 +289,19 @@ void printState() {
   printf("\nNon-zero memory:");
   byte *wordMem;
   for (int loc = 0; loc < MEMSIZE; loc += 4) {
-    wordMem = MEMLOC(loc);
+    wordMem = getmemloc(loc);
     if (*((word*)wordMem)){
       printf("\n0x%08x: 0x%02x%02x%02x%02x", loc, wordMem[0], wordMem[1], wordMem[2], wordMem[3]);
     }
   }
+}
+
+word *getmemword(location loc) {
+    return ((word *) getmemloc(loc));
+}
+
+byte *getmemloc(location loc) {
+    return (CPU.memory + loc);
 }
 
 
