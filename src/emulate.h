@@ -199,7 +199,7 @@ byte *getmemloc(location loc);
 /* 
 Print the state of the CPU to the terminal
 */
-void printState(errors );
+void printState();
 
 /* print out result based on error code and then CPU state
 
