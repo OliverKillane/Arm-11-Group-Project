@@ -22,43 +22,6 @@ void InitFunctionGen();
  */
 void FinishFunctionGen();
 
-/*
- * Checks if a given token represents a register (or a label looking like a register)
- */
-bool IsRegister(char* token);
-
-/*
- * Returns the index of a register
- */
-int GetRegisterNum(char* reg);
-
-/*
- * Sets a given instruction at the exact place even if the output vector is too short
- */
-void SetInstruction(Vector output, int instruction, int offset);
-
-/*
- * Retreives the raw value of an expression (might also be a label)
- */
-long long GetExpressionValue(
-    Map symbols, 
-    char* expression, 
-    bool pureexpression, 
-    bool hashexpression
-);
-
-/*
- * Splits a function into its base and the condition code
- */
-void SplitFunction(
-    char* func_code, 
-    char* func_base, 
-    unsigned int* condition
-);
-
-/*
- * Checks if a token represents an immediate value
- */
-bool IsImmediate(char* token, bool ispure, bool ishash);
+void SetInstruction(Vector restrict output, int instruction, int offset);
 
 #endif /* ASSEMBLE_COMMANDGEN_COMMON_DEFS_H_ */

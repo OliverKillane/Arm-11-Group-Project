@@ -2,6 +2,7 @@
 #include <stddata.h>
 #include <string.h>
 #include "common_defs.h"
+#include "../tokenizer.h"
 
 void ProcessMultiply(
     Map restrict symbols, 
@@ -12,20 +13,18 @@ void ProcessMultiply(
 ) {
     assert(ListSize(tokens) >= 3);
 
-    unsigned int condition;
-    char func_base[MAX_FUNCTION_LENGTH + 1];
-    SplitFunction(ListPopFront(tokens), func_base, &condition);
+    ConditionType condition = TokenInstructionConditionType(ListFront(tokens));
+    unsigned int accumulate = TokenInstructionType(ListPopFront(tokens)) == INSTR_MLA;
 
-    unsigned int accumulate = StringEq(func_base, "mla");
     assert(ListSize(tokens) - accumulate == 3);
     LISTFOR(tokens, iter) {
-        assert(IsRegister(ListIteratorGet(iter)));
-        assert(GetRegisterNum(ListIteratorGet(iter)) <= 12);
+        assert(TokenType(ListIteratorGet(iter)) == TOKEN_REGISTER);
+        assert(TokenRegisterNumber(ListIteratorGet(iter)) <= 12);
     }
-    unsigned int reg_d = GetRegisterNum(ListPopFront(tokens));
-    unsigned int reg_m = GetRegisterNum(ListPopFront(tokens));
-    unsigned int reg_s = GetRegisterNum(ListPopFront(tokens));
-    unsigned int reg_n = accumulate ?  GetRegisterNum(ListPopFront(tokens)) : 0;
+    unsigned int reg_d = TokenRegisterNumber(ListPopFront(tokens));
+    unsigned int reg_m = TokenRegisterNumber(ListPopFront(tokens));
+    unsigned int reg_s = TokenRegisterNumber(ListPopFront(tokens));
+    unsigned int reg_n = accumulate ? TokenRegisterNumber(ListPopFront(tokens)) : 0;
 
     unsigned int instruction = 9 << 4;
     instruction |= condition << 28;

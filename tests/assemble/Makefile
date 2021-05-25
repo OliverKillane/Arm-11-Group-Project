@@ -5,8 +5,7 @@ CFLAGS  = -Wall -g3 -I../../lib/stddata/include -I../../src/assemble -I../../src
 
 .PHONY: all clean 
 
-all: ../../build/tests/assemble/commandgentests.o\
-	 ../../build/tests/assemble/commandgen.o\
+all:     ../../build/tests/assemble/commandgen.o\
 	 ../../build/tests/assemble/process_branch.o\
 	 ../../build/tests/assemble/process_data_processing.o\
 	 ../../build/tests/assemble/process_data_transfer.o\
@@ -15,7 +14,8 @@ all: ../../build/tests/assemble/commandgentests.o\
 	 ../../build/tests/assemble/common_defs.o\
 	 ../../build/tests/assemble/stddata.o\
 	 ../../build/tests/assemble/assemble_utils.o\
-	 ../../build/tests/assemble/assembletests.o
+	 ../../build/tests/assemble/assembletests.o\
+	 ../../build/tests/assemble/tokenizer.o
 	
 	$(CC) $(CSANITIZERS) $(CFLAGS) $(wildcard ../../build/tests/assemble/*.o)\
 		-o ../../build/tests/assemble/tests
@@ -29,8 +29,7 @@ all: ../../build/tests/assemble/commandgentests.o\
 ../../build/tests/assemble/%.o:
 	$(CC) -c $(CFLAGS) $(CSANITIZERS) $^ -o $@
 
-../../build/tests/assemble/commandgentests.o: commandgentests.c	
-../../build/tests/assemble/assembletests.o: assembletests.c	
+../../build/tests/assemble/assembletests.o: assembletests.c
 
 ../../build/tests/assemble/commandgen.o:\
 		../../src/assemble/commandgen/commandgen.c
@@ -48,7 +47,8 @@ all: ../../build/tests/assemble/commandgentests.o\
 		../../src/assemble/commandgen/common_defs.c
 ../../build/tests/assemble/assemble_utils.o:\
 		../../src/assemble/assemble_utils.c
-
+../../build/tests/assemble/tokenizer.o:\
+		../../src/assemble/tokenizer.c
 
 
 clean:

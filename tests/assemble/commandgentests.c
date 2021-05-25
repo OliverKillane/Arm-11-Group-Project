@@ -7,29 +7,14 @@
 #include <common_defs.h>
 #include <stddata.h>
 #include <stdio.h>
-
-/* GetExpressionValue tests */
-void GetExprValueTests() {
-    Map symbols = NewEmptyMap(StringHash, StringEq);
-    MapSet(symbols, "label", 2);
-    MapSet(symbols, "wait", 5);
-    InitFunctionGen();
-    assert(GetExpressionValue(symbols, "label", false, true) == 8);
-    assert(GetExpressionValue(symbols, "1234", true, true) == 1234);
-    assert(GetExpressionValue(symbols, "=0xFFFF", false, false) == 0xFFFF);
-    assert(GetExpressionValue(symbols, "=01010", false, false) == 0b001000001000);
-    assert(GetExpressionValue(symbols, "#01237", false, true) == 0b000001010011111);
-    assert(GetExpressionValue(symbols, "#0xA21", false, true) == 0b101000100001);
-    assert(GetExpressionValue(symbols, "=537", false, false) == 537);
-    FinishFunctionGen();
-    DeleteMap(symbols);
-}
+#include <tokenizer.h>
+#include <stdbool.h>
 
 /* ProcessBranch tests */
 void SingleProcessBranch(
     Map symbols, 
     int tokens_num, 
-    char* tokens[], 
+    Token tokens[], 
     Vector output, 
     int offset, 
     int instruction_num
@@ -40,6 +25,9 @@ void SingleProcessBranch(
     }
     ProcessBranch(symbols, tokens_list, output, offset, instruction_num);
     DeleteList(tokens_list);
+    for(int i = 0; i < tokens_num; i++) {
+        DeleteToken(tokens[i]);
+    }
 }
 void ProcessBranchTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -49,14 +37,38 @@ void ProcessBranchTests() {
     InitFunctionGen();
     Vector output = NewEmptyVector();
 
-    SingleProcessBranch(symbols, 2, (char*[]){"beq", "label"}, output, 0, 8);
-    SingleProcessBranch(symbols, 2, (char*[]){"bne", "00"}, output, 1, 8);
-    SingleProcessBranch(symbols, 2, (char*[]){"bge", "04"}, output, 2, 8);
-    SingleProcessBranch(symbols, 2, (char*[]){"blt", "0xC"}, output, 3, 8);
-    SingleProcessBranch(symbols, 2, (char*[]){"bgt", "0x1C"}, output, 4, 8);
-    SingleProcessBranch(symbols, 2, (char*[]){"ble", "20"}, output, 5, 8);
-    SingleProcessBranch(symbols, 2, (char*[]){"bal", "010"}, output, 6, 8);
-    SingleProcessBranch(symbols, 2, (char*[]){"b", "034"}, output, 7, 8);
+    SingleProcessBranch(symbols, 2, (Token[]){
+        NewInstructionToken(COND_EQ, INSTR_BRN),
+        NewLabelToken("label")
+    }, output, 0, 8);
+    SingleProcessBranch(symbols, 2, (Token[]){
+        NewInstructionToken(COND_NE, INSTR_BRN), 
+        NewConstantToken(CONST_PURE, 0)
+    }, output, 1, 8);
+    SingleProcessBranch(symbols, 2, (Token[]){
+        NewInstructionToken(COND_GE, INSTR_BRN),
+        NewConstantToken(CONST_PURE, 4)
+    }, output, 2, 8);
+    SingleProcessBranch(symbols, 2, (Token[]){
+        NewInstructionToken(COND_LT, INSTR_BRN),
+        NewConstantToken(CONST_PURE, 0xC)
+    }, output, 3, 8);
+    SingleProcessBranch(symbols, 2, (Token[]){
+        NewInstructionToken(COND_GT, INSTR_BRN),
+        NewConstantToken(CONST_PURE, 0x1C)
+    }, output, 4, 8);
+    SingleProcessBranch(symbols, 2, (Token[]){
+        NewInstructionToken(COND_LE, INSTR_BRN),
+        NewConstantToken(CONST_PURE, 20)
+    }, output, 5, 8);
+    SingleProcessBranch(symbols, 2, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_BRN),
+        NewConstantToken(CONST_PURE, 8)
+    }, output, 6, 8);
+    SingleProcessBranch(symbols, 2, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_BRN),
+        NewConstantToken(CONST_PURE, 28)
+    }, output, 7, 8);
 
     assert((int)VectorGet(output, 0) == 0x0A000000);
     assert((int)VectorGet(output, 1) == 0x1AFFFFFD);
@@ -76,7 +88,7 @@ void ProcessBranchTests() {
 void SingleProcessDataProcessing(
     Map symbols, 
     int tokens_num, 
-    char* tokens[], 
+    Token tokens[], 
     Vector output, 
     int offset, 
     int instruction_num
@@ -87,6 +99,9 @@ void SingleProcessDataProcessing(
     }
     ProcessDataProcessing(symbols, tokens_list, output, offset, instruction_num);
     DeleteList(tokens_list);
+    for(int i = 0; i < tokens_num; i++) {
+        DeleteToken(tokens[i]);
+    }
 }
 
 void ProcessDataProcessingTests() {
@@ -95,16 +110,72 @@ void ProcessDataProcessingTests() {
     InitFunctionGen();
     Vector output = NewEmptyVector();
 
-    SingleProcessDataProcessing(symbols, 4, (char*[]){"andeq", "R12", "R12", "R9"}, output, 0, 10);
-    SingleProcessDataProcessing(symbols, 4, (char*[]){"eorne", "R8", "R6", "#0xC0000001"}, output, 1, 10);
-    SingleProcessDataProcessing(symbols, 4, (char*[]){"subge", "R4", "R4", "#0x100"}, output, 2, 10);
-    SingleProcessDataProcessing(symbols, 4, (char*[]){"rsblt", "R1", "R9", "#0x3FC0"}, output, 3, 10);
-    SingleProcessDataProcessing(symbols, 6, (char*[]){"addgt", "R3", "R2", "R2", "asr", "R9"}, output, 4, 10);
-    SingleProcessDataProcessing(symbols, 6, (char*[]){"orrle", "R5", "R1", "R3", "lsl", "R0"}, output, 5, 10);
-    SingleProcessDataProcessing(symbols, 5, (char*[]){"moval", "R7", "R6", "lsr", "#0x18"}, output, 6, 10);
-    SingleProcessDataProcessing(symbols, 5, (char*[]){"tst", "R9", "R9", "ror", "#11"}, output, 7, 10);
-    SingleProcessDataProcessing(symbols, 5, (char*[]){"teq", "R11", "R0", "lsr", "#0xF"}, output, 8, 10);
-    SingleProcessDataProcessing(symbols, 3, (char*[]){"cmp", "R10", "#261120"}, output, 9, 10);
+    SingleProcessDataProcessing(symbols, 4, (Token[]){
+        NewInstructionToken(COND_EQ, INSTR_AND),
+        NewRegisterToken(12),
+        NewRegisterToken(12),
+        NewRegisterToken(9)
+    }, output, 0, 10);
+    SingleProcessDataProcessing(symbols, 4, (Token[]){
+        NewInstructionToken(COND_NE, INSTR_EOR),
+        NewRegisterToken(8),
+        NewRegisterToken(6),
+        NewConstantToken(CONST_HASH, 0xC0000001)
+    }, output, 1, 10);
+    SingleProcessDataProcessing(symbols, 4, (Token[]){
+        NewInstructionToken(COND_GE, INSTR_SUB),
+        NewRegisterToken(4),
+        NewRegisterToken(4),
+        NewConstantToken(CONST_HASH, 0x100)
+    }, output, 2, 10);
+    SingleProcessDataProcessing(symbols, 4, (Token[]){
+        NewInstructionToken(COND_LT, INSTR_RSB),
+        NewRegisterToken(1),
+        NewRegisterToken(9),
+        NewConstantToken(CONST_HASH, 0x3FC0)
+    }, output, 3, 10);
+    SingleProcessDataProcessing(symbols, 6, (Token[]){
+        NewInstructionToken(COND_GT, INSTR_ADD),
+        NewRegisterToken(3),
+        NewRegisterToken(2),
+        NewRegisterToken(2),
+        NewInstructionToken(COND_AL, INSTR_ASR),
+        NewRegisterToken(9)
+    }, output, 4, 10);
+    SingleProcessDataProcessing(symbols, 6, (Token[]){
+        NewInstructionToken(COND_LE, INSTR_ORR),
+        NewRegisterToken(5),
+        NewRegisterToken(1),
+        NewRegisterToken(3),
+        NewInstructionToken(COND_AL, INSTR_LSL),
+        NewRegisterToken(0)
+    }, output, 5, 10);
+    SingleProcessDataProcessing(symbols, 5, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_MOV),
+        NewRegisterToken(7),
+        NewRegisterToken(6),
+        NewInstructionToken(COND_AL, INSTR_LSR),
+        NewConstantToken(CONST_HASH, 0x18)
+    }, output, 6, 10);
+    SingleProcessDataProcessing(symbols, 5, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_TST),
+        NewRegisterToken(9),
+        NewRegisterToken(9),
+        NewInstructionToken(COND_AL, INSTR_ROR),
+        NewConstantToken(CONST_HASH, 11)
+    }, output, 7, 10);
+    SingleProcessDataProcessing(symbols, 5, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_TEQ),
+        NewRegisterToken(11),
+        NewRegisterToken(0),
+        NewInstructionToken(COND_AL, INSTR_LSR),
+        NewConstantToken(CONST_HASH, 0xF)
+    }, output, 8, 10);
+    SingleProcessDataProcessing(symbols, 3, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_CMP),
+        NewRegisterToken(10),
+        NewConstantToken(CONST_HASH, 261120)
+    }, output, 9, 10);
     
     assert((int)VectorGet(output, 0) == 0x000CC009);
     assert((int)VectorGet(output, 1) == 0x12268107);
@@ -126,7 +197,7 @@ void ProcessDataProcessingTests() {
 void SingleProcessMultiply(
     Map symbols, 
     int tokens_num, 
-    char* tokens[], 
+    Token tokens[], 
     Vector output, 
     int offset, 
     int instruction_num
@@ -137,18 +208,54 @@ void SingleProcessMultiply(
     }
     ProcessMultiply(symbols, tokens_list, output, offset, instruction_num);
     DeleteList(tokens_list);
+    for(int i = 0; i < tokens_num; i++) {
+        DeleteToken(tokens[i]);
+    }
 }
 void ProcessMultiplyTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
     InitFunctionGen();
     Vector output = NewEmptyVector();
 
-    SingleProcessMultiply(symbols, 4, (char*[]){"muleq", "R3", "R2", "R5"}, output, 0, 6);
-    SingleProcessMultiply(symbols, 4, (char*[]){"mulle", "R8", "R9", "R10"}, output, 1, 6);
-    SingleProcessMultiply(symbols, 4, (char*[]){"mul", "R2", "R0", "R2"}, output, 2, 6);
-    SingleProcessMultiply(symbols, 5, (char*[]){"mlalt", "R5", "R10", "R5", "R11"}, output, 3, 6);
-    SingleProcessMultiply(symbols, 5, (char*[]){"mlagt", "R7", "R1", "R7", "R7"}, output, 4, 6);
-    SingleProcessMultiply(symbols, 5, (char*[]){"mlane", "R4", "R6", "R12", "R0"}, output, 5, 6);
+    SingleProcessMultiply(symbols, 4, (Token[]){
+        NewInstructionToken(COND_EQ, INSTR_MUL),
+        NewRegisterToken(3),
+        NewRegisterToken(2),
+        NewRegisterToken(5)
+    }, output, 0, 6);
+    SingleProcessMultiply(symbols, 4, (Token[]){
+        NewInstructionToken(COND_LE, INSTR_MUL),
+        NewRegisterToken(8),
+        NewRegisterToken(9),
+        NewRegisterToken(10)
+    }, output, 1, 6);
+    SingleProcessMultiply(symbols, 4, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_MUL),
+        NewRegisterToken(2),
+        NewRegisterToken(0),
+        NewRegisterToken(2)
+    }, output, 2, 6);
+    SingleProcessMultiply(symbols, 5, (Token[]){
+        NewInstructionToken(COND_LT, INSTR_MLA),
+        NewRegisterToken(5),
+        NewRegisterToken(10),
+        NewRegisterToken(5),
+        NewRegisterToken(11)
+    }, output, 3, 6);
+    SingleProcessMultiply(symbols, 5, (Token[]){
+        NewInstructionToken(COND_GT, INSTR_MLA),
+        NewRegisterToken(7),
+        NewRegisterToken(1),
+        NewRegisterToken(7),
+        NewRegisterToken(7)
+    }, output, 4, 6);
+    SingleProcessMultiply(symbols, 5, (Token[]){
+        NewInstructionToken(COND_NE, INSTR_MLA),
+        NewRegisterToken(4),
+        NewRegisterToken(6),
+        NewRegisterToken(12),
+        NewRegisterToken(0)
+    }, output, 5, 6);
 
     assert((int)VectorGet(output, 0) == 0x00030592);
     assert((int)VectorGet(output, 1) == 0xD0080A99);
@@ -166,7 +273,7 @@ void ProcessMultiplyTests() {
 void SingleProcessDataTransfer(
     Map symbols, 
     int tokens_num, 
-    char* tokens[], 
+    Token tokens[], 
     Vector output, 
     int offset, 
     int instruction_num
@@ -177,20 +284,79 @@ void SingleProcessDataTransfer(
     }
     ProcessDataTransfer(symbols, tokens_list, output, offset, instruction_num);
     DeleteList(tokens_list);
+    for(int i = 0; i < tokens_num; i++) {
+        DeleteToken(tokens[i]);
+    }
 }
 void ProcessDataTransferTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
     InitFunctionGen();
     Vector output = NewEmptyVector();
 
-    SingleProcessDataTransfer(symbols, 3, (char*[]){"ldr", "r2", "=0x20200020"}, output, 0, 8);
-    SingleProcessDataTransfer(symbols, 3, (char*[]){"ldr", "r0", "=017"}, output, 1, 8);
-    SingleProcessDataTransfer(symbols, 6, (char*[]){"ldr", "r3", "[", "r1", "#0x4", "]"}, output, 2, 8);
-    SingleProcessDataTransfer(symbols, 8, (char*[]){"ldr", "r12", "[", "r15", "-r2", "ror", "#22", "]"}, output, 3, 8);
-    SingleProcessDataTransfer(symbols, 6, (char*[]){"str", "r0", "[", "r1", "#28", "]"}, output, 4, 8);
-    SingleProcessDataTransfer(symbols, 6, (char*[]){"str", "r1", "[", "r2", "]", "r4"}, output, 5, 8);
-    SingleProcessDataTransfer(symbols, 6, (char*[]){"str", "r10", "[", "r10", "]", "#-212"}, output, 6, 8);
-    SingleProcessDataTransfer(symbols, 8, (char*[]){"str", "r9", "[", "r7", "]", "-r2", "asr", "R15"}, output, 7, 8);
+    SingleProcessDataTransfer(symbols, 3, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_LDR),
+        NewRegisterToken(2),
+        NewConstantToken(CONST_EQUALS, 0x20200020)
+    }, output, 0, 8);
+    SingleProcessDataTransfer(symbols, 3, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_LDR),
+        NewRegisterToken(0),
+        NewConstantToken(CONST_EQUALS, 15)
+    }, output, 1, 8);
+    SingleProcessDataTransfer(symbols, 6, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_LDR),
+        NewRegisterToken(3),
+        NewBraceToken(true),
+        NewRegisterToken(1),
+        NewConstantToken(CONST_HASH, 4),
+        NewBraceToken(false)
+    }, output, 2, 8);
+    SingleProcessDataTransfer(symbols, 9, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_LDR),
+        NewRegisterToken(12),
+        NewBraceToken(true),
+        NewRegisterToken(15),
+        NewSignToken(false),
+        NewRegisterToken(2),
+        NewInstructionToken(COND_AL, INSTR_ROR),
+        NewConstantToken(CONST_HASH, 22),
+        NewBraceToken(false)
+    }, output, 3, 8);
+    SingleProcessDataTransfer(symbols, 6, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_STR),
+        NewRegisterToken(0),
+        NewBraceToken(true),
+        NewRegisterToken(1),
+        NewConstantToken(CONST_HASH, 28),
+        NewBraceToken(false)
+    }, output, 4, 8);
+    SingleProcessDataTransfer(symbols, 6, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_STR),
+        NewRegisterToken(1),
+        NewBraceToken(true),
+        NewRegisterToken(2),
+        NewBraceToken(false),
+        NewRegisterToken(4)
+    }, output, 5, 8);
+    SingleProcessDataTransfer(symbols, 6, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_STR),
+        NewRegisterToken(10),
+        NewBraceToken(true),
+        NewRegisterToken(10),
+        NewBraceToken(false),
+        NewConstantToken(CONST_HASH, -212)
+    }, output, 6, 8);
+    SingleProcessDataTransfer(symbols, 9, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_STR),
+        NewRegisterToken(9),
+        NewBraceToken(true),
+        NewRegisterToken(7),
+        NewBraceToken(false),
+        NewSignToken(false),
+        NewRegisterToken(2),
+        NewInstructionToken(COND_AL, INSTR_ASR),
+        NewRegisterToken(15)
+    }, output, 7, 8);
 
     assert((int)VectorGet(output, 0) == 0xE59F2018);
     assert((int)VectorGet(output, 1) == 0xE3A0000F);
@@ -211,7 +377,7 @@ void ProcessDataTransferTests() {
 void SingleProcessShift(
     Map symbols, 
     int tokens_num, 
-    char* tokens[], 
+    Token tokens[], 
     Vector output, 
     int offset, 
     int instruction_num
@@ -222,18 +388,45 @@ void SingleProcessShift(
     }
     ProcessShift(symbols, tokens_list, output, offset, instruction_num);
     DeleteList(tokens_list);
+    for(int i = 0; i < tokens_num; i++) {
+        DeleteToken(tokens[i]);
+    }
 }
 void ProcessShiftTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
     InitFunctionGen();
     Vector output = NewEmptyVector();
 
-    SingleProcessShift(symbols, 3, (char*[]){"asreq", "R1", "#030"}, output, 0, 6);
-    SingleProcessShift(symbols, 3, (char*[]){"lslle", "R10", "#11"}, output, 1, 6);
-    SingleProcessShift(symbols, 3, (char*[]){"lsr", "R12", "#0xF"}, output, 2, 6);
-    SingleProcessShift(symbols, 3, (char*[]){"rorlt", "R8", "#030"}, output, 3, 6);
-    SingleProcessShift(symbols, 3, (char*[]){"asrgt", "R4", "R5"}, output, 4, 6);
-    SingleProcessShift(symbols, 3, (char*[]){"lslne", "R0", "R10"}, output, 5, 6);
+    SingleProcessShift(symbols, 3, (Token[]){
+        NewInstructionToken(COND_EQ, INSTR_ASR),
+        NewRegisterToken(1),
+        NewConstantToken(CONST_HASH, 0x18)
+    }, output, 0, 6);
+    SingleProcessShift(symbols, 3, (Token[]){
+        NewInstructionToken(COND_LE, INSTR_LSL),
+        NewRegisterToken(10),
+        NewConstantToken(CONST_HASH, 11)
+    }, output, 1, 6);
+    SingleProcessShift(symbols, 3, (Token[]){
+        NewInstructionToken(COND_AL, INSTR_LSR),
+        NewRegisterToken(12),
+        NewConstantToken(CONST_HASH, 0xF)
+    }, output, 2, 6);
+    SingleProcessShift(symbols, 3, (Token[]){
+        NewInstructionToken(COND_LT, INSTR_ROR),
+        NewRegisterToken(8),
+        NewConstantToken(CONST_HASH, 0x18)
+    }, output, 3, 6);
+    SingleProcessShift(symbols, 3, (Token[]){
+        NewInstructionToken(COND_GT, INSTR_ASR),
+        NewRegisterToken(4),
+        NewRegisterToken(5)
+    }, output, 4, 6);
+    SingleProcessShift(symbols, 3, (Token[]){
+        NewInstructionToken(COND_NE, INSTR_LSL),
+        NewRegisterToken(0),
+        NewRegisterToken(10)
+    }, output, 5, 6);
 
     assert((int)VectorGet(output, 0) == 0x01A01C41);
     assert((int)VectorGet(output, 1) == 0xD1A0A58A);
@@ -248,12 +441,10 @@ void ProcessShiftTests() {
 }
 
 void runCommandGenTests() {
-    GetExprValueTests();
     ProcessBranchTests();
     ProcessDataProcessingTests();
     ProcessMultiplyTests();
     ProcessDataTransferTests();
     ProcessShiftTests();
-
     printf("Command Gen Tests passed.\n");
 }

@@ -76,12 +76,11 @@ Token NewRegisterToken(int reg);
 
 Token NewConstantToken(ConstantType type, long long value);
 
-Token NewLabelToken(char label[512]);
+Token NewLabelToken(char label[]);
 
 Token NewSignToken(bool is_plus);
 
 Token NewBraceToken(bool is_open);
-
 
 void DeleteToken(Token token);
 
