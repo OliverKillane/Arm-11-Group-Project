@@ -195,7 +195,7 @@ void testTokensToBinary() {
 }
 
 int main(void) {
-    // runCommandGenTests();
+    runCommandGenTests();
 
     testRemoveColon();
     printf("Remove colon tests passed\n");
@@ -210,4 +210,4 @@ int main(void) {
     printf("Tokens to binary tests passed\n");
 
     printf("Assemble tests passed\n");
-} 
+}
