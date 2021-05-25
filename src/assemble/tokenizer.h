@@ -52,7 +52,7 @@ typedef enum {
 
 typedef struct {
     TokenKind type;
-    union contents {
+    union {
         struct {
             ConstantType type;
             long long value;
@@ -70,7 +70,18 @@ typedef struct {
 
 typedef TokenRepr * Token;
 
-Token NewToken(char* token_val);
+Token NewInstructionToken(ConditionType cond, InstructionType instr);
+
+Token NewRegisterToken(int reg);
+
+Token NewConstantToken(ConstantType type, long long value);
+
+Token NewLabelToken(char label[512]);
+
+Token NewSignToken(bool is_plus);
+
+Token NewBraceToken(bool is_open);
+
 
 void DeleteToken(Token token);
 
