@@ -255,16 +255,42 @@ void processDataInstr(instruction instr) {
 
   // Perform ALU operation
   switch(OpCode){
-    CASEBREAK(AND, ALUOut = RnVal & operand2Value; *Rd = ALUOut);
-    CASEBREAK(EOR, ALUOut = RnVal ^ operand2Value; *Rd = ALUOut);
-    CASEBREAK(SUB, ALUOut = RnVal - operand2Value; *Rd = ALUOut);
-    CASEBREAK(RSB, ALUOut = operand2Value - RnVal; *Rd = ALUOut);
-    CASEBREAK(ADD, ALUOut = RnVal + operand2Value; *Rd = ALUOut);
-    CASEBREAK(TST, ALUOut = RnVal & operand2Value);
-    CASEBREAK(TEQ, ALUOut = RnVal ^ operand2Value);
-    CASEBREAK(CMP, ALUOut = RnVal - operand2Value);
-    CASEBREAK(ORR, ALUOut = RnVal | operand2Value; *Rd = ALUOut);
-    CASEBREAK(MOV, *Rd = operand2Value);
+    case AND: 
+      ALUOut = RnVal & operand2Value; 
+      *Rd = ALUOut;
+      break;
+    case EOR:
+      ALUOut = RnVal ^ operand2Value; 
+      *Rd = ALUOut;
+      break;
+    case SUB: 
+      ALUOut = RnVal - operand2Value; 
+      *Rd = ALUOut;
+      break;
+    case RSB: 
+      ALUOut = operand2Value - RnVal; 
+      *Rd = ALUOut;
+      break;
+    case ADD: 
+      ALUOut = RnVal + operand2Value; 
+      *Rd = ALUOut;
+      break;
+    case TST: 
+      ALUOut = RnVal & operand2Value;
+      break;
+    case TEQ: 
+      ALUOut = RnVal ^ operand2Value;
+      break;
+    case CMP: 
+      ALUOut = RnVal - operand2Value;
+      break;
+    case ORR: 
+      ALUOut = RnVal | operand2Value; 
+      *Rd = ALUOut;
+      break;
+    case MOV: 
+      *Rd = operand2Value;
+      break;
     default: 
       printf("Error: Invalid operation in instruction: %08x", instr);
       exit(INVALID_INSTR);          

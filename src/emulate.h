@@ -78,14 +78,6 @@ typedef enum {
 
 // UTILITIES:
 
-/* 
-case match: {ops}; break;
-For making switch statements less tedious
-@param match The value to match
-@param ops The code to run, and then break after
-*/
-#define CASEBREAK(match, ops) case match: ops; break;
-
 /* Return a range of bits.
 @param data Source string of bits
 @param start inclusive start
