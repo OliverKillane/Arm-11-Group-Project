@@ -13,7 +13,7 @@ all: ../../build/assemble/assemble.o\
 	 ../../build/assemble/process_shift.o\
 	 ../../build/assemble/commandgen.o
 	cp ../../build/stddata.o ../../build/assemble/
-	$(CC) $(CFLAGS) $(wildcard ../../build/assemble/*.o) -o ../../build/assemble/assemble
+	$(CC) $(CFLAGS) $^ ../../build/assemble/stddata.o -o ../../build/assemble/assemble
 	cp ../../build/assemble/assemble ../../bin/
 
 ../../build/assemble/%.o:
