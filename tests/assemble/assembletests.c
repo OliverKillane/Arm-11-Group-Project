@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include "assemble_utils.h"
+#include "commandgentests.c"
 
 bool stringsAreEqual(char *str1, char *str2) {
     assert(str1 != NULL);

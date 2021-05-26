@@ -1,34 +1,36 @@
 #include "process_data_transfer.h"
 #include <stddata.h>
 #include "common_defs.h"
+#include "../tokenizer.h"
 
 static inline unsigned int ProcessImmediateShift(List restrict tokens) {
-    return GetExpressionValue(
-        dummy, ListPopFront(tokens), false, true
-    ) << 3;
+    assert(TokenConstantType(ListFront(tokens)) == CONST_HASH);
+    return TokenConstantValue(ListPopFront(tokens)) << 3;
 }
 
 static inline unsigned int ProcessRegisterShift(List restrict tokens) {
-    assert(IsRegister(ListFront(tokens)));
-    unsigned int reg_s = GetRegisterNum(ListPopFront(tokens));
-    
+    assert(TokenType(ListFront(tokens)) == TOKEN_REGISTER);
+    unsigned int reg_s = TokenRegisterNumber(ListPopFront(tokens));
     return (reg_s << 4) | 1;
 }
 
 static inline unsigned int ProcessRegister(List restrict tokens) {
-    assert(IsRegister(ListFront(tokens)));
-    unsigned int reg_m = GetRegisterNum(ListPopFront(tokens));
+    assert(TokenType(ListFront(tokens)) == TOKEN_REGISTER);
+    unsigned int reg_m = TokenRegisterNumber(ListPopFront(tokens));
     assert(reg_m <= 12);
     
     unsigned int shift = 0;
     if(ListSize(tokens) > 0) {
         assert(ListSize(tokens) == 2);
-        assert(MapQuery(shift_codes, ListFront(tokens)));
-        const unsigned int shift_code = MapGet(shift_codes, ListPopFront(tokens));
+        assert(TokenType(ListFront(tokens)) == TOKEN_INSTRUCTION);
+        assert(TokenInstructionConditionType(ListFront(tokens)) == COND_AL);
+        assert(MapQuery(shift_codes, (int)TokenInstructionType(ListFront(tokens))));
+        const unsigned int shift_code = 
+                MapGet(shift_codes, (int)TokenInstructionType(ListPopFront(tokens)));
         
         shift |= shift_code << 1;
 
-        shift |= IsImmediate(ListFront(tokens), false, true) ?
+        shift |= TokenType(ListFront(tokens)) == TOKEN_CONSTANT ?
             ProcessImmediateShift(tokens) : ProcessRegisterShift(tokens);
     }
 
@@ -80,9 +82,9 @@ void ProcessLoadConst(
     int offset, 
     int instructions_num
 ) {
-    assert(IsRegister(ListFront(tokens)));
-    unsigned int reg_d = GetRegisterNum(ListPopFront(tokens));
-    unsigned int expression = GetExpressionValue(dummy, ListPopFront(tokens), false, false);
+    assert(TokenType(ListFront(tokens)) == TOKEN_REGISTER);
+    unsigned int reg_d = TokenRegisterNumber(ListPopFront(tokens));
+    unsigned int expression = TokenConstantValue(ListPopFront(tokens));
     if(expression < (1<<12)) {
         SetInstruction(output, ProcessLoadMov(condition, reg_d, expression), offset);
     } else {
@@ -98,33 +100,37 @@ void ProcessDataTransfer(
     int instructions_num
 ) {
     assert(ListSize(tokens) >= 3);
-    unsigned int condition;
-    char func_base[MAX_FUNCTION_LENGTH + 1];
-    SplitFunction(ListPopFront(tokens), func_base, &condition);
 
-    unsigned int load_flag = StringEq(func_base, "ldr");
-    if(load_flag && IsImmediate(ListBack(tokens), false, false)) {
+    ConditionType condition = TokenInstructionConditionType(ListFront(tokens));
+    unsigned int load_flag = TokenInstructionType(ListPopFront(tokens)) == INSTR_LDR;
+
+    if(load_flag && TokenType(ListBack(tokens)) == TOKEN_CONSTANT && 
+       TokenConstantType(ListBack(tokens)) == CONST_EQUALS
+    ) {
         ProcessLoadConst(condition, tokens, output, offset, instructions_num);
         return;
     }
 
-    assert(IsRegister(ListFront(tokens)));
-    unsigned int reg_d = GetRegisterNum(ListPopFront(tokens));
+    assert(TokenType(ListFront(tokens)) == TOKEN_REGISTER);
+    unsigned int reg_d = TokenRegisterNumber(ListPopFront(tokens));
     assert(reg_d <= 12);
 
-    assert(StringEq(ListPopFront(tokens), "["));
+    assert(TokenType(ListFront(tokens)) == TOKEN_BRACE);
+    assert(TokenIsOpenBracket(ListPopFront(tokens)));
     assert(ListSize(tokens) >= 2);
 
-    assert(IsRegister(ListFront(tokens)));
-    unsigned int reg_n = GetRegisterNum(ListPopFront(tokens));
+    assert(TokenType(ListFront(tokens)) == TOKEN_REGISTER);
+    unsigned int reg_n = TokenRegisterNumber(ListPopFront(tokens));
 
     unsigned int pre_flag;
-    if(StringEq(ListBack(tokens), "]")) {
+    if(TokenType(ListBack(tokens)) == TOKEN_BRACE) {
+        assert(!TokenIsOpenBracket(ListBack(tokens)));
         pre_flag = 1;
         ListPopBack(tokens);
     } else {
+        assert(TokenType(ListFront(tokens)) == TOKEN_BRACE);
+        assert(!TokenIsOpenBracket(ListFront(tokens)));
         pre_flag = 0;
-        assert(StringEq(ListFront(tokens), "]"));
         ListPopFront(tokens);
     }
 
@@ -133,20 +139,17 @@ void ProcessDataTransfer(
     unsigned int immediate_flag = 0;
 
     if(!ListEmpty(tokens)) {
-        if(IsImmediate(ListFront(tokens), false, true)) {
-            long long value = GetExpressionValue(dummy, ListPopFront(tokens), false, true);
+        if(TokenType(ListFront(tokens)) == TOKEN_CONSTANT) {
+            assert(TokenConstantType(ListFront(tokens)) == CONST_HASH);
+            long long value = TokenConstantValue(ListPopFront(tokens));
             assert(ListEmpty(tokens));
             up_flag = value >= 0;
             assert(value < (1<<12) && value > -(1<<12));
             operand = abs(value);
             immediate_flag = 0;
         } else {
-            if(((char*)ListFront(tokens))[0] == '+' || ((char*)ListFront(tokens))[0] == '-') {
-                up_flag = ((char*)ListFront(tokens))[0] == '+';
-                ListSet(tokens, 0, ((char*)ListFront(tokens)) + 1);
-            } else {
-                up_flag = 1;
-            }
+            up_flag = TokenType(ListFront(tokens)) == TOKEN_SIGN ?
+                TokenIsPlus(ListPopFront(tokens)) : 1;
             operand = ProcessRegister(tokens);
             immediate_flag = 1;
         }

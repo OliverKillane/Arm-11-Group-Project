@@ -38,11 +38,11 @@ List tokenizeLine(char *line) {
         && currentState != TOKENIZER_ERROR) {
 
         switch (currentState) {
-            
+
             case TOKENIZER_START:
                 if (isWhitespace(line[0])) {
                     continue;
-                } else if 
+                }
                 break;
             
             default:

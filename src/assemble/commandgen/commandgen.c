@@ -1,4 +1,5 @@
 #include "commandgen.h"
+#include "../tokenizer.h"
 #include <stddata.h>
 #include <string.h>
 #include <ctype.h>
@@ -12,12 +13,11 @@ void FunctionGen(
     int offset, 
     int instructions_num
 ) {
-    char* func_code = ListFront(tokens);
-    unsigned int condition;
-    char func_base[MAX_FUNCTION_LENGTH + 1];
-    SplitFunction(func_code, func_base, &condition);
+    assert(ListSize(tokens) >= 1);
+    assert(TokenType(ListFront(tokens)) == TOKEN_INSTRUCTION);
 
-    void(*process_function)(FUNC_PROC_ARGS) = MapGet(func_proc, func_base);
+    void(*process_function)(FUNC_PROC_ARGS) = 
+            MapGet(func_proc, (int)TokenInstructionType(ListFront(tokens)));
     assert(process_function != NULL);
     process_function(symbols, tokens, output, offset, instructions_num);
 }

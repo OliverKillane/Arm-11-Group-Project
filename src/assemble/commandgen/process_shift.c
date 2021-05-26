@@ -1,18 +1,18 @@
 #include "process_shift.h"
 #include <stddata.h>
 #include "common_defs.h"
+#include "../tokenizer.h"
 
 static inline unsigned int ProcessImmediateShift(List restrict tokens) {
-    const int shift_value = GetExpressionValue(
-        dummy, ListPopFront(tokens), false, true
-    );
+    assert(TokenConstantType(ListFront(tokens)) == CONST_HASH);
+    const unsigned long long shift_value = TokenConstantValue(ListPopFront(tokens));
     assert(shift_value < 32 && shift_value >= 0);
     return shift_value << 3;
 }
 
 static inline unsigned int ProcessRegisterShift(List restrict tokens) {
-    assert(IsRegister(ListFront(tokens)));
-    unsigned int reg_s = GetRegisterNum(ListPopFront(tokens));
+    assert(TokenType(ListFront(tokens)) == TOKEN_REGISTER);
+    unsigned int reg_s = TokenRegisterNumber(ListPopFront(tokens));
     assert(reg_s <= 12);
     
     return (reg_s << 4) | 1;
@@ -25,25 +25,22 @@ void ProcessShift(
     int offset, 
     int instructions_num
 ) {
-    unsigned int condition;
-    char func_base[MAX_FUNCTION_LENGTH + 1];
-    SplitFunction(ListPopFront(tokens), func_base, &condition);
+    InstructionType shift_type = TokenInstructionType(ListFront(tokens));
+    ConditionType condition = TokenInstructionConditionType(ListPopFront(tokens));
 
-    assert(MapQuery(shift_codes, func_base));
-
-    assert(IsRegister(ListFront(tokens)));
-    unsigned int reg_d = GetRegisterNum(ListPopFront(tokens));
+    assert(TokenType(ListFront(tokens)) == TOKEN_REGISTER);
+    unsigned int reg_d = TokenRegisterNumber(ListPopFront(tokens));
     assert(reg_d <= 12);
-    unsigned int shift = IsImmediate(ListFront(tokens), false, true) ?
+
+    unsigned int shift = TokenType(ListFront(tokens)) == TOKEN_CONSTANT ?
             ProcessImmediateShift(tokens) : ProcessRegisterShift(tokens);
+    shift |= (unsigned int)MapGet(shift_codes, (int)shift_type) << 1;
 
-    shift |= (unsigned int)MapGet(shift_codes, func_base) << 1;
+    unsigned int instr = 0xD << 21;
+    instr |= condition << 28;
+    instr |= reg_d << 12;
+    instr |= reg_d;
+    instr |= shift << 4;
 
-    unsigned int instruction = 13 << 21;
-    instruction |= condition << 28;
-    instruction |= reg_d << 12;
-    instruction |= reg_d;
-    instruction |= shift << 4;
-
-    SetInstruction(output, instruction, offset);
+    SetInstruction(output, instr, offset);
 }

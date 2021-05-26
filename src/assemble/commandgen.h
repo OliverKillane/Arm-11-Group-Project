@@ -1,18 +1,23 @@
+/**
+ * @file commandgen.h
+ * @author Bartłomiej Cieślar
+ * @brief The top header for binary command generation
+ */
 #ifndef ASSEMBLE_FUNCTIONGEN_H_
 #define ASSEMBLE_FUNCTIONGEN_H_
 
 #include <stddata.h>
-#include "commandgen/common_defs.h"
+#include <commandgen/common_defs.h>
 
-/*
- * Initializes the assembly function processing
+/**
+ * @brief Initializes the assembly function processing
  */
 void InitFunctionGen();
 
-/*
- * Processes a single command from assembly
+/**
+ * @brief Processes a single command from assembly
  * 
- * @param symbols Map<char*, int> mapping labels to the addresses they point to
+ * @param symbols Map<char*, Token> mapping labels to the addresses they point to
  * @param tokens Vector<char*> representing the function to process
  * @param output Vector<int> representing the final executable
  * @param offset int representing the word offset of the function to process
@@ -25,8 +30,8 @@ void FunctionGen(
     int instructions_num
 );
 
-/*
- * Deallocates all helper variables
+/**
+ * @brief Deallocates all helper variables
  */
 void FinishFunctionGen();
 
