@@ -8,6 +8,7 @@
 #include <stddata.h>
 #include <stdio.h>
 #include <tokenizer.h>
+#include <token_utils.h>
 #include <stdbool.h>
 
 /* ProcessBranch tests */

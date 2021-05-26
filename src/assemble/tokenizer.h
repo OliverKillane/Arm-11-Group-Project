@@ -2,10 +2,7 @@
 #define ASSEMBLE_TOKENIZER_H_
 
 #include "stddata.h"
-
-static char currentToken[512];
-static int currentTokenLength;
-static TokenizerState currentState;
+#include "./tokenizer/token_utils.h"
 
 typedef enum {
     TOKENIZER_START,
@@ -15,11 +12,17 @@ typedef enum {
 
 typedef enum {
     WHITESPACE,
-    TOKENIZER_ERROR,
-    TOKENIZER_FINISHED,
+    ALPHA,
+    NUMERIC
 } CharacterType;
 
 
+static char currentToken[512];
+static int currentTokenLength;
+static TokenizerState currentState;
+
 List tokenizeLine(char *line);
+
+bool inline isWhitespace(char c);
 
 #endif /* ASSEMBLE_TOKENIZER_H_ */

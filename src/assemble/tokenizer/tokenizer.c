@@ -12,13 +12,9 @@ bool inline matchAlpha(char c) {
 }
 
 bool inline isHex(char c) {
-    return isDecimal(c)
+    return isdigit(c)
         || (c >= 0x61 && c <= 0x66)
         || (c >= 0x41 && c <= 0x46);
-}
-
-bool inline isDecimal(char c) {
-    return (c >= 0x30 && c <= 39);
 }
 
 bool inline isWhitespace(char c) {
@@ -40,9 +36,9 @@ List tokenizeLine(char *line) {
         switch (currentState) {
 
             case TOKENIZER_START:
-                if (isWhitespace(line[0])) {
-                    continue;
-                }
+                // if (isWhitespace(line[0])) {
+                //     continue;
+                // }
                 break;
             
             default:

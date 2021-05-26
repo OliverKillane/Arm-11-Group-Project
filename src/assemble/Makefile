@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Wall -g -I../../lib/stddata/include -Icommandgen -I. -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -pedantic -Wno-int-conversion
+CFLAGS  = -Wall -g -I../../lib/stddata/include -Icommandgen -Itokenizer -I. -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -pedantic -Wno-int-conversion
 
 .PHONY: all clean
 
@@ -11,7 +11,8 @@ all: ../../build/assemble/assemble.o\
 	 ../../build/assemble/process_data_transfer.o\
 	 ../../build/assemble/process_multiply.o\
 	 ../../build/assemble/process_shift.o\
-	 ../../build/assemble/commandgen.o
+	 ../../build/assemble/commandgen.o\
+	 ../../build/assemble/token_utils.o
 	cp ../../build/stddata.o ../../build/assemble/
 	$(CC) $(CFLAGS) $^ ../../build/assemble/stddata.o -o ../../build/assemble/assemble
 	cp ../../build/assemble/assemble ../../bin/
@@ -20,6 +21,7 @@ all: ../../build/assemble/assemble.o\
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 ../../build/assemble/assemble.o: assemble.c
+../../build/assemble/token_utils.o: tokenizer/token_utils.c
 ../../build/assemble/assemble_utils.o: assemble_utils.c
 ../../build/assemble/commandgen.o: commandgen/commandgen.c
 ../../build/assemble/common_defs.o: commandgen/common_defs.c
