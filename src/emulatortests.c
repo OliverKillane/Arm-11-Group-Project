@@ -1,10 +1,8 @@
+#include "testutils.c"
+#include "emulate.h"
+#include "emulate.c"
 #include <stdbool.h>
 #include <stdlib.h>
-
-#include "testutils.c"
-
-#define TEST
-#include "emulate.c"
 
 // note: am aware that binary constants are a GCC only thing - only using for tests
 
@@ -165,9 +163,6 @@ int main(){
   booltest(checkCond(AL), true, "AL test");
 
   testsection("processInstr Tests");
-  
-
-
 
   testsection("branchInstr Tests");
 
@@ -184,6 +179,7 @@ int main(){
   imm:    IIIIITT0RRRR
   reg:    RRRR0TT1RRRR
   */
+
 
   testsubsection("Constant Shift Tests");
   //Constant Shift
@@ -383,4 +379,5 @@ int main(){
   booltest(0, CPU.CPSR.Z, "Reg 1(12) EOR Reg 3 Z flag");
   booltest(1, CPU.CPSR.C, "Reg 1(12) EOR Reg 3 C flag");
   booltest(0, CPU.CPSR.V, "Reg 1(12) EOR Reg 3 V flag");
+
 }
