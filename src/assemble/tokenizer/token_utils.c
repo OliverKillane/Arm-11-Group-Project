@@ -1,7 +1,9 @@
-#include "tokenizer.h"
+#include "token_utils.h"
 #include <assert.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 Token NewInstructionToken(ConditionType cond, InstructionType instr) {
@@ -22,9 +24,11 @@ Token NewConstantToken(ConstantType type, long long value) {
     return token;
 }
 
-Token NewLabelToken(char label[512]) {
+Token NewLabelToken(char *label) {
     Token token = malloc(sizeof(TokenRepr));
-    *token = (TokenRepr) { TOKEN_LABEL, label };
+    token -> type = TOKEN_LABEL;
+    strncpy(token -> label, label, 512);
+
     return token;
 }
 
