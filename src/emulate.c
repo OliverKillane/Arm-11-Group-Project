@@ -333,9 +333,9 @@ void printState() {
 }
 
 word *getmemword(location loc) {
-    return ((word *) getmemloc(loc));
+  return ((word *) getmemloc(loc));
 }
 
 byte *getmemloc(location loc) {
-    return (CPU.memory + loc);
+  return (CPU.memory + loc);
 }
