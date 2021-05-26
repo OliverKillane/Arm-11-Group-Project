@@ -185,6 +185,7 @@ int main(){
   reg:    RRRR0TT1RRRR
   */
 
+  testsubsection("Constant Shift Tests");
   //Constant Shift
   // lsl (00):
   
@@ -195,15 +196,15 @@ int main(){
   // lsl by 3
   holder = shiftOperation(0b000110000011);
   int32test(674 << 3, holder.result, "LSL Register 3 (674) by 3 result");
-  int32test(0, holder.carryout, "LSL Register 3 (674) by 3 carryout");
+  booltest(0, holder.carryout, "LSL Register 3 (674) by 3 carryout");
 
-  holder = shiftOperation(0b001000000100);
-  int32test(6 << 4, holder.result, "LSL Register 4 (2^31 + 6) by 4 result");
-  int32test(0, holder.carryout, "LSL Register 4 (2^31 + 6) by 4 carryout");
+  holder = shiftOperation(0b000010000100);
+  int32test(6 << 1, holder.result, "LSL Register 4 (2^31 + 6) by 1 result");
+  booltest(1, holder.carryout, "LSL Register 4 (2^31 + 6) by 1 carryout");
 
   holder = shiftOperation(0b001000000101);
   int32test(6 << 4, holder.result, "LSL Register 4 (3^30 + 6) by 4 result");
-  int32test(0, holder.carryout, "LSL Register 4 (3^30 + 6) by 4 carryout");
+  booltest(0, holder.carryout, "LSL Register 4 (3^30 + 6) by 4 carryout");
 
   // lsr (01):
 
@@ -213,50 +214,173 @@ int main(){
   // lsr by 3
   holder = shiftOperation(0b000110100011);
   int32test(674 >> 3, holder.result, "LSR Register 3 (674) by 3 result");
-  int32test(0, holder.carryout, "LSR Register 3 (674) by 3 carryout");
+  booltest(0, holder.carryout, "LSR Register 3 (674) by 3 carryout");
 
   holder = shiftOperation(0b001000100100);
   int32test(6 >> 4, holder.result, "LSR Register 4 (6) by 4 result");
-  int32test(0, holder.carryout, "LSR Register 4 (6) by 4 carryout");
+  booltest(0, holder.carryout, "LSR Register 4 (6) by 4 carryout");
 
   holder = shiftOperation(0b001000100101);
   int32test(30 >> 4, holder.result, "LSR Register 5 (30) by 4 result");
-  int32test(1, holder.carryout, "LSR Register 5 (30) by 4 carryout");
+  booltest(1, holder.carryout, "LSR Register 5 (30) by 4 carryout");
 
   // asr (10):
 
   *GETREG(6) = -13;
   holder = shiftOperation(0b000011000110);
   int32test(-7, holder.result, "ASR Register 6 (-13) by 1 result");
-  int32test(1, holder.carryout, "ASR Register 6 (-13) by 1 carryout");
+  booltest(1, holder.carryout, "ASR Register 6 (-13) by 1 carryout");
 
   holder = shiftOperation(0b000111000011);
   int32test(674 >> 3, holder.result, "ASR Register 3 (674) by 3 result");
-  int32test(0, holder.carryout, "ASR Register 3 (674) by 3 carryout");
+  booltest(0, holder.carryout, "ASR Register 3 (674) by 3 carryout");
 
   holder = shiftOperation(0b001011000100);
   int32test(6 >> 4, holder.result, "ASR Register 4 (6) by 4 result");
   int32test(0, holder.carryout, "ASR Register 4 (6) by 4 carryout");
 
   // ror (11):
-  //below not done yet
   holder = shiftOperation(0b000011100100);
   int32test(3, holder.result, "ROR Register 4 (6) by 1 result");
-  int32test(0, holder.carryout, "ROR Register 4 (6) by 1 carryout");
+  booltest(0, holder.carryout, "ROR Register 4 (6) by 1 carryout");
+
+  *GETREG(1) = 7;
+
+  holder = shiftOperation(0b000101100001);
+  int32test(1 + (3 << 29), holder.result, "ROR Register 1 (7) by 2 result");
+  booltest(1, holder.carryout, "ROR Register 1 (7) by 2 carryout");
 
   //Shift Register
+
+  testsubsection("Register Shift Tests");
+
   // lsl (00):
+  *GETREG(3) = 674;
+  *GETREG(1) = 3;
+  holder = shiftOperation(0b000100010011);
+  int32test(674 << 3, holder.result, "LSL Register 3 (674) by Register 1 (3) result");
+  booltest(0, holder.carryout, "LSL Register 3 (674) by Register 1 (3) carryout");
+
+  *GETREG(4) =  6;
+  *GETREG(5) = 30;
+
+  holder = shiftOperation(0b010000010101);
+  int32test(30 << 6, holder.result, "LSL Register 5 (30) by Register 4 (6) result");
+  booltest(0, holder.carryout, "LSL Register 5 (30) by Register 4 (6) carryout");
+
+
+  *GETREG(4) = (1 << 31) + 6;
+  *GETREG(2) = 1;
+
+  holder = shiftOperation(0b001000010100);
+  int32test(6 << 1, holder.result, "LSL Register 4 (2^31 + 6) by Reg 2 (1) result");
+  booltest(1, holder.carryout, "LSL Register 4 (2^31 + 6) by Reg 2 (1) carryout");
 
   // lsr (01):
 
+  *GETREG(4) =  6;
+  *GETREG(5) = 30;
+  *GETREG(7) = 4;
+
+  // lsr by 3
+  holder = shiftOperation(0b000100110011);
+  int32test(674 >> 3, holder.result, "LSR Register 3 (674) by Reg 1 (3) result");
+  booltest(0, holder.carryout, "LSR Register 3 (674) by Reg 1 (3) carryout");
+
+  holder = shiftOperation(0b011100110100);
+  int32test(6 >> 4, holder.result, "LSR Register 4 (6) by Reg 7 (4) result");
+  booltest(0, holder.carryout, "LSR Register 4 (6) by Reg 7 (4) carryout");
+
+  holder = shiftOperation(0b011100110101);
+  int32test(30 >> 4, holder.result, "LSR Register 5 (30) by Reg 7 (4) result");
+  booltest(1, holder.carryout, "LSR Register 5 (30) by Reg 7 (4) carryout");
+
   // asr (10):
+
+  *GETREG(6) = -13;
+
+  holder = shiftOperation(0b001001010110);
+  int32test(-7, holder.result, "ASR Register 6 (-13) by Reg 2 (1) result");
+  booltest(1, holder.carryout, "ASR Register 6 (-13) by Reg 2 (1) carryout");
+
+  holder = shiftOperation(0b000101010011);
+  int32test(674 >> 3, holder.result, "ASR Register 3 (674) by Reg 1 (3) result");
+  booltest(0, holder.carryout, "ASR Register 3 (674) by Reg 1 (3) carryout");
+
+  holder = shiftOperation(0b011101010100);
+  int32test(6 >> 4, holder.result, "ASR Register 4 (6) by Reg 7 (4) result");
+  booltest(0, holder.carryout, "ASR Register 4 (6) by Reg 7 (4) carryout");
 
   // ror (11):
 
+  holder = shiftOperation(0b001001110100);
+  int32test(3, holder.result, "ROR Register 4 (6) by Reg 2 (1) result");
+  booltest(0, holder.carryout, "ROR Register 4 (6) by Reg 2 (1) carryout");
+
+  *GETREG(1) = 7;
+  *GETREG(8) = 2;
+
+  holder = shiftOperation(0b100001110001);
+  int32test(1 + (3 << 29), holder.result, "ROR Register 1 (7) by Reg 8 (2) result");
+  booltest(1, holder.carryout, "ROR Register 1 (7) by Reg 8 (2) carryout");
 
 
 
   testsection("MultiplyInstr Tests");
 
   testsection("processDataInstr Tests");
+
+
+  instruction instr;
+
+  testsubsection("immediate operand2 Tests");
+  SETCPSR(0, 0, 0, 0);
+  *GETREG(1) = 12;
+  instr = 0b00000010100100010001000000001111;
+  processDataInstr(instr);
+  int32test(27 , *GETREG(1), "Add 15 to Register 1 (12) destination reg");
+  booltest(0, CPU.CPSR.N, "Add 15 to Register 1 (12) N flag");
+  booltest(0, CPU.CPSR.Z, "Add 15 to Register 1 (12) Z flag");
+  booltest(0, CPU.CPSR.C, "Add 15 to Register 1 (12) C flag");
+  booltest(0, CPU.CPSR.V, "Add 15 to Register 1 (12) V flag"); 
+
+  *GETREG(1) = 12;
+  instr = 0b00000011010100010001000000001111;
+  processDataInstr(instr);
+  int32test(12 , *GETREG(1), "Compare 15 to Register 1 (12) destination reg");
+  booltest(1, CPU.CPSR.N, "Compare 15 to Register 1 (12) N flag");
+  booltest(0, CPU.CPSR.Z, "Compare 15 to Register 1 (12) Z flag");
+  booltest(1, CPU.CPSR.C, "Compare 15 to Register 1 (12) C flag");
+  booltest(0, CPU.CPSR.V, "Compare 15 to Register 1 (12) V flag"); 
+
+  SETCPSR(0, 0, 0, 0);
+  instr = 0b00000011101100010001000000001111;
+  processDataInstr(instr);
+  int32test(15 , *GETREG(1), "Move 15 to Register 1 (12) destination reg");
+  booltest(0, CPU.CPSR.N, "Move 15 to Register 1 (12) N flag");
+  booltest(0, CPU.CPSR.Z, "Move 15 to Register 1 (12) Z flag");
+  booltest(0, CPU.CPSR.C, "Move 15 to Register 1 (12) C flag");
+  booltest(0, CPU.CPSR.V, "Move 15 to Register 1 (12) V flag"); 
+
+  testsubsection("shifter operand2 Tests");
+  SETCPSR(0, 0, 0, 0);
+  *GETREG(1) = 12;
+  *GETREG(3) = (1 << 30) + 4;
+  instr = 0b00000000000100010010000100000011;
+  processDataInstr(instr);
+  int32test(0 , *GETREG(2), "Reg 1(12) AND Reg 3(2^30 + 4) destination Reg 2");
+  booltest(0, CPU.CPSR.N, "Reg 1(12) AND Reg 3 N flag");
+  booltest(1, CPU.CPSR.Z, "Reg 1(12) AND Reg 3 Z flag");
+  booltest(1, CPU.CPSR.C, "Reg 1(12) AND Reg 3 C flag");
+  booltest(0, CPU.CPSR.V, "Reg 1(12) AND Reg 3 V flag"); 
+
+  *GETREG(3) = (1 << 30) + 7;
+  *GETREG(4) = 2;
+  instr = 0b00000000001100010010010000010011;
+  processDataInstr(instr);
+  int32test(16 , *GETREG(2), "Reg 1(12) EOR Reg 3(2^30 + 7) destination Reg 2");
+  booltest(0, CPU.CPSR.N, "Reg 1(12) EOR Reg 3 N flag");
+  booltest(0, CPU.CPSR.Z, "Reg 1(12) EOR Reg 3 Z flag");
+  booltest(1, CPU.CPSR.C, "Reg 1(12) EOR Reg 3 C flag");
+  booltest(0, CPU.CPSR.V, "Reg 1(12) EOR Reg 3 V flag");
 }
