@@ -44,7 +44,12 @@ char *charpadding(unsigned int length, char filler) {
 void testsection(char *name) {
     sectionno++;
     testno = 0;
-    printf(MAGENTA "\n%i. Test Section: %s" DEFAULT, sectionno, name);
+    printf(MAGENTA "\n\n%i. Test Section: %s" DEFAULT, sectionno, name);
+}
+
+void testsubsection(char *name) {
+    testno = 0;
+    printf(BLUE "\n\n Test Subsection: %s\n" DEFAULT, name);
 }
 
 /* Take expected, result and their types, check they match and print out result.
