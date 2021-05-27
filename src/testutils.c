@@ -33,14 +33,6 @@ void starttests(char * testfile) {
     testno = 0;
 }
 
-// get a set length of padding
-char *charpadding(unsigned int length, char filler) {
-    char *padding = malloc(length + 1);
-    padding[length] = '\0';
-    memset(padding, filler, length);
-    return padding;
-}
-
 void testsection(char *name) {
     sectionno++;
     testno = 0;
@@ -65,16 +57,9 @@ void runtest(void* expected, void* result, type typ, char * description) {
         case BOOL: passed = EQUALS(expected, result, bool); break;
     }
 
-    int padlen = PADLEN - strlen(description);
-    assert(padlen >= 0);
-
-    char * descrpadding = charpadding(padlen, ' ');
-
     printf(passed?GREEN:RED);
 
-    printf("\n    %i: %s%s  ", testno, description, descrpadding);
-
-    free(descrpadding);
+    printf("\n    %-3i: %-50s  ", testno, description);
 
     if (passed) {
         printf("P" DEFAULT);
