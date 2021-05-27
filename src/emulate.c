@@ -10,7 +10,6 @@ machineState CPU;
 int main(int argc, char** argv) {
   if (argc != 2) {
     printf("Error: Invalid number of arguments provided, need only one filename\r\n");
-    printState();
     exit(INVALID_ARGUMENTS);
   }
 
@@ -33,7 +32,6 @@ void loadProgram(char* filename) {
 
   if (!file) {
     printf("Error: could not open file\r\n");
-    printState();
     exit(INVALID_FILE);
   }
 
