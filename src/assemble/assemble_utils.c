@@ -6,7 +6,7 @@
 #include <string.h>
 #include "stddata.h"
 #include "commandgen.h"
-#include "./tokenizer/token_utils.h"
+#include "tokenizer.h"
 
 
 /* Removes the colon in sourceStr by copying to targetStr.
@@ -100,6 +100,7 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 		LISTFOR(tokens, iter) {
 			printf("started for loop\n");
 			Token tok = ListIteratorGet(iter);
+			printf("ABCDEF\n");
 			switch (tok->type) {
 				case TOKEN_INSTRUCTION:
 					printf("Instruction Token\n");

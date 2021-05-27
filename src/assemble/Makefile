@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Wall -g -I../../lib/stddata/include -Icommandgen -Itokenizer -I. -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -pedantic -Wno-int-conversion
+CFLAGS  = -Wall -g -I../../lib/stddata/include -Icommandgen -Itokenizer -I. -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -pedantic -Wno-int-conversion
 
 .PHONY: all clean
 
@@ -34,5 +34,5 @@ all: ../../build/assemble/assemble.o\
 ../../build/assemble/process_shift.o: commandgen/process_shift.c
 
 clean:
-	rm -f $(wildcard ../build/assemble/*)
-	rm -f ../bin/assemble
+	rm -f $(wildcard ../../build/assemble/*)
+	rm -f ../../bin/assemble

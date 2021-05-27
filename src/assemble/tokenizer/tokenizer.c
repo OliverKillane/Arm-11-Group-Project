@@ -1,4 +1,4 @@
-#include "tokenizer.h"
+#include "../tokenizer.h"
 #include <assert.h>
 #include <string.h>
 #include <stdbool.h>
@@ -7,17 +7,17 @@
 #include <ctype.h>
 #include "stddata.h"
 
-bool inline matchAlpha(char c) {
+bool matchAlpha(char c) {
     return isalpha(c) != 0;
 }
 
-bool inline isHex(char c) {
+bool isHex(char c) {
     return isdigit(c)
         || (c >= 'A' && c <= 'F')
         || (c >= 'a' && c <= 'f');
 }
 
-bool inline isWhitespace(char c) {
+bool isWhitespace(char c) {
     return c == ' ' || c == '\t';
 }
 
@@ -255,15 +255,14 @@ void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
 
 
 List tokenizeLine(char *line, Map symbolTable, int currentLine) {
-    // printf("Started function\n");
+    //printf("Started function\n");
     List tokenList = NewEmptyList();
     currentTokenLength = 0;
     currentState = TOKENIZER_START;
 
     while (currentState != TOKENIZER_FINISHED 
         && currentState != TOKENIZER_ERROR) {
-
-        // printf("Current line:%s\n", line);
+        //printf("Current line:%s\n", line);
 
         CharacterType charType = getCharType(line[0]);
 
@@ -361,7 +360,6 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
         if (line[0] != '\0') {
             line++;
         }
-
     }
 
     // if (currentState == TOKENIZER_FINISHED) {
@@ -369,7 +367,7 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
     // } else {
     //     printf("Tokenizer error\n");
     // }
-
+    
     return tokenList;
 
 }
