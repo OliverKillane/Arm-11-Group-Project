@@ -55,117 +55,124 @@ int main(){
   cpsr tst = {.N = 1, .Z = 0, .C = 1, .V = 1};
 
   //0000 EQ Z = 1
+  instruction inst = 0b00000000000000000000000000000000;
   CPU.CPSR = tst;
-  booltest(checkCond(EQ), false, "EQ test");
+  booltest(checkCond(inst), false, "EQ test");
 
   SETCPSR(1, 1, 1, 1);
-  booltest(checkCond(EQ), true, "EQ test");
+  booltest(checkCond(inst), true, "EQ test");
 
   SETCPSR(0, 0, 0, 0);
-  booltest(checkCond(EQ), false, "EQ test");
+  booltest(checkCond(inst), false, "EQ test");
 
   // 0001 NE Z = 0;
+  inst = 0b00010000000000000000000000000000;
   SETCPSR(1, 0, 1, 1);
-  booltest(checkCond(NE), true, "NE test");
+  booltest(checkCond(inst), true, "NE test");
 
   SETCPSR(1, 1, 1, 1);
-  booltest(checkCond(NE), false, "NE test");
+  booltest(checkCond(inst), false, "NE test");
 
   SETCPSR(0, 0, 0, 0);
-  booltest(checkCond(NE), true, "NE test");
+  booltest(checkCond(inst), true, "NE test");
 
   // 1010 GE N = V
+  inst = 0b10100000000000000000000000000000;
   SETCPSR(1, 0, 1, 1);
-  booltest(checkCond(GE), true, "GE test");
+  booltest(checkCond(inst), true, "GE test");
 
   SETCPSR(1, 1, 1, 1);
-  booltest(checkCond(GE), true, "GE test");
+  booltest(checkCond(inst), true, "GE test");
 
   SETCPSR(0, 0, 0, 0);
-  booltest(checkCond(GE), true, "GE test");
+  booltest(checkCond(inst), true, "GE test");
 
   SETCPSR(0, 0, 1, 1);
-  booltest(checkCond(GE), false, "GE test");
+  booltest(checkCond(inst), false, "GE test");
   
   SETCPSR(1, 1, 1, 0);
-  booltest(checkCond(GE), false, "GE test");
+  booltest(checkCond(inst), false, "GE test");
 
   SETCPSR(0, 0, 0, 1);
-  booltest(checkCond(GE), false, "GE test");
+  booltest(checkCond(inst), false, "GE test");
 
   // 1011 LT N != V
+  inst = 0b10110000000000000000000000000000;
   SETCPSR(1, 0, 1, 1);
-  booltest(checkCond(LT), false, "LT test");
+  booltest(checkCond(inst), false, "LT test");
   
   SETCPSR(1, 1, 1, 1);
-  booltest(checkCond(LT), false, "LT test");
+  booltest(checkCond(inst), false, "LT test");
 
   CPU.CPSR = ((cpsr) {.N = 0, .Z = 0, .C = 0, .V = 0});
-  booltest(checkCond(LT), false, "LT test");
+  booltest(checkCond(inst), false, "LT test");
   
   SETCPSR(0, 0, 1, 1);
-  booltest(checkCond(LT), true, "LT test");
+  booltest(checkCond(inst), true, "LT test");
   
   SETCPSR(1, 1, 1, 0);
-  booltest(checkCond(LT), true, "LT test");
+  booltest(checkCond(inst), true, "LT test");
 
   SETCPSR(0, 0, 0, 1);
-  booltest(checkCond(LT), true, "LT test");
+  booltest(checkCond(inst), true, "LT test");
 
   // 1100 GTZ = 0 && (N = V)
   //NZCV
+  inst = 0b11000000000000000000000000000000;
   SETCPSR(0, 0, 0, 0);
-  booltest(checkCond(GT), true, "GT test");
+  booltest(checkCond(inst), true, "GT test");
 
   SETCPSR(0, 1, 0, 0);
-  booltest(checkCond(GT), false, "GT test");
+  booltest(checkCond(inst), false, "GT test");
 
   SETCPSR(0, 0, 0, 1);
-  booltest(checkCond(GT), false, "GT test");
+  booltest(checkCond(inst), false, "GT test");
 
   SETCPSR(0, 1, 1, 0);
-  booltest(checkCond(GT), false, "GT test");
+  booltest(checkCond(inst), false, "GT test");
 
   SETCPSR(1, 0, 0, 1);
-  booltest(checkCond(GT), true, "GT test");
+  booltest(checkCond(inst), true, "GT test");
   
   // 1101 LE Z || (N != V) NZCV
+  inst = 0b11010000000000000000000000000000;
   SETCPSR(1, 0, 1, 1);
-  booltest(checkCond(LE), false, "LE test");
+  booltest(checkCond(inst), false, "LE test");
 
   SETCPSR(1, 1, 1, 1);
-  booltest(checkCond(LE), true, "LE test");
+  booltest(checkCond(inst), true, "LE test");
 
   SETCPSR(0, 0, 0, 0);
-  booltest(checkCond(LE), false, "LE test");
+  booltest(checkCond(inst), false, "LE test");
 
   SETCPSR(0, 0, 1, 1);
-  booltest(checkCond(LE), true, "LE test");
+  booltest(checkCond(inst), true, "LE test");
 
   SETCPSR(1, 1, 1, 0);
-  booltest(checkCond(LE), true, "LE test");
+  booltest(checkCond(inst), true, "LE test");
   
   SETCPSR(0, 0, 0, 1);
-  booltest(checkCond(LE), true, "LE test");
+  booltest(checkCond(inst), true, "LE test");
 
   // 1110 AL (ignored)
+  inst = 0b11100000000000000000000000000000;
   SETCPSR(1, 0, 1, 1);
-  booltest(checkCond(AL), true, "AL test");
+  booltest(checkCond(inst), true, "AL test");
   
   SETCPSR(1, 1, 1, 1);
-  booltest(checkCond(AL), true, "AL test");
+  booltest(checkCond(inst), true, "AL test");
 
   SETCPSR(0, 0, 0, 0);
-  booltest(checkCond(AL), true, "AL test");
+  booltest(checkCond(inst), true, "AL test");
 
   SETCPSR(0, 0, 1, 1);
-  booltest(checkCond(AL), true, "AL test");
+  booltest(checkCond(inst), true, "AL test");
 
   SETCPSR(1, 1, 1, 0);
-  booltest(checkCond(AL), true, "AL test");
+  booltest(checkCond(inst), true, "AL test");
 
   SETCPSR(0, 0, 0, 1);
-  booltest(checkCond(AL), true, "AL test");
+  booltest(checkCond(inst), true, "AL test");
 
   testsection("processInstr Tests");
 
@@ -248,7 +255,7 @@ int main(){
   *GETREG(1) = 7;
 
   holder = shiftOperation(0b000101100001);
-  int32test(1 + (3 << 29), holder.result, "ROR Register 1 (7) by 2 result");
+  int32test(1 + (3 << 30), holder.result, "ROR Register 1 (7) by 2 result");
   booltest(1, holder.carryout, "ROR Register 1 (7) by 2 carryout");
 
   //Shift Register
@@ -322,7 +329,7 @@ int main(){
   *GETREG(8) = 2;
 
   holder = shiftOperation(0b100001110001);
-  int32test(1 + (3 << 29), holder.result, "ROR Register 1 (7) by Reg 8 (2) result");
+  int32test(1 + (3 << 30), holder.result, "ROR Register 1 (7) by Reg 8 (2) result");
   booltest(1, holder.carryout, "ROR Register 1 (7) by Reg 8 (2) carryout");
 
 
@@ -351,7 +358,7 @@ int main(){
   int32test(12 , *GETREG(1), "Compare 15 to Register 1 (12) destination reg");
   booltest(1, CPU.CPSR.N, "Compare 15 to Register 1 (12) N flag");
   booltest(0, CPU.CPSR.Z, "Compare 15 to Register 1 (12) Z flag");
-  booltest(1, CPU.CPSR.C, "Compare 15 to Register 1 (12) C flag");
+  booltest(0, CPU.CPSR.C, "Compare 15 to Register 1 (12) C flag");
   booltest(0, CPU.CPSR.V, "Compare 15 to Register 1 (12) V flag"); 
 
   SETCPSR(0, 0, 0, 0);
