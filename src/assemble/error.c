@@ -18,11 +18,20 @@ Map ErrorMessagesMap() {
     MapSet(error_messages, ERROR_TOO_LONG, "expected less tokens");
     MapSet(error_messages, ERROR_INVALID_INSTRUCTION, "invalid instruction code");
     MapSet(error_messages, ERROR_INVALID_LABEL, "label not found");
-    MapSet(error_messages, ERROR_EXPECTED_LABEL_OR_PURE_CONSTANT, "expected label or prefixless constant");
+    MapSet(error_messages, ERROR_EXPECTED_LABEL_OR_PURE_CONSTANT, 
+            "expected label or prefixless constant");
     MapSet(error_messages, ERROR_EXPECTED_4_DIVISIBLE, "expected a constant divisible by 4");
-    MapSet(error_messages, ERROR_INVALID_BRANCH, "branch destination out of bounds");
-    MapSet(error_messages, ERROR_EXPECTED_REGISTER_OR_HASH_CONSTANT, "expected register or a constant preceded by a hash");
+    MapSet(error_messages, ERROR_CONST_OOB, "constant out of bounds");
+    MapSet(error_messages, ERROR_EXPECTED_REGISTER_OR_HASH_CONSTANT, 
+            "expected register or a constant preceded by a hash");
     MapSet(error_messages, ERROR_INVALID_REGISTER, "invalid register");
+    MapSet(error_messages, ERROR_EXPECTED_REGISTER, "expected a register");
+    MapSet(error_messages, ERROR_OFFSET_TOO_FAR, "instruciton offset too big to store");
+    MapSet(error_messages, ERROR_EXPECTED_EQUALS_CONSTANT_OR_BRACE, 
+            "expected a constant preceded by an equals sign or an open square bracket");
+    MapSet(error_messages, ERROR_EXPECTED_CLOSED_BRACE, "expected closed bracket");
+    MapSet(error_messages, ERROR_EXPECTED_HASH_CONSTANT, "expected a constant preceded by a hash");
+    MapSet(error_messages, ERROR_SHIFT_OOB, "shift out of bounds");
 
     return error_messages;
 }
@@ -33,8 +42,9 @@ Map StagesNamesMap() {
     MapSet(stages_names, STAGE_NONE, "unspecified");
     MapSet(stages_names, STAGE_DISPATCH, "instruction processing dispatch");
     MapSet(stages_names, STAGE_BRANCH, "branch instruction generation");
-    MapSet(stages_names, STAGE_SHIFT, "shift instruction generation");
     MapSet(stages_names, STAGE_MULTIPLY, "multiply instruction generation");
+    MapSet(stages_names, STAGE_DATA_TRANSFER, "data transfer instruction generation");
+    MapSet(stages_names, STAGE_SHIFTED_REGISTER, "shifted register data source generation");
 
     return stages_names;
 }
