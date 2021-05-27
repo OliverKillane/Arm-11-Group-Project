@@ -13,12 +13,11 @@ emulate: emulate.o
 
 emulatortests: emulatortests.o
 
-testemulator: emulatortests emulate
-	$(CC) $(CFLAGS) -o emulatortests
+testemulator: emulatortests
 	./emulatortests
-	rm emulatortests
-
+	
 clean:
 	rm -f $(wildcard *.o)
+	rm -f $(wildcard *.exe)
 	rm -f assemble
 	rm -f emulate
