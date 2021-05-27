@@ -34,9 +34,11 @@ Token NewConstantToken(ConstantType type, long long value) {
 }
 
 Token NewLabelToken(char *label) {
+    // printf("making new label token\n");
     Token token = malloc(sizeof(TokenRepr));
     token -> type = TOKEN_LABEL;
     strncpy(token -> label, label, 512);
+    // printf("Copied string\n");
     return token;
 }
 

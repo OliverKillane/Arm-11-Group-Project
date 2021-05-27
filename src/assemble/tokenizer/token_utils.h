@@ -9,7 +9,7 @@ typedef enum {
     TOKEN_CONSTANT,
     TOKEN_LABEL,
     TOKEN_SIGN,
-    TOKEN_BRACE
+    TOKEN_BRACE,
 } TokenKind;
 
 typedef enum {
@@ -25,7 +25,8 @@ typedef enum {
     COND_LT = 0xB,
     COND_GT = 0xC,
     COND_LE = 0xD,
-    COND_AL = 0xE
+    COND_AL = 0xE,
+    COND_FAIL // Used in token matching.
 } ConditionType;
 
 typedef enum {

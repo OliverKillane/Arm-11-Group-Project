@@ -6,6 +6,7 @@
 #include <string.h>
 #include "stddata.h"
 #include "commandgen.h"
+#include "./tokenizer/token_utils.h"
 
 
 /* Removes the colon in sourceStr by copying to targetStr.
@@ -80,56 +81,58 @@ List readFileLines(char *filename) {
 
 List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 
-	const char splitTokens[4] = " \n,";
+	// const char splitTokens[4] = " \n,";
 
 	List listOfTokens = NewEmptyList();
 
 	LISTFOR(lines, iter) {
 
+
 		char *line = ListIteratorGet(iter);
 
+		printf("Tokenizing line:%s", line);
+
 		List lineTokens = NewEmptyList();
-		char *tok;
+		// char *tok;
 
-		bool lineHasInstr = false;
-		for (tok = strtok(line, splitTokens); tok != NULL; tok = strtok(0, splitTokens)) {	
+		// bool lineHasInstr = false;
+		List tokens = tokenizeLine(line, symbolTable, *totalInstructions);
+		LISTFOR(tokens, iter) {
+			printf("started for loop\n");
+			Token tok = ListIteratorGet(iter);
+			switch (tok->type) {
+				case TOKEN_INSTRUCTION:
+					printf("Instruction Token\n");
+					break;
+				case TOKEN_LABEL:
+					printf("Label Token %s\n", tok->label);
+					break;
 
-			char *colonPointer;
-			if ((colonPointer = strchr(tok, ':')) != NULL) {
-
-				*colonPointer = '\0';
-
-				MapSet(symbolTable, tok, *totalInstructions);
-
-			} else {
-
-				lineHasInstr = true;
-
-				if (*tok == '[') {
-					ListPushBack(lineTokens, "["); 
-					tok++;
-				}
-
-				char* closeBrace; 	
-				if ((closeBrace = strchr(tok, ']')) != NULL) {
-					*closeBrace = '\0';
-				}
-
-				if (*tok != '\0') {
-					ListPushBack(lineTokens, tok);
-				}
-
-				if (closeBrace != NULL) {
-					ListPushBack(lineTokens, "]"); 
-				}
+				case TOKEN_CONSTANT:
+					printf("Constant Token %d\n", tok->constant.value);
+					break;
+				case TOKEN_SIGN:
+					printf("Sign Token %d\n", tok->is_plus);
+					break;
+				case TOKEN_BRACE:
+					printf("Brace Token %d\n", tok->is_open);
+					break;
+				case TOKEN_REGISTER:
+					printf("Register Token %d\n", tok->reg_num);
+					break;
+				default:
+					printf("Token not recognized.");
+					break;
 			}
-
-		} 
-
-		if (lineHasInstr) {
-			(*totalInstructions)++;
-			ListPushBack(listOfTokens, lineTokens);
 		}
+		printf("Finished tokenizing line %x\n", tokens);
+		bool hasInstructions = !ListEmpty(tokens);
+		printf("blah\n");
+		if (true) {
+			(*totalInstructions)++;
+			ListPushBack(listOfTokens, tokens);
+		}
+		printf("added tokens to list\n");
 	}
 
 	return listOfTokens;

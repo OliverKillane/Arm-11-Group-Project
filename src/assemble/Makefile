@@ -12,7 +12,8 @@ all: ../../build/assemble/assemble.o\
 	 ../../build/assemble/process_multiply.o\
 	 ../../build/assemble/process_shift.o\
 	 ../../build/assemble/commandgen.o\
-	 ../../build/assemble/token_utils.o
+	 ../../build/assemble/token_utils.o\
+	 ../../build/assemble/tokenizer.o
 	cp ../../build/stddata.o ../../build/assemble/
 	$(CC) $(CFLAGS) $^ ../../build/assemble/stddata.o -o ../../build/assemble/assemble
 	cp ../../build/assemble/assemble ../../bin/
@@ -22,6 +23,7 @@ all: ../../build/assemble/assemble.o\
 
 ../../build/assemble/assemble.o: assemble.c
 ../../build/assemble/token_utils.o: tokenizer/token_utils.c
+../../build/assemble/tokenizer.o: tokenizer/tokenizer.c
 ../../build/assemble/assemble_utils.o: assemble_utils.c
 ../../build/assemble/commandgen.o: commandgen/commandgen.c
 ../../build/assemble/common_defs.o: commandgen/common_defs.c
