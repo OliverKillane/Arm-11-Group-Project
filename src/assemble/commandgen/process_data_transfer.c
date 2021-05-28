@@ -131,7 +131,7 @@ void ProcessLoadConst(
         SetErrorCode(STAGE_DATA_TRANSFER, ERROR_TOO_LONG);
         longjmp(error_jump, 1);
     }
-    if(expression < (1<<12)) {
+    if(expression < (1<<8)) {
         SetInstruction(output, ProcessLoadMov(condition, reg_d, expression), offset);
     } else {
         ProcessLoadBig(condition, reg_d, expression, output, offset, instructions_num);
