@@ -5,7 +5,7 @@
 #include "../tokenizer.h"
 #include "../error.h"
 
-jmp_buf error_jump;
+static jmp_buf error_jump;
 
 static inline unsigned int ProcessImmediateShift(List restrict tokens) {
     if(TokenConstantType(ListFront(tokens)) != CONST_HASH) {
@@ -213,18 +213,18 @@ bool ProcessDataTransfer(
 
     if(!ListEmpty(tokens)) {
         if(TokenType(ListFront(tokens)) == TOKEN_CONSTANT) {
-            if(TokenConstantType(ListFront(tokens)) == CONST_HASH) {
+            if(TokenConstantType(ListFront(tokens)) != CONST_HASH) {
                 SetErrorCode(STAGE_DATA_TRANSFER, ERROR_EXPECTED_HASH_CONSTANT);
                 longjmp(error_jump, 1);
             }
             long long value = TokenConstantValue(ListPopFront(tokens));
             if(!ListEmpty(tokens)) {
-                SetError(STAGE_DATA_TRANSFER, ERROR_TOO_LONG);
+                SetErrorCode(STAGE_DATA_TRANSFER, ERROR_TOO_LONG);
                 longjmp(error_jump, 1);
             }
             up_flag = value >= 0;
             if(value > (1<<12) || value < -(1<<12)) {
-                SetError(STAGE_DATA_TRANSFER, ERROR_CONST_OOB);
+                SetErrorCode (STAGE_DATA_TRANSFER, ERROR_CONST_OOB);
                 longjmp(error_jump, 1);
             }
             operand = abs(value);

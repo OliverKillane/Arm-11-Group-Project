@@ -5,7 +5,7 @@
 #include "../error.h"
 #include <setjmp.h>
 
-jmp_buf error_jump;
+static jmp_buf error_jump;
 
 static inline unsigned int ProcessImmediateShift(List restrict tokens) {
     if(TokenConstantType(ListFront(tokens)) != CONST_HASH) {

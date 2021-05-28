@@ -43,8 +43,8 @@ typedef enum {
     STAGE_DATA_PROCESSING
 } ProcessingStage;
 
-ErrorCodes error_code = ERROR_EMPTY;
-ProcessingStage processing_stage = STAGE_NONE;
+extern ErrorCodes error_code;
+extern ProcessingStage processing_stage;
 
 /**
  * @brief Sets the error data

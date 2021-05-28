@@ -2,10 +2,17 @@
 #include <stdio.h>
 #include "error.h"
 
-#define RED "\0x1b[38;5;31m"
-#define WHITE "0x1b[38;5;37m"
+#define RED "\e[31m"
+#define WHITE "\e[37m"
+
+ErrorCodes error_code = ERROR_EMPTY;
+ProcessingStage processing_stage = STAGE_NONE;
 
 void SetErrorCode(ProcessingStage stage, ErrorCodes new_error_code) {
+    if(error_code != ERROR_EMPTY) {
+        ReportError(-1, "", "");
+        assert(false);
+    }
     assert(error_code == ERROR_EMPTY);
     error_code = new_error_code;
     processing_stage = stage;
@@ -60,7 +67,7 @@ void ReportError(int line_num, char* file_name, char* line_contents) {
     Map stages_names = StagesNamesMap();
 
     printf(
-        "%s:%d: %s\n" RED "error while doing %s:" WHITE "%s\n", 
+        "%s:%d: %s\n" RED "error while doing %s: " WHITE "%s\n", 
         file_name, 
         line_num, 
         line_contents,

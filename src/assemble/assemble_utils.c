@@ -6,7 +6,7 @@
 #include <string.h>
 #include "stddata.h"
 #include "commandgen.h"
-#include "./tokenizer/token_utils.h"
+#include "tokenizer.h"
 
 
 /* Removes the colon in sourceStr by copying to targetStr.
@@ -90,19 +90,46 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 
 		char *line = ListIteratorGet(iter);
 
-		// printf("Tokenizing line:%s", line);
+		printf("Tokenizing line:%s", line);
 
 		List lineTokens = NewEmptyList();
 		// char *tok;
 
 		// bool lineHasInstr = false;
 		List tokens = tokenizeLine(line, symbolTable, *totalInstructions);
-		// printf("Finished tokenizing line %x\n", tokens);
+		printf("Finished tokenizing line %x\n", tokens);
 		bool hasInstructions = !ListEmpty(tokens);
-		// printf("blah\n");
+		printf("blah\n");
 		if (true) {
 			(*totalInstructions)++;
 			ListPushBack(listOfTokens, tokens);
+			LISTFOR(tokens, iter) {
+				Token tok = ListIteratorGet(iter);
+				switch (tok->type) {
+					case TOKEN_INSTRUCTION:
+						printf("Instruction Token\n");
+						break;
+					case TOKEN_LABEL:
+						printf("Label Token %s\n", tok->label);
+						break;
+
+					case TOKEN_CONSTANT:
+						printf("Constant Token %d\n", tok->constant.value);
+						break;
+					case TOKEN_SIGN:
+						printf("Sign Token %d\n", tok->is_plus);
+						break;
+					case TOKEN_BRACE:
+						printf("Brace Token %d\n", tok->is_open);
+						break;
+					case TOKEN_REGISTER:
+						printf("Register Token %d\n", tok->reg_num);
+						break;
+					default:
+						printf("Token not recognized.");
+						break;
+				}
+			}
 		}
 		// printf("added tokens to list\n");
 	}

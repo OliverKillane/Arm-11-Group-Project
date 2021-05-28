@@ -6,7 +6,7 @@
 #include "../tokenizer.h"
 #include "../error.h"
 
-jmp_buf error_jump;
+static jmp_buf error_jump;
 
 static inline unsigned int ProcessBaseRegisters(List restrict tokens) {
     if(ListSize(tokens) < 2) {
@@ -82,7 +82,7 @@ static inline unsigned int ProcessImmediate(List restrict tokens) {
         expr_value <<= 2;
     }
     expr_value = ConvertLongToRotated(expr_value);
-    if(expr_value < (1<<8)) {
+    if(expr_value >= (1<<8)) {
         SetErrorCode(STAGE_DATA_PROCESSING, ERROR_CONST_OOB);
         longjmp(error_jump, 1);
     }
@@ -182,7 +182,7 @@ bool ProcessDataProcessing(
     }
     unsigned int immediate = 0;
     if(TokenType(ListFront(tokens)) == TOKEN_CONSTANT) {
-        if(TokenConstantType(ListFront(tokens)) == CONST_HASH) {
+        if(TokenConstantType(ListFront(tokens)) != CONST_HASH) {
             SetErrorCode(STAGE_DATA_PROCESSING, ERROR_EXPECTED_HASH_CONSTANT);
             longjmp(error_jump, 1);
         }
