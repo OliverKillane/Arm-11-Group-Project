@@ -92,58 +92,58 @@ Token matchInstructionToken(char *str) {
     if (*str == 'j') {
         instTyp = INSTR_BRN;
         str++;
-    } else if (strcmp(str, "add") == 0) {
+    } else if (strncmp(str, "add", 3) == 0) {
         instTyp = INSTR_ADD;
         str += 3;
-    } else if (strcmp(str, "sub") == 0) {
+    } else if (strncmp(str, "sub", 3) == 0) {
         instTyp = INSTR_SUB;
         str += 3;
-    } else if (strcmp(str, "rsb") == 0) {
+    } else if (strncmp(str, "rsb", 3) == 0) {
         instTyp = INSTR_RSB;
         str += 3;
-    } else if (strcmp(str, "and") == 0) {
+    } else if (strncmp(str, "and", 3) == 0) {
         instTyp = INSTR_AND;
         str += 3;
-    } else if (strcmp(str, "eor") == 0) {
+    } else if (strncmp(str, "eor", 3) == 0) {
         instTyp = INSTR_EOR;
         str += 3;
-    } else if (strcmp(str, "orr") == 0) {
+    } else if (strncmp(str, "orr", 3) == 0) {
         instTyp = INSTR_ORR;
         str += 3;
-    } else if (strcmp(str, "mov") == 0) {
+    } else if (strncmp(str, "mov", 3) == 0) {
         instTyp = INSTR_MOV;
         str += 3;
-    } else if (strcmp(str, "tst") == 0) {
+    } else if (strncmp(str, "tst", 3) == 0) {
         instTyp = INSTR_TST;
         str += 3;
-    } else if (strcmp(str, "teq") == 0) {
+    } else if (strncmp(str, "teq", 3) == 0) {
         instTyp = INSTR_TEQ;
         str += 3;
-    } else if (strcmp(str, "cmp") == 0) {
+    } else if (strncmp(str, "cmp", 3) == 0) {
         instTyp = INSTR_CMP;
         str += 3;
-    } else if (strcmp(str, "mul") == 0) {
+    } else if (strncmp(str, "mul", 3) == 0) {
         instTyp = INSTR_MUL;
         str += 3;
-    } else if (strcmp(str, "mla") == 0) {
+    } else if (strncmp(str, "mla", 3) == 0) {
         instTyp = INSTR_MLA;
         str += 3;
-    } else if (strcmp(str, "ldr") == 0) {
+    } else if (strncmp(str, "ldr", 3) == 0) {
         instTyp = INSTR_LDR;
         str += 3;
-    } else if (strcmp(str, "str") == 0) {
+    } else if (strncmp(str, "str", 3) == 0) {
         instTyp = INSTR_STR;
         str += 3;
-    } else if (strcmp(str, "lsl") == 0) {
+    } else if (strncmp(str, "lsl", 3) == 0) {
         instTyp = INSTR_LSL;
         str += 3;
-    } else if (strcmp(str, "asr") == 0) {
+    } else if (strncmp(str, "asr", 3) == 0) {
         instTyp = INSTR_ASR;
         str += 3;
-    } else if (strcmp(str, "lsr") == 0) {
+    } else if (strncmp(str, "lsr", 3) == 0) {
         instTyp = INSTR_LSR;
         str += 3;
-    } else if (strcmp(str, "ror") == 0) {
+    } else if (strncmp(str, "ror", 3) == 0) {
         instTyp = INSTR_ROR;
         str += 3;
     } else {
