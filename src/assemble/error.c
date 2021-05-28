@@ -9,10 +9,6 @@ ErrorCodes error_code = ERROR_EMPTY;
 ProcessingStage processing_stage = STAGE_NONE;
 
 void SetErrorCode(ProcessingStage stage, ErrorCodes new_error_code) {
-    if(error_code != ERROR_EMPTY) {
-        ReportError(-1, "", "");
-        assert(false);
-    }
     assert(error_code == ERROR_EMPTY);
     error_code = new_error_code;
     processing_stage = stage;
