@@ -6,7 +6,7 @@
 /*
  * Processes Data Transfer commands
  */
-void ProcessDataTransfer(
+bool ProcessDataTransfer(
     Map symbols, 
     List tokens, 
     Vector output, 

@@ -6,7 +6,7 @@
 /*
  * Processes shift-related commands
  */
-void ProcessShift(
+bool ProcessShift(
     Map symbols, 
     List tokens, 
     Vector output, 

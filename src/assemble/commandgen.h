@@ -7,6 +7,7 @@
 #define ASSEMBLE_FUNCTIONGEN_H_
 
 #include <stddata.h>
+#include <stdbool.h>
 #include <commandgen/common_defs.h>
 
 /**
@@ -22,7 +23,7 @@ void InitFunctionGen();
  * @param output Vector<int> representing the final executable
  * @param offset int representing the word offset of the function to process
  */
-void FunctionGen(
+bool FunctionGen(
     Map symbols, 
     List tokens, 
     Vector output, 

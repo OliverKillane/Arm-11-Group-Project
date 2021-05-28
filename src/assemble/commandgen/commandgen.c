@@ -1,23 +1,35 @@
-#include "commandgen.h"
+#include "../commandgen.h"
 #include "../tokenizer.h"
+#include "../error.h"
 #include <stddata.h>
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
 #include <stdio.h>
 
-void FunctionGen(
+bool FunctionGen(
     Map restrict symbols, 
     List restrict tokens, 
     Vector restrict output, 
     int offset, 
     int instructions_num
 ) {
-    assert(ListSize(tokens) >= 1);
-    assert(TokenType(ListFront(tokens)) == TOKEN_INSTRUCTION);
+    if(ListSize(tokens) < 1) {
+        SetErrorCode(STAGE_DISPATCH, ERROR_TOO_SHORT);
+        return true;
+    }
+    if(TokenType(ListFront(tokens)) != TOKEN_INSTRUCTION) {
+        SetErrorCode(STAGE_DISPATCH, ERROR_EXPECTED_INSTRUCTION);
+        return true;
+    }
 
-    void(*process_function)(FUNC_PROC_ARGS) = 
+    bool(*process_function)(FUNC_PROC_ARGS) = 
             MapGet(func_proc, (int)TokenInstructionType(ListFront(tokens)));
-    assert(process_function != NULL);
-    process_function(symbols, tokens, output, offset, instructions_num);
+    
+    if(TokenType(ListFront(tokens)) == NULL) {
+        SetErrorCode(STAGE_DISPATCH, ERROR_INVALID_INSTRUCTION);
+        return true;
+    }
+
+    return process_function(symbols, tokens, output, offset, instructions_num);
 }

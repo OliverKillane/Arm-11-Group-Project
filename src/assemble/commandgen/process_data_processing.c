@@ -2,17 +2,27 @@
 #include <stddata.h>
 #include "common_defs.h"
 #include <stdio.h>
+#include <setjmp.h>
 #include "../tokenizer.h"
+#include "../error.h"
+
+jmp_buf error_jump;
 
 static inline unsigned int ProcessBaseRegisters(List restrict tokens) {
-    assert(ListSize(tokens) >= 2);
+    if(ListSize(tokens) < 2) {
+        SetErrorCode(STAGE_DATA_PROCESSING, ERROR_TOO_SHORT);
+        longjmp(error_jump, 1);
+    }
     
     InstructionType base = TokenInstructionType(ListFront(tokens));
     ConditionType condition = TokenInstructionConditionType(ListPopFront(tokens));
 
     int opcode = MapGet(data_proc_opcodes, (int)base);
 
-    assert(TokenType(ListFront(tokens)) == TOKEN_REGISTER);
+    if(TokenType(ListFront(tokens)) != TOKEN_REGISTER) {
+        SetErrorCode(STAGE_DATA_PROCESSING, ERROR_EXPECTED_REGISTER);
+        longjmp(error_jump, 1);
+    }
     unsigned int reg_d, reg_n, set_cspr;
     if(base == INSTR_MOV) {
         reg_d = TokenRegisterNumber(ListPopFront(tokens));
@@ -23,13 +33,22 @@ static inline unsigned int ProcessBaseRegisters(List restrict tokens) {
         reg_n = TokenRegisterNumber(ListPopFront(tokens));
         set_cspr = 1;
     } else {
-        assert(ListSize(tokens) >= 2);
-        assert(TokenType(ListGet(tokens, 1)) == TOKEN_REGISTER);
+        if(ListSize(tokens) < 2) {
+            SetErrorCode(STAGE_DATA_PROCESSING, ERROR_TOO_SHORT);
+            longjmp(error_jump, 1);
+        }
+        if(TokenType(ListGet(tokens, 1)) != TOKEN_REGISTER) {
+            SetErrorCode(STAGE_DATA_PROCESSING, ERROR_EXPECTED_REGISTER);
+            longjmp(error_jump, 1);
+        }
         reg_d = TokenRegisterNumber(ListPopFront(tokens));
         reg_n = TokenRegisterNumber(ListPopFront(tokens));
         set_cspr = 0;
     }
-    assert(reg_d <= 12 && reg_n <= 12);
+    if(reg_d > 12 || reg_n > 12) {
+        SetErrorCode(STAGE_DATA_PROCESSING, ERROR_INVALID_REGISTER);
+        longjmp(error_jump, 1);
+    }
 
     unsigned int instruction = 0;
     instruction |= condition << 28;
@@ -45,10 +64,16 @@ static inline unsigned int ConvertLongToRotated(unsigned long long value) {
 }
 
 static inline unsigned int ProcessImmediate(List restrict tokens) {
-    assert(ListSize(tokens) == 1);
+    if(ListSize(tokens) > 1) {
+        SetErrorCode(STAGE_DATA_PROCESSING, ERROR_TOO_LONG);
+        longjmp(error_jump, 1);
+    }
 
     const long long expr_value_signed = TokenConstantValue(ListPopFront(tokens));
-    assert(expr_value_signed >= 0);
+    if(expr_value_signed < 0) {
+        SetErrorCode(STAGE_DATA_PROCESSING, ERROR_CONST_OOB);
+        longjmp(error_jump, 1);
+    }
     unsigned long long expr_value = expr_value_signed;
 
     unsigned int rotate_right = 0;
@@ -57,7 +82,10 @@ static inline unsigned int ProcessImmediate(List restrict tokens) {
         expr_value <<= 2;
     }
     expr_value = ConvertLongToRotated(expr_value);
-    assert(expr_value < (1<<8));
+    if(expr_value < (1<<8)) {
+        SetErrorCode(STAGE_DATA_PROCESSING, ERROR_CONST_OOB);
+        longjmp(error_jump, 1);
+    }
 
     int operand2 = 0;
     operand2 |= rotate_right << 8;
@@ -67,30 +95,59 @@ static inline unsigned int ProcessImmediate(List restrict tokens) {
 }
 
 static inline unsigned int ProcessImmediateShift(List restrict tokens) {
-    const int shift_value = TokenConstantValue(ListPopFront(tokens));
-    assert(shift_value >= 0 && shift_value < 32);
+    if(TokenConstantType(ListFront(tokens)) != CONST_HASH) {
+        SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_REGISTER_OR_HASH_CONSTANT);
+        longjmp(error_jump, 1);
+    }
+    const unsigned long long shift_value = TokenConstantValue(ListPopFront(tokens));
+    if(shift_value >= 32 && shift_value < 0) {
+        SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_SHIFT_OOB);
+        longjmp(error_jump, 1);
+    }
     return shift_value << 3;
 }
 
 static inline unsigned int ProcessRegisterShift(List restrict tokens) {
-    assert(TokenType(ListFront(tokens)) == TOKEN_REGISTER);
+    if(TokenType(ListFront(tokens)) != TOKEN_REGISTER) {
+        SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_REGISTER_OR_HASH_CONSTANT);
+        longjmp(error_jump, 1);
+    }
     unsigned int reg_s = TokenRegisterNumber(ListPopFront(tokens));
-    assert(reg_s <= 12);
+    if(reg_s > 12) {
+        SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_INVALID_REGISTER);
+        longjmp(error_jump, 1);
+    }
     
     return (reg_s << 4) | 1;
 }
 
 static inline unsigned int ProcessRegister(List restrict tokens) {
-    assert(TokenType(ListFront(tokens)) == TOKEN_REGISTER);
+    if(TokenType(ListFront(tokens)) != TOKEN_REGISTER) {
+        SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_REGISTER);
+        longjmp(error_jump, 1);
+    }
     unsigned int reg_m = TokenRegisterNumber(ListPopFront(tokens));
-    assert(reg_m <= 12);
+    if(reg_m > 12) {
+        SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_INVALID_REGISTER);
+        longjmp(error_jump, 1);
+    }
     
     unsigned int shift = 0;
     if(ListSize(tokens) > 0) {
-        assert(ListSize(tokens) == 2);
-        assert(TokenType(ListFront(tokens)) == TOKEN_INSTRUCTION);
-        assert(TokenInstructionConditionType(ListFront(tokens)) == COND_AL);
-        assert(MapQuery(shift_codes, (int)TokenInstructionType(ListFront(tokens))));
+        if(ListSize(tokens) < 2) {
+            SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_TOO_SHORT);
+            longjmp(error_jump, 1);
+        }
+        if(ListSize(tokens) > 2) {
+            SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_TOO_LONG);
+            longjmp(error_jump, 1);
+        }
+        if(TokenType(ListFront(tokens)) != TOKEN_INSTRUCTION || 
+                TokenInstructionConditionType(ListFront(tokens)) != COND_AL || 
+                !MapQuery(shift_codes, (int)TokenInstructionType(ListFront(tokens)))) {
+            SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_CONDITIONLESS_SHIFT);
+            longjmp(error_jump, 1);
+        }
         const unsigned int shift_code = 
                 MapGet(shift_codes, (int)TokenInstructionType(ListPopFront(tokens)));
         
@@ -107,19 +164,28 @@ static inline unsigned int ProcessRegister(List restrict tokens) {
     return operand2;
 }
 
-void ProcessDataProcessing(
+bool ProcessDataProcessing(
     Map restrict symbols, 
     List restrict tokens, 
     Vector restrict output, 
     int offset, 
     int instructions_num
 ) {
+    if(setjmp(error_jump) != 0) {
+        return true;
+    }
     unsigned int instruction = ProcessBaseRegisters(tokens);
 
-    assert(!ListEmpty(tokens));
+    if(ListEmpty(tokens)) {
+        SetErrorCode(STAGE_DATA_PROCESSING, ERROR_TOO_SHORT);
+        longjmp(error_jump, 1);
+    }
     unsigned int immediate = 0;
     if(TokenType(ListFront(tokens)) == TOKEN_CONSTANT) {
-        assert(TokenConstantType(ListFront(tokens)) == CONST_HASH);
+        if(TokenConstantType(ListFront(tokens)) == CONST_HASH) {
+            SetErrorCode(STAGE_DATA_PROCESSING, ERROR_EXPECTED_HASH_CONSTANT);
+            longjmp(error_jump, 1);
+        }
         immediate = 1;
     }
 
@@ -128,4 +194,5 @@ void ProcessDataProcessing(
     instruction |= immediate << 25;
     instruction |= operand2;
     SetInstruction(output, instruction, offset);
+    return false;
 }

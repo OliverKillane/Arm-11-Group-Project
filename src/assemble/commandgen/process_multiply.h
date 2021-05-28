@@ -6,7 +6,7 @@
 /*
  * Processes multiply commands
  */
-void ProcessMultiply(
+bool ProcessMultiply(
     Map symbols, 
     List tokens, 
     Vector output, 

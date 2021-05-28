@@ -6,7 +6,7 @@
 /*
  * Processes a data processing command
  */
-void ProcessDataProcessing(
+bool ProcessDataProcessing(
     Map symbols, 
     List tokens, 
     Vector output, 

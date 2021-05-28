@@ -32,6 +32,7 @@ Map ErrorMessagesMap() {
     MapSet(error_messages, ERROR_EXPECTED_CLOSED_BRACE, "expected closed bracket");
     MapSet(error_messages, ERROR_EXPECTED_HASH_CONSTANT, "expected a constant preceded by a hash");
     MapSet(error_messages, ERROR_SHIFT_OOB, "shift out of bounds");
+    MapSet(error_messages, ERROR_EXPECTED_CONDITIONLESS_SHIFT, "expected conditionless shift");
 
     return error_messages;
 }
@@ -45,6 +46,7 @@ Map StagesNamesMap() {
     MapSet(stages_names, STAGE_MULTIPLY, "multiply instruction generation");
     MapSet(stages_names, STAGE_DATA_TRANSFER, "data transfer instruction generation");
     MapSet(stages_names, STAGE_SHIFTED_REGISTER, "shifted register data source generation");
+    MapSet(stages_names, STAGE_DATA_PROCESSING, "data processing instruction generation");
 
     return stages_names;
 }

@@ -3,23 +3,36 @@
 #include <string.h>
 #include "common_defs.h"
 #include "../tokenizer.h"
+#include "../error.h"
 
-void ProcessMultiply(
+bool ProcessMultiply(
     Map restrict symbols, 
     List restrict tokens, 
     Vector restrict output, 
     int offset, 
     int instructions_num
 ) {
-    assert(ListSize(tokens) >= 3);
 
     ConditionType condition = TokenInstructionConditionType(ListFront(tokens));
     unsigned int accumulate = TokenInstructionType(ListPopFront(tokens)) == INSTR_MLA;
 
-    assert(ListSize(tokens) - accumulate == 3);
+    if(ListSize(tokens) - accumulate < 3) {
+        SetErrorCode(STAGE_MULTIPLY, ERROR_TOO_SHORT);
+        return true;
+    }
+    if(ListSize(tokens) - accumulate > 3) {
+        SetErrorCode(STAGE_MULTIPLY, ERROR_TOO_LONG);
+        return true;
+    }
     LISTFOR(tokens, iter) {
-        assert(TokenType(ListIteratorGet(iter)) == TOKEN_REGISTER);
-        assert(TokenRegisterNumber(ListIteratorGet(iter)) <= 12);
+        if(TokenType(ListIteratorGet(iter)) != TOKEN_REGISTER) {
+            SetErrorCode(STAGE_MULTIPLY, ERROR_EXPECTED_REGISTER);
+            return true;
+        }
+        if(TokenRegisterNumber(ListIteratorGet(iter)) > 12) {
+            SetErrorCode(STAGE_MULTIPLY, ERROR_INVALID_REGISTER);
+            return true;
+        }
     }
     unsigned int reg_d = TokenRegisterNumber(ListPopFront(tokens));
     unsigned int reg_m = TokenRegisterNumber(ListPopFront(tokens));
@@ -35,4 +48,5 @@ void ProcessMultiply(
     instruction |= reg_m;
 
     SetInstruction(output, instruction, offset);
+    return false;
 }

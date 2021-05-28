@@ -6,7 +6,7 @@
 /*
  * Processses a branch instruction
  */
-void ProcessBranch(
+bool ProcessBranch(
     Map symbols, 
     List tokens, 
     Vector output, 
