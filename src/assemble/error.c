@@ -1,4 +1,5 @@
 #include <stddata.h>
+#include <stdio.h>
 #include "error.h"
 
 #define RED "\0x1b[38;5;31m"
@@ -63,8 +64,8 @@ void ReportError(int line_num, char* file_name, char* line_contents) {
         file_name, 
         line_num, 
         line_contents,
-        MapGet(stages_names, processing_stage),
-        MapGet(error_messages, error_code)
+        MapGet(stages_names, (int)processing_stage),
+        MapGet(error_messages, (int)error_code)
     );
 
     DeleteMap(error_messages);
