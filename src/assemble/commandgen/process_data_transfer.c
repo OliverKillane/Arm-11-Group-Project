@@ -241,8 +241,11 @@ bool ProcessDataTransfer(
             operand = abs(value);
             immediate_flag = 0;
         } else {
-            up_flag = TokenType(ListFront(tokens)) == TOKEN_SIGN ?
-                TokenIsPlus(ListFront(tokens)) : 1;
+            if(TokenType(ListFront(tokens)) == TOKEN_SIGN) {
+                up_flag = TokenIsPlus(ListFront(tokens));
+                DeleteToken(ListPopFront(tokens));
+            }
+            
             operand = ProcessRegister(tokens);
             immediate_flag = 1;
         }

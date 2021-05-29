@@ -25,10 +25,10 @@ void SingleProcessBranch(
         ListPushBack(tokens_list, tokens[i]);
     }
     ProcessBranch(symbols, tokens_list, output, offset, instruction_num);
-    DeleteList(tokens_list);
-    for(int i = 0; i < tokens_num; i++) {
-        DeleteToken(tokens[i]);
+    while(!ListEmpty(tokens_list)) {
+        DeleteToken(ListPopFront(tokens_list));
     }
+    DeleteList(tokens_list);
 }
 void ProcessBranchTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -99,10 +99,10 @@ void SingleProcessDataProcessing(
         ListPushBack(tokens_list, tokens[i]);
     }
     ProcessDataProcessing(symbols, tokens_list, output, offset, instruction_num);
-    DeleteList(tokens_list);
-    for(int i = 0; i < tokens_num; i++) {
-        DeleteToken(tokens[i]);
+    while(!ListEmpty(tokens_list)) {
+        DeleteToken(ListPopFront(tokens_list));
     }
+    DeleteList(tokens_list);
 }
 
 void ProcessDataProcessingTests() {
@@ -208,10 +208,10 @@ void SingleProcessMultiply(
         ListPushBack(tokens_list, tokens[i]);
     }
     ProcessMultiply(symbols, tokens_list, output, offset, instruction_num);
-    DeleteList(tokens_list);
-    for(int i = 0; i < tokens_num; i++) {
-        DeleteToken(tokens[i]);
+    while(!ListEmpty(tokens_list)) {
+        DeleteToken(ListPopFront(tokens_list));
     }
+    DeleteList(tokens_list);
 }
 void ProcessMultiplyTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -284,10 +284,10 @@ void SingleProcessDataTransfer(
         ListPushBack(tokens_list, tokens[i]);
     }
     ProcessDataTransfer(symbols, tokens_list, output, offset, instruction_num);
-    DeleteList(tokens_list);
-    for(int i = 0; i < tokens_num; i++) {
-        DeleteToken(tokens[i]);
+    while(!ListEmpty(tokens_list)) {
+        DeleteToken(ListPopFront(tokens_list));
     }
+    DeleteList(tokens_list);
 }
 void ProcessDataTransferTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -356,7 +356,7 @@ void ProcessDataTransferTests() {
         NewSignToken(false),
         NewRegisterToken(2),
         NewInstructionToken(COND_AL, INSTR_ASR),
-        NewRegisterToken(15)
+        NewRegisterToken(12)
     }, output, 7, 8);
 
     assert((int)VectorGet(output, 0) == 0xE59F2018);
@@ -366,7 +366,7 @@ void ProcessDataTransferTests() {
     assert((int)VectorGet(output, 4) == 0xE581001C);
     assert((int)VectorGet(output, 5) == 0xE6821004);
     assert((int)VectorGet(output, 6) == 0xE40AA0D4);
-    assert((int)VectorGet(output, 7) == 0xE6079F52);
+    assert((int)VectorGet(output, 7) == 0xE6079c52);
     assert((int)VectorGet(output, 8) == 0x20200020);
 
     FinishFunctionGen();
@@ -388,10 +388,10 @@ void SingleProcessShift(
         ListPushBack(tokens_list, tokens[i]);
     }
     ProcessShift(symbols, tokens_list, output, offset, instruction_num);
-    DeleteList(tokens_list);
-    for(int i = 0; i < tokens_num; i++) {
-        DeleteToken(tokens[i]);
+    while(!ListEmpty(tokens_list)) {
+        DeleteToken(ListPopFront(tokens_list));
     }
+    DeleteList(tokens_list);
 }
 void ProcessShiftTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -442,10 +442,15 @@ void ProcessShiftTests() {
 }
 
 void runCommandGenTests() {
+    fprintf(stderr, "Branch\n");
     ProcessBranchTests();
+    fprintf(stderr, "DataProc\n");
     ProcessDataProcessingTests();
+    fprintf(stderr, "Mult\n");
     ProcessMultiplyTests();
+    fprintf(stderr, "DataTransfer\n");
     ProcessDataTransferTests();
+    fprintf(stderr, "Shift\n");
     ProcessShiftTests();
     printf("Command Gen Tests passed.\n");
 }

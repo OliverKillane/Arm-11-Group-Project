@@ -34,7 +34,7 @@ bool ProcessBranch(
         }
         pc_offset = (long long)MapGet(symbols, TokenLabel(target)) - 2 - offset;
     } else {
-        if(TokenType(target) != TOKEN_CONSTANT || TokenConstantType(target) == CONST_PURE) {
+        if(TokenType(target) != TOKEN_CONSTANT || TokenConstantType(target) != CONST_PURE) {
             SetErrorCode(STAGE_BRANCH, ERROR_EXPECTED_LABEL_OR_PURE_CONSTANT);
             return true;
         }
