@@ -22,6 +22,7 @@ int main(int argc, char** argv) {
   runProgram();
   printState();
 
+  free(CPU.memory);
   return EXIT_SUCCESS;
 }
 #endif
