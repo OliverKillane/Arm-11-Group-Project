@@ -285,6 +285,10 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     ListPushBack(tokenList, NewBraceToken(true));
                 } else if (line[0] == ']')  {
                     ListPushBack(tokenList, NewBraceToken(false));
+                } else if (line[0] == '+')  {
+                    ListPushBack(tokenList, NewSignToken(true));
+                } else if (line[0] == '-')  {
+                    ListPushBack(tokenList, NewSignToken(false));
                 } else if (line[0] == '#' || line[0] == '=' || isHex(line[0])) {
                     addCharToToken(line[0]);
                     currentState = TOKENIZER_CONSTANT;

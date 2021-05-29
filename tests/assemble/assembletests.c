@@ -49,6 +49,7 @@ bool listOfStringsAreEqual(List list1, List list2) {
 }
 
 bool toksEqual(Token tok1, Token tok2) {
+    
     switch (TokenType(tok1)) {
         case TOKEN_LABEL:
             return TokenType(tok2) == TOKEN_LABEL 
@@ -233,16 +234,40 @@ void testTokenize() {
     lineTokens = NewEmptyList();
     ListPushBack(lineTokens, NewInstructionToken(COND_AL, INSTR_MOV));
     ListPushBack(lineTokens, NewRegisterToken(3));
-    ListPushBack(lineTokens, NewConstantToken(CONST_HASH, 25600));
+    ListPushBack(lineTokens, NewConstantToken(CONST_HASH, 256));
     ListPushBack(expectedTokens, lineTokens);
 
-    LISTFOR(expectedTokens, iter) {
-        DeleteList(ListIteratorGet(iter));
-    }
-    DeleteList(tokens);
-    DeleteList(lines);
-    DeleteList(expectedTokens);
-    DeleteMap(symbolTable);
+    assert(listOfListsOfTokensAreEqual(expectedTokens, tokens));
+
+    MAPFOR(symbolTable, iter) {
+ 	    free((char*)(MapIteratorGet(iter).key));
+  	}
+	DeleteMap(symbolTable);
+
+	LISTFOR(lines, iter) {
+		free(ListIteratorGet(iter));
+	}
+	DeleteList(lines);
+
+	LISTFOR(tokens, iter1) {
+		List line = ListIteratorGet(iter1);
+		LISTFOR(line, iter2) {
+			Token token = ListIteratorGet(iter2);
+			DeleteToken(token);
+		}
+		DeleteList(line);
+	}
+	DeleteList(tokens);
+
+    LISTFOR(expectedTokens, iter1) {
+		List line = ListIteratorGet(iter1);
+		LISTFOR(line, iter2) {
+			Token token = ListIteratorGet(iter2);
+			DeleteToken(token);
+		}
+		DeleteList(line);
+	}
+	DeleteList(expectedTokens);
 
 }
 
@@ -267,20 +292,26 @@ void testTokensToBinary() {
 
     assert(correct);
 
-    // DeleteMap(symbolTable);
-    // LISTFOR(lines, iter) {
-    //     free(ListIteratorGet(iter));
-    // }
-    // DeleteList(lines);
-    // LISTFOR(tokens, iter) {
-    //     List toks = ListIteratorGet(iter);
-    //     LISTFOR(tokens, iter2) {
-    //         free(ListIteratorGet(iter2));
-    //     }
-    //     DeleteList(ListIteratorGet(iter));
-    // }
-    // DeleteList(tokens);
-    // DeleteVector(binaryTokens);
+    MAPFOR(symbolTable, iter) {
+ 	    free((char*)(MapIteratorGet(iter).key));
+  	}
+	DeleteMap(symbolTable);
+
+	LISTFOR(lines, iter) {
+		free(ListIteratorGet(iter));
+	}
+	DeleteList(lines);
+
+	LISTFOR(tokens, iter1) {
+		List line = ListIteratorGet(iter1);
+		LISTFOR(line, iter2) {
+			Token token = ListIteratorGet(iter2);
+			DeleteToken(token);
+		}
+		DeleteList(line);
+	}
+	DeleteList(tokens);
+    DeleteVector(binaryTokens);
 }
 
 void testMatchAlpha() {
@@ -333,10 +364,12 @@ void testMatchInstructionToken() {
     instr = matchInstructionToken("mov");
     assert(TokenInstructionType(instr) == INSTR_MOV);
     assert(TokenInstructionConditionType(instr) == COND_AL); 
+    DeleteToken(instr);
 
     instr = matchInstructionToken("beq");
     assert(TokenInstructionType(instr) == INSTR_BRN);
     assert(TokenInstructionConditionType(instr) == COND_EQ);
+    DeleteToken(instr);
 
     instr = matchInstructionToken("beqe");
     assert(instr == NULL);
@@ -362,9 +395,11 @@ void testMatchRegister() {
 
     reg = matchRegister("r0");
     assert(TokenRegisterNumber(reg) == 0);
+    DeleteToken(reg);
 
     reg = matchRegister("r16");
     assert(TokenRegisterNumber(reg) == 16);
+    DeleteToken(reg);
 
     reg = matchRegister("r17");
     assert(reg == NULL);
@@ -382,16 +417,19 @@ void testMatchConstant() {
     // printf("1\n");
     assert(TokenConstantValue(con) == 255);
     assert(TokenConstantType(con) == CONST_HASH);
+    DeleteToken(con);
 
     con = matchConstant("12312");
     // printf("2\n");
     assert(TokenConstantValue(con) == 12312);
     assert(TokenConstantType(con) == CONST_PURE);
+    DeleteToken(con);
 
     con = matchConstant("=-12312");
     // printf("3\n");
     assert(TokenConstantValue(con) == -12312);
     assert(TokenConstantType(con) == CONST_EQUALS);
+    DeleteToken(con);
 
     con = matchConstant("#ff");
     assert(con == NULL);
@@ -400,7 +438,7 @@ void testMatchConstant() {
 }
 
 int main(void) {
-    // runCommandGenTests();
+    runCommandGenTests();
 
     // testRemoveColon();
     // printf("Remove colon tests passed\n");
