@@ -119,7 +119,10 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 			// 			break;
 			// 	}
 			// }
+		} else {
+			DeleteList(tokens);
 		}
+
 	}
 
 	return listOfTokens;
