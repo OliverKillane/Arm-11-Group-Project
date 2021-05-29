@@ -315,21 +315,22 @@ void processDataInstr(instruction instr) {
 void printState() {
   printf("Registers:");
   for (int registerNo = 0; registerNo < 13; registerNo++) {
-    printf("\r\n$%-3i: %10i (0x%08x)", registerNo, *GETREG(registerNo), *GETREG(registerNo));
+    printf("\n$%-3i: %10i (0x%08x)", registerNo, *GETREG(registerNo), *GETREG(registerNo));
   }
-  printf("\r\nPC  : %10i (0x%08x)", *GETREG(PC), *GETREG(PC));
+  printf("\nPC  : %10i (0x%08x)", *GETREG(PC), *GETREG(PC));
 
   word cpsrReg = ((CPU.CPSR.N << 3) + (CPU.CPSR.Z << 2) + (CPU.CPSR.C << 1) + CPU.CPSR.V) << 28;
-  printf("\r\nCPSR: %10i (0x%08x)", cpsrReg, cpsrReg);
+  printf("\nCPSR: %10i (0x%08x)", cpsrReg, cpsrReg);
 
-  printf("\r\nNon-zero memory:");
+  printf("\nNon-zero memory:");
   byte *wordMem;
   for (int loc = 0; loc < MEMSIZE; loc += 4) {
     wordMem = getmemloc(loc);
     if (*(word*)wordMem){
-      printf("\r\n0x%08x: 0x%02x%02x%02x%02x", loc, wordMem[0], wordMem[1], wordMem[2], wordMem[3]);
+      printf("\n0x%08x: 0x%02x%02x%02x%02x", loc, wordMem[0], wordMem[1], wordMem[2], wordMem[3]);
     }
   }
+  printf("\n");
 }
 
 word *getmemword(location loc) {
