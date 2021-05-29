@@ -400,10 +400,10 @@ void testMatchConstant() {
 }
 
 int main(void) {
-    // runCommandGenTests();
+    runCommandGenTests();
 
-    // testRemoveColon();
-    // printf("Remove colon tests passed\n");
+    //testRemoveColon();
+    //printf("Remove colon tests passed\n");
 
     testMatchAlpha();
     testIsHex();

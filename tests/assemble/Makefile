@@ -57,13 +57,6 @@ all:     ../../build/tests/assemble/commandgen.o\
 ../../build/tests/assemble/tokenizer.o:\
 		../../src/assemble/tokenizer/tokenizer.c
 
-CFLAGS  = -Wall -g -I../../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -Werror -pedantic
-
-.PHONY: all clean
-
-all:
-	cp ../../build/tests/stddata.o ../../build/tests/assemble/stddata.o
-
 clean:
 	rm -f $(wildcard ../../build/tests/assemble/*)
 
