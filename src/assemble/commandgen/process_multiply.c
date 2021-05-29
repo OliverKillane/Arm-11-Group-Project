@@ -34,10 +34,13 @@ bool ProcessMultiply(
             return true;
         }
     }
-    unsigned int reg_d = TokenRegisterNumber(ListPopFront(tokens));
-    unsigned int reg_m = TokenRegisterNumber(ListPopFront(tokens));
-    unsigned int reg_s = TokenRegisterNumber(ListPopFront(tokens));
-    unsigned int reg_n = accumulate ? TokenRegisterNumber(ListPopFront(tokens)) : 0;
+    unsigned int reg_d = TokenRegisterNumber(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
+    unsigned int reg_m = TokenRegisterNumber(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
+    unsigned int reg_s = TokenRegisterNumber(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
+    unsigned int reg_n = accumulate ? TokenRegisterNumber(ListFront(tokens)) : 0;
 
     unsigned int instruction = 9 << 4;
     instruction |= condition << 28;

@@ -12,7 +12,8 @@ static inline unsigned int ProcessImmediateShift(List restrict tokens) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_REGISTER_OR_HASH_CONSTANT);
         longjmp(error_jump, 1);
     }
-    const unsigned long long shift_value = TokenConstantValue(ListPopFront(tokens));
+    const unsigned long long shift_value = TokenConstantValue(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
     if(shift_value >= 32 && shift_value < 0) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_SHIFT_OOB);
         longjmp(error_jump, 1);
@@ -25,7 +26,8 @@ static inline unsigned int ProcessRegisterShift(List restrict tokens) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_REGISTER_OR_HASH_CONSTANT);
         longjmp(error_jump, 1);
     }
-    unsigned int reg_s = TokenRegisterNumber(ListPopFront(tokens));
+    unsigned int reg_s = TokenRegisterNumber(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
     if(reg_s > 12) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_INVALID_REGISTER);
         longjmp(error_jump, 1);
@@ -46,13 +48,15 @@ bool ProcessShift(
     }
 
     InstructionType shift_type = TokenInstructionType(ListFront(tokens));
-    ConditionType condition = TokenInstructionConditionType(ListPopFront(tokens));
+    ConditionType condition = TokenInstructionConditionType(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
 
     if(TokenType(ListFront(tokens)) != TOKEN_REGISTER) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_REGISTER);
         longjmp(error_jump, 1);
     }
-    unsigned int reg_d = TokenRegisterNumber(ListPopFront(tokens));
+    unsigned int reg_d = TokenRegisterNumber(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
     if(reg_d > 12) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_INVALID_REGISTER);
         longjmp(error_jump, 1);
