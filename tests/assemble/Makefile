@@ -32,7 +32,6 @@ all:     ../../build/tests/assemble/commandgen.o\
 	$(CC) -c $(CFLAGS) $(CSANITIZERS) $^ -o $@
 
 
-
 ../../build/tests/assemble/assembletests.o: assembletests.c
 
 ../../build/tests/assemble/error.o:\
@@ -57,7 +56,6 @@ all:     ../../build/tests/assemble/commandgen.o\
 		../../src/assemble/assemble_utils.c
 ../../build/tests/assemble/tokenizer.o:\
 		../../src/assemble/tokenizer/tokenizer.c
-
 
 clean:
 	rm -f $(wildcard ../../build/tests/assemble/*)

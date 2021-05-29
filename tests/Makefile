@@ -1,6 +1,6 @@
 CC      = gcc
 CSANITIZERS = -fsanitize=address,undefined,leak,pointer-subtract
-CFLAGS  = -Wall -g -I../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -Werror -pedantic
+CFLAGS  = -Wall -g -I../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -pedantic
 
 .PHONY: all clean emulate stddata assemble
 

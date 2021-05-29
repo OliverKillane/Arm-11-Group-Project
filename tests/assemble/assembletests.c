@@ -440,8 +440,8 @@ void testMatchConstant() {
 int main(void) {
     runCommandGenTests();
 
-    // testRemoveColon();
-    // printf("Remove colon tests passed\n");
+    //testRemoveColon();
+    //printf("Remove colon tests passed\n");
 
     testMatchAlpha();
     testIsHex();
