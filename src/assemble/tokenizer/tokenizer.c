@@ -21,32 +21,15 @@ bool isWhitespace(char c) {
     return c == ' ' || c == '\t';
 }
 
-void match(bool (*func)(char), char c) {
-    assert(func(c));
-}
-
-CharacterType getCharType(char c) {
-    CharacterType type = 0;
-
-    if (isWhitespace(c)) {
-        type |= WHITESPACE;
-    }
-    if (isdigit(c)) {
-        type |= NUMERIC;
-    }
-    if (isHex(c)) {
-        type |= HEX;
-    }
-    if (c == ':'){
-        type |= COLON;
-    }
-    return type;
-}
-
 void addCharToToken(char c) {
     currentToken[currentTokenLength] = c;
     currentTokenLength++;
 }
+
+void removeCharFromToken() {
+    currentTokenLength--;
+}
+
 void resetToken() {
     currentTokenLength = 0;
 }
@@ -89,9 +72,9 @@ ConditionType matchConditionType(char *str) {
 
 Token matchInstructionToken(char *str) {
     InstructionType instTyp;
-    if (*str == 'j') {
+    if (*str == 'b') {
         instTyp = INSTR_BRN;
-        str++;
+        str += 1;
     } else if (strncmp(str, "add", 3) == 0) {
         instTyp = INSTR_ADD;
         str += 3;
@@ -177,6 +160,22 @@ int matchDecimal(char *str) {
     return num;
 }
 
+bool isHexNumber(char *str) {
+    if (*str == '-') {
+        str++;
+    }
+
+    for (; *str != '\0'; str++)
+    {
+        if (!isHex(*str)){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 int matchHex(char *str) {
     bool negated = false;
     if (*str == '-') {
@@ -184,6 +183,7 @@ int matchHex(char *str) {
         str++;
     }
     int num = 0;
+    // printf("%s\n", str);
 
     for (; *str != '\0'; str++)
     {
@@ -192,8 +192,8 @@ int matchHex(char *str) {
         if (isdigit(*str)) {
             num += *str - '0';
         } else {
-            *str |= 32; // convert to lowercase
-            num += *str - 'a' + 10;
+            char tmpstr = *str | 32; // convert to lowercase
+            num += tmpstr - 'a' + 10;
         }
     }
 
@@ -235,13 +235,26 @@ Token matchConstant(char *str) {
     
     
     if (strlen(str) < 3) {
-        return NewConstantToken(conType, matchDecimal(str));
+        if (isNumber(str)) {
+            return NewConstantToken(conType, matchDecimal(str));
+        } else {
+            return NULL;
+        }
     } else {
         if (str[0] == '0' && str[1] == 'x') {
             str += 2;
-            return NewConstantToken(conType, matchHex(str));
+            if (isHexNumber(str)) {
+                return NewConstantToken(conType, matchHex(str));
+            } else {
+                return NULL;
+            }
+            
         } else {
-            return NewConstantToken(conType, matchDecimal(str));
+            if (isNumber(str)) {
+                return NewConstantToken(conType, matchDecimal(str));
+            } else {
+                return NULL;
+            }
         }
     }
 }
@@ -255,21 +268,16 @@ void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
 
 
 List tokenizeLine(char *line, Map symbolTable, int currentLine) {
-    //printf("Started function\n");
     List tokenList = NewEmptyList();
     currentTokenLength = 0;
     currentState = TOKENIZER_START;
 
     while (currentState != TOKENIZER_FINISHED 
         && currentState != TOKENIZER_ERROR) {
-        //printf("Current line:%s\n", line);
-
-        CharacterType charType = getCharType(line[0]);
 
         switch (currentState) {
 
             case TOKENIZER_START:
-                // printf("STATE: START\n");
                 if (isalpha(line[0])) {
                     addCharToToken(line[0]);
                     currentState = TOKENIZER_INSTR_LABEL_REG;
@@ -285,54 +293,36 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                 }
                 break;
             case TOKENIZER_INSTR_LABEL_REG:
-
-                // printf("STATE: INSTR LABEL REG\n");
                 if (isalpha(line[0])) {
                     addCharToToken(line[0]);
                 } else if (line[0] == ':') {
                     addCharToToken('\0');
                     addTokenToSymbolTable(symbolTable, currentLine, currentToken);
-                    // ListPushBack(tokenList, NewLabelToken(currentToken));
                     resetToken();
                     currentState = TOKENIZER_START;
                 } else if (isdigit(line[0])) {
                     addCharToToken(line[0]);
-                    currentState = TOKENIZER_REGISTER;
+                    
                 } else {
                     addCharToToken('\0');
                     Token matchedInstruction = matchInstructionToken(currentToken);
-                    // printf("matched token\n");
-                    // printf("Token: %x\n", matchedInstruction);
+                    Token matchedRegister = NULL;
+                    if (matchedInstruction == NULL) {
+                        matchedRegister = matchRegister(currentToken);
+                    }
+
                     if (matchedInstruction != NULL) {
                         ListPushBack(tokenList, matchedInstruction);
                         
+                    } else if (matchedRegister != NULL) {
+                        ListPushBack(tokenList, matchedRegister);
                     } else {
                         
                         Token newToken = NewLabelToken(currentToken);
-                        // printf("Found token to be a label\n");
                         ListPushBack(tokenList, newToken);
-                        // printf("Wow!\n");
                     }
                     currentState = TOKENIZER_START;
-                    // printf("finished making token\n");
                     resetToken();
-                    line--;
-                }
-                break;
-            case TOKENIZER_REGISTER:
-                if (isdigit(line[0])) {
-                    addCharToToken(line[0]);
-                } else {
-                    addCharToToken('\0');
-                    Token matchedRegister = matchRegister(currentToken);
-                    if (matchedRegister != NULL) {
-                        ListPushBack(tokenList, matchedRegister);
-                        resetToken();
-                        currentState = TOKENIZER_START;
-                    } else {
-                        currentState = TOKENIZER_ERROR;
-                    }
-                    currentState = TOKENIZER_START;
                     line--;
                 }
                 break;
@@ -361,13 +351,6 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
             line++;
         }
     }
-
-    // if (currentState == TOKENIZER_FINISHED) {
-    //     printf("Tokenizer has finished\n");
-    // } else {
-    //     printf("Tokenizer error\n");
-    // }
-    
     return tokenList;
 
 }
