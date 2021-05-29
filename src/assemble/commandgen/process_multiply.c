@@ -14,7 +14,8 @@ bool ProcessMultiply(
 ) {
 
     ConditionType condition = TokenInstructionConditionType(ListFront(tokens));
-    unsigned int accumulate = TokenInstructionType(ListPopFront(tokens)) == INSTR_MLA;
+    unsigned int accumulate = TokenInstructionType(ListFront(tokens)) == INSTR_MLA;
+    DeleteToken(ListPopFront(tokens));
 
     if(ListSize(tokens) - accumulate < 3) {
         SetErrorCode(STAGE_MULTIPLY, ERROR_TOO_SHORT);
