@@ -9,7 +9,7 @@ machineState CPU;
 #ifndef TEST
 int main(int argc, char** argv) {
   if (argc != 2) {
-    printf("Error: Invalid number of arguments provided, need only one filename\r\n");
+    printf("Error: Invalid number of arguments provided, need only one filename\n");
     exit(INVALID_ARGUMENTS);
   }
 
@@ -31,7 +31,7 @@ void loadProgram(char* filename) {
   FILE *file = fopen(filename, "rb");
 
   if (!file) {
-    printf("Error: could not open file\r\n");
+    printf("Error: could not open file\n");
     exit(INVALID_FILE);
   }
 
@@ -42,7 +42,7 @@ void loadProgram(char* filename) {
   fseek(file, 0, SEEK_SET);
 
   if (fread(CPU.memory, 1, length, file) != length) {
-    printf("Error: Unable to load all instructions\r\n");
+    printf("Error: Unable to load all instructions\n");
     exit(INVALID_FILE);
   }
 
@@ -67,7 +67,7 @@ void runProgram() {
       } else if(!GETBITS(currentInstr, 26, 2)) {
         processDataInstr(currentInstr);
       } else {
-        printf("Error: Invalid instruction no: %08x\r\n", currentInstr);
+        printf("Error: Invalid instruction no: %08x\n", currentInstr);
         printState();
         exit(INVALID_INSTR);
       }
@@ -102,7 +102,7 @@ void singleDataTransInstr(instruction instr) {
   bool L = GETBIT(instr, 20);
 
   if (RdSrcDst == GETREG(PC)) {
-    printf("Error: Data Transfer instruction uses PC as Rd: %08x\r\n", instr);
+    printf("Error: Data Transfer instruction uses PC as Rd: %08x\n", instr);
     printState();
     exit(INVALID_INSTR);
   }
@@ -110,7 +110,7 @@ void singleDataTransInstr(instruction instr) {
   if (I) {
     // if post idexing, using shift, Rn != Rm
     if (GETREG(GETBITS(instr, 0, 4)) == RdSrcDst && !P) {
-      printf("Error: Data Transfer instruction uses same register as Rn, Rm: %08x\r\n", instr);
+      printf("Error: Data Transfer instruction uses same register as Rn, Rm: %08x\n", instr);
     }
     offset = shiftOperation(instr).result;
   } else {
@@ -124,7 +124,7 @@ void singleDataTransInstr(instruction instr) {
   word loc = P?(*RnBase + offset):*RnBase;
 
   if (loc >= MEMSIZE) {
-    printf("Error: Out of bounds memory access at address 0x%08x\r\n", loc);
+    printf("Error: Out of bounds memory access at address 0x%08x\n", loc);
   } else {
     if (L) {
       *RdSrcDst = *getmemword(loc);
@@ -165,7 +165,7 @@ shiftRes shiftOperation(word shift) {
 
   } else {
 
-    printf("Error: Data processing instruction has an invalid shift.\r\n");
+    printf("Error: Data processing instruction has an invalid shift.\n");
     exit(INVALID_INSTR);
   }
 
@@ -209,7 +209,7 @@ void multiplyInstr(instruction instr) {
   word *PCReg = GETREG(PC);
 
   if (Rd == Rm || PCReg == Rd || PCReg == Rm || PCReg == Rs || PCReg == Rn) {
-    printf("Error: Multiply instruction uses same register for Rd, Rm: %08x\r\n", instr);
+    printf("Error: Multiply instruction uses same register for Rd, Rm: %08x\n", instr);
     exit(INVALID_INSTR);
   }
 
@@ -290,7 +290,7 @@ void processDataInstr(instruction instr) {
       *Rd = operand2Value;
       break;
     default: 
-      printf("Error: Invalid operation in instruction: %08x\r\n", instr);
+      printf("Error: Invalid operation in instruction: %08x\n", instr);
       exit(INVALID_INSTR);          
   }
 
