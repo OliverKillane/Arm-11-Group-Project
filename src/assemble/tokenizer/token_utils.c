@@ -60,9 +60,9 @@ Token NewBraceToken(bool is_open) {
 
 void DeleteToken(Token token) {
     assert(token != NULL);
-    if (TokenType(token) == TOKEN_LABEL) {
-        free(token -> label);
-    }
+    // if (TokenType(token) == TOKEN_LABEL) {
+    //     free(TokenLabel(token));
+    // }
     free(token);
 }
 
