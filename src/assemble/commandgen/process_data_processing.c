@@ -15,7 +15,8 @@ static inline unsigned int ProcessBaseRegisters(List restrict tokens) {
     }
     
     InstructionType base = TokenInstructionType(ListFront(tokens));
-    ConditionType condition = TokenInstructionConditionType(ListPopFront(tokens));
+    ConditionType condition = TokenInstructionConditionType(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
 
     int opcode = MapGet(data_proc_opcodes, (int)base);
 
@@ -25,12 +26,14 @@ static inline unsigned int ProcessBaseRegisters(List restrict tokens) {
     }
     unsigned int reg_d, reg_n, set_cspr;
     if(base == INSTR_MOV) {
-        reg_d = TokenRegisterNumber(ListPopFront(tokens));
+        reg_d = TokenRegisterNumber(ListFront(tokens));
+        DeleteToken(ListPopFront(tokens));
         reg_n = 0;
         set_cspr = 0;
     } else if(SetQuery(comp_funcs, (int)base)) {
         reg_d = 0;
-        reg_n = TokenRegisterNumber(ListPopFront(tokens));
+        reg_n = TokenRegisterNumber(ListFront(tokens));
+        DeleteToken(ListPopFront(tokens));
         set_cspr = 1;
     } else {
         if(ListSize(tokens) < 2) {
@@ -41,8 +44,10 @@ static inline unsigned int ProcessBaseRegisters(List restrict tokens) {
             SetErrorCode(STAGE_DATA_PROCESSING, ERROR_EXPECTED_REGISTER);
             longjmp(error_jump, 1);
         }
-        reg_d = TokenRegisterNumber(ListPopFront(tokens));
-        reg_n = TokenRegisterNumber(ListPopFront(tokens));
+        reg_d = TokenRegisterNumber(ListFront(tokens));
+        DeleteToken(ListPopFront(tokens));
+        reg_n = TokenRegisterNumber(ListFront(tokens));
+        DeleteToken(ListPopFront(tokens));
         set_cspr = 0;
     }
     if(reg_d > 12 || reg_n > 12) {
@@ -69,7 +74,8 @@ static inline unsigned int ProcessImmediate(List restrict tokens) {
         longjmp(error_jump, 1);
     }
 
-    const long long expr_value_signed = TokenConstantValue(ListPopFront(tokens));
+    const long long expr_value_signed = TokenConstantValue(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
     if(expr_value_signed < 0) {
         SetErrorCode(STAGE_DATA_PROCESSING, ERROR_CONST_OOB);
         longjmp(error_jump, 1);
@@ -99,7 +105,8 @@ static inline unsigned int ProcessImmediateShift(List restrict tokens) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_REGISTER_OR_HASH_CONSTANT);
         longjmp(error_jump, 1);
     }
-    const unsigned long long shift_value = TokenConstantValue(ListPopFront(tokens));
+    const unsigned long long shift_value = TokenConstantValue(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
     if(shift_value >= 32 && shift_value < 0) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_SHIFT_OOB);
         longjmp(error_jump, 1);
@@ -112,7 +119,8 @@ static inline unsigned int ProcessRegisterShift(List restrict tokens) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_REGISTER_OR_HASH_CONSTANT);
         longjmp(error_jump, 1);
     }
-    unsigned int reg_s = TokenRegisterNumber(ListPopFront(tokens));
+    unsigned int reg_s = TokenRegisterNumber(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
     if(reg_s > 12) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_INVALID_REGISTER);
         longjmp(error_jump, 1);
@@ -126,7 +134,8 @@ static inline unsigned int ProcessRegister(List restrict tokens) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_REGISTER);
         longjmp(error_jump, 1);
     }
-    unsigned int reg_m = TokenRegisterNumber(ListPopFront(tokens));
+    unsigned int reg_m = TokenRegisterNumber(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
     if(reg_m > 12) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_INVALID_REGISTER);
         longjmp(error_jump, 1);
@@ -149,7 +158,8 @@ static inline unsigned int ProcessRegister(List restrict tokens) {
             longjmp(error_jump, 1);
         }
         const unsigned int shift_code = 
-                MapGet(shift_codes, (int)TokenInstructionType(ListPopFront(tokens)));
+                MapGet(shift_codes, (int)TokenInstructionType(ListFront(tokens)));
+        DeleteToken(ListPopFront(tokens));
         
         shift |= shift_code << 1;
 

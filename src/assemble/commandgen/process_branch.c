@@ -22,7 +22,8 @@ bool ProcessBranch(
         return true;
     }
 
-    ConditionType condition = TokenInstructionConditionType(ListPopFront(tokens));
+    ConditionType condition = TokenInstructionConditionType(ListFront(tokens));
+    DeleteToken(ListPopFront(tokens));
 
     Token target = ListPopFront(tokens);
     long long pc_offset;
@@ -43,6 +44,7 @@ bool ProcessBranch(
         }
         pc_offset = (long long)TokenConstantValue(target) / 4 - 2 - offset;
     }
+    DeleteToken(target);
     if(pc_offset + 2 + offset >= instructions_num) {
         SetErrorCode(STAGE_BRANCH, ERROR_CONST_OOB);
         return true;
