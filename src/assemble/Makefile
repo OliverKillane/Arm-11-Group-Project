@@ -1,4 +1,5 @@
 CC      = gcc
+CSANITIZERS = -fsanitize=address,undefined,leak,pointer-subtract
 CFLAGS  = -Wall -g -I../../lib/stddata/include -Icommandgen -Itokenizer -I. -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -pedantic -Wno-int-conversion
 
 .PHONY: all clean
@@ -16,7 +17,7 @@ all: ../../build/assemble/assemble.o\
 	 ../../build/assemble/tokenizer.o\
 	 ../../build/assemble/error.o
 	cp ../../build/stddata.o ../../build/assemble/
-	$(CC) $(CFLAGS) $^ ../../build/assemble/stddata.o -o ../../build/assemble/assemble
+	$(CC) $(CSANITIZERS) $(CFLAGS) $^ ../../build/assemble/stddata.o -o ../../build/assemble/assemble
 	cp ../../build/assemble/assemble ../../bin/
 
 ../../build/assemble/%.o:

@@ -16,7 +16,8 @@ all:     ../../build/tests/assemble/commandgen.o\
 	 ../../build/tests/assemble/assemble_utils.o\
 	 ../../build/tests/assemble/assembletests.o\
 	 ../../build/tests/assemble/tokenizer.o\
-	 ../../build/tests/assemble/token_utils.o
+	 ../../build/tests/assemble/token_utils.o\
+	 ../../build/tests/assemble/error.o
 	
 	$(CC) $(CSANITIZERS) $(CFLAGS) $(wildcard ../../build/tests/assemble/*.o)\
 		-o ../../build/tests/assemble/tests
@@ -30,7 +31,12 @@ all:     ../../build/tests/assemble/commandgen.o\
 ../../build/tests/assemble/%.o:
 	$(CC) -c $(CFLAGS) $(CSANITIZERS) $^ -o $@
 
+
+
 ../../build/tests/assemble/assembletests.o: assembletests.c
+
+../../build/tests/assemble/error.o:\
+		../../src/assemble/error.c
 ../../build/tests/assemble/token_utils.o:\
 		../../src/assemble/tokenizer/token_utils.c
 ../../build/tests/assemble/commandgen.o:\

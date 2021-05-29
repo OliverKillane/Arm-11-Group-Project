@@ -15,19 +15,24 @@ typedef enum {
     TOKENIZER_FINISHED,
 } TokenizerState;
 
-typedef enum {
-    WHITESPACE=1,
-    ALPHA=2,
-    NUMERIC=4,
-    HEX=8,
-    COLON=16
-} CharacterType;
-
-
 static char currentToken[512];
 static int currentTokenLength;
 static TokenizerState currentState;
 
+bool matchAlpha(char c);
+bool isHex(char c);
+bool isWhitespace(char c);
+void addCharToToken(char c);
+void removeCharFromToken();
+void resetToken();
+bool isNumber(char *str);
+ConditionType matchConditionType(char *str);
+Token matchInstructionToken(char *str);
+int matchDecimal(char *str);
+int matchHex(char *str);
+Token matchRegister(char *str);
+Token matchConstant(char *str);
+void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token);
 List tokenizeLine(char *line, Map symbolTable, int currentLine);
 
 #endif /* ASSEMBLE_TOKENIZER_H_ */
