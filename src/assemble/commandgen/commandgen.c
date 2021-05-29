@@ -23,7 +23,7 @@ bool FunctionGen(
         return true;
     }
 
-    bool(*process_function)(FUNC_PROC_ARGS) = 
+    bool(*process_function)(Map, List, Vector, int, int) = 
             MapGet(func_proc, (int)TokenInstructionType(ListFront(tokens)));
     
     if(TokenType(ListFront(tokens)) == NULL) {
