@@ -6,7 +6,7 @@
 
 bool LayoutTransferConst(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num

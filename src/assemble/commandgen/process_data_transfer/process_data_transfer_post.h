@@ -6,7 +6,7 @@
 
 bool LayoutTransferPostConst(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num
@@ -14,7 +14,7 @@ bool LayoutTransferPostConst(
 
 bool LayoutTransferPostReg(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num
@@ -22,7 +22,7 @@ bool LayoutTransferPostReg(
 
 bool LayoutTransferPostSgnReg(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num

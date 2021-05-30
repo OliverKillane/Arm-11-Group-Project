@@ -6,7 +6,7 @@
 
 bool LayoutTransferPre(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num
@@ -14,7 +14,7 @@ bool LayoutTransferPre(
 
 bool LayoutTransferPreConst(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num
@@ -22,7 +22,7 @@ bool LayoutTransferPreConst(
 
 bool LayoutTransferPreReg(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num
@@ -30,7 +30,7 @@ bool LayoutTransferPreReg(
 
 bool LayoutTransferPreSgnReg(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num

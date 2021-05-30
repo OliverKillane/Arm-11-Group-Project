@@ -276,7 +276,7 @@ void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
 
 
 List tokenizeLine(char *line, Map symbolTable, int currentLine) {
-    List tokenList = NewEmptyList();
+    Vector tokenList = NewEmptyVector();
     currentTokenLength = 0;
     currentState = TOKENIZER_START;
 
@@ -290,13 +290,13 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     addCharToToken(line[0]);
                     currentState = TOKENIZER_INSTR_LABEL_REG;
                 } else if (line[0] == '[')  {
-                    ListPushBack(tokenList, NewBraceToken(true));
+                    VectorPushBack(tokenList, NewBraceToken(true));
                 } else if (line[0] == ']')  {
-                    ListPushBack(tokenList, NewBraceToken(false));
+                    VectorPushBack(tokenList, NewBraceToken(false));
                 } else if (line[0] == '+')  {
-                    ListPushBack(tokenList, NewSignToken(true));
+                    VectorPushBack(tokenList, NewSignToken(true));
                 } else if (line[0] == '-')  {
-                    ListPushBack(tokenList, NewSignToken(false));
+                    VectorPushBack(tokenList, NewSignToken(false));
                 } else if (line[0] == '#' || line[0] == '=' || isHex(line[0])) {
                     addCharToToken(line[0]);
                     currentState = TOKENIZER_CONSTANT;
@@ -324,14 +324,14 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     }
 
                     if (matchedInstruction != NULL) {
-                        ListPushBack(tokenList, matchedInstruction);
+                        VectorPushBack(tokenList, matchedInstruction);
                         
                     } else if (matchedRegister != NULL) {
-                        ListPushBack(tokenList, matchedRegister);
+                        VectorPushBack(tokenList, matchedRegister);
                     } else {
                         
                         Token newToken = NewLabelToken(currentToken);
-                        ListPushBack(tokenList, newToken);
+                        VectorPushBack(tokenList, newToken);
                     }
                     currentState = TOKENIZER_START;
                     resetToken();
@@ -345,7 +345,7 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     addCharToToken('\0');
                     Token matchedConstant = matchConstant(currentToken);
                     if (matchedConstant != NULL) {
-                        ListPushBack(tokenList, matchedConstant);
+                        VectorPushBack(tokenList, matchedConstant);
                         resetToken();
                         currentState = TOKENIZER_START;
                     } else {

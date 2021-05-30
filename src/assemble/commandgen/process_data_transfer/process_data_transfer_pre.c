@@ -1,13 +1,13 @@
 #include "../common_defs.h"
 #include "../../tokenizer.h"
-#include "process_data_transfer_pre_shift.h"
+#include "process_data_transfer_pre.h"
 #include "process_data_transfer_common.h"
 #include <stddata.h>
 #include <stdbool.h>
 
 bool LayoutTransferPre(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num
@@ -27,7 +27,7 @@ bool LayoutTransferPre(
 
 bool LayoutTransferPreConst(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num
@@ -48,7 +48,7 @@ bool LayoutTransferPreConst(
 
 bool LayoutTransferPreReg(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num
@@ -70,7 +70,7 @@ bool LayoutTransferPreReg(
 
 bool LayoutTransferPreSgnReg(
     Map symbols, 
-    List tokens, 
+    Vector tokens, 
     Vector output, 
     int offset, 
     int instructions_num

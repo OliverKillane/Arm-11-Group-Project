@@ -5,10 +5,10 @@
 #include <stdbool.h>
 
 bool LayoutMovConst(
-    Map symbols, 
-    Vector tokens, 
-    Vector output, 
-    int offset, 
+    Map symbols,
+    Vector tokens,
+    Vector output,
+    int offset,
     int instructions_num
 );
 

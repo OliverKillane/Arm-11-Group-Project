@@ -31,12 +31,12 @@ int main(int argc, char **argv) {
 	DeleteList(lines);
 
 	LISTFOR(listOfTokens, iter1) {
-		List line = ListIteratorGet(iter1);
-		LISTFOR(line, iter2) {
-			Token token = ListIteratorGet(iter2);
+		Vector line = ListIteratorGet(iter1);
+		VECTORFOR(line, iter2) {
+			Token token = VectorIteratorGet(iter2);
 			DeleteToken(token);
 		}
-		DeleteList(line);
+		DeleteVector(line);
 	}
 	DeleteList(listOfTokens);
 
