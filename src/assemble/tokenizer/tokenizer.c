@@ -232,11 +232,19 @@ Token matchConstant(char *str) {
     } else {
         conType = CONST_PURE;
     }
+    int sign = 1;
+    if (*str == '-') {
+        sign = -1;
+        str++;
+    } else if (*str == '+') {
+        str++;
+    }
+    
     
     
     if (strlen(str) < 3) {
         if (isNumber(str)) {
-            return NewConstantToken(conType, matchDecimal(str));
+            return NewConstantToken(conType, sign*matchDecimal(str));
         } else {
             return NULL;
         }
@@ -244,14 +252,14 @@ Token matchConstant(char *str) {
         if (str[0] == '0' && str[1] == 'x') {
             str += 2;
             if (isHexNumber(str)) {
-                return NewConstantToken(conType, matchHex(str));
+                return NewConstantToken(conType, sign*matchHex(str));
             } else {
                 return NULL;
             }
             
         } else {
             if (isNumber(str)) {
-                return NewConstantToken(conType, matchDecimal(str));
+                return NewConstantToken(conType, sign*matchDecimal(str));
             } else {
                 return NULL;
             }
@@ -331,7 +339,7 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                 }
                 break;
             case TOKENIZER_CONSTANT:
-                if (isHex(line[0]) || line[0] == 'x') {
+                if (isHex(line[0]) || line[0] == 'x' || line[0] == '-') {
                     addCharToToken(line[0]);
                 } else {
                     addCharToToken('\0');
