@@ -43,11 +43,13 @@ int MapFindIndex(Map map, void* key) {
 void MapUnsafeSet(Map map, void* key, void* value) {
     int index = MapFindIndex(map, key);
     map->data[index].key = key;
+    if(map->data[index].value == NULL) {
+        map->size++;
+        map->items_num++;
+    }
     map->data[index].value = value;
     map->min_index = min(map->min_index, index);
     map->max_index = max(map->max_index, index);
-    map->size++;
-    map->items_num++;
 }
 
 void MapClearData(int size, MapEntry *data) {

@@ -9,6 +9,7 @@
 #include "set_iterator_tests.c"
 #include "map_tests.c"
 #include "map_iterator_tests.c"
+#include "decision_tree_tests.c"
 
 int main() {
     StackTests();
@@ -22,4 +23,5 @@ int main() {
     SetIteratorTests();
     MapTests();
     MapIteratorTests();
+    DecisionTreeTests();
 }
