@@ -1,50 +1,13 @@
 #include "common_defs.h"
-#include "process_branch.h"
-#include "process_multiply.h"
-#include "process_shift.h"
-#include "process_data_processing.h"
-#include "process_data_transfer.h"
+#include "instruction_layouts.h"
 #include "../tokenizer.h"
 #include <stddata.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdio.h>
+#include <stdarg.h>
 
-Map func_proc; // Map<Token, void(*func)(FUNC_PROC_ARGS)
-Map data_proc_opcodes; // Map<Token, char>
-Set comp_funcs; // Set<Token>
+Map data_proc_opcodes;
 Map shift_codes;
 
 /* Helper Functions */
-void InitFuncProc() {
-    func_proc = NewEmptyMap(UnsafeIntHash, UnsafeIntEq);
-    MapSet(func_proc, INSTR_BRN, ProcessBranch);
-    int data_proc_func_count = 10;
-    InstructionType data_proc_funcs[] = {
-        INSTR_ADD,
-        INSTR_SUB,
-        INSTR_RSB,
-        INSTR_AND,
-        INSTR_EOR,
-        INSTR_ORR,
-        INSTR_MOV,
-        INSTR_TST,
-        INSTR_TEQ,
-        INSTR_CMP
-    };
-    for(int i = 0; i < data_proc_func_count; i++) {
-        MapSet(func_proc, (int)data_proc_funcs[i], ProcessDataProcessing);
-    }
-    MapSet(func_proc, INSTR_MUL, ProcessMultiply);
-    MapSet(func_proc, INSTR_MLA, ProcessMultiply);
-    MapSet(func_proc, INSTR_LDR, ProcessDataTransfer);
-    MapSet(func_proc, INSTR_STR, ProcessDataTransfer);
-    MapSet(func_proc, INSTR_LSL, ProcessShift);
-    MapSet(func_proc, INSTR_ASR, ProcessShift);
-    MapSet(func_proc, INSTR_LSR, ProcessShift);
-    MapSet(func_proc, INSTR_ROR, ProcessShift);
-}
-
 void InitDataProcOpcodes() {
     data_proc_opcodes = NewEmptyMap(UnsafeIntHash, UnsafeIntEq);
     MapSet(data_proc_opcodes, INSTR_AND, 0b0000);
@@ -59,13 +22,6 @@ void InitDataProcOpcodes() {
     MapSet(data_proc_opcodes, INSTR_CMP, 0b1010);
 }
 
-void InitCompFuncs() {
-    comp_funcs = NewEmptySet(UnsafeIntHash, UnsafeIntEq);
-    SetInsert(comp_funcs, INSTR_TST);
-    SetInsert(comp_funcs, INSTR_TEQ);
-    SetInsert(comp_funcs, INSTR_CMP);
-}
-
 void InitShiftCodes() {
     shift_codes = NewEmptyMap(UnsafeIntHash, UnsafeIntEq);
     MapSet(shift_codes, INSTR_LSL, 0b00);
@@ -76,16 +32,13 @@ void InitShiftCodes() {
 
 /* Interface Definitions */
 void InitFunctionGen() {
-    InitFuncProc();
     InitDataProcOpcodes();
-    InitCompFuncs();
     InitShiftCodes();
+    InitInstructionLayouts();
 }
 
 void FinishFunctionGen() {
-    DeleteMap(func_proc);
     DeleteMap(data_proc_opcodes);
-    DeleteSet(comp_funcs);
     DeleteMap(shift_codes);
 }
 
@@ -94,4 +47,20 @@ void SetInstruction(Vector restrict output, int instruction, int offset) {
         VectorResize(output, offset + 1);
     }
     VectorSet(output, offset, instruction);
+}
+
+unsigned int FillInstruction(int nfields, ...) {
+    va_list args;
+    va_start(args, nfields);
+
+    unsigned int instruction = 0;
+    for(int i = 0; i < nfields; i++) {
+        unsigned int value = va_arg(args, unsigned int);
+        unsigned int shift = va_arg(args, unsigned int);
+        instruction |= value << shift;
+    }
+
+    va_end(args);
+    
+    return instruction;
 }
