@@ -418,6 +418,7 @@ void testMatchConstant() {
     assert(TokenConstantValue(con) == 255);
     assert(TokenConstantType(con) == CONST_HASH);
     DeleteToken(con);
+    // printf("1\n");
 
     con = matchConstant("12312");
     // printf("2\n");
@@ -433,8 +434,11 @@ void testMatchConstant() {
 
     con = matchConstant("#ff");
     assert(con == NULL);
-    con = matchConstant("#-0x234");
-    assert(con == NULL);
+    // printf("Hello there");
+    con = matchConstant("#-0xFF");
+    assert(TokenConstantValue(con) == -255);
+    assert(TokenConstantType(con) == CONST_HASH);
+    DeleteToken(con);
 }
 
 int main(void) {
