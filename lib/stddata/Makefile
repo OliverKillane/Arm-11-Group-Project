@@ -8,7 +8,7 @@ build/tests/tests: build/tests/tests.o build/tests/vector.o build/tests/stack.o\
 				   build/tests/vector_iterator.o build/tests/list_node_utils.o build/tests/list.o\
 				   build/tests/list_iterator.o  build/tests/set.o build/tests/queue.o\
 				   build/tests/deque.o build/tests/set_iterator.o build/tests/map.o\
-				   build/tests/map_iterator.o
+				   build/tests/map_iterator.o build/tests/decision_tree.o
 	$(CC) $^ $(CSANITIZERS) -o build/tests/tests
 
 build/tests/%.o: 
@@ -30,6 +30,7 @@ build/tests/deque.o: lib/deque.c
 build/tests/set_iterator.o: lib/set_iterator.c
 build/tests/map.o: lib/map.c
 build/tests/map_iterator.o: lib/map_iterator.c
+build/tests/decision_tree.o: lib/decision_tree.c
 
 build/vector.o: lib/vector.c
 build/stack.o: lib/stack.c
@@ -44,6 +45,7 @@ build/set_iterator.o: lib/set_iterator.c
 build/map.o: lib/map.c
 build/map_iterator.o: lib/map_iterator.c
 build/hash_utils.o: lib/hash_utils.c
+build/decision_tree.o: lib/decision_tree.c
 
 clean:
 	rm -rf build/*
@@ -55,7 +57,8 @@ test: build/tests/tests
 
 library: build/vector.o build/stack.o build/vector_iterator.o build/list_node_utils.o\
 		 build/list.o build/list_iterator.o build/set.o build/queue.o build/deque.o\
-		 build/set_iterator.o build/map.o build/map_iterator.o build/hash_utils.o
+		 build/set_iterator.o build/map.o build/map_iterator.o build/hash_utils.o\
+		 build/decision_tree.o
 	ld -relocatable $^ -o bin/stddata.o
 
 .PHONY: clean default library
