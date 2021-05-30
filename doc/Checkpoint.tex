@@ -32,14 +32,36 @@
     \end{center}
     \subsection*{Development Cycle}
         \begin{center}
-            \includegraphics[scale=0.7]{development cycle}
+            \includegraphics[width = \textwidth]{development cycle}
         \end{center}
+    \subsection*{Group Function: \textcolor{green}{good}}
+        By splitting the project and developing for predefined interfaces members can feel free to develop at their own pace, and for any given design decision at most two members can decide (too many cooks problem avoided).
+        In particular pair programming has been very effective at writing bug-free, readable code on the first pass of our development cycle in most occasions.
+        \newline\newline
+        In the extension we will continue this strategy, but with the addition of more pair programming, in particular on test creation, as faulty unit tests have been a time consuming issue. 
 
 \section{Implementation Strategies}
-    \subsection*{Project Status}
+    \subsection*{Project Structure}
         \begin{center}
-            \includegraphics[scale = 0.4]{project status}
+            \includegraphics[width = \textwidth]{project status}
         \end{center}
+    \begin{center}
+        \begin{tabular}{l l l}
+            Step & Functionality & Subroutine \\
+            \hline
+            (1) & Setup CPU, initialize values to zero. & \textcolor{green}{main} \\
+            (2) & Read file into CPU memory. & \textcolor{green}{loadProgram}\\
+            (3) & While not a halt instruction and no critical error: & \textcolor{green}{runProgram} \\
+            (3a) & Read current instruction and increment PC.  & \textcolor{green}{runProgram}\\
+            (3b) & Determine if instruction condition code is met by CPU CPSR register state. & \textcolor{green}{checkCond}\\
+            (3c) & If so, determine instruction type.  & \textcolor{green}{runProgram}\\
+            (3d) & Send instruction to appropriate function to change CPU state. & \textcolor{green}{Instr Functions}\\
+            (4) & Display CPU state and exit. & \textcolor{green}{printState} \\
+        \end{tabular}
+    \end{center}
+    The CPU state is held in a single global struct, for easy access.
+
+
     
 
 
