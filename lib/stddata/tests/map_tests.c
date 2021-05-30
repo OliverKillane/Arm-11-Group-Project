@@ -35,8 +35,12 @@ void MapAddingItems() {
         MapSet(map, &keys[i], &values[nitems - i]);
     }
     for(int i = 0; i < nitems; i++) {
+        MapSet(map, &keys[i], &values[nitems - i]);
+    }
+    for(int i = 0; i < nitems; i++) {
         assert(MapGet(map, &keys[i]) == &values[nitems - i]);
     }
+    assert(MapSize(map) == nitems);
     DeleteMap(map);
 }
 
