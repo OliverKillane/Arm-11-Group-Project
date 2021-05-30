@@ -31,6 +31,7 @@ typedef struct {
     word registers[16];
     cpsr CPSR;
     byte *memory; 
+    word GPIO;
 } machineState;
 
 // declared the CPU that will be used.
