@@ -38,7 +38,9 @@
         By splitting the project and developing for predefined interfaces members can feel free to develop at their own pace, and for any given design decision at most two members can decide (too many cooks problem avoided).
         In particular pair programming has been very effective at writing bug-free, readable code on the first pass of our development cycle in most occasions.
         \newline\newline
-        In the extension we will continue this strategy, but with the addition of more pair programming, in particular on test creation, as faulty unit tests have been a time consuming issue. 
+        In the extension we will continue this strategy, but with the addition of more pair programming, in particular on test creation, as faulty unit tests have been a time consuming issue.
+        \newline\newline
+        One improvement we could make, is to delete and squash commits when merging a branch, this means we can preserve the commit message history, without having many 'dead' branches left following commits. Further using more descriptive branch names to ease confusion.
 
 \section{Implementation Strategies}
     \subsection*{Project Structure}
@@ -59,7 +61,7 @@
             (4) & Display CPU state and exit. & \textcolor{green}{printState} \\
         \end{tabular}
     \end{center}
-    The CPU state is held in a single global struct, for easy access.
+    The CPU state is held in a single global struct, for easy access. 
 
 
     
