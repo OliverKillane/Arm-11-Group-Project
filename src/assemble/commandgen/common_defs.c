@@ -38,6 +38,7 @@ void InitFunctionGen() {
 }
 
 void FinishFunctionGen() {
+    FinishInstructionLayouts();
     DeleteMap(data_proc_opcodes);
     DeleteMap(shift_codes);
 }

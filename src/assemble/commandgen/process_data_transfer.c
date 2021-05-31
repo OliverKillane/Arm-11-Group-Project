@@ -4,6 +4,7 @@
 #include "../tokenizer.h"
 #include "process_data_transfer.h"
 #include <stddata.h>
+#include <stdio.h>
 
 bool LayoutTransferSet(
     Map symbols, 
@@ -12,7 +13,7 @@ bool LayoutTransferSet(
     int offset, 
     int instructions_num
 ) {
-    unsigned int reg_d = TokenRegisterNum(VectorGet(tokens, 1));
+    unsigned int reg_d = TokenRegisterNumber(VectorGet(tokens, 1));
     unsigned int constant = TokenConstantValue(VectorGet(tokens, 2));
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
 
@@ -21,7 +22,7 @@ bool LayoutTransferSet(
             5,
             cond, 28,
             0x1, 25,
-            MapGet(data_proc_opcodes, INSTR_MOV), 21,
+            MapGet(data_proc_opcodes, (void*)INSTR_MOV), 21,
             reg_d, 12,
             constant, 0
         ), offset);
@@ -61,12 +62,12 @@ bool LayoutTransferConst(
     ProcessDataLayout(tokens, 4, &type, &reg_n, &reg_d, &constant);
 
     unsigned int pre = DecisionTreeQuery(bracket_layouts, tokens);
-    unsigned int cond = TokenInstructionType(VectorGet(tokens, 0));
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int load = type == INSTR_LDR;
     SetInstruction(output, FillInstruction(
         8,
         cond, 28,
-        0x01, 26,
+        0x1, 26,
         pre, 24,
         constant >= 0, 23,
         load, 20,
@@ -95,19 +96,19 @@ bool LayoutTransferShiftConst(
     ProcessDataLayout(tokens, 7, &type, &reg_n, &reg_d, &reg_m, &up, &shift_name, &shift_value);
 
     unsigned int pre = DecisionTreeQuery(bracket_layouts, tokens);
-    unsigned int cond = TokenInstructionType(VectorGet(tokens, 0));
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int load = type == INSTR_LDR;
     SetInstruction(output, FillInstruction(
         10,
         cond, 28,
-        0x011, 25,
+        0x3, 25,
         pre, 24,
         up, 23,
         load, 20,
         reg_n, 16,
         reg_d, 12,
         reg_m, 0,
-        MapGet(shift_codes, shift_name), 5,
+        MapGet(shift_codes, (void*)shift_name), 5,
         shift_value, 7
     ), offset);
 
@@ -128,15 +129,15 @@ bool LayoutTransferShiftReg(
     unsigned int up = 1;
     InstructionType shift_name;
     unsigned int reg_s;
-    ProcessDataLayout(tokens, 7, &type, &reg_n, &reg_d, &reg_m, &up, &shift_name, &shift_name);
+    ProcessDataLayout(tokens, 7, &type, &reg_n, &reg_d, &reg_m, &up, &shift_name, &reg_s);
 
     unsigned int pre = DecisionTreeQuery(bracket_layouts, tokens);
-    unsigned int cond = TokenInstructionType(VectorGet(tokens, 0));
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int load = type == INSTR_LDR;
     SetInstruction(output, FillInstruction(
         11,
         cond, 28,
-        0x011, 25,
+        0x3, 25,
         pre, 24,
         up, 23,
         load, 20,
@@ -144,7 +145,7 @@ bool LayoutTransferShiftReg(
         reg_d, 12,
         reg_m, 0,
         0x1, 4,
-        MapGet(shift_codes, shift_name), 5,
+        MapGet(shift_codes, (void*)shift_name), 5,
         reg_s, 8
     ), offset);
 

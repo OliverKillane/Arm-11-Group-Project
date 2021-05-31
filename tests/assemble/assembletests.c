@@ -1,16 +1,13 @@
 #include <stdbool.h>
-// #include <assemble.h>
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
-#include "assemble_utils.h"
-// #include "tokenizer.h"
+#include <assemble_utils.h>
 #include "commandgentests.c"
 
 bool stringsAreEqual(char *str1, char *str2) {
     assert(str1 != NULL);
     assert(str2 != NULL);
-    // printf("Comparing: '%s' to '%s'\n", str1, str2);
     for (; *str1 != '\0' && *str2 != '\0'; str1++, str2++) {
         if (*str1 != *str2) {
             return false;
@@ -192,12 +189,6 @@ void testReadFileLines() {
     }
     DeleteList(test);
 }
-
-// void testRemoveColon() {
-//     assert(stringsAreEqual("hello", "hello:"));
-//     assert(stringsAreEqual("hello", "hello"));
-//     assert(!stringsAreEqual(":hello", "hello"));
-// }
 
 void testTokenize() {
     List lines = readFileLines("./tokenTests.s");
@@ -414,27 +405,22 @@ void testMatchConstant() {
     assert(con == NULL);
 
     con = matchConstant("#0xff");
-    // printf("1\n");
     assert(TokenConstantValue(con) == 255);
     assert(TokenConstantType(con) == CONST_HASH);
     DeleteToken(con);
-    // printf("1\n");
 
     con = matchConstant("12312");
-    // printf("2\n");
     assert(TokenConstantValue(con) == 12312);
     assert(TokenConstantType(con) == CONST_PURE);
     DeleteToken(con);
 
     con = matchConstant("=-12312");
-    // printf("3\n");
     assert(TokenConstantValue(con) == -12312);
     assert(TokenConstantType(con) == CONST_EQUALS);
     DeleteToken(con);
 
     con = matchConstant("#ff");
     assert(con == NULL);
-    // printf("Hello there");
     con = matchConstant("#-0xFF");
     assert(TokenConstantValue(con) == -255);
     assert(TokenConstantType(con) == CONST_HASH);
@@ -444,18 +430,13 @@ void testMatchConstant() {
 int main(void) {
     runCommandGenTests();
 
-    //testRemoveColon();
-    //printf("Remove colon tests passed\n");
-
     testMatchAlpha();
     testIsHex();
     testMatchConditionType();
     testMatchConstant();
     testMatchInstructionToken();
     testMatchRegister();
-    printf("bruh\n");
     testMatchHex();
-    // printf("bruh\n");
     testMatchDecimal();
 
     testReadFileLines();

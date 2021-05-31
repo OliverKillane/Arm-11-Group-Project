@@ -3,6 +3,7 @@
 #include "../tokenizer.h"
 #include "process_data_processing.h"
 #include <stddata.h>
+#include <stdio.h>
 
 static inline unsigned int ConvertLongToRotated(unsigned long long value) {
     return (unsigned int)value | (value >> 32);
@@ -39,7 +40,7 @@ bool LayoutProcConst(
     ProcessDataLayout(tokens, 4, &type, &reg_n, &reg_d, &constant);
 
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
-    unsigned int opcode = MapGet(data_proc_opcodes, type);
+    unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
     unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
     SetInstruction(output, FillInstruction(
         7,
@@ -70,8 +71,9 @@ bool LayoutProcShiftConst(
     ProcessDataLayout(tokens, 6, &type, &reg_n, &reg_d, &reg_m, &shift_name, &shift_value);
 
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
-    unsigned int opcode = MapGet(data_proc_opcodes, type);
+    unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
     unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
+
     SetInstruction(output, FillInstruction(
         8,
         cond, 28,
@@ -80,7 +82,7 @@ bool LayoutProcShiftConst(
         reg_n, 16,
         reg_d, 12,
         reg_m, 0,
-        MapGet(shift_codes, shift_name), 5,
+        MapGet(shift_codes, (void*)shift_name), 5,
         shift_value, 7
     ), offset);
     return false;
@@ -102,7 +104,7 @@ bool LayoutProcShiftReg(
     ProcessDataLayout(tokens, 6, &type, &reg_n, &reg_d, &reg_m, &shift_name, &reg_s);
 
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
-    unsigned int opcode = MapGet(data_proc_opcodes, type);
+    unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
     unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
     SetInstruction(output, FillInstruction(
         9,
@@ -113,7 +115,7 @@ bool LayoutProcShiftReg(
         reg_d, 12,
         reg_m, 0,
         0x1, 4,
-        MapGet(shift_codes, shift_name), 5,
+        MapGet(shift_codes, (void*)shift_name), 5,
         reg_s, 8
     ), offset);
     return false;

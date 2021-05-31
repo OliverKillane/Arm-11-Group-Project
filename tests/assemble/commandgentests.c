@@ -1,10 +1,6 @@
 #include <commandgen.h>
-#include <process_shift.h>
-#include <process_multiply.h>
-#include <process_data_transfer.h>
-#include <process_data_processing.h>
-#include <process_branch.h>
 #include <common_defs.h>
+#include <instruction_layouts.h>
 #include <stddata.h>
 #include <stdio.h>
 #include <tokenizer.h>
@@ -20,15 +16,15 @@ void SingleProcessBranch(
     int offset, 
     int instruction_num
 ) {
-    List tokens_list = NewEmptyList();
+    Vector tokens_Vector = NewEmptyVector();
     for(int i = 0; i < tokens_num; i++) {
-        ListPushBack(tokens_list, tokens[i]);
+        VectorPushBack(tokens_Vector, tokens[i]);
     }
-    ProcessBranch(symbols, tokens_list, output, offset, instruction_num);
-    while(!ListEmpty(tokens_list)) {
-        DeleteToken(ListPopFront(tokens_list));
+    FunctionGen(symbols, tokens_Vector, output, offset, instruction_num);
+    while(!VectorEmpty(tokens_Vector)) {
+        DeleteToken(VectorPopBack(tokens_Vector));
     }
-    DeleteList(tokens_list);
+    DeleteVector(tokens_Vector);
 }
 void ProcessBranchTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -94,15 +90,15 @@ void SingleProcessDataProcessing(
     int offset, 
     int instruction_num
 ) {
-    List tokens_list = NewEmptyList();
+    Vector tokens_Vector = NewEmptyVector();
     for(int i = 0; i < tokens_num; i++) {
-        ListPushBack(tokens_list, tokens[i]);
+        VectorPushBack(tokens_Vector, tokens[i]);
     }
-    ProcessDataProcessing(symbols, tokens_list, output, offset, instruction_num);
-    while(!ListEmpty(tokens_list)) {
-        DeleteToken(ListPopFront(tokens_list));
+    FunctionGen(symbols, tokens_Vector, output, offset, instruction_num);
+    while(!VectorEmpty(tokens_Vector)) {
+        DeleteToken(VectorPopBack(tokens_Vector));
     }
-    DeleteList(tokens_list);
+    DeleteVector(tokens_Vector);
 }
 
 void ProcessDataProcessingTests() {
@@ -203,15 +199,15 @@ void SingleProcessMultiply(
     int offset, 
     int instruction_num
 ) {
-    List tokens_list = NewEmptyList();
+    Vector tokens_Vector = NewEmptyVector();
     for(int i = 0; i < tokens_num; i++) {
-        ListPushBack(tokens_list, tokens[i]);
+        VectorPushBack(tokens_Vector, tokens[i]);
     }
-    ProcessMultiply(symbols, tokens_list, output, offset, instruction_num);
-    while(!ListEmpty(tokens_list)) {
-        DeleteToken(ListPopFront(tokens_list));
+    FunctionGen(symbols, tokens_Vector, output, offset, instruction_num);
+    while(!VectorEmpty(tokens_Vector)) {
+        DeleteToken(VectorPopBack(tokens_Vector));
     }
-    DeleteList(tokens_list);
+    DeleteVector(tokens_Vector);
 }
 void ProcessMultiplyTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -279,15 +275,15 @@ void SingleProcessDataTransfer(
     int offset, 
     int instruction_num
 ) {
-    List tokens_list = NewEmptyList();
+    Vector tokens_Vector = NewEmptyVector();
     for(int i = 0; i < tokens_num; i++) {
-        ListPushBack(tokens_list, tokens[i]);
+        VectorPushBack(tokens_Vector, tokens[i]);
     }
-    ProcessDataTransfer(symbols, tokens_list, output, offset, instruction_num);
-    while(!ListEmpty(tokens_list)) {
-        DeleteToken(ListPopFront(tokens_list));
+    FunctionGen(symbols, tokens_Vector, output, offset, instruction_num);
+    while(!VectorEmpty(tokens_Vector)) {
+        DeleteToken(VectorPopBack(tokens_Vector));
     }
-    DeleteList(tokens_list);
+    DeleteVector(tokens_Vector);
 }
 void ProcessDataTransferTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -366,7 +362,7 @@ void ProcessDataTransferTests() {
     assert((int)VectorGet(output, 4) == 0xE581001C);
     assert((int)VectorGet(output, 5) == 0xE6821004);
     assert((int)VectorGet(output, 6) == 0xE40AA0D4);
-    assert((int)VectorGet(output, 7) == 0xE6079c52);
+    assert((int)VectorGet(output, 7) == 0xE6079C52);
     assert((int)VectorGet(output, 8) == 0x20200020);
 
     FinishFunctionGen();
@@ -383,15 +379,15 @@ void SingleProcessShift(
     int offset, 
     int instruction_num
 ) {
-    List tokens_list = NewEmptyList();
+    Vector tokens_Vector = NewEmptyVector();
     for(int i = 0; i < tokens_num; i++) {
-        ListPushBack(tokens_list, tokens[i]);
+        VectorPushBack(tokens_Vector, tokens[i]);
     }
-    ProcessShift(symbols, tokens_list, output, offset, instruction_num);
-    while(!ListEmpty(tokens_list)) {
-        DeleteToken(ListPopFront(tokens_list));
+    FunctionGen(symbols, tokens_Vector, output, offset, instruction_num);
+    while(!VectorEmpty(tokens_Vector)) {
+        DeleteToken(VectorPopBack(tokens_Vector));
     }
-    DeleteList(tokens_list);
+    DeleteVector(tokens_Vector);
 }
 void ProcessShiftTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
