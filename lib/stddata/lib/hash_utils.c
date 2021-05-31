@@ -32,3 +32,10 @@ unsigned long long UnsafeIntHash(void* int_ptr) { /* purposfeully illegal conver
 bool UnsafeIntEq(void* int_a, void* int_b) {
     return int_a == int_b;
 }
+unsigned long long UnsafeIntHash(void* int_ptr) { /* purposfeully illegal conversion */
+    return int_ptr;
+}
+
+bool UnsafeIntEq(void* int_a, void* int_b) {
+    return int_a == int_b;
+}
