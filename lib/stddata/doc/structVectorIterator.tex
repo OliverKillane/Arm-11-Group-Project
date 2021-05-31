@@ -1,0 +1,31 @@
+\hypertarget{structVectorIterator}{}\doxysection{Vector\+Iterator Struct Reference}
+\label{structVectorIterator}\index{VectorIterator@{VectorIterator}}
+
+
+An iterator for a \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}.  
+
+
+
+
+\doxysubsection{Detailed Description}
+An iterator for a \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}. 
+
+The \mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} is mainly used for looping over a vector. Example usage in for loops\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordflow}{for}(\mbox{\hyperlink{structVectorIterator}{VectorIterator}} iter = \mbox{\hyperlink{vector__iterator_8h_a7ecf696f0c60b8b37894216e849e9ca9}{VectorBegin}}(vector); \mbox{\hyperlink{vector__iterator_8h_a5c09ad74f77cccbd44839c423fae3bf6}{VectorIteratorLess}}(iter, \mbox{\hyperlink{vector__iterator_8h_a3ac64474d8d2aa92f2d256871a8d73d7}{VectorEnd}}(vector)); \mbox{\hyperlink{vector__iterator_8h_ad10dbf42b5aa4378807df02f8c34ebe6}{VectorIteratorIncr}}(\&iter)) \{}
+\DoxyCodeLine{    printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, (\textcolor{keywordtype}{char}*)\mbox{\hyperlink{vector__iterator_8h_a92ab75d92792528f561ef946dda689be}{VectorIteratorGet}}(iter));}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+\begin{DoxyNote}{Note}
+Most of the interface functions require only the value of an iterator to be passed, except for the ones modifying it ( \mbox{\hyperlink{vector__iterator_8h_ad10dbf42b5aa4378807df02f8c34ebe6}{Vector\+Iterator\+Incr}} and \mbox{\hyperlink{vector__iterator_8h_a8ca87fd5df29f5c11d1751e396c305b4}{Vector\+Iterator\+Decr}} ) 
+
+Most of the time it will be used in combination with the VECTORFOR macro 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+Changing the internal variables manually outside of the interface functions will result in an undefined behaviour. 
+
+Attempting to use an uninitialized \mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} will result in an undefined behaviour 
+\end{DoxyWarning}

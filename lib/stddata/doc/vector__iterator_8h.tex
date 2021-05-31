@@ -1,0 +1,234 @@
+\hypertarget{vector__iterator_8h}{}\doxysection{include/vector\+\_\+iterator.h File Reference}
+\label{vector__iterator_8h}\index{include/vector\_iterator.h@{include/vector\_iterator.h}}
+
+
+\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} and utilities related to it  
+
+
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}}
+\begin{DoxyCompactList}\small\item\em An iterator for a \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{vector__iterator_8h_afab80cd168470efd88cc07223e2b1ec9}{VECTORFOR}}(vector,  iter)
+\begin{DoxyCompactList}\small\item\em A macro for looping over a vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} \mbox{\hyperlink{vector__iterator_8h_a7ecf696f0c60b8b37894216e849e9ca9}{Vector\+Begin}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector)
+\begin{DoxyCompactList}\small\item\em Returns an iterator at the beginning of the vector. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} \mbox{\hyperlink{vector__iterator_8h_a3ac64474d8d2aa92f2d256871a8d73d7}{Vector\+End}} (\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} vector)
+\begin{DoxyCompactList}\small\item\em Returns an iterator at the end of the vector. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{vector__iterator_8h_a5c09ad74f77cccbd44839c423fae3bf6}{Vector\+Iterator\+Less}} (\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} a, \mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} b)
+\begin{DoxyCompactList}\small\item\em Checks if the first iterator points to a smaller index than the second. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{vector__iterator_8h_a861242c1f3f583b0f2b15a9600882d2a}{Vector\+Iterator\+Compare}} (\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} a, \mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} b)
+\begin{DoxyCompactList}\small\item\em Compares two iterators. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector__iterator_8h_ad10dbf42b5aa4378807df02f8c34ebe6}{Vector\+Iterator\+Incr}} (\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} $\ast$iter)
+\begin{DoxyCompactList}\small\item\em Moves the iterator to the next item in the vector. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector__iterator_8h_a8ca87fd5df29f5c11d1751e396c305b4}{Vector\+Iterator\+Decr}} (\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} $\ast$iter)
+\begin{DoxyCompactList}\small\item\em Moves the iterator to the previous item in the vector. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{vector__iterator_8h_a92ab75d92792528f561ef946dda689be}{Vector\+Iterator\+Get}} (\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} iter)
+\begin{DoxyCompactList}\small\item\em Returns an item the iterator is pointing to. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector__iterator_8h_a573fb59aca9ea921eb029b0a5da2af47}{Vector\+Iterator\+Set}} (\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} iter, void $\ast$new\+\_\+item)
+\begin{DoxyCompactList}\small\item\em Sets an item the iterator is pointing to. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{vector__iterator_8h_afab80cd168470efd88cc07223e2b1ec9}\label{vector__iterator_8h_afab80cd168470efd88cc07223e2b1ec9}} 
+\index{vector\_iterator.h@{vector\_iterator.h}!VECTORFOR@{VECTORFOR}}
+\index{VECTORFOR@{VECTORFOR}!vector\_iterator.h@{vector\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{VECTORFOR}{VECTORFOR}}
+{\footnotesize\ttfamily \#define VECTORFOR(\begin{DoxyParamCaption}\item[{}]{vector,  }\item[{}]{iter }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{    \textcolor{keywordflow}{for}(\mbox{\hyperlink{structVectorIterator}{VectorIterator}} iter = \mbox{\hyperlink{vector__iterator_8h_a7ecf696f0c60b8b37894216e849e9ca9}{VectorBegin}}(vector);\(\backslash\)}
+\DoxyCodeLine{        VectorIteratorLess(iter, \mbox{\hyperlink{vector__iterator_8h_a3ac64474d8d2aa92f2d256871a8d73d7}{VectorEnd}}(vector));\(\backslash\)}
+\DoxyCodeLine{        VectorIteratorIncr(\&iter))}
+
+\end{DoxyCode}
+
+
+A macro for looping over a vector. 
+
+This macro creates a for loop header using iterators to iterate over a vector. Example usage\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{vector__iterator_8h_afab80cd168470efd88cc07223e2b1ec9}{VECTORFOR}}(vector, iter) \{}
+\DoxyCodeLine{    printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}}, (\textcolor{keywordtype}{char}*)\mbox{\hyperlink{vector__iterator_8h_a92ab75d92792528f561ef946dda689be}{VectorIteratorGet}}(iter));}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & the vector to be iterated over \\
+\hline
+{\em iter} & the name of the iterator that will index the vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{vector__iterator_8h_a7ecf696f0c60b8b37894216e849e9ca9}\label{vector__iterator_8h_a7ecf696f0c60b8b37894216e849e9ca9}} 
+\index{vector\_iterator.h@{vector\_iterator.h}!VectorBegin@{VectorBegin}}
+\index{VectorBegin@{VectorBegin}!vector\_iterator.h@{vector\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{VectorBegin()}{VectorBegin()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} Vector\+Begin (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector }\end{DoxyParamCaption})}
+
+
+
+Returns an iterator at the beginning of the vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to get the beginning iterator to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An iterator pointing at the first item of the {\ttfamily vector} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector__iterator_8h_a3ac64474d8d2aa92f2d256871a8d73d7}\label{vector__iterator_8h_a3ac64474d8d2aa92f2d256871a8d73d7}} 
+\index{vector\_iterator.h@{vector\_iterator.h}!VectorEnd@{VectorEnd}}
+\index{VectorEnd@{VectorEnd}!vector\_iterator.h@{vector\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{VectorEnd()}{VectorEnd()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} Vector\+End (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{vector }\end{DoxyParamCaption})}
+
+
+
+Returns an iterator at the end of the vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & The vector to get the end iterator to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An iterator pointing at the item behind the last item of the {\ttfamily vector} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily vector} not being a valid allocated \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector__iterator_8h_a5c09ad74f77cccbd44839c423fae3bf6}\label{vector__iterator_8h_a5c09ad74f77cccbd44839c423fae3bf6}} 
+\index{vector\_iterator.h@{vector\_iterator.h}!VectorIteratorLess@{VectorIteratorLess}}
+\index{VectorIteratorLess@{VectorIteratorLess}!vector\_iterator.h@{vector\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{VectorIteratorLess()}{VectorIteratorLess()}}
+{\footnotesize\ttfamily bool Vector\+Iterator\+Less (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}}}]{a,  }\item[{\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}}}]{b }\end{DoxyParamCaption})}
+
+
+
+Checks if the first iterator points to a smaller index than the second. 
+
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the first iterator points before the second, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+the two iterators not pointing at the same vector will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector__iterator_8h_a861242c1f3f583b0f2b15a9600882d2a}\label{vector__iterator_8h_a861242c1f3f583b0f2b15a9600882d2a}} 
+\index{vector\_iterator.h@{vector\_iterator.h}!VectorIteratorCompare@{VectorIteratorCompare}}
+\index{VectorIteratorCompare@{VectorIteratorCompare}!vector\_iterator.h@{vector\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{VectorIteratorCompare()}{VectorIteratorCompare()}}
+{\footnotesize\ttfamily int Vector\+Iterator\+Compare (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}}}]{a,  }\item[{\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}}}]{b }\end{DoxyParamCaption})}
+
+
+
+Compares two iterators. 
+
+\begin{DoxyReturn}{Returns}
+-\/1 if the first iterator points to an item before the second iterator 0 if the two iterators point to the same item 1 if the second iterator points to an item before the first iterator 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+the two iterators not pointing at the same vector will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector__iterator_8h_ad10dbf42b5aa4378807df02f8c34ebe6}\label{vector__iterator_8h_ad10dbf42b5aa4378807df02f8c34ebe6}} 
+\index{vector\_iterator.h@{vector\_iterator.h}!VectorIteratorIncr@{VectorIteratorIncr}}
+\index{VectorIteratorIncr@{VectorIteratorIncr}!vector\_iterator.h@{vector\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{VectorIteratorIncr()}{VectorIteratorIncr()}}
+{\footnotesize\ttfamily void Vector\+Iterator\+Incr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} $\ast$}]{iter }\end{DoxyParamCaption})}
+
+
+
+Moves the iterator to the next item in the vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the pointer to the iterator to be incremented \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+trying to increment an iterator pointing at the end of the vector will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector__iterator_8h_a8ca87fd5df29f5c11d1751e396c305b4}\label{vector__iterator_8h_a8ca87fd5df29f5c11d1751e396c305b4}} 
+\index{vector\_iterator.h@{vector\_iterator.h}!VectorIteratorDecr@{VectorIteratorDecr}}
+\index{VectorIteratorDecr@{VectorIteratorDecr}!vector\_iterator.h@{vector\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{VectorIteratorDecr()}{VectorIteratorDecr()}}
+{\footnotesize\ttfamily void Vector\+Iterator\+Decr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}} $\ast$}]{iter }\end{DoxyParamCaption})}
+
+
+
+Moves the iterator to the previous item in the vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the pointer to the iterator to be incremented \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+trying to increment an iterator pointing at the end of the vector will result in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{vector__iterator_8h_a92ab75d92792528f561ef946dda689be}\label{vector__iterator_8h_a92ab75d92792528f561ef946dda689be}} 
+\index{vector\_iterator.h@{vector\_iterator.h}!VectorIteratorGet@{VectorIteratorGet}}
+\index{VectorIteratorGet@{VectorIteratorGet}!vector\_iterator.h@{vector\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{VectorIteratorGet()}{VectorIteratorGet()}}
+{\footnotesize\ttfamily void$\ast$ Vector\+Iterator\+Get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}}}]{iter }\end{DoxyParamCaption})}
+
+
+
+Returns an item the iterator is pointing to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the iterator to dereference \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the item the iterator is pointing at 
+\end{DoxyReturn}
+\mbox{\Hypertarget{vector__iterator_8h_a573fb59aca9ea921eb029b0a5da2af47}\label{vector__iterator_8h_a573fb59aca9ea921eb029b0a5da2af47}} 
+\index{vector\_iterator.h@{vector\_iterator.h}!VectorIteratorSet@{VectorIteratorSet}}
+\index{VectorIteratorSet@{VectorIteratorSet}!vector\_iterator.h@{vector\_iterator.h}}
+\doxysubsubsection{\texorpdfstring{VectorIteratorSet()}{VectorIteratorSet()}}
+{\footnotesize\ttfamily void Vector\+Iterator\+Set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVectorIterator}{Vector\+Iterator}}}]{iter,  }\item[{void $\ast$}]{new\+\_\+item }\end{DoxyParamCaption})}
+
+
+
+Sets an item the iterator is pointing to. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iter} & the iterator for which to set the item that it is pointing at \\
+\hline
+{\em new\+\_\+item} & the new value for the item \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily new\+\_\+item} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
