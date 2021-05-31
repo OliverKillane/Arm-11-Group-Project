@@ -1,13 +1,11 @@
 CC      = gcc
-CSANITIZERS = -fsanitize=address,undefined,leak,pointer-subtract
-CFLAGS  = -Wall -g -I../../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -Werror -pedantic
+CFLAGS  = -Wall -g -I../../src/emulate -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -pedantic
 
-.PHONY: all clean
+.PHONY: all clean test
 
 all:
-	cp ../../build/tests/stddata.o ../../build/tests/emulate/stddata.o
-
-
+	$(CC) $(CFLAGS) emulatortests.c -o ../../build/tests/emulate/emulatortests
+	./../../build/tests/emulate/emulatortests
 
 clean:
 	rm -f $(wildcard ../../build/tests/emulate/*)

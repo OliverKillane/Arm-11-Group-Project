@@ -15,7 +15,7 @@
 
 #ignore junk files from compiling C code
 *.o
-emulate
+# emulate
 assemble
 
 #ignore junk files from compiling Haskell code
@@ -32,4 +32,3 @@ assemble
 *.vrb
 *.nav
 *.toc
-
