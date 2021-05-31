@@ -17,6 +17,8 @@ int main(int argc, char** argv) {
   CPU.memory = calloc(MEMSIZE, 1);
   assert(CPU.memory);
   memset(CPU.registers, 0, 64);
+  CPU.GPIO = 0;
+  
 
   loadProgram(argv[1]);
   runProgram();
@@ -93,6 +95,8 @@ void branchInstr(instruction instr) {
   *GETREG(PC) += (GETBITS(instr, 0, 23) - (GETBIT(instr, 23) << 23) + 1) << 2;
 }
 
+
+// needs to change gpio pins, better handling
 void singleDataTransInstr(instruction instr) {
   word* RnBase = GETREG(GETBITS(instr, 16, 4));
   word* RdSrcDst = GETREG(GETBITS(instr, 12, 4));
@@ -122,22 +126,45 @@ void singleDataTransInstr(instruction instr) {
     offset = -offset;
   }
 
-  word loc = P?(*RnBase + offset):*RnBase;
+  word memloc = P?(*RnBase + offset):*RnBase;
 
-  if (loc >= MEMSIZE) {
-    printf("Error: Out of bounds memory access at address 0x%08x\n", loc);
-  } else {
+  if (memloc == 0x20200008 || memloc == 0x20200004 || memloc == 0x20200000) {
+    int region = ((memloc & 0xF) >> 2) * 10;
+    printf("One GPIO pin from %i to %i has been accessed\n", region, region + 9);
+
     if (L) {
-      *RdSrcDst = *getmemword(loc);
-    } else {
-      *getmemword(loc) = *RdSrcDst;
+      *RdSrcDst = memloc;
     }
 
-    if (!P) {
-      *RnBase += offset;
+    // store is ignored as all loads must load the address, so stored values do not matter.
+  } else if (memloc == 0x20200028 && !L) {
+    // clear pins
+    printf("PIN OFF\n");
+    CPU.GPIO = CPU.GPIO & !*RdSrcDst;
+  } else if (memloc == 0x2020001C && !L) {
+    // set pins
+    printf("PIN ON\n");
+    CPU.GPIO = CPU.GPIO | *RdSrcDst;
+  } else if (memloc < MEMSIZE) {
+
+    // interacting with 64KB of main memory
+    if (L) {
+      *RdSrcDst = *getmemword(memloc);
+    } else {
+      *getmemword(memloc) = *RdSrcDst;
     }
+  } else {
+
+    // not a load/store to control, or a store to clear or set, and 
+    // address is outside 64KB main memory
+
+    printf("Error: Out of bounds memory access at address 0x%08x\n", memloc);
+    return;
   }
- 
+
+  if (!P) {
+    *RnBase += offset;
+  }
 }
 
 
