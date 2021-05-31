@@ -6,17 +6,17 @@ CFLAGS  = -Wall -g -I../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -s
 all: stddata assemble emulate
 
 assemble: stddata
-	cd assemble && make
+	cd assemble && $(MAKE)
 
 emulate: stddata
-	cd assemble && make
+	cd assemble && $(MAKE)
 
 stddata:
-	cd ../lib/stddata && make library
+	cd ../lib/stddata && $(MAKE) library
 	cp ../lib/stddata/bin/stddata.o ../build/
 
 clean:
-	cd ../lib/stddata && make clean
+	cd ../lib/stddata && $(MAKE) clean
 	rm -f $(wildcard ../build/*.o)
-	cd assemble && make clean
-	cd emulate && make clean
+	cd assemble && $(MAKE) clean
+	cd emulate && $(MAKE) clean
