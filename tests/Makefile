@@ -1,23 +1,23 @@
 CC      = gcc
 CSANITIZERS = -fsanitize=address,undefined,leak,pointer-subtract
-CFLAGS  = -Wall -g -I../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -Werror -pedantic
+CFLAGS  = -Wall -g -I../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -pedantic
 
-.PHONY: all clean assemble emulate stddata
+.PHONY: all clean emulate stddata assemble
 
-all: stddata assemble emulate
+all: stddata emulate assemble
 
 assemble: stddata
-	cd assemble && make
+	cd assemble && $(MAKE)
 
 emulate: stddata
-	cd emulate && make
+	cd emulate && $(MAKE)
 
 stddata:
-	cd ../lib/stddata && make library
+	cd ../lib/stddata && $(MAKE) library
 	cp ../lib/stddata/bin/stddata.o ../build/tests/
 
 clean:
-	cd assemble && make clean
-	cd emulate && make clean
-	cd ../lib/stddata && make clean
+	cd assemble && $(MAKE) clean
+	cd emulate && $(MAKE) clean
+	cd ../lib/stddata && $(MAKE) clean
 	rm -f $(wildcard ../build/*.o)

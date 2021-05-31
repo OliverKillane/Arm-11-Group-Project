@@ -15,6 +15,7 @@
 
 #ignore junk files from compiling C code
 *.o
+.vscode
 
 #ignore junk files from compiling Haskell code
 *.hi
