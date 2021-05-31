@@ -9,9 +9,12 @@
 #include <stdbool.h>
 #include <stdarg.h>
 
-DecisionTree instruction_layouts;
-List layout_tokens;
-Set single_group_tokens;
+DecisionTree restrict instruction_layouts;
+DecisionTree restrict data_layouts;
+DecisionTree restrict bracket_layouts;
+List restrict layout_tokens;
+List restrict data_layout_vectors;
+Set restrict single_group_tokens;
 
 unsigned long long InstructionLayoutHashFunc(void* restrict token_ptr) {
     Token token = token;
@@ -63,9 +66,10 @@ void InitSingleGroupTokens() {
     SetInsert(single_group_tokens, INSTR_BRN);
 }
 
-void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, int, int), ...) {
+void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, int, int), int num_indicies, 
+    void* layout_args_indicies[], void* bracket_layout_result, ...) {
     va_list args;
-    va_start(args, func);
+    va_start(args, bracket_layout_result);
 
     List layout = NewEmptyList();
     for(;layout_str != '\0';layout_str++) {
@@ -105,64 +109,118 @@ void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, int, int
         ListPushBack(layout_tokens, ListIteratorGet(iter));
     }
     DecisionTreeInsert(instruction_layouts, layout, func);
+    if(num_indicies != 0) {
+        Vector layout_args = NewFilledVector(num_indicies, layout_args_indicies);
+        DecisionTreeInsert(data_layouts, layout, layout_args);
+        ListPushBack(data_layout_vectors, layout_args);
+    }
+    DecisionTreeInsert(bracket_layouts, layout, bracket_layout_result);
     DeleteList(layout);
+}
+
+void ProcessDataLayout(Vector tokens, int n, ...) {
+    va_list args;
+    va_start(args, n);
+
+    Vector layout_args = DecisionTreeQuery(data_layouts, tokens);
+    void* args_ptrs[n];
+    for(int i = 0; i < n; i++) {
+        args_ptrs[i] = va_arg(args, void*);
+    }
+    VectorIterator layout_args_iter = VectorBegin(layout_args);
+    VECTORFOR(tokens, tokens_iter) {
+        switch(TokenType(VectorIteratorGet(tokens_iter))) {
+            TOKEN_BRACE:
+                VectorIteratorDecr(&layout_args_iter);
+                break;
+            TOKEN_CONSTANT:
+                *(long long*)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] = 
+                        TokenConstantValue(VectorIteratorGet(tokens_iter));
+                break;
+            TOKEN_INSTRUCTION:
+                *(InstructionType*)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] =
+                        TokenInstructionType(VectorIteratorGet(tokens_iter));
+                break;
+            TOKEN_LABEL:
+                *(unsigned char**)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] =
+                        TokenLabel(VectorIteratorGet(tokens_iter));
+                break;
+            TOKEN_REGISTER:
+                *(unsigned int*)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] = 
+                        TokenRegisterNumber(VectorIteratorGet(tokens_iter));
+                break;
+            TOKEN_SIGN:
+                *(unsigned int*)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] = 
+                        TokenIsPlus(VectorIteratorGet(tokens_iter));
+                break;
+        }
+        VectorIteratorIncr(&layout_args_iter);
+    }
 }
 
 void InitInstructionLayouts() {
     InitSingleGroupTokens();
     layout_tokens = NewEmptyList();
+    data_layout_vectors = NewEmptyList();
     instruction_layouts = NewEmptyDecisionTree(InstructionLayoutHashFunc, InstructionLayoutEqFunc);
+    data_layouts = NewEmptyDecisionTree(InstructionLayoutEqFunc, InstructionLayoutHashFunc);
     
     /* Data Processing Instructions */
-    AddSingleLayout("irr#", LayoutComputeConst, INSTR_AND);
-    AddSingleLayout("irrr", LayoutComputeReg, INSTR_AND);
-    AddSingleLayout("irrri#", LayoutComputeShiftConst, INSTR_AND, INSTR_LSL);
-    AddSingleLayout("irrrir", LayoutComputeShiftReg, INSTR_AND, INSTR_LSL);
-    AddSingleLayout("irr#", LayoutMovConst, INSTR_MOV);
-    AddSingleLayout("irrr", LayoutMovReg, INSTR_MOV);
-    AddSingleLayout("irrri#", LayoutMovShiftConst, INSTR_MOV, INSTR_LSL);
-    AddSingleLayout("irrrir", LayoutMovShiftReg, INSTR_MOV, INSTR_LSL);
-    AddSingleLayout("irr#", LayoutTestConst, INSTR_TST);
-    AddSingleLayout("irrr", LayoutTestReg, INSTR_TST);
-    AddSingleLayout("irrri#", LayoutTestShiftConst, INSTR_TST, INSTR_LSL);
-    AddSingleLayout("irrrir", LayoutTestShiftReg, INSTR_TST, INSTR_LSL);
+    AddSingleLayout("irr#", LayoutProcConst, 4, (void*){0, 2, 1, 3}, NULL, INSTR_AND);
+    AddSingleLayout("irrr", LayoutProcShiftConst, 4, (void*){0, 2, 1, 3}, NULL, INSTR_AND);
+    AddSingleLayout("irrri#", LayoutProcShiftConst, 6, (void*){0, 2, 1, 3, 4, 5}, NULL, INSTR_AND, INSTR_LSL);
+    AddSingleLayout("irrrir", LayoutProcShiftReg, 6, (void*){0, 2, 1, 3, 4, 5}, NULL, INSTR_AND, INSTR_LSL);
+    AddSingleLayout("ir#", LayoutProcConst, 3, (void*){0, 2, 3}, NULL, INSTR_MOV);
+    AddSingleLayout("irr", LayoutProcShiftConst, 3, (void*){0, 2, 3}, NULL, INSTR_MOV);
+    AddSingleLayout("irri#", LayoutProcShiftConst, 5, (void*){0, 2, 3, 4, 5}, NULL, INSTR_MOV, INSTR_LSL);
+    AddSingleLayout("irrir", LayoutProcShiftReg, 5, (void*){0, 2, 3, 4, 5}, NULL, INSTR_MOV, INSTR_LSL);
+    AddSingleLayout("ir#", LayoutProcConst, 3, (void*){0, 1, 3}, NULL, INSTR_TST);
+    AddSingleLayout("irr", LayoutProcShiftConst, 3, (void*){0, 1, 3}, NULL, INSTR_TST);
+    AddSingleLayout("irri#", LayoutProcShiftConst, 5, (void*){0, 1, 3, 4, 5}, NULL, INSTR_TST, INSTR_LSL);
+    AddSingleLayout("irrir", LayoutProcShiftReg, 5, (void*){0, 1, 3, 4, 5}, NULL, INSTR_TST, INSTR_LSL);
 
     /* Multiply Instructions */
-    AddSingleLayout("irrr", LayoutMUL, INSTR_MUL);
-    AddSingleLayout("irrrr", LayoutMLA, INSTR_MLA);
+    AddSingleLayout("irrr", LayoutMUL, 0, NULL, NULL, INSTR_MUL);
+    AddSingleLayout("irrrr", LayoutMLA, 0, NULL, NULL, INSTR_MLA);
 
     /* Single Data Transfer Instructions */
-    AddSingleLayout("ir=", LayoutTransferConst, INSTR_LDR);
-    AddSingleLayout("ir[r]", LayoutTransferPre, INSTR_LDR);
-    AddSingleLayout("ir[r#]", LayoutTransferPreConst, INSTR_LDR);
-    AddSingleLayout("ir[rr]", LayoutTransferPreReg, INSTR_LDR);
-    AddSingleLayout("ir[rsr]", LayoutTransferPreSgnReg, INSTR_LDR);
-    AddSingleLayout("ir[rri#]", LayoutTransferPreShiftConst, INSTR_LDR, INSTR_LSL);
-    AddSingleLayout("ir[rrir]", LayoutTransferPreShiftReg, INSTR_LDR, INSTR_LSL);
-    AddSingleLayout("ir[rsri#]", LayoutTransferPreSgnShiftConst, INSTR_LDR, INSTR_LSL);
-    AddSingleLayout("ir[rsrir]", LayoutTransferPreSgnShiftReg, INSTR_LDR, INSTR_LSL);
-    AddSingleLayout("ir[r]#", LayoutTransferPostConst, INSTR_LDR);
-    AddSingleLayout("ir[r]r", LayoutTransferPostReg, INSTR_LDR);
-    AddSingleLayout("ir[r]sr", LayoutTransferPostSgnReg, INSTR_LDR);
-    AddSingleLayout("ir[r]ri#", LayoutTransferPostShiftConst, INSTR_LDR, INSTR_LSL);
-    AddSingleLayout("ir[r]rir", LayoutTransferPostShiftReg, INSTR_LDR, INSTR_LSL);
-    AddSingleLayout("ir[r]sri#", LayoutTransferPostSgnShiftConst, INSTR_LDR, INSTR_LSL);
-    AddSingleLayout("ir[r]srir", LayoutTransferPostSgnShiftReg, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir=", LayoutTransferSet, 0, NULL, NULL, INSTR_LDR);
+    AddSingleLayout("ir[r]", LayoutTransferConst, 3, (void*){0, 2, 1}, 1, INSTR_LDR);
+    AddSingleLayout("ir[r#]", LayoutTransferConst, 4, (void*){0, 2, 1, 3}, 1, INSTR_LDR);
+    AddSingleLayout("ir[rr]", LayoutTransferShiftConst, 4, (void*){0, 2, 1, 3}, 1, INSTR_LDR);
+    AddSingleLayout("ir[rsr]", LayoutTransferShiftConst, 5, (void*){0, 2, 1, 4, 3}, 1, INSTR_LDR);
+    AddSingleLayout("ir[rri#]", LayoutTransferShiftConst, 6, (void*){0, 2, 1, 3, 5, 6}, 1, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[rrir]", LayoutTransferShiftReg, 6, (void*){0, 2, 1, 3, 5, 6}, 1, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[rsri#]", LayoutTransferShiftConst, 7, (void*){0, 2, 1, 4, 3, 5, 6}, 1, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[rsrir]", LayoutTransferShiftReg, 7, (void*){0, 2, 1, 4, 3, 5, 6}, 1, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[r]#", LayoutTransferConst, 4, (void*){0, 2, 1, 3}, 0, INSTR_LDR);
+    AddSingleLayout("ir[r]r", LayoutTransferShiftConst, 4, (void*){0, 2, 1, 3}, 0, INSTR_LDR);
+    AddSingleLayout("ir[r]sr", LayoutTransferShiftConst, 5, (void*){0, 2, 1, 4, 3}, 0, INSTR_LDR);
+    AddSingleLayout("ir[r]ri#", LayoutTransferShiftConst, 6, (void*){0, 2, 1, 3, 5, 6}, 0, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[r]rir", LayoutTransferShiftReg, 6, (void*){0, 2, 1, 3, 5, 6}, 0, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[r]sri#", LayoutTransferShiftConst, 7, (void*){0, 2, 1, 4, 3, 5, 6}, 0, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[r]srir", LayoutTransferShiftReg, 7, (void*){0, 2, 1, 4, 3, 5, 6}, 0, INSTR_LDR, INSTR_LSL);
 
     /* Branch Instructions */
-    AddSingleLayout("il", LayoutBranchLabel, INSTR_BRN);
-    AddSingleLayout("ic", LayoutBranchConstant, INSTR_BRN);
+    AddSingleLayout("il", LayoutBranchLabel, NULL, NULL, INSTR_BRN);
+    AddSingleLayout("ic", LayoutBranchConstant, NULL, NULL, INSTR_BRN);
 
     /* Shift Instructions */
-    AddSingleLayout("ir#", LayoutShiftConst, INSTR_LSL);
-    AddSingleLayout("irr", LayoutShiftReg, INSTR_LSL);
+    AddSingleLayout("ir#", LayoutShiftConst, NULL, NULL, INSTR_LSL);
+    AddSingleLayout("irr", LayoutShiftReg, NULL, NULL, INSTR_LSL);
 }
 
 void FinishInstructionLayouts() {
     DeleteDecisionTree(instruction_layouts);
+    DeleteDecisionTree(data_layouts);
+    DeleteDecisionTree(bracket_layouts);
     DeleteSet(single_group_tokens);
     LISTFOR(layout_tokens, iter) {
         DeleteToken(ListIteratorGet(iter));
     }
+    LISTFOR(data_layout_vectors, iter) {
+        DeleteVector(ListIteratorGet(iter));
+    }
     DeleteList(layout_tokens);
+    DeleteList(data_layout_vectors);
 }

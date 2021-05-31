@@ -4,6 +4,9 @@
 #include <stddata.h>
 
 extern DecisionTree instruction_layouts;
+extern DecisionTree bracket_layouts;
+
+void ProcessDataLayout(Vector tokens, int n, ...);
 
 void InitInstructionLayouts();
 

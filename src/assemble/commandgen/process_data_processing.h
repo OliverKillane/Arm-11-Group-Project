@@ -3,6 +3,35 @@
  * @author Bartłomiej Cieślar
  * @brief data processing instructions processing
  */
-#include "process_data_processing/process_data_processing_compute.h"
-#include "process_data_processing/process_data_processing_mov.h"
-#include "process_data_processing/process_data_processing_test.h"
+
+#ifndef ASSEMBLE_COMMANDGEN_PROCESS_DATA_PROCESSING_H_
+#define ASSEMBLE_COMMANDGEN_PROCESS_DATA_PROCESSING_H_
+
+#include <stddata.h>
+#include <stdbool.h>
+
+bool LayoutProcConst(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutProcShiftConst(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutProcShiftReg(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+#endif /* ASSEMBLE_COMMANDGEN_PROCESS_DATA_PROCESSING_H_ */

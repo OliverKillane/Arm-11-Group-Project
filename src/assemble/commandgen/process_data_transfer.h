@@ -3,8 +3,43 @@
  * @author Bartłomiej Cieślar
  * @brief data transfer instructions processing
  */
-#include "process_data_transfer/process_data_transfer_const.h"
-#include "process_data_transfer/process_data_transfer_pre.h"
-#include "process_data_transfer/process_data_transfer_pre_shift.h"
-#include "process_data_transfer/process_data_transfer_post.h"
-#include "process_data_transfer/process_data_transfer_post_shift.h"
+
+#ifndef ASSEMBLE_COMMANDGEN_PROCESS_DATA_TRANSFER_H_
+#define ASSEMBLE_COMMANDGEN_PROCESS_DATA_TRANSFER_H_
+
+#include <stddata.h>
+#include <stdbool.h>
+
+bool LayoutTransferSet(
+    Map symbols, 
+    Vector tokens, 
+    Vector output,
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutTransferConst(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutTransferShiftConst(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutTransferShiftReg(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+#endif /* ASSEMBLE_COMMANDGEN_PROCESS_DATA_TRANSFER_H_ */
