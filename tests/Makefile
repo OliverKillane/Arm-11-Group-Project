@@ -9,7 +9,7 @@ all: stddata emulate assemble
 assemble: stddata
 	cd assemble && $(MAKE)
 
-emulate: stddata
+emulate: 
 	cd emulate && $(MAKE)
 
 stddata:
