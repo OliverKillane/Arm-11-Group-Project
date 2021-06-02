@@ -16,18 +16,3 @@
 #ignore junk files from compiling C code
 *.o
 .vscode
-
-#ignore junk files from compiling Haskell code
-*.hi
-
-#ignore junk files from compiling Java code
-*.class
-
-#ignore other junk files
-*.backup
-*.kate-swp
-*.swp
-*.snm
-*.vrb
-*.nav
-*.toc
