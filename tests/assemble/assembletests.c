@@ -136,7 +136,38 @@ bool listOfListsOfStringsAreEqual(List list1, List list2) {
     return true;
 }
 
-bool listOfListsOfTokensAreEqual(List list1, List list2) {
+bool vectorOfTokensAreEqual(Vector v1, Vector v2) {
+    // assert(v1 != NULL);
+    // assert(v2 != NULL);
+    VectorIterator list2iter = VectorBegin(v2);
+    VectorIterator list1iter = VectorBegin(v1);
+
+    int num = 0;
+    while (!VectorIteratorLess(list1iter, VectorEnd(v1))
+        && !VectorIteratorLess(list2iter, VectorEnd(v2)) ) {
+        printf("Gets through %d\n", num++);
+
+        Token str1 = VectorIteratorGet(list1iter);
+        Token str2 = VectorIteratorGet(list2iter);
+
+        if (!toksEqual(str1, str2)) {
+            return false;
+        }
+
+        VectorIteratorIncr(&list1iter);
+        VectorIteratorIncr(&list2iter);
+        
+    }
+
+    if (!VectorIteratorLess(list1iter, VectorEnd(v1))
+        || !VectorIteratorLess(list2iter, VectorEnd(v2)) ) {
+        return false;
+    }
+
+    return true;
+}
+
+bool listOfVectorsOfTokensAreEqual(List list1, List list2) {
     ListIterator list2iter = ListBegin(list2);
     ListIterator list1iter = ListBegin(list1);
 
@@ -144,10 +175,10 @@ bool listOfListsOfTokensAreEqual(List list1, List list2) {
     while (!ListIteratorEqual(list1iter, ListEnd(list1)) 
         && !ListIteratorEqual(list2iter, ListEnd(list2)) ) {
 
-        List subList1 = ListIteratorGet(list1iter);
-        List subList2 = ListIteratorGet(list2iter);
+        Vector subList1 = ListIteratorGet(list1iter);
+        Vector subList2 = ListIteratorGet(list2iter);
 
-        if (!listOfTokensAreEqual(subList1, subList2)) {
+        if (!vectorOfTokensAreEqual(subList1, subList2)) {
             return false;
         }
 
@@ -199,36 +230,36 @@ void testTokenize() {
 
     List expectedTokens = NewEmptyList();
 
-    List lineTokens = NewEmptyList();
-    ListPushBack(lineTokens, NewInstructionToken(COND_AL, INSTR_MOV));
-    ListPushBack(lineTokens, NewRegisterToken(0));
-    ListPushBack(lineTokens, NewBraceToken(true));
-    ListPushBack(lineTokens, NewRegisterToken(2));
-    ListPushBack(lineTokens, NewSignToken(true));
-    ListPushBack(lineTokens, NewRegisterToken(3));
-    ListPushBack(lineTokens, NewConstantToken(CONST_HASH, 4));
-    ListPushBack(lineTokens, NewBraceToken(false));
+    Vector lineTokens = NewEmptyVector();
+    VectorPushBack(lineTokens, NewInstructionToken(COND_AL, INSTR_MOV));
+    VectorPushBack(lineTokens, NewRegisterToken(0));
+    VectorPushBack(lineTokens, NewBraceToken(true));
+    VectorPushBack(lineTokens, NewRegisterToken(2));
+    VectorPushBack(lineTokens, NewSignToken(true));
+    VectorPushBack(lineTokens, NewRegisterToken(3));
+    VectorPushBack(lineTokens, NewConstantToken(CONST_HASH, 4));
+    VectorPushBack(lineTokens, NewBraceToken(false));
     ListPushBack(expectedTokens, lineTokens);
 
-    lineTokens = NewEmptyList();
-    ListPushBack(lineTokens, NewInstructionToken(COND_AL, INSTR_MUL));
-    ListPushBack(lineTokens, NewRegisterToken(2));
-    ListPushBack(lineTokens, NewRegisterToken(1));
-    ListPushBack(lineTokens, NewRegisterToken(0));
+    lineTokens = NewEmptyVector();
+    VectorPushBack(lineTokens, NewInstructionToken(COND_AL, INSTR_MUL));
+    VectorPushBack(lineTokens, NewRegisterToken(2));
+    VectorPushBack(lineTokens, NewRegisterToken(1));
+    VectorPushBack(lineTokens, NewRegisterToken(0));
     ListPushBack(expectedTokens, lineTokens);
 
-    lineTokens = NewEmptyList();
-    ListPushBack(lineTokens, NewInstructionToken(COND_NE, INSTR_BRN));
-    ListPushBack(lineTokens, NewLabelToken("loop"));
+    lineTokens = NewEmptyVector();
+    VectorPushBack(lineTokens, NewInstructionToken(COND_NE, INSTR_BRN));
+    VectorPushBack(lineTokens, NewLabelToken("loop"));
     ListPushBack(expectedTokens, lineTokens);
 
-    lineTokens = NewEmptyList();
-    ListPushBack(lineTokens, NewInstructionToken(COND_AL, INSTR_MOV));
-    ListPushBack(lineTokens, NewRegisterToken(3));
-    ListPushBack(lineTokens, NewConstantToken(CONST_HASH, 256));
+    lineTokens = NewEmptyVector();
+    VectorPushBack(lineTokens, NewInstructionToken(COND_AL, INSTR_MOV));
+    VectorPushBack(lineTokens, NewRegisterToken(3));
+    VectorPushBack(lineTokens, NewConstantToken(CONST_HASH, 256));
     ListPushBack(expectedTokens, lineTokens);
 
-    assert(listOfListsOfTokensAreEqual(expectedTokens, tokens));
+    assert(listOfVectorsOfTokensAreEqual(expectedTokens, tokens));
 
     MAPFOR(symbolTable, iter) {
  	    free((char*)(MapIteratorGet(iter).key));
@@ -240,25 +271,25 @@ void testTokenize() {
 	}
 	DeleteList(lines);
 
-	LISTFOR(tokens, iter1) {
-		List line = ListIteratorGet(iter1);
-		LISTFOR(line, iter2) {
-			Token token = ListIteratorGet(iter2);
+	LISTFOR(expectedTokens, iter1) {
+		Vector line = ListIteratorGet(iter1);
+		VECTORFOR(line, iter2) {
+			Token token = VectorIteratorGet(iter2);
 			DeleteToken(token);
 		}
-		DeleteList(line);
-	}
-	DeleteList(tokens);
-
-    LISTFOR(expectedTokens, iter1) {
-		List line = ListIteratorGet(iter1);
-		LISTFOR(line, iter2) {
-			Token token = ListIteratorGet(iter2);
-			DeleteToken(token);
-		}
-		DeleteList(line);
+		DeleteVector(line);
 	}
 	DeleteList(expectedTokens);
+
+    LISTFOR(tokens, iter1) {
+		Vector line = ListIteratorGet(iter1);
+		VECTORFOR(line, iter2) {
+			Token token = VectorIteratorGet(iter2);
+			DeleteToken(token);
+		}
+		DeleteVector(line);
+	}
+	DeleteList(tokens);
 
 }
 
@@ -294,12 +325,12 @@ void testTokensToBinary() {
 	DeleteList(lines);
 
 	LISTFOR(tokens, iter1) {
-		List line = ListIteratorGet(iter1);
-		LISTFOR(line, iter2) {
-			Token token = ListIteratorGet(iter2);
+		Vector line = ListIteratorGet(iter1);
+		VECTORFOR(line, iter2) {
+			Token token = VectorIteratorGet(iter2);
 			DeleteToken(token);
 		}
-		DeleteList(line);
+		DeleteVector(line);
 	}
 	DeleteList(tokens);
     DeleteVector(binaryTokens);
@@ -428,7 +459,7 @@ void testMatchConstant() {
 }
 
 int main(void) {
-    runCommandGenTests();
+    // runCommandGenTests();
 
     testMatchAlpha();
     testIsHex();
