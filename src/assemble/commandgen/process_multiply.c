@@ -1,4 +1,5 @@
 #include "process_multiply.h"
+<<<<<<< HEAD
 #include <stddata.h>
 #include <string.h>
 #include "common_defs.h"
@@ -8,10 +9,19 @@
 bool ProcessMultiply(
     Map restrict symbols, 
     List restrict tokens, 
+=======
+#include "../tokenizer.h"
+#include <stddata.h>
+
+bool LayoutMUL(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     Vector restrict output, 
     int offset, 
     int instructions_num
 ) {
+<<<<<<< HEAD
 
     ConditionType condition = TokenInstructionConditionType(ListFront(tokens));
     unsigned int accumulate = TokenInstructionType(ListFront(tokens)) == INSTR_MLA;
@@ -52,5 +62,35 @@ bool ProcessMultiply(
     instruction |= reg_m;
 
     SetInstruction(output, instruction, offset);
+=======
+    SetInstruction(output, FillInstruction(
+        5,
+        TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
+        TokenRegisterNumber(VectorGet(tokens, 1)), 16,
+        TokenRegisterNumber(VectorGet(tokens, 2)), 0,
+        TokenRegisterNumber(VectorGet(tokens, 3)), 8,
+        0x9, 4
+    ), offset);
+    return false;
+}
+
+bool LayoutMLA(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+    int offset, 
+    int instructions_num
+) {
+    SetInstruction(output, FillInstruction(
+        7,
+        TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
+        TokenRegisterNumber(VectorGet(tokens, 1)), 16,
+        TokenRegisterNumber(VectorGet(tokens, 2)), 0,
+        TokenRegisterNumber(VectorGet(tokens, 3)), 8,
+        TokenRegisterNumber(VectorGet(tokens, 4)), 12,
+        0x9, 4,
+        0x1, 21
+    ), offset);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     return false;
 }

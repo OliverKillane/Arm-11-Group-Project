@@ -8,6 +8,20 @@
 #include "commandgen.h"
 #include "tokenizer.h"
 
+<<<<<<< HEAD
+=======
+
+/* Removes the colon in sourceStr by copying to targetStr.
+ * PRE: targetStr is of size one less than sourceStr.
+ * POST: targetStr contains (in order) every character in sourceStr without the colon suffix.
+ */
+void removeColon(char *str) {
+	for ( ; *str != ':' || *str != '\0' ; str++);
+
+	*str = '\0';
+}
+
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 int bigToLittleEndian(int value) {
 	int newValue = 0;
 
@@ -76,6 +90,7 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 
 		char *line = ListIteratorGet(iter);
 
+<<<<<<< HEAD
 		List tokens = tokenizeLine(line, symbolTable, *totalInstructions);
 		bool hasInstructions = !ListEmpty(tokens);
 		if (hasInstructions) {
@@ -110,6 +125,15 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 			// }
 		} else {
 			DeleteList(tokens);
+=======
+		Vector tokens = tokenizeLine(line, symbolTable, *totalInstructions);
+		bool hasInstructions = !VectorEmpty(tokens);
+		if (hasInstructions) {
+			(*totalInstructions)++;
+			ListPushBack(listOfTokens, tokens);
+		} else {
+			DeleteVector(tokens);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 		}
 
 	}
@@ -125,7 +149,11 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, int totalInstructions)
 
 	int currInstr = 0;
 	LISTFOR(listOfTokens, allTokensIter) {	
+<<<<<<< HEAD
 		List lineTokens = ListIteratorGet(allTokensIter);
+=======
+		Vector lineTokens = ListIteratorGet(allTokensIter);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 		
 		FunctionGen(symbolTable, lineTokens, programVector, currInstr, totalInstructions);
 		

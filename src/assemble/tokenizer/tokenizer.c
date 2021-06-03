@@ -276,7 +276,11 @@ void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
 
 
 List tokenizeLine(char *line, Map symbolTable, int currentLine) {
+<<<<<<< HEAD
     List tokenList = NewEmptyList();
+=======
+    Vector tokenList = NewEmptyVector();
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     currentTokenLength = 0;
     currentState = TOKENIZER_START;
 
@@ -290,6 +294,7 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     addCharToToken(line[0]);
                     currentState = TOKENIZER_INSTR_LABEL_REG;
                 } else if (line[0] == '[')  {
+<<<<<<< HEAD
                     ListPushBack(tokenList, NewBraceToken(true));
                 } else if (line[0] == ']')  {
                     ListPushBack(tokenList, NewBraceToken(false));
@@ -297,6 +302,15 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     ListPushBack(tokenList, NewSignToken(true));
                 } else if (line[0] == '-')  {
                     ListPushBack(tokenList, NewSignToken(false));
+=======
+                    VectorPushBack(tokenList, NewBraceToken(true));
+                } else if (line[0] == ']')  {
+                    VectorPushBack(tokenList, NewBraceToken(false));
+                } else if (line[0] == '+')  {
+                    VectorPushBack(tokenList, NewSignToken(true));
+                } else if (line[0] == '-')  {
+                    VectorPushBack(tokenList, NewSignToken(false));
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
                 } else if (line[0] == '#' || line[0] == '=' || isHex(line[0])) {
                     addCharToToken(line[0]);
                     currentState = TOKENIZER_CONSTANT;
@@ -324,6 +338,7 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     }
 
                     if (matchedInstruction != NULL) {
+<<<<<<< HEAD
                         ListPushBack(tokenList, matchedInstruction);
                         
                     } else if (matchedRegister != NULL) {
@@ -332,6 +347,16 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                         
                         Token newToken = NewLabelToken(currentToken);
                         ListPushBack(tokenList, newToken);
+=======
+                        VectorPushBack(tokenList, matchedInstruction);
+                        
+                    } else if (matchedRegister != NULL) {
+                        VectorPushBack(tokenList, matchedRegister);
+                    } else {
+                        
+                        Token newToken = NewLabelToken(currentToken);
+                        VectorPushBack(tokenList, newToken);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
                     }
                     currentState = TOKENIZER_START;
                     resetToken();
@@ -345,7 +370,11 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     addCharToToken('\0');
                     Token matchedConstant = matchConstant(currentToken);
                     if (matchedConstant != NULL) {
+<<<<<<< HEAD
                         ListPushBack(tokenList, matchedConstant);
+=======
+                        VectorPushBack(tokenList, matchedConstant);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
                         resetToken();
                         currentState = TOKENIZER_START;
                     } else {

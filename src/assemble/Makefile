@@ -14,7 +14,12 @@ all: ../../build/assemble/assemble.o\
 	 ../../build/assemble/commandgen.o\
 	 ../../build/assemble/token_utils.o\
 	 ../../build/assemble/tokenizer.o\
+<<<<<<< HEAD
 	 ../../build/assemble/error.o
+=======
+	 ../../build/assemble/error.o\
+	 ../../build/assemble/instruction_layouts.o
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 	cp ../../build/stddata.o ../../build/assemble/
 	$(CC) $(CFLAGS) $^ ../../build/assemble/stddata.o -o ../../build/assemble/assemble
 	cp ../../build/assemble/assemble ../../bin/
@@ -34,6 +39,10 @@ all: ../../build/assemble/assemble.o\
 ../../build/assemble/process_data_transfer.o: commandgen/process_data_transfer.c
 ../../build/assemble/process_multiply.o: commandgen/process_multiply.c
 ../../build/assemble/process_shift.o: commandgen/process_shift.c
+<<<<<<< HEAD
+=======
+../../build/assemble/instruction_layouts.o: commandgen/instruction_layouts.c
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 
 clean:
 	rm -f $(wildcard ../../build/assemble/*)

@@ -1,4 +1,5 @@
 #include "common_defs.h"
+<<<<<<< HEAD
 #include "process_branch.h"
 #include "process_multiply.h"
 #include "process_shift.h"
@@ -45,6 +46,17 @@ void InitFuncProc() {
     MapSet(func_proc, INSTR_ROR, ProcessShift);
 }
 
+=======
+#include "instruction_layouts.h"
+#include "../tokenizer.h"
+#include <stddata.h>
+#include <stdarg.h>
+
+Map data_proc_opcodes;
+Map shift_codes;
+
+/* Helper Functions */
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 void InitDataProcOpcodes() {
     data_proc_opcodes = NewEmptyMap(UnsafeIntHash, UnsafeIntEq);
     MapSet(data_proc_opcodes, INSTR_AND, 0b0000);
@@ -59,6 +71,7 @@ void InitDataProcOpcodes() {
     MapSet(data_proc_opcodes, INSTR_CMP, 0b1010);
 }
 
+<<<<<<< HEAD
 void InitCompFuncs() {
     comp_funcs = NewEmptySet(UnsafeIntHash, UnsafeIntEq);
     SetInsert(comp_funcs, INSTR_TST);
@@ -66,6 +79,8 @@ void InitCompFuncs() {
     SetInsert(comp_funcs, INSTR_CMP);
 }
 
+=======
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 void InitShiftCodes() {
     shift_codes = NewEmptyMap(UnsafeIntHash, UnsafeIntEq);
     MapSet(shift_codes, INSTR_LSL, 0b00);
@@ -76,6 +91,7 @@ void InitShiftCodes() {
 
 /* Interface Definitions */
 void InitFunctionGen() {
+<<<<<<< HEAD
     InitFuncProc();
     InitDataProcOpcodes();
     InitCompFuncs();
@@ -86,6 +102,16 @@ void FinishFunctionGen() {
     DeleteMap(func_proc);
     DeleteMap(data_proc_opcodes);
     DeleteSet(comp_funcs);
+=======
+    InitDataProcOpcodes();
+    InitShiftCodes();
+    InitInstructionLayouts();
+}
+
+void FinishFunctionGen() {
+    FinishInstructionLayouts();
+    DeleteMap(data_proc_opcodes);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     DeleteMap(shift_codes);
 }
 
@@ -94,4 +120,23 @@ void SetInstruction(Vector restrict output, int instruction, int offset) {
         VectorResize(output, offset + 1);
     }
     VectorSet(output, offset, instruction);
+<<<<<<< HEAD
+=======
+}
+
+unsigned int FillInstruction(int nfields, ...) {
+    va_list args;
+    va_start(args, nfields);
+
+    unsigned int instruction = 0;
+    for(int i = 0; i < nfields; i++) {
+        unsigned int value = va_arg(args, unsigned int);
+        unsigned int shift = va_arg(args, unsigned int);
+        instruction |= value << shift;
+    }
+
+    va_end(args);
+    
+    return instruction;
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 }

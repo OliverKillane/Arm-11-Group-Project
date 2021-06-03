@@ -1,16 +1,26 @@
 #include <stdbool.h>
+<<<<<<< HEAD
 // #include <assemble.h>
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
 #include "assemble_utils.h"
 // #include "tokenizer.h"
+=======
+#include <stdio.h>
+#include <assert.h>
+#include <string.h>
+#include <assemble_utils.h>
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 #include "commandgentests.c"
 
 bool stringsAreEqual(char *str1, char *str2) {
     assert(str1 != NULL);
     assert(str2 != NULL);
+<<<<<<< HEAD
     // printf("Comparing: '%s' to '%s'\n", str1, str2);
+=======
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     for (; *str1 != '\0' && *str2 != '\0'; str1++, str2++) {
         if (*str1 != *str2) {
             return false;
@@ -193,12 +203,15 @@ void testReadFileLines() {
     DeleteList(test);
 }
 
+<<<<<<< HEAD
 // void testRemoveColon() {
 //     assert(stringsAreEqual("hello", "hello:"));
 //     assert(stringsAreEqual("hello", "hello"));
 //     assert(!stringsAreEqual(":hello", "hello"));
 // }
 
+=======
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 void testTokenize() {
     List lines = readFileLines("./tokenTests.s");
     Map symbolTable = NewEmptyMap(StringHash, StringEq);
@@ -414,6 +427,7 @@ void testMatchConstant() {
     assert(con == NULL);
 
     con = matchConstant("#0xff");
+<<<<<<< HEAD
     // printf("1\n");
     assert(TokenConstantValue(con) == 255);
     assert(TokenConstantType(con) == CONST_HASH);
@@ -422,19 +436,32 @@ void testMatchConstant() {
 
     con = matchConstant("12312");
     // printf("2\n");
+=======
+    assert(TokenConstantValue(con) == 255);
+    assert(TokenConstantType(con) == CONST_HASH);
+    DeleteToken(con);
+
+    con = matchConstant("12312");
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     assert(TokenConstantValue(con) == 12312);
     assert(TokenConstantType(con) == CONST_PURE);
     DeleteToken(con);
 
     con = matchConstant("=-12312");
+<<<<<<< HEAD
     // printf("3\n");
+=======
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     assert(TokenConstantValue(con) == -12312);
     assert(TokenConstantType(con) == CONST_EQUALS);
     DeleteToken(con);
 
     con = matchConstant("#ff");
     assert(con == NULL);
+<<<<<<< HEAD
     // printf("Hello there");
+=======
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     con = matchConstant("#-0xFF");
     assert(TokenConstantValue(con) == -255);
     assert(TokenConstantType(con) == CONST_HASH);
@@ -444,18 +471,25 @@ void testMatchConstant() {
 int main(void) {
     runCommandGenTests();
 
+<<<<<<< HEAD
     //testRemoveColon();
     //printf("Remove colon tests passed\n");
 
+=======
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     testMatchAlpha();
     testIsHex();
     testMatchConditionType();
     testMatchConstant();
     testMatchInstructionToken();
     testMatchRegister();
+<<<<<<< HEAD
     printf("bruh\n");
     testMatchHex();
     // printf("bruh\n");
+=======
+    testMatchHex();
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     testMatchDecimal();
 
     testReadFileLines();

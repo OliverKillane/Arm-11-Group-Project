@@ -3,10 +3,15 @@
  * @author Bartłomiej Cieślar
  * @brief data transfer instructions processing
  */
+<<<<<<< HEAD
+=======
+
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 #ifndef ASSEMBLE_COMMANDGEN_PROCESS_DATA_TRANSFER_H_
 #define ASSEMBLE_COMMANDGEN_PROCESS_DATA_TRANSFER_H_
 
 #include <stddata.h>
+<<<<<<< HEAD
 
 /**
  * @brief Processes data transfer instructions
@@ -41,6 +46,37 @@
 bool ProcessDataTransfer(
     Map symbols, 
     List tokens, 
+=======
+#include <stdbool.h>
+
+bool LayoutTransferSet(
+    Map symbols, 
+    Vector tokens, 
+    Vector output,
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutTransferConst(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutTransferShiftConst(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutTransferShiftReg(
+    Map symbols, 
+    Vector tokens, 
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     Vector output, 
     int offset, 
     int instructions_num

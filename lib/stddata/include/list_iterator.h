@@ -132,7 +132,8 @@ void ListIteratorInsertAfter(ListIterator iter, void* new_item);
 void ListIteratorInsertBefore(ListIterator iter, void* new_item);
 
 /**
- * @brief Removes an item iterator is pointing to 
+ * @brief Removes an item the iterator is pointing to 
+ * 
  * The function removes the item the iterator is pointing to from the list 
  * and moves the iterator to the next item in the list.
  * 

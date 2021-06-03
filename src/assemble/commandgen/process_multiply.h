@@ -7,6 +7,7 @@
 #define ASSEMBLE_COMMANDGEN_PROCESS_MULTIPLY_H_
 
 #include <stddata.h>
+<<<<<<< HEAD
 
 /**
  * @brief Processes multiply instructions
@@ -26,6 +27,22 @@ bool ProcessMultiply(
     Map symbols, 
     List tokens, 
     Vector output, 
+=======
+#include <stdbool.h>
+
+bool LayoutMUL(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutMLA(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     int offset, 
     int instructions_num
 );

@@ -7,6 +7,7 @@
 #define ASSEMBLE_COMMANDGEN_PROCESS_SHIFT_H_
 
 #include <stddata.h>
+<<<<<<< HEAD
 
 /**
  * @brief Processes shift instructions
@@ -30,9 +31,27 @@ bool ProcessShift(
     Map symbols, 
     List tokens, 
     Vector output, 
+=======
+#include <stdbool.h>
+
+bool LayoutShiftConst(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     int offset, 
     int instructions_num
 );
 
+<<<<<<< HEAD
+=======
+bool LayoutShiftReg(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+    int offset, 
+    int instructions_num
+);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 
 #endif /* ASSEMBLE_COMMANDGEN_PROCESS_SHIFT_H_ */

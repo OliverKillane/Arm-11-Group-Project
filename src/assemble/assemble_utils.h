@@ -3,6 +3,7 @@
 
 #include "stddata.h"
 
+<<<<<<< HEAD
 /**
  * @brief Writes the contents of @p program data vector to a file associated with @p filename .
  * @note the endian that the file is written in is the endian associated with the machine architecture. 
@@ -23,6 +24,14 @@ List readFileLines(char *filename);
  * function will have to ensure that the strings are freed along with the list itself.
  */
 
+=======
+void removeColon(char *str);
+
+void writeBinary(Vector program, char *filename);
+
+List readFileLines(char *filename);
+
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 List tokenize(List lines, Map symbolTable, int *totalInstructions);
 
 Vector tokensToBinary(Map symbolTable, List listOfTokens, int totalInstructions);

@@ -31,12 +31,21 @@ int main(int argc, char **argv) {
 	DeleteList(lines);
 
 	LISTFOR(listOfTokens, iter1) {
+<<<<<<< HEAD
 		List line = ListIteratorGet(iter1);
 		LISTFOR(line, iter2) {
 			Token token = ListIteratorGet(iter2);
 			DeleteToken(token);
 		}
 		DeleteList(line);
+=======
+		Vector line = ListIteratorGet(iter1);
+		VECTORFOR(line, iter2) {
+			Token token = VectorIteratorGet(iter2);
+			DeleteToken(token);
+		}
+		DeleteVector(line);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 	}
 	DeleteList(listOfTokens);
 

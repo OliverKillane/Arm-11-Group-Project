@@ -7,6 +7,7 @@
 #define ASSEMBLE_COMMANDGEN_PROCESS_BRANCH_H_
 
 #include <stddata.h>
+<<<<<<< HEAD
 
 /**
  * @brief Processses a branch instruction
@@ -29,6 +30,22 @@ bool ProcessBranch(
     Map symbols, 
     List tokens, 
     Vector output, 
+=======
+#include <stdbool.h>
+
+bool LayoutBranchLabel(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutBranchConstant(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     int offset, 
     int instructions_num
 );

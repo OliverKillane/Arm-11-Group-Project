@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "process_shift.h"
 #include <stddata.h>
 #include "common_defs.h"
@@ -39,10 +40,40 @@ static inline unsigned int ProcessRegisterShift(List restrict tokens) {
 bool ProcessShift(
     Map restrict symbols, 
     List restrict tokens, 
+=======
+#include "common_defs.h"
+#include "process_shift.h"
+#include "../tokenizer.h"
+#include <stddata.h>
+
+bool LayoutShiftConst(
+    Map restrict symbols, 
+    Vector restrict tokens, 
     Vector restrict output, 
     int offset, 
     int instructions_num
 ) {
+    SetInstruction(output, FillInstruction(
+        6,
+        TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
+        MapGet(data_proc_opcodes, (void*)INSTR_MOV), 21,
+        TokenRegisterNumber(VectorGet(tokens, 1)), 12,
+        TokenRegisterNumber(VectorGet(tokens, 1)), 0,
+        MapGet(shift_codes, (void*)TokenInstructionType(VectorGet(tokens, 0))), 5,
+        TokenConstantValue(VectorGet(tokens, 2)), 7
+    ), offset);
+    return false;
+}
+
+bool LayoutShiftReg(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
+    Vector restrict output, 
+    int offset, 
+    int instructions_num
+) {
+<<<<<<< HEAD
     if(setjmp(error_jump) != 0) {
         return true;
     }
@@ -79,5 +110,17 @@ bool ProcessShift(
     instr |= shift << 4;
 
     SetInstruction(output, instr, offset);
+=======
+    SetInstruction(output, FillInstruction(
+        7,
+        TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
+        MapGet(data_proc_opcodes, (void*)INSTR_MOV), 21,
+        TokenRegisterNumber(VectorGet(tokens, 1)), 12,
+        TokenRegisterNumber(VectorGet(tokens, 1)), 0,
+        0x1, 4,
+        MapGet(shift_codes, (void*)TokenInstructionType(VectorGet(tokens, 0))), 5,
+        TokenRegisterNumber(VectorGet(tokens, 2)), 8
+    ), offset);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     return false;
 }

@@ -1,10 +1,15 @@
 #include <commandgen.h>
+<<<<<<< HEAD
 #include <process_shift.h>
 #include <process_multiply.h>
 #include <process_data_transfer.h>
 #include <process_data_processing.h>
 #include <process_branch.h>
 #include <common_defs.h>
+=======
+#include <common_defs.h>
+#include <instruction_layouts.h>
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 #include <stddata.h>
 #include <stdio.h>
 #include <tokenizer.h>
@@ -20,6 +25,7 @@ void SingleProcessBranch(
     int offset, 
     int instruction_num
 ) {
+<<<<<<< HEAD
     List tokens_list = NewEmptyList();
     for(int i = 0; i < tokens_num; i++) {
         ListPushBack(tokens_list, tokens[i]);
@@ -29,6 +35,17 @@ void SingleProcessBranch(
         DeleteToken(ListPopFront(tokens_list));
     }
     DeleteList(tokens_list);
+=======
+    Vector tokens_Vector = NewEmptyVector();
+    for(int i = 0; i < tokens_num; i++) {
+        VectorPushBack(tokens_Vector, tokens[i]);
+    }
+    FunctionGen(symbols, tokens_Vector, output, offset, instruction_num);
+    while(!VectorEmpty(tokens_Vector)) {
+        DeleteToken(VectorPopBack(tokens_Vector));
+    }
+    DeleteVector(tokens_Vector);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 }
 void ProcessBranchTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -94,6 +111,7 @@ void SingleProcessDataProcessing(
     int offset, 
     int instruction_num
 ) {
+<<<<<<< HEAD
     List tokens_list = NewEmptyList();
     for(int i = 0; i < tokens_num; i++) {
         ListPushBack(tokens_list, tokens[i]);
@@ -103,6 +121,17 @@ void SingleProcessDataProcessing(
         DeleteToken(ListPopFront(tokens_list));
     }
     DeleteList(tokens_list);
+=======
+    Vector tokens_Vector = NewEmptyVector();
+    for(int i = 0; i < tokens_num; i++) {
+        VectorPushBack(tokens_Vector, tokens[i]);
+    }
+    FunctionGen(symbols, tokens_Vector, output, offset, instruction_num);
+    while(!VectorEmpty(tokens_Vector)) {
+        DeleteToken(VectorPopBack(tokens_Vector));
+    }
+    DeleteVector(tokens_Vector);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 }
 
 void ProcessDataProcessingTests() {
@@ -203,6 +232,7 @@ void SingleProcessMultiply(
     int offset, 
     int instruction_num
 ) {
+<<<<<<< HEAD
     List tokens_list = NewEmptyList();
     for(int i = 0; i < tokens_num; i++) {
         ListPushBack(tokens_list, tokens[i]);
@@ -212,6 +242,17 @@ void SingleProcessMultiply(
         DeleteToken(ListPopFront(tokens_list));
     }
     DeleteList(tokens_list);
+=======
+    Vector tokens_Vector = NewEmptyVector();
+    for(int i = 0; i < tokens_num; i++) {
+        VectorPushBack(tokens_Vector, tokens[i]);
+    }
+    FunctionGen(symbols, tokens_Vector, output, offset, instruction_num);
+    while(!VectorEmpty(tokens_Vector)) {
+        DeleteToken(VectorPopBack(tokens_Vector));
+    }
+    DeleteVector(tokens_Vector);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 }
 void ProcessMultiplyTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -279,6 +320,7 @@ void SingleProcessDataTransfer(
     int offset, 
     int instruction_num
 ) {
+<<<<<<< HEAD
     List tokens_list = NewEmptyList();
     for(int i = 0; i < tokens_num; i++) {
         ListPushBack(tokens_list, tokens[i]);
@@ -288,6 +330,17 @@ void SingleProcessDataTransfer(
         DeleteToken(ListPopFront(tokens_list));
     }
     DeleteList(tokens_list);
+=======
+    Vector tokens_Vector = NewEmptyVector();
+    for(int i = 0; i < tokens_num; i++) {
+        VectorPushBack(tokens_Vector, tokens[i]);
+    }
+    FunctionGen(symbols, tokens_Vector, output, offset, instruction_num);
+    while(!VectorEmpty(tokens_Vector)) {
+        DeleteToken(VectorPopBack(tokens_Vector));
+    }
+    DeleteVector(tokens_Vector);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 }
 void ProcessDataTransferTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);
@@ -366,7 +419,11 @@ void ProcessDataTransferTests() {
     assert((int)VectorGet(output, 4) == 0xE581001C);
     assert((int)VectorGet(output, 5) == 0xE6821004);
     assert((int)VectorGet(output, 6) == 0xE40AA0D4);
+<<<<<<< HEAD
     assert((int)VectorGet(output, 7) == 0xE6079c52);
+=======
+    assert((int)VectorGet(output, 7) == 0xE6079C52);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     assert((int)VectorGet(output, 8) == 0x20200020);
 
     FinishFunctionGen();
@@ -383,6 +440,7 @@ void SingleProcessShift(
     int offset, 
     int instruction_num
 ) {
+<<<<<<< HEAD
     List tokens_list = NewEmptyList();
     for(int i = 0; i < tokens_num; i++) {
         ListPushBack(tokens_list, tokens[i]);
@@ -392,6 +450,17 @@ void SingleProcessShift(
         DeleteToken(ListPopFront(tokens_list));
     }
     DeleteList(tokens_list);
+=======
+    Vector tokens_Vector = NewEmptyVector();
+    for(int i = 0; i < tokens_num; i++) {
+        VectorPushBack(tokens_Vector, tokens[i]);
+    }
+    FunctionGen(symbols, tokens_Vector, output, offset, instruction_num);
+    while(!VectorEmpty(tokens_Vector)) {
+        DeleteToken(VectorPopBack(tokens_Vector));
+    }
+    DeleteVector(tokens_Vector);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 }
 void ProcessShiftTests() {
     Map symbols = NewEmptyMap(StringHash, StringEq);

@@ -17,6 +17,9 @@
 *.o
 .vscode
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 
 #ignore junk files from compiling Haskell code
 *.hi

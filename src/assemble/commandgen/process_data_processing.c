@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "process_data_processing.h"
 #include <stddata.h>
 #include "common_defs.h"
@@ -63,11 +64,20 @@ static inline unsigned int ProcessBaseRegisters(List restrict tokens) {
     instruction |= reg_d << 12;
     return instruction;
 }
+=======
+#include "common_defs.h"
+#include "instruction_layouts.h"
+#include "../tokenizer.h"
+#include "process_data_processing.h"
+#include <stddata.h>
+#include <stdio.h>
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 
 static inline unsigned int ConvertLongToRotated(unsigned long long value) {
     return (unsigned int)value | (value >> 32);
 }
 
+<<<<<<< HEAD
 static inline unsigned int ProcessImmediate(List restrict tokens) {
     if(ListSize(tokens) > 1) {
         SetErrorCode(STAGE_DATA_PROCESSING, ERROR_TOO_LONG);
@@ -80,6 +90,9 @@ static inline unsigned int ProcessImmediate(List restrict tokens) {
         SetErrorCode(STAGE_DATA_PROCESSING, ERROR_CONST_OOB);
         longjmp(error_jump, 1);
     }
+=======
+static inline unsigned int ProcessImmediate(long long expr_value_signed) {
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     unsigned long long expr_value = expr_value_signed;
 
     unsigned int rotate_right = 0;
@@ -88,10 +101,13 @@ static inline unsigned int ProcessImmediate(List restrict tokens) {
         expr_value <<= 2;
     }
     expr_value = ConvertLongToRotated(expr_value);
+<<<<<<< HEAD
     if(expr_value >= (1<<8)) {
         SetErrorCode(STAGE_DATA_PROCESSING, ERROR_CONST_OOB);
         longjmp(error_jump, 1);
     }
+=======
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 
     int operand2 = 0;
     operand2 |= rotate_right << 8;
@@ -100,6 +116,7 @@ static inline unsigned int ProcessImmediate(List restrict tokens) {
     return operand2;
 }
 
+<<<<<<< HEAD
 static inline unsigned int ProcessImmediateShift(List restrict tokens) {
     if(TokenConstantType(ListFront(tokens)) != CONST_HASH) {
         SetErrorCode(STAGE_SHIFTED_REGISTER, ERROR_EXPECTED_REGISTER_OR_HASH_CONSTANT);
@@ -177,10 +194,78 @@ static inline unsigned int ProcessRegister(List restrict tokens) {
 bool ProcessDataProcessing(
     Map restrict symbols, 
     List restrict tokens, 
+=======
+bool LayoutProcConst(
+    Map restrict symbols, 
+    Vector restrict tokens, 
     Vector restrict output, 
     int offset, 
     int instructions_num
 ) {
+    InstructionType type;
+    unsigned int reg_n = 0;
+    unsigned int reg_d = 0;
+    long long constant = 0;
+    ProcessDataLayout(tokens, 4, &type, &reg_n, &reg_d, &constant);
+
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
+    unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
+    unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
+    SetInstruction(output, FillInstruction(
+        7,
+        cond, 28,
+        0x1, 25,
+        opcode, 21,
+        set, 20,
+        reg_n, 16,
+        reg_d, 12,
+        ProcessImmediate(constant), 0
+    ), offset);
+    return false;
+}
+
+bool LayoutProcShiftConst(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+    int offset, 
+    int instructions_num
+) {
+    InstructionType type;
+    unsigned int reg_n = 0;
+    unsigned int reg_d = 0;
+    unsigned int reg_m;
+    InstructionType shift_name = INSTR_LSL;
+    long long shift_value = 0;
+    ProcessDataLayout(tokens, 6, &type, &reg_n, &reg_d, &reg_m, &shift_name, &shift_value);
+
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
+    unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
+    unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
+
+    SetInstruction(output, FillInstruction(
+        8,
+        cond, 28,
+        opcode, 21,
+        set, 20,
+        reg_n, 16,
+        reg_d, 12,
+        reg_m, 0,
+        MapGet(shift_codes, (void*)shift_name), 5,
+        shift_value, 7
+    ), offset);
+    return false;
+}
+
+bool LayoutProcShiftReg(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
+    Vector restrict output, 
+    int offset, 
+    int instructions_num
+) {
+<<<<<<< HEAD
     if(setjmp(error_jump) != 0) {
         return true;
     }
@@ -204,5 +289,30 @@ bool ProcessDataProcessing(
     instruction |= immediate << 25;
     instruction |= operand2;
     SetInstruction(output, instruction, offset);
+=======
+    InstructionType type;
+    unsigned int reg_n = 0;
+    unsigned int reg_d = 0;
+    unsigned int reg_m;
+    InstructionType shift_name;
+    unsigned int reg_s;
+    ProcessDataLayout(tokens, 6, &type, &reg_n, &reg_d, &reg_m, &shift_name, &reg_s);
+
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
+    unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
+    unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
+    SetInstruction(output, FillInstruction(
+        9,
+        cond, 28,
+        opcode, 21,
+        set, 20,
+        reg_n, 16,
+        reg_d, 12,
+        reg_m, 0,
+        0x1, 4,
+        MapGet(shift_codes, (void*)shift_name), 5,
+        reg_s, 8
+    ), offset);
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     return false;
 }

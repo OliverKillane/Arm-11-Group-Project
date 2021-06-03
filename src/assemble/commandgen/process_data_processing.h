@@ -3,10 +3,15 @@
  * @author Bartłomiej Cieślar
  * @brief data processing instructions processing
  */
+<<<<<<< HEAD
+=======
+
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
 #ifndef ASSEMBLE_COMMANDGEN_PROCESS_DATA_PROCESSING_H_
 #define ASSEMBLE_COMMANDGEN_PROCESS_DATA_PROCESSING_H_
 
 #include <stddata.h>
+<<<<<<< HEAD
 
 /**
  * @brief Processes data processing instructions
@@ -39,6 +44,29 @@
 bool ProcessDataProcessing(
     Map symbols, 
     List tokens, 
+=======
+#include <stdbool.h>
+
+bool LayoutProcConst(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutProcShiftConst(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutProcShiftReg(
+    Map symbols, 
+    Vector tokens, 
+>>>>>>> assemble_tokenizer_commongen_using_decision_tree
     Vector output, 
     int offset, 
     int instructions_num
