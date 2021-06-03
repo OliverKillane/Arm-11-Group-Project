@@ -8,13 +8,14 @@
 bool LayoutRet(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data,
     int offset, 
     int instructions_num
 ) {
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
 
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         4,
         cond, 28,
         0xD, 21,
@@ -28,18 +29,20 @@ bool LayoutRet(
 bool LayoutHalt(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
-    SetInstruction(output, 0, offset);
+    SetInstruction(text, 0, offset);
     return false;
 }
 
 bool LayoutPush(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -48,7 +51,7 @@ bool LayoutPush(
     ProcessDataLayout(tokens, 2, &type, &reg_d);
 
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         7,
         cond, 28,
         0x1, 26,
@@ -64,7 +67,8 @@ bool LayoutPush(
 bool LayoutPop(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -73,7 +77,7 @@ bool LayoutPop(
     ProcessDataLayout(tokens, 2, &type, &reg_d);
 
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         7,
         cond, 28,
         0x1, 26,

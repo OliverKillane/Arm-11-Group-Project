@@ -7,9 +7,10 @@
 #include <stdio.h>
 
 bool LayoutTransferSet(
-    Map symbols, 
-    Vector tokens, 
-    Vector output, 
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -18,7 +19,7 @@ bool LayoutTransferSet(
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
 
     if(constant < (1<<8)) {
-        SetInstruction(output, FillInstruction(
+        SetInstruction(text, FillInstruction(
             5,
             cond, 28,
             0x1, 25,
@@ -29,12 +30,9 @@ bool LayoutTransferSet(
         return false;
     }
 
-    if(VectorSize(output) < instructions_num) {
-        VectorResize(output, instructions_num);
-    }
-    long long data_offset = VectorSize(output);
-    VectorPushBack(output, constant);
-    SetInstruction(output, FillInstruction(
+    long long data_offset = VectorSize(data) + instructions_num;
+    VectorPushBack(data, constant);
+    SetInstruction(text, FillInstruction(
         7,
         cond, 28,
         0x1, 26,
@@ -49,9 +47,10 @@ bool LayoutTransferSet(
 }
 
 bool LayoutTransferConst(
-    Map symbols, 
-    Vector tokens,
-    Vector output, 
+    Map restrict symbols, 
+    Vector restrict tokens,
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -64,7 +63,7 @@ bool LayoutTransferConst(
     unsigned int pre = DecisionTreeQuery(bracket_layouts, tokens);
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int load = type == INSTR_LDR;
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         8,
         cond, 28,
         0x1, 26,
@@ -80,9 +79,10 @@ bool LayoutTransferConst(
 }
 
 bool LayoutTransferShiftConst(
-    Map symbols, 
-    Vector tokens, 
-    Vector output, 
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -98,7 +98,7 @@ bool LayoutTransferShiftConst(
     unsigned int pre = DecisionTreeQuery(bracket_layouts, tokens);
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int load = type == INSTR_LDR;
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         10,
         cond, 28,
         0x3, 25,
@@ -116,9 +116,10 @@ bool LayoutTransferShiftConst(
 }
 
 bool LayoutTransferShiftReg(
-    Map symbols, 
-    Vector tokens, 
-    Vector output, 
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -134,7 +135,7 @@ bool LayoutTransferShiftReg(
     unsigned int pre = DecisionTreeQuery(bracket_layouts, tokens);
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int load = type == INSTR_LDR;
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         11,
         cond, 28,
         0x3, 25,

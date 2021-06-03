@@ -13,7 +13,8 @@
 bool LayoutProcConst(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
@@ -21,7 +22,8 @@ bool LayoutProcConst(
 bool LayoutProcShiftConst(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
@@ -29,7 +31,8 @@ bool LayoutProcShiftConst(
 bool LayoutProcShiftReg(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );

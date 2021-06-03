@@ -7,11 +7,12 @@
 bool LayoutMUL(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         5,
         TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
         TokenRegisterNumber(VectorGet(tokens, 1)), 16,
@@ -25,11 +26,12 @@ bool LayoutMUL(
 bool LayoutMLA(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         7,
         TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
         TokenRegisterNumber(VectorGet(tokens, 1)), 16,

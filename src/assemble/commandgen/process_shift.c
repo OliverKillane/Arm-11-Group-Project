@@ -7,11 +7,12 @@
 bool LayoutShiftConst(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         6,
         TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
         MapGet(data_proc_opcodes, (void*)INSTR_MOV), 21,
@@ -26,11 +27,12 @@ bool LayoutShiftConst(
 bool LayoutShiftReg(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         7,
         TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
         MapGet(data_proc_opcodes, (void*)INSTR_MOV), 21,

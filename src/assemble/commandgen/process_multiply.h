@@ -10,17 +10,19 @@
 #include <stdbool.h>
 
 bool LayoutMUL(
-    Map restrict symbols, 
-    Vector restrict tokens, 
-    Vector restrict output, 
+    Map symbols, 
+    Vector tokens, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
 
 bool LayoutMLA(
-    Map restrict symbols, 
-    Vector restrict tokens, 
-    Vector restrict output, 
+    Map symbols, 
+    Vector tokens, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );

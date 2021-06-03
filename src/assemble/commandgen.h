@@ -22,8 +22,9 @@
 bool FunctionGen(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
-    int offset, 
+    Vector text,
+    Vector data,
+    int offset,
     int instructions_num
 );
 

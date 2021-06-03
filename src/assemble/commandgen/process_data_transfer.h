@@ -13,7 +13,8 @@
 bool LayoutTransferSet(
     Map symbols, 
     Vector tokens, 
-    Vector output,
+    Vector text,
+    Vector data,
     int offset, 
     int instructions_num
 );
@@ -21,7 +22,8 @@ bool LayoutTransferSet(
 bool LayoutTransferConst(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
@@ -29,7 +31,8 @@ bool LayoutTransferConst(
 bool LayoutTransferShiftConst(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
@@ -37,7 +40,8 @@ bool LayoutTransferShiftConst(
 bool LayoutTransferShiftReg(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );

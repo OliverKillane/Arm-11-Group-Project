@@ -29,7 +29,8 @@ static inline unsigned int ProcessImmediate(long long expr_value_signed) {
 bool LayoutProcConst(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -42,7 +43,7 @@ bool LayoutProcConst(
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
     unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         7,
         cond, 28,
         0x1, 25,
@@ -58,7 +59,8 @@ bool LayoutProcConst(
 bool LayoutProcShiftConst(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -74,7 +76,7 @@ bool LayoutProcShiftConst(
     unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
     unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
 
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         8,
         cond, 28,
         opcode, 21,
@@ -91,7 +93,8 @@ bool LayoutProcShiftConst(
 bool LayoutProcShiftReg(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -106,7 +109,7 @@ bool LayoutProcShiftReg(
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
     unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         9,
         cond, 28,
         opcode, 21,

@@ -8,7 +8,8 @@
 bool LayoutBranchLabel(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -20,7 +21,7 @@ bool LayoutBranchLabel(
     unsigned int jump_offset = ((int)MapGet(symbols, label) - 2 - offset) & ((1<<24) - 1);
     unsigned int link = (type == INSTR_BRL); 
 
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         4,
         cond, 28,
         0x5, 25,
@@ -33,7 +34,8 @@ bool LayoutBranchLabel(
 bool LayoutBranchConstant(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -45,7 +47,7 @@ bool LayoutBranchConstant(
     unsigned int jump_offset = (constant / 4 - 2 - offset) & ((1<<24) - 1);
     unsigned int link = (type == INSTR_BRL); 
 
-    SetInstruction(output, FillInstruction(
+    SetInstruction(text, FillInstruction(
         4,
         cond, 28,
         0x5, 25,

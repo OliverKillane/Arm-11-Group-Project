@@ -7,10 +7,11 @@
 bool FunctionGen(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data,
     int offset, 
     int instructions_num
 ) {
-    bool(*process_function)(Map, Vector, Vector, int, int) = DecisionTreeQuery(instruction_layouts, tokens);
-    return process_function(symbols, tokens, output, offset, instructions_num);
+    bool(*process_function)(Map, Vector, Vector, Vector, int, int) = DecisionTreeQuery(instruction_layouts, tokens);
+    return process_function(symbols, tokens, text, data, offset, instructions_num);
 }

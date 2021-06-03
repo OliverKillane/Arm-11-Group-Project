@@ -7,7 +7,8 @@
 bool LayoutRet(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
@@ -15,7 +16,8 @@ bool LayoutRet(
 bool LayoutHalt(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
@@ -23,7 +25,8 @@ bool LayoutHalt(
 bool LayoutPush(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
@@ -31,7 +34,8 @@ bool LayoutPush(
 bool LayoutPop(
     Map symbols, 
     Vector tokens, 
-    Vector output, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
