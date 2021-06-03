@@ -8,8 +8,8 @@ all: stddata assemble emulate
 assemble: stddata
 	cd assemble && $(MAKE)
 
-emulate:
-	cd emulate && $(MAKE)
+emulate: stddata
+	cd assemble && $(MAKE)
 
 stddata:
 	cd ../lib/stddata && $(MAKE) library

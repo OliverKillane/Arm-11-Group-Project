@@ -8,17 +8,6 @@
 #include "commandgen.h"
 #include "tokenizer.h"
 
-
-/* Removes the colon in sourceStr by copying to targetStr.
- * PRE: targetStr is of size one less than sourceStr.
- * POST: targetStr contains (in order) every character in sourceStr without the colon suffix.
- */
-void removeColon(char *str) {
-	for ( ; *str != ':' || *str != '\0' ; str++);
-
-	*str = '\0';
-}
-
 int bigToLittleEndian(int value) {
 	int newValue = 0;
 
