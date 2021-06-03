@@ -96,7 +96,6 @@ void branchInstr(instruction instr) {
 }
 
 
-// needs to change gpio pins, better handling
 void singleDataTransInstr(instruction instr) {
   word* RnBase = GETREG(GETBITS(instr, 16, 4));
   word* RdSrcDst = GETREG(GETBITS(instr, 12, 4));
@@ -113,7 +112,7 @@ void singleDataTransInstr(instruction instr) {
   }
 
   if (I) {
-    // if post idexing, using shift, Rn != Rm
+    /* if post idexing, using shift, Rn != Rm */
     if (GETREG(GETBITS(instr, 0, 4)) == RdSrcDst && !P) {
       printf("Error: Data Transfer instruction uses same register as Rn, Rm: %08x\n", instr);
     }
@@ -136,18 +135,18 @@ void singleDataTransInstr(instruction instr) {
       *RdSrcDst = memloc;
     }
 
-    // store is ignored as all loads must load the address, so stored values do not matter.
+    /* store is ignored as all loads must load the address, so stored values do not matter. */
   } else if (memloc == 0x20200028 && !L) {
-    // clear pins
+    /* clear pins */
     printf("PIN OFF\n");
     CPU.GPIO = CPU.GPIO & !*RdSrcDst;
   } else if (memloc == 0x2020001C && !L) {
-    // set pins
+    /* set pins */
     printf("PIN ON\n");
     CPU.GPIO = CPU.GPIO | *RdSrcDst;
   } else if (memloc < MEMSIZE) {
 
-    // interacting with 64KB of main memory
+    /* interacting with 64KB of main memory */
     if (L) {
       *RdSrcDst = *getmemword(memloc);
     } else {
@@ -155,8 +154,8 @@ void singleDataTransInstr(instruction instr) {
     }
   } else {
 
-    // not a load/store to control, or a store to clear or set, and 
-    // address is outside 64KB main memory
+    /* not a load/store to control, or a store to clear or set, and
+    address is outside 64KB main memory */
 
     printf("Error: Out of bounds memory access at address 0x%08x\n", memloc);
     return;
@@ -180,15 +179,15 @@ shiftRes shiftOperation(word shift) {
   byte shiftType = GETBITS(shift, 5, 2);
   word shiftby;
 
-  // Check 4th bit to determine the shift type (integer or register)
+  /* Check 4th bit to determine the shift type (integer or register) */
   if (GETBIT(shift, 4) && !GETBIT(shift, 7)) {
 
-    // shift by value of selected register
+    /* shift by value of selected register */
     shiftby = *(GETREG(GETBITS(shift, 8, 4)));
 
   } else if (!GETBIT(shift, 4)) {
-
-    // shift by constant integer amount
+    
+    /* shift by constant integer amount */
     shiftby = GETBITS(shift, 7, 5);
 
   } else {
@@ -197,7 +196,7 @@ shiftRes shiftOperation(word shift) {
     exit(INVALID_INSTR);
   }
 
-  // checking for shift by zero
+  /* checking for shift by zero */
   if (shiftby == 0) {
 
     return (shiftRes) {
@@ -265,7 +264,7 @@ void processDataInstr(instruction instr) {
   bool shiftCarryOut = false;
     
   if(I){
-    // Operand2 is an immediate value (shift rotate by rotate * 2)
+    /* Operand2 is an immediate value (shift rotate by rotate * 2) */
     word rotate = GETBITS(instr, 8, 4) << 1;
     word imm = GETBITS(instr, 0, 8);
     operand2Value = (imm >> rotate) | (GETBITS(imm, 0, rotate) << (32 - rotate)); 
@@ -273,13 +272,13 @@ void processDataInstr(instruction instr) {
     shiftCarryOut = GETBIT(imm, rotate - 1);
     }
   } else {
-    // Operand 2 is a shift register
+    /* Operand 2 is a shift register */
     shiftRes op2 = shiftOperation(instr);
     operand2Value = op2.result;
     shiftCarryOut = op2.carryout;
   }
 
-  // Perform ALU operation
+  /* Perform ALU operation */
   switch(OpCode){
     case AND: 
       ALUOut = RnVal & operand2Value; 
@@ -322,14 +321,14 @@ void processDataInstr(instruction instr) {
       exit(INVALID_INSTR);          
   }
 
-  // if S set then reassign CPSR flags
+  /* if S set then reassign CPSR flags */
   if(S) {
     if (OpCode == AND || OpCode == EOR || OpCode == ORR || OpCode == TEQ || OpCode == TST || OpCode == MOV) {
       CPU.CPSR.C = shiftCarryOut;
     } else if (OpCode == ADD || OpCode == RSB) {
       CPU.CPSR.C = (GETBIT(RnVal, 31) || GETBIT(operand2Value, 31)) && !GETBIT(ALUOut, 31);
     } else {
-      // Opcode must BE SUB or CMP
+      /* Opcode must BE SUB or CMP */
       CPU.CPSR.C = operand2Value <= RnVal;
     }
 
