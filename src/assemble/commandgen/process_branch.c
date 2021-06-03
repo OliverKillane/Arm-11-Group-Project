@@ -1,5 +1,6 @@
 #include "common_defs.h"
 #include "process_branch.h"
+#include "instruction_layouts.h"
 #include "../tokenizer.h"
 #include <stddata.h>
 #include <stdio.h>
@@ -17,7 +18,7 @@ bool LayoutBranchLabel(
     
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int jump_offset = ((int)MapGet(symbols, label) - 2 - offset) & ((1<<24) - 1);
-    unsigned int link = (type == INSTR_BLN); 
+    unsigned int link = (type == INSTR_BRL); 
 
     SetInstruction(output, FillInstruction(
         4,
@@ -42,7 +43,7 @@ bool LayoutBranchConstant(
     
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int jump_offset = (constant / 4 - 2 - offset) & ((1<<24) - 1);
-    unsigned int link = (type == INSTR_BLN); 
+    unsigned int link = (type == INSTR_BRL); 
 
     SetInstruction(output, FillInstruction(
         4,

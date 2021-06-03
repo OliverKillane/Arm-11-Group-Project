@@ -12,4 +12,28 @@ bool LayoutRet(
     int instructions_num
 );
 
+bool LayoutHalt(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutPush(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
+bool LayoutPop(
+    Map symbols, 
+    Vector tokens, 
+    Vector output, 
+    int offset, 
+    int instructions_num
+);
+
 #endif /* ASSEMBLE_COMMANDGEN_PROCESS_ALIAS_H_ */

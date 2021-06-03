@@ -1,4 +1,6 @@
+#include "common_defs.h"
 #include "process_multiply.h"
+#include "instruction_layouts.h"
 #include "../tokenizer.h"
 #include <stddata.h>
 

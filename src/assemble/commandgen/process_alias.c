@@ -1,5 +1,6 @@
 #include "common_defs.h"
 #include "process_alias.h"
+#include "instruction_layouts.h"
 #include "../tokenizer.h"
 #include <stddata.h>
 #include <stdio.h>
@@ -21,5 +22,66 @@ bool LayoutRet(
         0xE, 0
     ), offset);
 
+    return false;
+}
+
+bool LayoutHalt(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+    int offset, 
+    int instructions_num
+) {
+    SetInstruction(output, 0, offset);
+    return false;
+}
+
+bool LayoutPush(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+    int offset, 
+    int instructions_num
+) {
+    InstructionType type;
+    unsigned int reg_d;
+    ProcessDataLayout(tokens, 2, &type, &reg_d);
+
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
+    SetInstruction(output, FillInstruction(
+        7,
+        cond, 28,
+        0x1, 26,
+        0x1, 24,
+        0x1, 21,
+        0xD, 16,
+        reg_d, 12,
+        0x4, 0
+    ), offset);
+    return false;
+}
+
+bool LayoutPop(
+    Map restrict symbols, 
+    Vector restrict tokens, 
+    Vector restrict output, 
+    int offset, 
+    int instructions_num
+) {
+    InstructionType type;
+    unsigned int reg_d;
+    ProcessDataLayout(tokens, 2, &type, &reg_d);
+
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
+    SetInstruction(output, FillInstruction(
+        7,
+        cond, 28,
+        0x1, 26,
+        0x1, 23,
+        0x1, 20,
+        0xD, 16,
+        reg_d, 12,
+        0x4, 0
+    ), offset);
     return false;
 }

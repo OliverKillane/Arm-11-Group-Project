@@ -64,13 +64,13 @@ bool InstructionLayoutEqFunc(void* token_a_ptr, void* token_b_ptr) {
                        TokenInstructionType(token_b) == INSTR_CMP);
             }
             if(TokenInstructionType(token_a) == INSTR_BRN ||
-               TokenInstructionType(token_a) == INSTR_BLN ||
+               TokenInstructionType(token_a) == INSTR_BRL ||
                TokenInstructionType(token_b) == INSTR_BRN ||
-               TokenInstructionType(token_b) == INSTR_BLN) {
+               TokenInstructionType(token_b) == INSTR_BRL) {
                 return (TokenInstructionType(token_a) == INSTR_BRN ||
-                        TokenInstructionType(token_a) == INSTR_BLN) &&
+                        TokenInstructionType(token_a) == INSTR_BRL) &&
                        (TokenInstructionType(token_b) == INSTR_BRN ||
-                        TokenInstructionType(token_b) == INSTR_BLN)
+                        TokenInstructionType(token_b) == INSTR_BRL);
             }
             return true;
             
@@ -85,6 +85,9 @@ void InitSingleGroupTokens() {
     SetInsert(single_group_tokens, INSTR_MUL);
     SetInsert(single_group_tokens, INSTR_MLA);
     SetInsert(single_group_tokens, INSTR_RET);
+    SetInsert(single_group_tokens, INSTR_PSH);
+    SetInsert(single_group_tokens, INSTR_POP);
+    SetInsert(single_group_tokens, INSTR_HLT);
 }
 
 void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, int, int), int num_indicies, 
@@ -247,6 +250,9 @@ void InitInstructionLayouts() {
 
     /* Aliased Instructions */
     AddSingleLayout("i", LayoutRet, 0, NULL, NULL, INSTR_RET);
+    AddSingleLayout("i", LayoutHalt, 0, NULL, NULL, INSTR_HLT);
+    AddSingleLayout("ir", LayoutPush, 2, (void*[]){0, 1}, NULL, INSTR_PSH);
+    AddSingleLayout("ir", LayoutPop, 2, (void*[]){0, 1}, NULL, INSTR_POP);
 }
 
 void FinishInstructionLayouts() {

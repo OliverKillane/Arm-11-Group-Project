@@ -34,6 +34,9 @@ typedef enum {
     INSTR_BRN = 10, // to be able to map over them
     INSTR_BRL,
     INSTR_RET,
+    INSTR_PSH,
+    INSTR_POP,
+    INSTR_HLT,
     INSTR_ADD,
     INSTR_SUB,
     INSTR_RSB,
