@@ -1,3 +1,4 @@
+#include "common_defs.h"
 #include "process_branch.h"
 #include "../tokenizer.h"
 #include <stddata.h>
@@ -10,11 +11,20 @@ bool LayoutBranchLabel(
     int offset, 
     int instructions_num
 ) {
+    InstructionType type;
+    char* label;
+    ProcessDataLayout(tokens, 2, &type, &label);
+    
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
+    unsigned int jump_offset = ((int)MapGet(symbols, label) - 2 - offset) & ((1<<24) - 1);
+    unsigned int link = (type == INSTR_BLN); 
+
     SetInstruction(output, FillInstruction(
-        3,
-        TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
-        0xA, 24,
-        ((int)MapGet(symbols, TokenLabel(VectorGet(tokens, 1))) - 2 - offset) & ((1<<24) - 1), 0
+        4,
+        cond, 28,
+        0x5, 25,
+        link, 24,
+        jump_offset, 0
     ), offset);
     return false;
 }
@@ -26,11 +36,20 @@ bool LayoutBranchConstant(
     int offset, 
     int instructions_num
 ) {
+    InstructionType type;
+    long long constant;
+    ProcessDataLayout(tokens, 2, &type, &constant);
+    
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
+    unsigned int jump_offset = (constant / 4 - 2 - offset) & ((1<<24) - 1);
+    unsigned int link = (type == INSTR_BLN); 
+
     SetInstruction(output, FillInstruction(
-        3,
-        TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
-        0xA, 24,
-        (TokenConstantValue(VectorGet(tokens, 1)) / 4 - 2 - offset) & ((1<<24) - 1), 0
+        4,
+        cond, 28,
+        0x5, 25,
+        link, 24,
+        jump_offset, 0
     ), offset);
     return false;
 }

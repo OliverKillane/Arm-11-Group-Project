@@ -10,6 +10,7 @@ typedef enum {
     TOKEN_LABEL,
     TOKEN_SIGN,
     TOKEN_BRACE,
+    TOKEN_EXCLAMATION
 } TokenKind;
 
 typedef enum {
@@ -31,6 +32,8 @@ typedef enum {
 
 typedef enum {
     INSTR_BRN = 10, // to be able to map over them
+    INSTR_BRL,
+    INSTR_RET,
     INSTR_ADD,
     INSTR_SUB,
     INSTR_RSB,
@@ -82,6 +85,8 @@ Token NewLabelToken(char *label);
 Token NewSignToken(bool is_plus);
 
 Token NewBraceToken(bool is_open);
+
+Token NewExclamationToken();
 
 
 void DeleteToken(Token token);

@@ -58,6 +58,14 @@ Token NewBraceToken(bool is_open) {
     return token;
 }
 
+Token NewExclamationToken() {
+    Token token = malloc(sizeof(TokenRepr));
+    *token = (TokenRepr) {
+        .type = TOKEN_EXCLAMATION
+    };
+    return token;
+}
+
 void DeleteToken(Token token) {
     assert(token != NULL);
 
