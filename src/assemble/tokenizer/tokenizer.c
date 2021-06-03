@@ -72,7 +72,10 @@ ConditionType matchConditionType(char *str) {
 
 Token matchInstructionToken(char *str) {
     InstructionType instTyp;
-    if (*str == 'b') {
+    if (strncmp(str, "brl", 3) == 0) {
+        instTyp = INSTR_BRL;
+        str += 3;
+    } else if (strncmp(str, "b", 1) == 0) {
         instTyp = INSTR_BRN;
         str += 1;
     } else if (strncmp(str, "add", 3) == 0) {
@@ -129,6 +132,17 @@ Token matchInstructionToken(char *str) {
     } else if (strncmp(str, "ror", 3) == 0) {
         instTyp = INSTR_ROR;
         str += 3;
+    } else if (strncmp(str, "pop", 3) == 0) {
+        instTyp = INSTR_POP;
+        str += 3;
+    } else if (strncmp(str, "ret", 3) == 0) {
+        instTyp = INSTR_RET;
+        str += 3;
+    } else if (strncmp(str, "halt", 4) == 0) {
+        return NewInstructionToken(COND_AL, INSTR_HLT);
+    } else if (strncmp(str, "push", 4) == 0) {
+        instTyp = INSTR_PSH;
+        str += 4;
     } else {
         return NULL;
     }
@@ -297,7 +311,9 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     VectorPushBack(tokenList, NewSignToken(true));
                 } else if (line[0] == '-')  {
                     VectorPushBack(tokenList, NewSignToken(false));
-                } else if (line[0] == '#' || line[0] == '=' || isHex(line[0])) {
+                } else if (line[0] == '!')  {
+                    VectorPushBack(tokenList, NewExclamationToken());
+                }else if (line[0] == '#' || line[0] == '=' || isHex(line[0])) {
                     addCharToToken(line[0]);
                     currentState = TOKENIZER_CONSTANT;
                 } else if (line[0] == '\n') {
