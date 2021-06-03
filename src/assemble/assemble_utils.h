@@ -22,6 +22,7 @@ List readFileLines(char *filename);
  * @note The tokens in each of the returned list has been allocated and then copied, so the user of this
  * function will have to ensure that the strings are freed along with the list itself.
  */
+
 List tokenize(List lines, Map symbolTable, int *totalInstructions);
 
 Vector tokensToBinary(Map symbolTable, List listOfTokens, int totalInstructions);

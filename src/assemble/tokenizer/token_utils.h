@@ -24,7 +24,6 @@ typedef enum {
     TOKEN_SIGN,
     TOKEN_BRACE,
 } TokenKind;
-
 /**
  * @brief An enum for describing the type of constant a constant type token represents.
  * 
@@ -44,6 +43,7 @@ typedef enum {
  * 
  * @note the enums have a value of 10 so that they may be used as void pointers.
  */
+
 typedef enum {
     COND_EQ = 0x0, // to be able to map over them
     COND_NE = 0x1,
@@ -60,6 +60,7 @@ typedef enum {
  * 
  * @note the enums have a value of 10 so that they may be used as void pointers.
  */
+
 typedef enum {
     INSTR_BRN = 10, // to be able to map over them
     INSTR_ADD,
@@ -95,6 +96,7 @@ typedef enum {
  * @warning Attempting to access values in the union not associated with TokenKind will result in
  *          undefined behaviour.
  */
+
 typedef struct {
     TokenKind type;
     union {
@@ -196,6 +198,7 @@ bool TokenIsPlus(Token token);
  * @brief A function that returns true if the character of the token is a '['.
  * @warning this function will assert that the TokenKind associated with the Token is TOKEN_BRACE.
  */
+
 bool TokenIsOpenBracket(Token token);
 
 #endif /* ASSEMBLE_TOKEN_UTILS_H_ */

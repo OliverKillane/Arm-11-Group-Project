@@ -8,7 +8,6 @@
 #include "commandgen.h"
 #include "tokenizer.h"
 
-
 int bigToLittleEndian(int value) {
 	int newValue = 0;
 

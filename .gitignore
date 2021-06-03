@@ -16,6 +16,7 @@
 #ignore junk files from compiling C code
 *.o
 .vscode
+<<<<<<< HEAD
 
 #ignore junk files from compiling Haskell code
 *.hi
@@ -32,3 +33,5 @@
 *.nav
 *.toc
 
+=======
+>>>>>>> 13407f76ed336097e9820e046aef9f7de26a6755

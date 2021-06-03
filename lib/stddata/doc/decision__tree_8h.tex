@@ -1,0 +1,335 @@
+\hypertarget{decision__tree_8h}{}\doxysection{include/decision\+\_\+tree.h File Reference}
+\label{decision__tree_8h}\index{include/decision\_tree.h@{include/decision\_tree.h}}
+
+
+\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} and utilities related to it  
+
+
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structDecisionTreeRepr}{Decision\+Tree\+Repr}}
+\begin{DoxyCompactList}\small\item\em The structure representation of a decision tree. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{decision__tree_8h_a81605c38d1d32df2f6b21a2d7b7f1b61}{Decision\+Tree\+Insert}}(tree,  data,  value)
+\begin{DoxyCompactList}\small\item\em Sets a value under a sequence to a new value. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{decision__tree_8h_a516766eddb32d1c8653b66df43248ee7}{Decision\+Tree\+Query}}(tree,  data)
+\begin{DoxyCompactList}\small\item\em Retreives a value under a sequence. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{structDecisionTreeRepr}{Decision\+Tree\+Repr}} $\ast$ \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}
+\begin{DoxyCompactList}\small\item\em A decision tree. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} \mbox{\hyperlink{decision__tree_8h_a5e59d503dfd7b2e391b1b844c6d7ac6f}{New\+Empty\+Decision\+Tree}} (unsigned long long($\ast$hash\+\_\+func)(void $\ast$), bool($\ast$eq\+\_\+func)(void $\ast$, void $\ast$))
+\begin{DoxyCompactList}\small\item\em Creates a new empty \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{decision__tree_8h_a9f099acb42f72734247adddd8b2db707}{Delete\+Decision\+Tree}} (\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} tree)
+\begin{DoxyCompactList}\small\item\em Deallocates a \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{decision__tree_8h_ab1f2d62ca1b8b95c952a1e94639e56ce}{Decision\+Tree\+Size}} (\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} tree)
+\begin{DoxyCompactList}\small\item\em Returns the number of entries inside the decision tree. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{decision__tree_8h_aff95812250b0fe6430fc26ffe58025a7}{Decision\+Tree\+Empty}} (\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} tree)
+\begin{DoxyCompactList}\small\item\em Checks if the decision tree has no entries. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{decision__tree_8h_a75c8dc35a46648b3cb171231b90e4dc6}{Decision\+Tree\+Insert\+Vector}} (\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} tree, \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} data, void $\ast$value)
+\begin{DoxyCompactList}\small\item\em Sets a value under a sequence represented by a vector to a new value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{decision__tree_8h_a7f68ba76fdab3855ad75b2e0ad36d1d2}{Decision\+Tree\+Insert\+List}} (\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} tree, \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} data, void $\ast$value)
+\begin{DoxyCompactList}\small\item\em Sets a value under a sequence represented by a list to a new value. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{decision__tree_8h_a3dfbbce75367436a964f6bea271f7e37}{Decision\+Tree\+Query\+Vector}} (\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} tree, \mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}} data)
+\begin{DoxyCompactList}\small\item\em Retreives a value under a sequence represented by a vector. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{decision__tree_8h_a278ee55404453830880635845bb46ca9}{Decision\+Tree\+Query\+List}} (\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} tree, \mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}} data)
+\begin{DoxyCompactList}\small\item\em Retreives a value under a sequence represented by a list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} and utilities related to it 
+
+\begin{DoxyAuthor}{Author}
+Bartłomiej Cieślar 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{decision__tree_8h_a81605c38d1d32df2f6b21a2d7b7f1b61}\label{decision__tree_8h_a81605c38d1d32df2f6b21a2d7b7f1b61}} 
+\index{decision\_tree.h@{decision\_tree.h}!DecisionTreeInsert@{DecisionTreeInsert}}
+\index{DecisionTreeInsert@{DecisionTreeInsert}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{DecisionTreeInsert}{DecisionTreeInsert}}
+{\footnotesize\ttfamily \#define Decision\+Tree\+Insert(\begin{DoxyParamCaption}\item[{}]{tree,  }\item[{}]{data,  }\item[{}]{value }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{                                       \_Generic(data, \(\backslash\)}
+\DoxyCodeLine{                                       \mbox{\hyperlink{structVectorRepr}{Vector}}: \mbox{\hyperlink{decision__tree_8h_a75c8dc35a46648b3cb171231b90e4dc6}{DecisionTreeInsertVector}}, \(\backslash\)}
+\DoxyCodeLine{                                       \mbox{\hyperlink{structListRepr}{List}}: \mbox{\hyperlink{decision__tree_8h_a7f68ba76fdab3855ad75b2e0ad36d1d2}{DecisionTreeInsertList}}\(\backslash\)}
+\DoxyCodeLine{)(tree, data, value)}
+
+\end{DoxyCode}
+
+
+Sets a value under a sequence to a new value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & the decision tree to be modified \\
+\hline
+{\em data} & the sequence to place the {\ttfamily value} under \\
+\hline
+{\em value} & the value to be inserted into the decision tree \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily value} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily data} having an item of value 0 or 1 will result in an undefined behaviour 
+
+{\ttfamily tree} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{decision__tree_8h_a516766eddb32d1c8653b66df43248ee7}\label{decision__tree_8h_a516766eddb32d1c8653b66df43248ee7}} 
+\index{decision\_tree.h@{decision\_tree.h}!DecisionTreeQuery@{DecisionTreeQuery}}
+\index{DecisionTreeQuery@{DecisionTreeQuery}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{DecisionTreeQuery}{DecisionTreeQuery}}
+{\footnotesize\ttfamily \#define Decision\+Tree\+Query(\begin{DoxyParamCaption}\item[{}]{tree,  }\item[{}]{data }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{                                       \_Generic(data, \(\backslash\)}
+\DoxyCodeLine{                                       \mbox{\hyperlink{structVectorRepr}{Vector}}: \mbox{\hyperlink{decision__tree_8h_a3dfbbce75367436a964f6bea271f7e37}{DecisionTreeQueryVector}}, \(\backslash\)}
+\DoxyCodeLine{                                       \mbox{\hyperlink{structListRepr}{List}}: \mbox{\hyperlink{decision__tree_8h_a278ee55404453830880635845bb46ca9}{DecisionTreeQueryList}}\(\backslash\)}
+\DoxyCodeLine{)(tree, data)}
+
+\end{DoxyCode}
+
+
+Retreives a value under a sequence. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & the decision tree to retreive the value from \\
+\hline
+{\em data} & the sequence to retreive value of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the sequence or NULL if the key is not assigned 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily data} having an item with a value 0 or 1 will result in an undefined behaviour 
+
+{\ttfamily tree} not being a valid allocated \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} results in an undefined behaviour 
+\end{DoxyWarning}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}\label{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}} 
+\index{decision\_tree.h@{decision\_tree.h}!DecisionTree@{DecisionTree}}
+\index{DecisionTree@{DecisionTree}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{DecisionTree}{DecisionTree}}
+{\footnotesize\ttfamily typedef \mbox{\hyperlink{structDecisionTreeRepr}{Decision\+Tree\+Repr}}$\ast$ \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}}
+
+
+
+A decision tree. 
+
+This is a decision tree, which works like a map for sequences of items\+: It supports the following operations\+:
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{decision__tree_8h_a81605c38d1d32df2f6b21a2d7b7f1b61}{Decision\+Tree\+Insert}} Adds a sequence of items and the corresponding value
+\item \mbox{\hyperlink{decision__tree_8h_a516766eddb32d1c8653b66df43248ee7}{Decision\+Tree\+Query}} Retreives the value of a sequence in the decision tree
+\end{DoxyItemize}
+
+It can be created using \mbox{\hyperlink{decision__tree_8h_a5e59d503dfd7b2e391b1b844c6d7ac6f}{New\+Empty\+Decision\+Tree}} and deallocated using \mbox{\hyperlink{decision__tree_8h_a9f099acb42f72734247adddd8b2db707}{Delete\+Decision\+Tree}} To check its size and test if it is empty, use \mbox{\hyperlink{decision__tree_8h_ab1f2d62ca1b8b95c952a1e94639e56ce}{Decision\+Tree\+Size}} and \mbox{\hyperlink{decision__tree_8h_aff95812250b0fe6430fc26ffe58025a7}{Decision\+Tree\+Empty}}
+
+\begin{DoxyNote}{Note}
+Even though this is only a typedef, do not delcare it as a pointer to \mbox{\hyperlink{structDecisionTreeRepr}{Decision\+Tree\+Repr}} for improved code clarity 
+\end{DoxyNote}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{decision__tree_8h_a5e59d503dfd7b2e391b1b844c6d7ac6f}\label{decision__tree_8h_a5e59d503dfd7b2e391b1b844c6d7ac6f}} 
+\index{decision\_tree.h@{decision\_tree.h}!NewEmptyDecisionTree@{NewEmptyDecisionTree}}
+\index{NewEmptyDecisionTree@{NewEmptyDecisionTree}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{NewEmptyDecisionTree()}{NewEmptyDecisionTree()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} New\+Empty\+Decision\+Tree (\begin{DoxyParamCaption}\item[{unsigned long long($\ast$)(void $\ast$)}]{hash\+\_\+func,  }\item[{bool($\ast$)(void $\ast$, void $\ast$)}]{eq\+\_\+func }\end{DoxyParamCaption})}
+
+
+
+Creates a new empty \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}. 
+
+Dynamically allocates a new empty \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} using malloc.
+
+
+\begin{DoxyParams}{Parameters}
+{\em hash\+\_\+func} & The hash function for the items in the sequences \\
+\hline
+{\em eq\+\_\+func} & The equality function of the decision tree to compare the items in the sequences with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+In order to avoid memory leaks, please use \mbox{\hyperlink{decision__tree_8h_a9f099acb42f72734247adddd8b2db707}{Delete\+Decision\+Tree}} to deallocate it once you are done using it. 
+\end{DoxyWarning}
+\mbox{\Hypertarget{decision__tree_8h_a9f099acb42f72734247adddd8b2db707}\label{decision__tree_8h_a9f099acb42f72734247adddd8b2db707}} 
+\index{decision\_tree.h@{decision\_tree.h}!DeleteDecisionTree@{DeleteDecisionTree}}
+\index{DeleteDecisionTree@{DeleteDecisionTree}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{DeleteDecisionTree()}{DeleteDecisionTree()}}
+{\footnotesize\ttfamily void Delete\+Decision\+Tree (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}}]{tree }\end{DoxyParamCaption})}
+
+
+
+Deallocates a \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & The decision tree to be deallocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+Trying to use or deallocate already deallocated \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{decision__tree_8h_ab1f2d62ca1b8b95c952a1e94639e56ce}\label{decision__tree_8h_ab1f2d62ca1b8b95c952a1e94639e56ce}} 
+\index{decision\_tree.h@{decision\_tree.h}!DecisionTreeSize@{DecisionTreeSize}}
+\index{DecisionTreeSize@{DecisionTreeSize}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{DecisionTreeSize()}{DecisionTreeSize()}}
+{\footnotesize\ttfamily int Decision\+Tree\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}}]{tree }\end{DoxyParamCaption})}
+
+
+
+Returns the number of entries inside the decision tree. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & The decision tree to check the size of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the decision tree 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily tree} not being a valid allocated \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{decision__tree_8h_aff95812250b0fe6430fc26ffe58025a7}\label{decision__tree_8h_aff95812250b0fe6430fc26ffe58025a7}} 
+\index{decision\_tree.h@{decision\_tree.h}!DecisionTreeEmpty@{DecisionTreeEmpty}}
+\index{DecisionTreeEmpty@{DecisionTreeEmpty}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{DecisionTreeEmpty()}{DecisionTreeEmpty()}}
+{\footnotesize\ttfamily bool Decision\+Tree\+Empty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}}]{tree }\end{DoxyParamCaption})}
+
+
+
+Checks if the decision tree has no entries. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & The decision tree to check the emptiness of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\bfseries{true}} if the decision tree has no entries, otherwise {\bfseries{false}} 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily tree} not being a valid allocated \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{decision__tree_8h_a75c8dc35a46648b3cb171231b90e4dc6}\label{decision__tree_8h_a75c8dc35a46648b3cb171231b90e4dc6}} 
+\index{decision\_tree.h@{decision\_tree.h}!DecisionTreeInsertVector@{DecisionTreeInsertVector}}
+\index{DecisionTreeInsertVector@{DecisionTreeInsertVector}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{DecisionTreeInsertVector()}{DecisionTreeInsertVector()}}
+{\footnotesize\ttfamily void Decision\+Tree\+Insert\+Vector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}}]{tree,  }\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{data,  }\item[{void $\ast$}]{value }\end{DoxyParamCaption})}
+
+
+
+Sets a value under a sequence represented by a vector to a new value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & the decision tree to be modified \\
+\hline
+{\em data} & the sequence to place the {\ttfamily value} under \\
+\hline
+{\em value} & the value to be inserted into the decision tree \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily value} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily data} having an item of value 0 or 1 will result in an undefined behaviour 
+
+{\ttfamily tree} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{decision__tree_8h_a7f68ba76fdab3855ad75b2e0ad36d1d2}\label{decision__tree_8h_a7f68ba76fdab3855ad75b2e0ad36d1d2}} 
+\index{decision\_tree.h@{decision\_tree.h}!DecisionTreeInsertList@{DecisionTreeInsertList}}
+\index{DecisionTreeInsertList@{DecisionTreeInsertList}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{DecisionTreeInsertList()}{DecisionTreeInsertList()}}
+{\footnotesize\ttfamily void Decision\+Tree\+Insert\+List (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}}]{tree,  }\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{data,  }\item[{void $\ast$}]{value }\end{DoxyParamCaption})}
+
+
+
+Sets a value under a sequence represented by a list to a new value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & the decision tree to be modified \\
+\hline
+{\em data} & the sequence to place the {\ttfamily value} under \\
+\hline
+{\em value} & the value to be inserted into the decision tree \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+the {\ttfamily value} may be used to hold an integer value as well if it fits inside a void$\ast$ 
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+{\ttfamily data} having an item of value 0 or 1 will result in an undefined behaviour 
+
+{\ttfamily tree} not being a valid allocated \mbox{\hyperlink{map_8h_afc1319fe71687abf76f0fa4bcfa1154f}{Map}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{decision__tree_8h_a3dfbbce75367436a964f6bea271f7e37}\label{decision__tree_8h_a3dfbbce75367436a964f6bea271f7e37}} 
+\index{decision\_tree.h@{decision\_tree.h}!DecisionTreeQueryVector@{DecisionTreeQueryVector}}
+\index{DecisionTreeQueryVector@{DecisionTreeQueryVector}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{DecisionTreeQueryVector()}{DecisionTreeQueryVector()}}
+{\footnotesize\ttfamily void$\ast$ Decision\+Tree\+Query\+Vector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}}]{tree,  }\item[{\mbox{\hyperlink{vector_8h_a1ec1d8ee2a4766c9427ebf2a1c221f52}{Vector}}}]{data }\end{DoxyParamCaption})}
+
+
+
+Retreives a value under a sequence represented by a vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & the decision tree to retreive the value from \\
+\hline
+{\em data} & the sequence to retreive value of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the sequence or NULL if the key is not assigned 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily data} having an item with a value 0 or 1 will result in an undefined behaviour 
+
+{\ttfamily tree} not being a valid allocated \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} results in an undefined behaviour 
+\end{DoxyWarning}
+\mbox{\Hypertarget{decision__tree_8h_a278ee55404453830880635845bb46ca9}\label{decision__tree_8h_a278ee55404453830880635845bb46ca9}} 
+\index{decision\_tree.h@{decision\_tree.h}!DecisionTreeQueryList@{DecisionTreeQueryList}}
+\index{DecisionTreeQueryList@{DecisionTreeQueryList}!decision\_tree.h@{decision\_tree.h}}
+\doxysubsubsection{\texorpdfstring{DecisionTreeQueryList()}{DecisionTreeQueryList()}}
+{\footnotesize\ttfamily void$\ast$ Decision\+Tree\+Query\+List (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}}}]{tree,  }\item[{\mbox{\hyperlink{list_8h_a29731fb23c4f8fd187f12b1d78536c30}{List}}}]{data }\end{DoxyParamCaption})}
+
+
+
+Retreives a value under a sequence represented by a list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tree} & the decision tree to retreive the value from \\
+\hline
+{\em data} & the sequence to retreive value of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value of the sequence or NULL if the key is not assigned 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+{\ttfamily data} having an item with a value 0 or 1 will result in an undefined behaviour 
+
+{\ttfamily tree} not being a valid allocated \mbox{\hyperlink{decision__tree_8h_a27ba77fa2923271e968d9439e2243f5d}{Decision\+Tree}} results in an undefined behaviour 
+\end{DoxyWarning}

@@ -106,7 +106,7 @@ void DeleteMap(Map map);
 /**
  * @brief Sets a value under a key to a new value
  * 
- * @param map the map to be modifier
+ * @param map the map to be modified
  * @param key the key to place the @p value under
  * @param value the value to be inserted into the map
  * @note the @p value may be used to hold an integer value as well if it fits inside a void*
