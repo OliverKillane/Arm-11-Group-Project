@@ -21,11 +21,7 @@
  */
 bool FunctionGen(
     Map symbols, 
-<<<<<<< HEAD
-    List tokens, 
-=======
     Vector tokens, 
->>>>>>> assemble_tokenizer_commongen_using_decision_tree
     Vector output, 
     int offset, 
     int instructions_num

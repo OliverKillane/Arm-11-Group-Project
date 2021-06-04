@@ -8,8 +8,6 @@
 #include "commandgen.h"
 #include "tokenizer.h"
 
-<<<<<<< HEAD
-=======
 
 /* Removes the colon in sourceStr by copying to targetStr.
  * PRE: targetStr is of size one less than sourceStr.
@@ -21,7 +19,6 @@ void removeColon(char *str) {
 	*str = '\0';
 }
 
->>>>>>> assemble_tokenizer_commongen_using_decision_tree
 int bigToLittleEndian(int value) {
 	int newValue = 0;
 
@@ -90,42 +87,6 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 
 		char *line = ListIteratorGet(iter);
 
-<<<<<<< HEAD
-		List tokens = tokenizeLine(line, symbolTable, *totalInstructions);
-		bool hasInstructions = !ListEmpty(tokens);
-		if (hasInstructions) {
-			(*totalInstructions)++;
-			ListPushBack(listOfTokens, tokens);
-			// LISTFOR(tokens, iter) {
-			// 	Token tok = ListIteratorGet(iter);
-			// 	switch (tok->type) {
-			// 		case TOKEN_INSTRUCTION:
-			// 			printf("Instruction Token\n");
-			// 			break;
-			// 		case TOKEN_LABEL:
-			// 			printf("Label Token %s\n", tok->label);
-			// 			break;
-
-			// 		case TOKEN_CONSTANT:
-			// 			printf("Constant Token %d\n", tok->constant.value);
-			// 			break;
-			// 		case TOKEN_SIGN:
-			// 			printf("Sign Token %d\n", tok->is_plus);
-			// 			break;
-			// 		case TOKEN_BRACE:
-			// 			printf("Brace Token %d\n", tok->is_open);
-			// 			break;
-			// 		case TOKEN_REGISTER:
-			// 			printf("Register Token %d\n", tok->reg_num);
-			// 			break;
-			// 		default:
-			// 			printf("Token not recognized.");
-			// 			break;
-			// 	}
-			// }
-		} else {
-			DeleteList(tokens);
-=======
 		Vector tokens = tokenizeLine(line, symbolTable, *totalInstructions);
 		bool hasInstructions = !VectorEmpty(tokens);
 		if (hasInstructions) {
@@ -133,7 +94,6 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 			ListPushBack(listOfTokens, tokens);
 		} else {
 			DeleteVector(tokens);
->>>>>>> assemble_tokenizer_commongen_using_decision_tree
 		}
 
 	}
@@ -149,11 +109,7 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, int totalInstructions)
 
 	int currInstr = 0;
 	LISTFOR(listOfTokens, allTokensIter) {	
-<<<<<<< HEAD
-		List lineTokens = ListIteratorGet(allTokensIter);
-=======
 		Vector lineTokens = ListIteratorGet(allTokensIter);
->>>>>>> assemble_tokenizer_commongen_using_decision_tree
 		
 		FunctionGen(symbolTable, lineTokens, programVector, currInstr, totalInstructions);
 		
