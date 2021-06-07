@@ -10,6 +10,9 @@
 #include <stddata.h>
 #include <stdbool.h>
 
+/**
+ * @brief Handles all data processing instructions where the operand is a constant
+ */
 bool LayoutProcConst(
     Map symbols, 
     Vector tokens, 
@@ -19,6 +22,9 @@ bool LayoutProcConst(
     int instructions_num
 );
 
+/**
+ * @brief Handles all data processing instructions where the operand is a register shifted by a constant amount
+ */
 bool LayoutProcShiftConst(
     Map symbols, 
     Vector tokens, 
@@ -28,6 +34,9 @@ bool LayoutProcShiftConst(
     int instructions_num
 );
 
+/**
+ * @brief Handles all data processing instructions where the operand is a register shifted by a variable amount
+ */
 bool LayoutProcShiftReg(
     Map symbols, 
     Vector tokens, 

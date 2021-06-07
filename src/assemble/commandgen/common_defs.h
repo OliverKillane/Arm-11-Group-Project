@@ -9,26 +9,36 @@
 #include <stddata.h>
 
 /**
- * @brief Maps data processing instruction codes to their opcodes
+ * @brief Map< @ref InstructionType , unsigned int> from the data processing instructions to their opcodes
  */
-extern Map data_proc_opcodes; // Map<char*, char>
+extern Map data_proc_opcodes; 
 /**
- * @brief Maps shift tokens into respective shift codes
+ * @brief Map < @ref InstructionType, unsigned int> from the shift instructions to their shift codes
  */
-extern Map shift_codes; // Map<char*, char>
+extern Map shift_codes;
 
 /**
- * @brief Initializes all the maps used for instruction generation
+ * @brief Initializes the enum maps used in the commandgen
  */
 void InitFunctionGen();
 
 /**
- * @brief Deallocates all the maps used for instruction generation
+ * @brief Deallocates the enum maps used in the commandgen
  */
 void FinishFunctionGen();
 
+/**
+ * @brief Set the instruction at a certain offset
+ */
 void SetInstruction(Vector restrict output, int instruction, int offset);
 
+/**
+ * @brief Assembles the instruction from data fields
+ * 
+ * @param nfields number of data fields in the final instructions
+ * @param param the data field to put in the instruction (unsigned int)
+ * @param pos the first(smallest) bit of the data field
+ */
 unsigned int FillInstruction(int nfields, ...);
 
 #endif /* ASSEMBLE_COMMANDGEN_COMMON_DEFS_H_ */

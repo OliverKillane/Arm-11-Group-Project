@@ -5,32 +5,6 @@
 #include <stddata.h>
 #include <stdio.h>
 
-bool LayoutBranchLabel(
-    Map restrict symbols, 
-    Vector restrict tokens, 
-    Vector restrict text,
-    Vector restrict data, 
-    int offset, 
-    int instructions_num
-) {
-    InstructionType type;
-    char* label;
-    ProcessDataLayout(tokens, 2, &type, &label);
-    
-    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
-    unsigned int jump_offset = ((int)MapGet(symbols, label) - 2 - offset) & ((1<<24) - 1);
-    unsigned int link = (type == INSTR_BRL); 
-
-    SetInstruction(text, FillInstruction(
-        4,
-        cond, 28,
-        0x5, 25,
-        link, 24,
-        jump_offset, 0
-    ), offset);
-    return false;
-}
-
 bool LayoutBranchConstant(
     Map restrict symbols, 
     Vector restrict tokens, 

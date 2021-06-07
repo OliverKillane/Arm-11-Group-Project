@@ -16,7 +16,8 @@ typedef enum {
 typedef enum {
     CONST_HASH = 10, // to be able to map over them
     CONST_EQUALS,
-    CONST_PURE
+    CONST_PURE,
+    CONST_ANY // for handling labels
 } ConstantType;
 
 typedef enum {

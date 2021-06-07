@@ -9,6 +9,9 @@
 #include <stddata.h>
 #include <stdbool.h>
 
+/**
+ * @brief Handles all "mul ..." instructions
+ */
 bool LayoutMUL(
     Map symbols, 
     Vector tokens, 
@@ -18,6 +21,9 @@ bool LayoutMUL(
     int instructions_num
 );
 
+/**
+ * @brief Handles all "mla ..." instructions
+ */
 bool LayoutMLA(
     Map symbols, 
     Vector tokens, 

@@ -35,7 +35,9 @@ bool InstructionLayoutEqFunc(void* token_a_ptr, void* token_b_ptr) {
         case TOKEN_BRACE:
             return TokenIsOpenBracket(token_a) == TokenIsOpenBracket(token_b);
         case TOKEN_CONSTANT:
-            return TokenConstantType(token_a) == TokenConstantType(token_b);
+            return TokenConstantType(token_a) == TokenConstantType(token_b) ||
+                   TokenConstantType(token_a) == CONST_ANY || 
+                   TokenConstantType(token_b) == CONST_ANY;
         case TOKEN_INSTRUCTION:
             if(SetQuery(single_group_tokens, (void*)TokenInstructionType(token_a)) ||
                SetQuery(single_group_tokens, (void*)TokenInstructionType(token_b))) {
@@ -113,9 +115,6 @@ void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, int, int
             case '=':
                 ListPushBack(layout, NewConstantToken(CONST_EQUALS, 0));
                 break;
-            case 'l':
-                ListPushBack(layout, NewLabelToken(""));
-                break;
             case 's':
                 ListPushBack(layout, NewSignToken(true));
                 break;
@@ -170,10 +169,6 @@ void ProcessDataLayout(Vector tokens, int n, ...) {
             case TOKEN_INSTRUCTION:
                 *(InstructionType*)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] =
                         TokenInstructionType(VectorIteratorGet(tokens_iter));
-                break;
-            case TOKEN_LABEL:
-                *(char**)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] =
-                        TokenLabel(VectorIteratorGet(tokens_iter));
                 break;
             case TOKEN_REGISTER:
                 *(unsigned int*)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] = 
@@ -241,8 +236,7 @@ void InitInstructionLayouts() {
     AddSingleLayout("ir[r]srir", LayoutTransferShiftReg, 7, (void*[]){0, 2, 1, 4, 3, 5, 6}, 0, INSTR_LDR, INSTR_LSL);
 
     /* Branch Instructions */
-    AddSingleLayout("il", LayoutBranchLabel, 2, (void*[]){0, 1}, NULL, INSTR_BRN);
-    AddSingleLayout("ic", LayoutBranchConstant, 2, (void*[]){0, 1}, NULL, INSTR_BRN);
+    AddSingleLayout("ic", LayoutBranchConstant, 0, NULL, NULL, INSTR_BRN);
 
     /* Shift Instructions */
     AddSingleLayout("ir#", LayoutShiftConst, 0, NULL, NULL, INSTR_LSL);

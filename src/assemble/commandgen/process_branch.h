@@ -9,15 +9,9 @@
 #include <stddata.h>
 #include <stdbool.h>
 
-bool LayoutBranchLabel(
-    Map symbols, 
-    Vector tokens, 
-    Vector text,
-    Vector data, 
-    int offset, 
-    int instructions_num
-);
-
+/**
+ * @brief Handles all branch instruction layouts
+ */
 bool LayoutBranchConstant(
     Map symbols, 
     Vector tokens, 

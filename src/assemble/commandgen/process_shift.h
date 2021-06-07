@@ -9,6 +9,9 @@
 #include <stddata.h>
 #include <stdbool.h>
 
+/**
+ * @brief Handles all shift instructions where shift is by a constant amount
+ */
 bool LayoutShiftConst(
     Map symbols, 
     Vector tokens, 
@@ -18,6 +21,9 @@ bool LayoutShiftConst(
     int instructions_num
 );
 
+/**
+ * @brief Handles all shift instructions where shift is by a variable amount
+ */
 bool LayoutShiftReg(
     Map symbols, 
     Vector tokens, 

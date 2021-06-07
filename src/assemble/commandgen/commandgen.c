@@ -12,6 +12,7 @@ bool FunctionGen(
     int offset, 
     int instructions_num
 ) {
-    bool(*process_function)(Map, Vector, Vector, Vector, int, int) = DecisionTreeQuery(instruction_layouts, tokens);
-    return process_function(symbols, tokens, text, data, offset, instructions_num);
+    ProcessExpression(symbols, tokens);
+    bool(*process_function)(Map, Vector, Vector, int, int) = DecisionTreeQuery(instruction_layouts, tokens);
+    return process_function(symbols, tokens, output, offset, instructions_num);
 }
