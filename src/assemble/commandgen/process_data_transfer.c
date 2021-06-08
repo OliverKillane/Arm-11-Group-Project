@@ -1,7 +1,7 @@
-
 #include "common_defs.h"
 #include "instruction_layouts.h"
 #include "../tokenizer.h"
+#include "../error.h"
 #include "process_data_transfer.h"
 #include <stddata.h>
 #include <stdio.h>
@@ -15,7 +15,7 @@ bool LayoutTransferSet(
     int instructions_num
 ) {
     unsigned int reg_d = TokenRegisterNumber(VectorGet(tokens, 1));
-    unsigned int constant = TokenConstantValue(VectorGet(tokens, 2));
+    long long constant = TokenConstantValue(VectorGet(tokens, 2));
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
 
     if(constant < (1<<8)) {
@@ -31,7 +31,18 @@ bool LayoutTransferSet(
     }
 
     long long data_offset = VectorSize(data) + instructions_num;
-    VectorPushBack(data, constant);
+    VectorPushBack(data, constant & ((1 << 32) - 1));
+
+    if((data_offset - 2 - offset) * 4 >= (1 << 12)) {
+        SetErrorCode(ERROR_OFFSET_OOB);
+        return true;
+    }
+
+    if(constant >= (1 << 32) || constant < -(1 << 31)) {
+        SetErrorCode(ERROR_CONSTANT_OOB);
+        return true;
+    }
+
     SetInstruction(text, FillInstruction(
         7,
         cond, 28,
@@ -60,15 +71,35 @@ bool LayoutTransferConst(
     long long constant = 0;
     ProcessDataLayout(tokens, 4, &type, &reg_n, &reg_d, &constant);
 
-    unsigned int pre = DecisionTreeQuery(bracket_layouts, tokens);
+    unsigned int pre = 0;
+    unsigned int write_back = 0;
+    switch((int)DecisionTreeQuery(bracket_layouts, tokens)) {
+        case 2:
+            write_back = 1;
+        case 1:
+            pre = 1;
+            break;
+    }
+
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int load = type == INSTR_LDR;
+
+    if(constant >= (1 << 12) || constant <= -(1 << 12)) {
+        SetErrorCode(ERROR_CONSTANT_OOB);
+        return true;
+    }
+    if(write_back && reg_n == 15) {
+        SetErrorCode(ERROR_INVALID_REGISTER);
+        return true;
+    }
+
     SetInstruction(text, FillInstruction(
-        8,
+        9,
         cond, 28,
         0x1, 26,
         pre, 24,
         constant >= 0, 23,
+        write_back, 21,
         load, 20,
         reg_n, 16,
         reg_d, 12,
@@ -95,15 +126,39 @@ bool LayoutTransferShiftConst(
     long long shift_value = 0;
     ProcessDataLayout(tokens, 7, &type, &reg_n, &reg_d, &reg_m, &up, &shift_name, &shift_value);
 
-    unsigned int pre = DecisionTreeQuery(bracket_layouts, tokens);
+    unsigned int pre = 0;
+    unsigned int write_back = 0;
+    switch((int)DecisionTreeQuery(bracket_layouts, tokens)) {
+        case 2:
+            write_back = 1;
+        case 1:
+            pre = 1;
+            break;
+    }
+
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int load = type == INSTR_LDR;
+
+    if((write_back && reg_n == 15) || reg_m == 15) {
+        SetErrorCode(ERROR_INVALID_REGISTER);
+        return true;
+    }
+    if(shift_value < 0 || shift_value > 31) {
+        SetErrorCode(ERROR_CONSTANT_OOB);
+        return true;
+    }
+    if(TokenInstructionConditionType(shift_name) != COND_AL) {
+        SetErrorCode(ERROR_CONDITIONAL_SHIFT);
+        return true;
+    }
+
     SetInstruction(text, FillInstruction(
-        10,
+        11,
         cond, 28,
         0x3, 25,
         pre, 24,
         up, 23,
+        write_back, 21,
         load, 20,
         reg_n, 16,
         reg_d, 12,
@@ -132,15 +187,35 @@ bool LayoutTransferShiftReg(
     unsigned int reg_s;
     ProcessDataLayout(tokens, 7, &type, &reg_n, &reg_d, &reg_m, &up, &shift_name, &reg_s);
 
-    unsigned int pre = DecisionTreeQuery(bracket_layouts, tokens);
+    unsigned int pre = 0;
+    unsigned int write_back = 0;
+    switch((int)DecisionTreeQuery(bracket_layouts, tokens)) {
+        case 2:
+            write_back = 1;
+        case 1:
+            pre = 1;
+            break;
+    }
+
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int load = type == INSTR_LDR;
+
+    if((write_back && reg_n == 15) || reg_m == 15) {
+        SetErrorCode(ERROR_INVALID_REGISTER);
+        return true;
+    }
+    if(TokenInstructionConditionType(shift_name) != COND_AL) {
+        SetErrorCode(ERROR_CONDITIONAL_SHIFT);
+        return true;
+    }
+
     SetInstruction(text, FillInstruction(
-        11,
+        12,
         cond, 28,
         0x3, 25,
         pre, 24,
         up, 23,
+        write_back, 21,
         load, 20,
         reg_n, 16,
         reg_d, 12,

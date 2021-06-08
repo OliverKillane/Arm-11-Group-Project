@@ -1,17 +1,35 @@
 #include "process_expression.h"
 #include "../tokenizer.h"
+#include "../error.h"
 #include <stddata.h>
 #include <stdio.h>
+
+bool ValidateToken(Token token) {
+    switch(TokenType(token)) {
+        TOKEN_REGISTER:
+            if(TokenRegisterNumber(token) > 15 || TokenRegisterNumber < 0) {
+                SetErrorCode(ERROR_INVALID_REGISTER);
+                return true;
+            }
+            return false;
+        default:
+            return false;
+    }
+}
 
 bool ProcessExpression(Map restrict symbols, Vector tokens) {
     Vector new_tokens = NewEmptyVector();
     VECTORFOR(tokens, iter) {
+        if(ValidateToken(VectorIteratorGet(iter))) {
+            return true;
+        }
         if(TokenType(VectorIteratorGet(iter)) != TOKEN_LABEL) {
             VectorPushBack(new_tokens, VectorIteratorGet(iter));
             continue;
         }
         if(!MapQuery(symbols, TokenLabel(VectorIteratorGet(iter)))) {
             DeleteVector(new_tokens);
+            SetErrorCode(ERROR_LABEL_NOT_FOUND);
             return true;
         }
         long long address = (long long)MapGet(symbols, TokenLabel(VectorIteratorGet(iter))) * 4;

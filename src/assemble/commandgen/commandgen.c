@@ -1,5 +1,6 @@
 #include "../commandgen.h"
 #include "../tokenizer.h"
+#include "../error.h"
 #include "instruction_layouts.h"
 #include <stddata.h>
 #include <stdio.h>
@@ -12,7 +13,13 @@ bool FunctionGen(
     int offset, 
     int instructions_num
 ) {
-    ProcessExpression(symbols, tokens);
-    bool(*process_function)(Map, Vector, Vector, int, int) = DecisionTreeQuery(instruction_layouts, tokens);
-    return process_function(symbols, tokens, output, offset, instructions_num);
+    if(ProcessExpression(symbols, tokens)) {
+        return true;
+    }
+    bool(*process_function)(Map, Vector, Vector, Vector, int, int) = DecisionTreeQuery(instruction_layouts, tokens);
+    if(process_function == NULL) {
+        SetErrorCode(ERROR_INVALID_PATTERN);
+        return true;
+    }
+    return process_function(symbols, tokens, text, data, offset, instructions_num);
 }

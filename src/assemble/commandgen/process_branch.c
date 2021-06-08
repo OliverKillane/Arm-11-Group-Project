@@ -2,6 +2,7 @@
 #include "process_branch.h"
 #include "instruction_layouts.h"
 #include "../tokenizer.h"
+#include "../error.h"
 #include <stddata.h>
 #include <stdio.h>
 
@@ -19,7 +20,12 @@ bool LayoutBranchConstant(
     
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int jump_offset = (constant / 4 - 2 - offset) & ((1<<24) - 1);
-    unsigned int link = (type == INSTR_BRL); 
+    unsigned int link = (type == INSTR_BRL);
+    
+    if(-(1<<24) >= jump_offset || (1<<24) <= jump_offset) {
+        SetErrorCode(ERROR_OFFSET_OOB);
+        return true;
+    }
 
     SetInstruction(text, FillInstruction(
         4,

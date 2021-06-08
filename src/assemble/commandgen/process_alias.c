@@ -2,6 +2,7 @@
 #include "process_alias.h"
 #include "instruction_layouts.h"
 #include "../tokenizer.h"
+#include "../error.h"
 #include <stddata.h>
 #include <stdio.h>
 
@@ -14,7 +15,6 @@ bool LayoutRet(
     int instructions_num
 ) {
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
-
     SetInstruction(text, FillInstruction(
         4,
         cond, 28,
@@ -34,6 +34,11 @@ bool LayoutHalt(
     int offset, 
     int instructions_num
 ) {
+    if(TokenInstructionConditionType(VectorGet(tokens, 0)) != COND_AL) {
+        SetErrorCode(ERROR_INVALID_PATTERN);
+        return true;
+    }
+
     SetInstruction(text, 0, offset);
     return false;
 }
