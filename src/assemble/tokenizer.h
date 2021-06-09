@@ -33,6 +33,6 @@ int matchHex(char *str);
 Token matchRegister(char *str);
 Token matchConstant(char *str);
 void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token);
-List tokenizeLine(char *line, Map symbolTable, int currentLine);
+List tokenizeTextLine(char *line, Map symbolTable, int currentLine);
 
 #endif /* ASSEMBLE_TOKENIZER_H_ */

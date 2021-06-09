@@ -73,7 +73,7 @@ ConditionType matchConditionType(char *str) {
 Token matchInstructionToken(char *str) {
     InstructionType instTyp;
     if (strncmp(str, "brl", 3) == 0) {
-        instTyp = INSTR_BRL;
+        instTyp = INSTR_BLN;
         str += 3;
     } else if (strncmp(str, "b", 1) == 0) {
         instTyp = INSTR_BRN;
@@ -289,7 +289,7 @@ void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
 }
 
 
-List tokenizeLine(char *line, Map symbolTable, int currentLine) {
+List tokenizeTextLine(char *line, Map symbolTable, int currentLine) {
     Vector tokenList = NewEmptyVector();
     currentTokenLength = 0;
     currentState = TOKENIZER_START;
@@ -377,6 +377,104 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
 
         if (line[0] != '\0') {
             line++;
+        } else {
+            currentState = TOKENIZER_FINISHED;
+        }
+    }
+    return tokenList;
+
+}
+
+List tokenizeDataLine(char *line, Map symbolTable) {
+    Vector tokenList = NewEmptyVector();
+    currentTokenLength = 0;
+    currentState = TOKENIZER_START;
+
+    while (currentState != TOKENIZER_FINISHED 
+        && currentState != TOKENIZER_ERROR) {
+
+        switch (currentState) {
+
+            case TOKENIZER_START:
+                if (isalpha(line[0])) {
+                    addCharToToken(line[0]);
+                    currentState = TOKENIZER_INSTR_LABEL_REG;
+                } else if (line[0] == '[')  {
+                    VectorPushBack(tokenList, NewBraceToken(true));
+                } else if (line[0] == ']')  {
+                    VectorPushBack(tokenList, NewBraceToken(false));
+                } else if (line[0] == '+')  {
+                    VectorPushBack(tokenList, NewSignToken(true));
+                } else if (line[0] == '-')  {
+                    VectorPushBack(tokenList, NewSignToken(false));
+                } else if (line[0] == '!')  {
+                    VectorPushBack(tokenList, NewExclamationToken());
+                }else if (line[0] == '#' || line[0] == '=' || isHex(line[0])) {
+                    addCharToToken(line[0]);
+                    currentState = TOKENIZER_CONSTANT;
+                } else if (line[0] == '\n') {
+                    currentState = TOKENIZER_FINISHED;
+                }
+                break;
+            case TOKENIZER_INSTR_LABEL_REG:
+                if (isalpha(line[0])) {
+                    addCharToToken(line[0]);
+                } else if (line[0] == ':') {
+                    addCharToToken('\0');
+                    addTokenToSymbolTable(symbolTable, currentToken, currentToken);
+                    resetToken();
+                    currentState = TOKENIZER_START;
+                } else if (isdigit(line[0])) {
+                    addCharToToken(line[0]);
+                    
+                } else {
+                    addCharToToken('\0');
+                    Token matchedInstruction = matchInstructionToken(currentToken);
+                    Token matchedRegister = NULL;
+                    if (matchedInstruction == NULL) {
+                        matchedRegister = matchRegister(currentToken);
+                    }
+
+                    if (matchedInstruction != NULL) {
+                        VectorPushBack(tokenList, matchedInstruction);
+                        
+                    } else if (matchedRegister != NULL) {
+                        VectorPushBack(tokenList, matchedRegister);
+                    } else {
+                        
+                        Token newToken = NewLabelToken(currentToken);
+                        VectorPushBack(tokenList, newToken);
+                    }
+                    currentState = TOKENIZER_START;
+                    resetToken();
+                    line--;
+                }
+                break;
+            case TOKENIZER_CONSTANT:
+                if (isHex(line[0]) || line[0] == 'x' || line[0] == '-') {
+                    addCharToToken(line[0]);
+                } else {
+                    addCharToToken('\0');
+                    Token matchedConstant = matchConstant(currentToken);
+                    if (matchedConstant != NULL) {
+                        VectorPushBack(tokenList, matchedConstant);
+                        resetToken();
+                        currentState = TOKENIZER_START;
+                    } else {
+                        currentState = TOKENIZER_ERROR;
+                    }
+                    currentState = TOKENIZER_START;
+                    line--;
+                }
+            
+            default:
+                break;
+        }
+
+        if (line[0] != '\0') {
+            line++;
+        } else {
+            currentState = TOKENIZER_FINISHED;
         }
     }
     return tokenList;

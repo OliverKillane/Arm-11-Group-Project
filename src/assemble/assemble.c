@@ -14,37 +14,51 @@ int main(int argc, char **argv) {
 
 	int totalInstructions = 0;
 
-	List lines = readFileLines(argv[1]);
-	List listOfTokens = tokenize(lines, symbolTable, &totalInstructions);
+	List textLines = NewEmptyList();
+	List dataLines = NewEmptyList();
+	readFileLines(argv[1], textLines, dataLines);
+
+	printf("ALL TEXT LINES:\n");
+	LISTFOR(textLines, iter) {
+		char *line = ListIteratorGet(iter);
+		printf("%s", line);
+	}
+
+	printf("\nALL DATA LINES:\n");
+	LISTFOR(dataLines, iter) {
+		char *line = ListIteratorGet(iter);
+		printf("%s", line);
+	}
+	// List listOfTokens = tokenize(lines, symbolTable, &totalInstructions);
 	// printf("Got to making binary vector\n");
-	Vector binaryVector = tokensToBinary(symbolTable, listOfTokens, totalInstructions);
+	// Vector binaryVector = tokensToBinary(symbolTable, listOfTokens, totalInstructions);
 	
 
-	MAPFOR(symbolTable, iter) {
- 	    free((char*)(MapIteratorGet(iter).key));
-  	}
-	DeleteMap(symbolTable);
+	// MAPFOR(symbolTable, iter) {
+ 	//     free((char*)(MapIteratorGet(iter).key));
+  	// }
+	// DeleteMap(symbolTable);
 
-	LISTFOR(lines, iter) {
-		free(ListIteratorGet(iter));
-	}
-	DeleteList(lines);
+	// LISTFOR(lines, iter) {
+	// 	free(ListIteratorGet(iter));
+	// }
+	// DeleteList(lines);
 
-	LISTFOR(listOfTokens, iter1) {
-		Vector line = ListIteratorGet(iter1);
-		VECTORFOR(line, iter2) {
-			Token token = VectorIteratorGet(iter2);
-			DeleteToken(token);
-		}
-		DeleteVector(line);
-	}
-	DeleteList(listOfTokens);
+	// LISTFOR(listOfTokens, iter1) {
+	// 	Vector line = ListIteratorGet(iter1);
+	// 	VECTORFOR(line, iter2) {
+	// 		Token token = VectorIteratorGet(iter2);
+	// 		DeleteToken(token);
+	// 	}
+	// 	DeleteVector(line);
+	// }
+	// DeleteList(listOfTokens);
 
 
 
-	writeBinary(binaryVector, argv[2]);
+	// writeBinary(binaryVector, argv[2]);
 
-	DeleteVector(binaryVector);
+	// DeleteVector(binaryVector);
 	
     return EXIT_SUCCESS;
 }

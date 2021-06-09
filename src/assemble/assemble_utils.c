@@ -52,7 +52,7 @@ void writeBinary(Vector program, char *filename) {
 	fclose(file);
 }
 
-List readFileLines(char *filename) {
+void readFileLines(char *filename, List textLines, List dataLines) {
 
 	FILE *file;
 	char *line = NULL;
@@ -64,11 +64,30 @@ List readFileLines(char *filename) {
 
 	List linesLst = NewEmptyList();
 
-	while ((read = getline(&line, &length, file)) != -1) {
-		char *allocatedStr = malloc(sizeof(char) * (length + 1));
-		strcpy(allocatedStr, line);
+	bool readingText = true;
 
-		ListPushBack(linesLst, allocatedStr);
+	while ((read = getline(&line, &length, file)) != -1) {
+		
+
+		if (strncmp(line, ".text", 5)) {
+			readingText = true;
+		} else if (strncmp(line, ".data", 5)) {
+			readingText = false;
+		} else if (strncmp(line, ".include", 8)) {
+			// readingText = true;
+			readFileLines(line[9], textLines, dataLines);
+		} else {
+			char *allocatedStr = malloc(sizeof(char) * (length + 1));
+			strcpy(allocatedStr, line);
+			if (readingText) {
+				ListPushBack(textLines, allocatedStr);
+			} else {
+				ListPushBack(dataLines, allocatedStr);
+			}
+		}
+
+
+		// ListPushBack(linesLst, allocatedStr);
 	}
 	if (line != NULL) {
 		free(line);
@@ -76,7 +95,7 @@ List readFileLines(char *filename) {
 
     fclose(file);
 
-	return linesLst;
+	// return linesLst;
 }
 
 List tokenize(List lines, Map symbolTable, int *totalInstructions) {
