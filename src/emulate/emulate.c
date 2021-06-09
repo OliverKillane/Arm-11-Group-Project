@@ -137,6 +137,7 @@ void singleDataTransInstr(instruction instr) {
   bool I = GETBIT(instr, 25);
   bool P = GETBIT(instr, 24);
   bool U = GETBIT(instr, 23);
+  bool W = GETBIT(instr, 21);
   bool L = GETBIT(instr, 20);
 
   /* FATAL ERROR: PC cannot be the destination register */
@@ -162,7 +163,20 @@ void singleDataTransInstr(instruction instr) {
     offset = -offset;
   }
 
-  word memloc = P?(*RnBase + offset):*RnBase;
+  word memloc;
+  if (P) {
+
+    /* if pre indexing, pre index, use W bit to determine if to update Rn*/
+    memloc = *RnBase + offset;
+    if (W) {
+      *RnBase += offset;
+    }
+  } else {
+    
+    /* if post indexing, post index and update Rn */
+    memloc = *RnBase;
+    *RnBase += offset;
+  }
 
   if (memloc == 0x20200008 || memloc == 0x20200004 || memloc == 0x20200000) {
     int region = ((memloc & 0xF) >> 2) * 10;
@@ -198,10 +212,6 @@ void singleDataTransInstr(instruction instr) {
 
     printf("Error: Out of bounds memory access at address 0x%08x\n", memloc);
     return;
-  }
-
-  if (!P) {
-    *RnBase += offset;
   }
 }
 
