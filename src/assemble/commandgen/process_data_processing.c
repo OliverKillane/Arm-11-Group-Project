@@ -103,10 +103,6 @@ bool LayoutProcShiftConst(
         SetErrorCode(ERROR_CONSTANT_OOB);
         return true;
     }
-    if(TokenInstructionConditionType(shift_name) != COND_AL) {
-        SetErrorCode(ERROR_CONDITIONAL_SHIFT);
-        return true;
-    }
 
     SetInstruction(text, FillInstruction(
         8,
@@ -144,10 +140,6 @@ bool LayoutProcShiftReg(
 
     if(reg_s == 15) {
         SetErrorCode(ERROR_INVALID_REGISTER);
-        return true;
-    }
-    if(TokenInstructionConditionType(shift_name) != COND_AL) {
-        SetErrorCode(ERROR_CONDITIONAL_SHIFT);
         return true;
     }
 

@@ -1,10 +1,11 @@
 #include "process_expression.h"
+#include "common_defs.h"
 #include "../tokenizer.h"
 #include "../error.h"
 #include <stddata.h>
 #include <stdio.h>
 
-bool ValidateToken(Token token) {
+bool ValidateToken(Token token, int index) {
     switch(TokenType(token)) {
         TOKEN_REGISTER:
             if(TokenRegisterNumber(token) > 15 || TokenRegisterNumber < 0) {
@@ -12,6 +13,13 @@ bool ValidateToken(Token token) {
                 return true;
             }
             return false;
+        TOKEN_INSTRUCTION:
+            if(index > 0 &&
+               MapQuery(shift_codes, TokenInstructionType(token)) && 
+               TokenInstructionConditionType(token) != COND_AL) {
+                SetErrorCode(ERROR_CONDITIONAL_SHIFT);
+                return true;
+            }
         default:
             return false;
     }
@@ -19,8 +27,9 @@ bool ValidateToken(Token token) {
 
 bool ProcessExpression(Map restrict symbols, Vector tokens) {
     Vector new_tokens = NewEmptyVector();
+    int c = 0;
     VECTORFOR(tokens, iter) {
-        if(ValidateToken(VectorIteratorGet(iter))) {
+        if(ValidateToken(VectorIteratorGet(iter), c++)) {
             return true;
         }
         if(TokenType(VectorIteratorGet(iter)) != TOKEN_LABEL) {
