@@ -147,10 +147,6 @@ bool LayoutTransferShiftConst(
         SetErrorCode(ERROR_CONSTANT_OOB);
         return true;
     }
-    if(TokenInstructionConditionType(shift_name) != COND_AL) {
-        SetErrorCode(ERROR_CONDITIONAL_SHIFT);
-        return true;
-    }
 
     SetInstruction(text, FillInstruction(
         11,
@@ -202,10 +198,6 @@ bool LayoutTransferShiftReg(
 
     if((write_back && reg_n == 15) || reg_m == 15) {
         SetErrorCode(ERROR_INVALID_REGISTER);
-        return true;
-    }
-    if(TokenInstructionConditionType(shift_name) != COND_AL) {
-        SetErrorCode(ERROR_CONDITIONAL_SHIFT);
         return true;
     }
 
