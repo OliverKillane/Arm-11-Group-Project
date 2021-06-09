@@ -20,6 +20,7 @@ all:     ../../build/tests/assemble/commandgen.o\
 	 ../../build/tests/assemble/error.o\
 	 ../../build/tests/assemble/instruction_layouts.o\
 	 ../../build/tests/assemble/process_expression.o
+	 ../../build/tests/assemble/process_alias.o
 	
 	 	$(CC) $(CSANITIZERS) $(CFLAGS) $(wildcard ../../build/tests/assemble/*.o)\
 		-o ../../build/tests/assemble/tests
@@ -62,6 +63,7 @@ all:     ../../build/tests/assemble/commandgen.o\
 		../../src/assemble/tokenizer/tokenizer.c
 ../../build/tests/assemble/process_expression.o:\
 		../../src/assemble/commandgen/process_expression.c
+../../build/tests/assemble/process_alias.o: ../../src/assemble/commandgen/process_alias.c
 
 clean:
 	rm -f $(wildcard ../../build/tests/assemble/*)

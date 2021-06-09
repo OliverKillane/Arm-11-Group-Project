@@ -16,7 +16,8 @@ all: ../../build/assemble/assemble.o\
 	 ../../build/assemble/tokenizer.o\
 	 ../../build/assemble/error.o\
 	 ../../build/assemble/instruction_layouts.o\
-	 ../../build/assemble/process_expression.o
+	 ../../build/assemble/process_expression.o\
+	 ../../build/assemble/process_alias.o
 	cp ../../build/stddata.o ../../build/assemble/
 	$(CC) $(CFLAGS) $^ ../../build/assemble/stddata.o -o ../../build/assemble/assemble
 	cp ../../build/assemble/assemble ../../bin/
@@ -38,6 +39,7 @@ all: ../../build/assemble/assemble.o\
 ../../build/assemble/process_shift.o: commandgen/process_shift.c
 ../../build/assemble/instruction_layouts.o: commandgen/instruction_layouts.c
 ../../build/assemble/process_expression.o: commandgen/process_expression.c
+../../build/assemble/process_alias.o: commandgen/process_alias.c
 
 clean:
 	rm -f $(wildcard ../../build/assemble/*)

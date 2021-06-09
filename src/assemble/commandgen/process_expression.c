@@ -15,7 +15,7 @@ bool ValidateToken(Token token, int index) {
             return false;
         TOKEN_INSTRUCTION:
             if(index > 0 &&
-               MapQuery(shift_codes, TokenInstructionType(token)) && 
+               MapQuery(shift_codes, (int)TokenInstructionType(token)) && 
                TokenInstructionConditionType(token) != COND_AL) {
                 SetErrorCode(ERROR_CONDITIONAL_SHIFT);
                 return true;
