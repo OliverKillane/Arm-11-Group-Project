@@ -10,6 +10,7 @@ ErrorCodes error_code = ERROR_EMPTY;
 void SetErrorCode(ErrorCodes new_error_code) {
     assert(error_code == ERROR_EMPTY);
     error_code = new_error_code;
+    ReportError(0, "", "");
 }
 
 Map ErrorMessagesMap() {

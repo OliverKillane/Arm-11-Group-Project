@@ -236,7 +236,7 @@ void InitInstructionLayouts() {
     AddSingleLayout("ir[r]srir", LayoutTransferShiftReg, 7, (void*[]){0, 2, 1, 4, 3, 5, 6}, 0, INSTR_LDR, INSTR_LSL);
 
     /* Branch Instructions */
-    AddSingleLayout("ic", LayoutBranchConstant, 0, NULL, NULL, INSTR_BRN);
+    AddSingleLayout("ic", LayoutBranchConstant, 2, (void*[]){0, 1}, NULL, INSTR_BRN);
 
     /* Shift Instructions */
     AddSingleLayout("ir#", LayoutShiftConst, 0, NULL, NULL, INSTR_LSL);

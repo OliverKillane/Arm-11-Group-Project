@@ -15,7 +15,7 @@ static inline unsigned int ConvertLongToRotated(unsigned long long value) {
 static inline unsigned int ProcessImmediate(long long expr_value_signed) {
     process_immediate_error = false;
 
-    if(expr_value_signed < 0 || expr_value_signed >= (1<<32)) {
+    if(expr_value_signed < 0 || expr_value_signed >= (1ll << 32)) {
         process_immediate_error = true;
         SetErrorCode(ERROR_CONSTANT_OOB);
         return 0;
@@ -24,13 +24,13 @@ static inline unsigned int ProcessImmediate(long long expr_value_signed) {
     unsigned long long expr_value = expr_value_signed;
 
     unsigned int rotate_right = 0;
-    while(rotate_right < 16 && ConvertLongToRotated(expr_value) >= (1<<8)) {
+    while(rotate_right < 16 && ConvertLongToRotated(expr_value) >= (1 << 8)) {
         rotate_right++;
         expr_value <<= 2;
     }
     expr_value = ConvertLongToRotated(expr_value);
 
-    if(expr_value >= (1<<8)) {
+    if(expr_value >= (1 << 8)) {
         process_immediate_error = true;
         SetErrorCode(ERROR_CONSTANT_OOB);
         return 0;
