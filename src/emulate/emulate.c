@@ -6,6 +6,7 @@
 
 machineState CPU;
 
+/* TEST allows for test suite to run unit tests without double definition of main */
 #ifndef TEST
 int main(int argc, char** argv) {
   if (argc != 2) {
@@ -13,24 +14,29 @@ int main(int argc, char** argv) {
     exit(INVALID_ARGUMENTS);
   }
 
+  /* set up machine initial state */
   CPU.CPSR = (cpsr) {.N = 0, .Z = 0, .C = 0, .V = 0};
   CPU.memory = calloc(MEMSIZE, 1);
   assert(CPU.memory);
   memset(CPU.registers, 0, 64);
   CPU.GPIO = 0;
   
-
+  /*load, run and display final state */
   loadProgram(argv[1]);
   runProgram();
   printState();
 
+  /* CPU memory is the only memory on the heap allocated, so it must be freed */
   free(CPU.memory);
+
   return EXIT_SUCCESS;
 }
 #endif
 
 
 void loadProgram(char* filename) {
+
+  /* open the file and perform null check */
   FILE *file = fopen(filename, "rb");
 
   if (!file) {
@@ -38,28 +44,54 @@ void loadProgram(char* filename) {
     exit(INVALID_FILE);
   }
 
+  /* get file length*/
   fseek(file, 0, SEEK_END);
-
   int length = ftell(file);
-
   fseek(file, 0, SEEK_SET);
 
+  /* read file contents */
   if (fread(CPU.memory, 1, length, file) != length) {
     printf("Error: Unable to load all instructions\n");
     exit(INVALID_FILE);
   }
 
+  /* if the system is not little endian, reorder instruction bytes accordingly*/
+  if (!littleendiancheck()) {
+    byte* memloc;
+    byte holder;
+
+    /* for each memory location, swap order of bytes from 0123 to 3210 */
+    for (int loc = 0; loc < length; loc += 4) {
+      memloc = getmemloc(loc);
+
+      holder = memloc[0];
+      memloc[0] = memloc[3];
+      memloc[3] = holder;
+
+      holder = memloc[1];
+      memloc[1] = memloc[2];
+      memloc[2] = holder;
+    }
+  }
+
+  /* close the file */
   fclose(file);
 }
 
 void runProgram() {
+
+  /* to mimic pipelining, PC starts at 4 */
   *GETREG(PC) = 4;
   instruction currentInstr;
 
+  /* run fetch-decode-execute loop until at halt instruction, (all zeros) */
   do {
+
+    /* increment PC and fetch instruction */
     *GETREG(PC) += 4;
     currentInstr = *getmemword(*GETREG(PC) - 8);
 
+    /* if instruction condition is satisfied, decide which type and process*/
     if (checkCond(currentInstr)) {
       if(GETBITS(currentInstr, 24, 4) == 0xA) {
         branchInstr(currentInstr);
@@ -70,7 +102,7 @@ void runProgram() {
       } else if(!GETBITS(currentInstr, 26, 2)) {
         processDataInstr(currentInstr);
       } else {
-        printf("Error: Invalid instruction no: %08x\n", currentInstr);
+        printf("Error: Invalid instruction type: %08x\n", currentInstr);
         printState();
         exit(INVALID_INSTR);
       }
@@ -92,6 +124,8 @@ bool checkCond(instruction instr) {
 }
 
 void branchInstr(instruction instr) {
+
+  /* increase PC by sign extended operand, multiplied by 4*/
   *GETREG(PC) += (GETBITS(instr, 0, 23) - (GETBIT(instr, 23) << 23) + 1) << 2;
 }
 
@@ -103,8 +137,10 @@ void singleDataTransInstr(instruction instr) {
   bool I = GETBIT(instr, 25);
   bool P = GETBIT(instr, 24);
   bool U = GETBIT(instr, 23);
+  bool W = GETBIT(instr, 21);
   bool L = GETBIT(instr, 20);
 
+  /* FATAL ERROR: PC cannot be the destination register */
   if (RdSrcDst == GETREG(PC)) {
     printf("Error: Data Transfer instruction uses PC as Rd: %08x\n", instr);
     printState();
@@ -112,9 +148,11 @@ void singleDataTransInstr(instruction instr) {
   }
 
   if (I) {
-    /* if post idexing, using shift, Rn != Rm */
+    /* FATAL ERROR: if post idexing, using shift, Rn != Rm */
     if (GETREG(GETBITS(instr, 0, 4)) == RdSrcDst && !P) {
       printf("Error: Data Transfer instruction uses same register as Rn, Rm: %08x\n", instr);
+      printState();
+      exit(INVALID_INSTR);
     }
     offset = shiftOperation(instr).result;
   } else {
@@ -125,7 +163,20 @@ void singleDataTransInstr(instruction instr) {
     offset = -offset;
   }
 
-  word memloc = P?(*RnBase + offset):*RnBase;
+  word memloc;
+  if (P) {
+
+    /* if pre indexing, pre index, use W bit to determine if to update Rn*/
+    memloc = *RnBase + offset;
+    if (W) {
+      *RnBase += offset;
+    }
+  } else {
+    
+    /* if post indexing, post index and update Rn */
+    memloc = *RnBase;
+    *RnBase += offset;
+  }
 
   if (memloc == 0x20200008 || memloc == 0x20200004 || memloc == 0x20200000) {
     int region = ((memloc & 0xF) >> 2) * 10;
@@ -137,10 +188,12 @@ void singleDataTransInstr(instruction instr) {
 
     /* store is ignored as all loads must load the address, so stored values do not matter. */
   } else if (memloc == 0x20200028 && !L) {
+    
     /* clear pins */
     printf("PIN OFF\n");
     CPU.GPIO = CPU.GPIO & !*RdSrcDst;
   } else if (memloc == 0x2020001C && !L) {
+
     /* set pins */
     printf("PIN ON\n");
     CPU.GPIO = CPU.GPIO | *RdSrcDst;
@@ -160,18 +213,14 @@ void singleDataTransInstr(instruction instr) {
     printf("Error: Out of bounds memory access at address 0x%08x\n", memloc);
     return;
   }
-
-  if (!P) {
-    *RnBase += offset;
-  }
 }
 
 
-shiftRes shiftOperation(word shift) {
+shiftRes shiftOperation(instruction shift) {
   word *Rm = GETREG(GETBITS(shift, 0, 4));
 
   if (Rm == GETREG(PC)) {
-    printf("Error: invalid shift uses PC as Rm");
+    printf("Error: invalid shift uses PC as Rm: 0x%08x\n", shift);
     exit(INVALID_INSTR);
   }
 
@@ -192,7 +241,7 @@ shiftRes shiftOperation(word shift) {
 
   } else {
 
-    printf("Error: Data processing instruction has an invalid shift.\n");
+    printf("Error: Data processing instruction has an invalid shift: 0x%08x\n", shift);
     exit(INVALID_INSTR);
   }
 
@@ -223,7 +272,7 @@ shiftRes shiftOperation(word shift) {
       .carryout = GETBIT(RmVal, shiftby - 1)
       };
     default:
-      printf("Error: Invalid shift");
+      printf("Error: Invalid shift: 0x%08x\n", shift);
       exit(INVALID_INSTR);
   }
 }
@@ -235,6 +284,7 @@ void multiplyInstr(instruction instr) {
   word *Rn = GETREG(GETBITS(instr, 12, 4));
   word *PCReg = GETREG(PC);
 
+  /* FATAL ERROR: cannot have instruction with this register usage */
   if (Rd == Rm || PCReg == Rd || PCReg == Rm || PCReg == Rs || PCReg == Rn) {
     printf("Error: Multiply instruction uses same register for Rd, Rm: %08x\n", instr);
     exit(INVALID_INSTR);
@@ -253,25 +303,29 @@ void multiplyInstr(instruction instr) {
 }
 
 void processDataInstr(instruction instr) {
-  opcode OpCode = GETBITS(instr, 21,4);
+  opcode instrOpCode = GETBITS(instr, 21,4);
   word *Rd = GETREG(GETBITS(instr, 12, 4));
   word RnVal = *GETREG(GETBITS(instr, 16, 4));
   word operand2Value;
-  word ALUOut;
+  word result;
 
   bool I = GETBIT(instr, 25);
   bool S = GETBIT(instr, 20);
   bool shiftCarryOut = false;
     
   if(I){
+
     /* Operand2 is an immediate value (shift rotate by rotate * 2) */
     word rotate = GETBITS(instr, 8, 4) << 1;
     word imm = GETBITS(instr, 0, 8);
     operand2Value = (imm >> rotate) | (GETBITS(imm, 0, rotate) << (32 - rotate)); 
+
     if(rotate > 0){
-    shiftCarryOut = GETBIT(imm, rotate - 1);
+      shiftCarryOut = GETBIT(imm, rotate - 1);
     }
+
   } else {
+
     /* Operand 2 is a shift register */
     shiftRes op2 = shiftOperation(instr);
     operand2Value = op2.result;
@@ -279,87 +333,97 @@ void processDataInstr(instruction instr) {
   }
 
   /* Perform ALU operation */
-  switch(OpCode){
+  switch(instrOpCode){
+    case TST:
     case AND: 
-      ALUOut = RnVal & operand2Value; 
-      *Rd = ALUOut;
+      result = RnVal & operand2Value; 
       break;
+    case TEQ:
     case EOR:
-      ALUOut = RnVal ^ operand2Value; 
-      *Rd = ALUOut;
+      result = RnVal ^ operand2Value; 
       break;
+    case CMP:
     case SUB: 
-      ALUOut = RnVal - operand2Value; 
-      *Rd = ALUOut;
+      result = RnVal - operand2Value; 
       break;
     case RSB: 
-      ALUOut = operand2Value - RnVal; 
-      *Rd = ALUOut;
+      result = operand2Value - RnVal; 
       break;
     case ADD: 
-      ALUOut = RnVal + operand2Value; 
-      *Rd = ALUOut;
-      break;
-    case TST: 
-      ALUOut = RnVal & operand2Value;
-      break;
-    case TEQ: 
-      ALUOut = RnVal ^ operand2Value;
-      break;
-    case CMP: 
-      ALUOut = RnVal - operand2Value;
+      result = RnVal + operand2Value; 
       break;
     case ORR: 
-      ALUOut = RnVal | operand2Value; 
-      *Rd = ALUOut;
+      result = RnVal | operand2Value; 
       break;
     case MOV: 
-      *Rd = operand2Value;
+      result = operand2Value;
       break;
     default: 
+
+      /* FATAL ERROR: cannot determine instruction type so exit */
       printf("Error: Invalid operation in instruction: %08x\n", instr);
-      exit(INVALID_INSTR);          
+      exit(INVALID_INSTR);
+  }
+
+  /* if instruction impacts destination register, write to destination */
+  if (instrOpCode != CMP && instrOpCode != TEQ && instrOpCode != TST) {
+    *Rd = result;
   }
 
   /* if S set then reassign CPSR flags */
   if(S) {
-    if (OpCode == AND || OpCode == EOR || OpCode == ORR || OpCode == TEQ || OpCode == TST || OpCode == MOV) {
+    if (instrOpCode == AND || instrOpCode == EOR || instrOpCode == ORR || instrOpCode == TEQ || instrOpCode == TST || instrOpCode == MOV) {
       CPU.CPSR.C = shiftCarryOut;
-    } else if (OpCode == ADD || OpCode == RSB) {
-      CPU.CPSR.C = (GETBIT(RnVal, 31) || GETBIT(operand2Value, 31)) && !GETBIT(ALUOut, 31);
+    } else if (instrOpCode == ADD || instrOpCode == RSB) {
+      CPU.CPSR.C = (GETBIT(RnVal, 31) || GETBIT(operand2Value, 31)) && !GETBIT(result, 31);
     } else {
       /* Opcode must BE SUB or CMP */
       CPU.CPSR.C = operand2Value <= RnVal;
     }
 
-    CPU.CPSR.Z = ALUOut == 0;
-    CPU.CPSR.N = GETBIT(ALUOut, 31);
+    CPU.CPSR.Z = result == 0;
+    CPU.CPSR.N = GETBIT(result, 31);
   }
 }
 
 void printState() {
-  printf("Registers:");
+
+  /* orint out each register, except for LR and SP*/
+  printf("Registers:\n");
   for (int registerNo = 0; registerNo < 13; registerNo++) {
-    printf("\n$%-3i: %10i (0x%08x)", registerNo, *GETREG(registerNo), *GETREG(registerNo));
+    printf("$%-3i: %10i (0x%08x)\n", registerNo, *GETREG(registerNo), *GETREG(registerNo));
   }
-  printf("\nPC  : %10i (0x%08x)", *GETREG(PC), *GETREG(PC));
+  printf("PC  : %10i (0x%08x)\n", *GETREG(PC), *GETREG(PC));
 
   word cpsrReg = ((CPU.CPSR.N << 3) + (CPU.CPSR.Z << 2) + (CPU.CPSR.C << 1) + CPU.CPSR.V) << 28;
-  printf("\nCPSR: %10i (0x%08x)", cpsrReg, cpsrReg);
+  printf("CPSR: %10i (0x%08x)\n", cpsrReg, cpsrReg);
 
-  printf("\nNon-zero memory:");
-  byte *wordMem;
+  /* print out the memory, note: on big endian systems, this memory will be printed as big endian */
+  printf("Non-zero memory:\n");
+
+  bool littleEndian = littleendiancheck();
+  byte *memByte;
   for (int loc = 0; loc < MEMSIZE; loc += 4) {
-    wordMem = getmemloc(loc);
-    if (*(word*)wordMem){
-      printf("\n0x%08x: 0x%02x%02x%02x%02x", loc, wordMem[0], wordMem[1], wordMem[2], wordMem[3]);
+    memByte = getmemloc(loc);
+    if (*(word*)memByte){
+
+      /* if little endian, print out in order, if big, swap bytes to mimic little endian */
+      if (littleEndian) {
+        printf("0x%08x: 0x%02x%02x%02x%02x\n", loc, memByte[0], memByte[1], memByte[2], memByte[3]);
+      } else {
+        printf("0x%08x: 0x%02x%02x%02x%02x\n", loc, memByte[3], memByte[2], memByte[1], memByte[0]);
+      }
     }
   }
-  printf("\n");
+}
+
+bool littleendiancheck() {
+    word test = 1;
+    return *((byte*) &test);
 }
 
 word *getmemword(location loc) {
-  return ((word *) getmemloc(loc));
+  return (word *) getmemloc(loc);
 }
 
 byte *getmemloc(location loc) {

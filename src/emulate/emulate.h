@@ -88,7 +88,7 @@ typedef enum {
 
 /* get bit at location in a word:
 @param data the word you are inspecting
-@param n bit number (0-31) 
+@param n bit number (0-31)
 */
 #define GETBIT(data, n) (((data) >> (n)) & 1)
 
@@ -143,7 +143,7 @@ a register), Compute the shift operand value.
 @param shift Instruction bits 11-0 (inclusive)
 @retval a struct of the shift, and overflow bit
 */
-shiftRes shiftOperation(word shift);
+shiftRes shiftOperation(instruction shift);
 
 /* 
 Execute a multiply instruction
@@ -174,6 +174,11 @@ word *getmemword(location loc);
 */
 byte *getmemloc(location loc);
 
+
+/*  determine if the system the emulator is being run on is big or little endian 
+@retval true if littel endian, false otherwise 
+*/
+bool littleendiancheck();
 
 // TERMINAL OUTPUT:
 
