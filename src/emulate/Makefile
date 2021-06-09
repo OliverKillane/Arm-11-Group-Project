@@ -12,15 +12,12 @@ profile:
 	$(CC) $(CFLAGS) -pg emulate.c -o emulate_prof
 	./emulate_prof $(PROFILETARGET)
 	gprof emulate_prof gmon.out > analysis.txt
-	rm gmon.out
-	rm emulate_prof
+	rm -f gmon.out
+	rm -f emulate_prof
 	less analysis.txt
-
-
-
 
 clean:
 	rm -f $(wildcard ../build/emulate/*)
 	rm -f ../../bin/emulate
-	rm gmon.out
-	rm emulate_prof
+	rm -f gmon.out
+	rm -f emulate_prof

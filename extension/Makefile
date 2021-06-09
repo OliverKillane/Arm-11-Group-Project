@@ -1,4 +1,4 @@
-.PHONY all clean
+.PHONY: all clean
 
 all: assemble emulate
 	../bin/assemble pong.s ../bin/pong
@@ -10,4 +10,4 @@ emulate: assemble
 	../bin/emulate ../bin/pong -v
 
 clean:
-	rm ../bin/pong
+	rm -f ../bin/pong

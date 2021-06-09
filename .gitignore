@@ -16,10 +16,6 @@
 #ignore junk files from compiling C code
 *.o
 .vscode
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> assemble_tokenizer_commongen_using_decision_tree
 
 #ignore junk files from compiling Haskell code
 *.hi
@@ -35,6 +31,3 @@
 *.vrb
 *.nav
 *.toc
-
-=======
->>>>>>> 13407f76ed336097e9820e046aef9f7de26a6755

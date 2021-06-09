@@ -1,11 +1,6 @@
 CC      = gcc
-<<<<<<< HEAD
-CSANITIZERS = -fsanitize=address,undefined,leak,pointer-subtract
-CFLAGS  = -Wall -g3 -I../../lib/stddata/include -I../../src/assemble -I../../src/assemble/tokenizer -I../../src/assemble/commandgen\
-=======
 CSANITIZERS = -fsanitize=address,undefined
 CFLAGS  = -Wall -g -I../../lib/stddata/include -I../../src/assemble -I../../src/assemble/tokenizer -I../../src/assemble/commandgen\
->>>>>>> assemble_tokenizer_commongen_using_decision_tree
 		  -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17  -Wno-int-conversion -Wno-pointer-to-int-cast
 
 .PHONY: all clean 
@@ -22,12 +17,8 @@ all:     ../../build/tests/assemble/commandgen.o\
 	 ../../build/tests/assemble/assembletests.o\
 	 ../../build/tests/assemble/tokenizer.o\
 	 ../../build/tests/assemble/token_utils.o\
-<<<<<<< HEAD
-	 ../../build/tests/assemble/error.o
-=======
 	 ../../build/tests/assemble/error.o\
 	 ../../build/tests/assemble/instruction_layouts.o
->>>>>>> assemble_tokenizer_commongen_using_decision_tree
 	
 	$(CC) $(CSANITIZERS) $(CFLAGS) $(wildcard ../../build/tests/assemble/*.o)\
 		-o ../../build/tests/assemble/tests
@@ -62,11 +53,8 @@ all:     ../../build/tests/assemble/commandgen.o\
 		../../src/assemble/commandgen/process_shift.c
 ../../build/tests/assemble/common_defs.o:\
 		../../src/assemble/commandgen/common_defs.c
-<<<<<<< HEAD
-=======
 ../../build/tests/assemble/instruction_layouts.o:\
 		../../src/assemble/commandgen/instruction_layouts.c
->>>>>>> assemble_tokenizer_commongen_using_decision_tree
 ../../build/tests/assemble/assemble_utils.o:\
 		../../src/assemble/assemble_utils.c
 ../../build/tests/assemble/tokenizer.o:\
