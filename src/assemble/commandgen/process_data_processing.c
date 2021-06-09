@@ -1,15 +1,26 @@
 #include "common_defs.h"
 #include "instruction_layouts.h"
 #include "../tokenizer.h"
+#include "../error.h"
 #include "process_data_processing.h"
 #include <stddata.h>
 #include <stdio.h>
+
+bool process_immediate_error;
 
 static inline unsigned int ConvertLongToRotated(unsigned long long value) {
     return (unsigned int)value | (value >> 32);
 }
 
 static inline unsigned int ProcessImmediate(long long expr_value_signed) {
+    process_immediate_error = false;
+
+    if(expr_value_signed < 0 || expr_value_signed >= (1<<32)) {
+        process_immediate_error = true;
+        SetErrorCode(ERROR_CONSTANT_OOB);
+        return 0;
+    }
+
     unsigned long long expr_value = expr_value_signed;
 
     unsigned int rotate_right = 0;
@@ -18,6 +29,12 @@ static inline unsigned int ProcessImmediate(long long expr_value_signed) {
         expr_value <<= 2;
     }
     expr_value = ConvertLongToRotated(expr_value);
+
+    if(expr_value >= (1<<8)) {
+        process_immediate_error = true;
+        SetErrorCode(ERROR_CONSTANT_OOB);
+        return 0;
+    }
 
     int operand2 = 0;
     operand2 |= rotate_right << 8;
@@ -29,7 +46,8 @@ static inline unsigned int ProcessImmediate(long long expr_value_signed) {
 bool LayoutProcConst(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -42,7 +60,13 @@ bool LayoutProcConst(
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
     unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
-    SetInstruction(output, FillInstruction(
+    unsigned int operand2 = ProcessImmediate(constant);
+
+    if(process_immediate_error) {
+        return true;
+    }
+
+    SetInstruction(text, FillInstruction(
         7,
         cond, 28,
         0x1, 25,
@@ -50,7 +74,7 @@ bool LayoutProcConst(
         set, 20,
         reg_n, 16,
         reg_d, 12,
-        ProcessImmediate(constant), 0
+        operand2, 0
     ), offset);
     return false;
 }
@@ -58,7 +82,8 @@ bool LayoutProcConst(
 bool LayoutProcShiftConst(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -74,7 +99,16 @@ bool LayoutProcShiftConst(
     unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
     unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
 
-    SetInstruction(output, FillInstruction(
+    if(shift_value < 0 || shift_value > 31) {
+        SetErrorCode(ERROR_CONSTANT_OOB);
+        return true;
+    }
+    if(TokenInstructionConditionType(shift_name) != COND_AL) {
+        SetErrorCode(ERROR_CONDITIONAL_SHIFT);
+        return true;
+    }
+
+    SetInstruction(text, FillInstruction(
         8,
         cond, 28,
         opcode, 21,
@@ -91,7 +125,8 @@ bool LayoutProcShiftConst(
 bool LayoutProcShiftReg(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
@@ -106,7 +141,17 @@ bool LayoutProcShiftReg(
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
     unsigned int opcode = MapGet(data_proc_opcodes, (void*)type);
     unsigned int set = type == INSTR_TST || type == INSTR_TEQ || type == INSTR_CMP;
-    SetInstruction(output, FillInstruction(
+
+    if(reg_s == 15) {
+        SetErrorCode(ERROR_INVALID_REGISTER);
+        return true;
+    }
+    if(TokenInstructionConditionType(shift_name) != COND_AL) {
+        SetErrorCode(ERROR_CONDITIONAL_SHIFT);
+        return true;
+    }
+
+    SetInstruction(text, FillInstruction(
         9,
         cond, 28,
         opcode, 21,

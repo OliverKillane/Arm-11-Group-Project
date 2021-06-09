@@ -9,18 +9,26 @@
 #include <stddata.h>
 #include <stdbool.h>
 
+/**
+ * @brief Handles all shift instructions where shift is by a constant amount
+ */
 bool LayoutShiftConst(
-    Map restrict symbols, 
-    Vector restrict tokens, 
-    Vector restrict output, 
+    Map symbols, 
+    Vector tokens, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
 
+/**
+ * @brief Handles all shift instructions where shift is by a variable amount
+ */
 bool LayoutShiftReg(
-    Map restrict symbols, 
-    Vector restrict tokens, 
-    Vector restrict output, 
+    Map symbols, 
+    Vector tokens, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
