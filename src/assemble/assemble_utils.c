@@ -130,7 +130,7 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, int totalInstructions)
 	LISTFOR(listOfTokens, allTokensIter) {	
 		Vector lineTokens = ListIteratorGet(allTokensIter);
 		
-		FunctionGen(symbolTable, lineTokens, programVector, currInstr, totalInstructions);
+		// FunctionGen(symbolTable, lineTokens, programVector, currInstr, totalInstructions);
 		
 		currInstr++;		
 	}

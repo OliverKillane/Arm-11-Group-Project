@@ -73,7 +73,7 @@ ConditionType matchConditionType(char *str) {
 Token matchInstructionToken(char *str) {
     InstructionType instTyp;
     if (strncmp(str, "brl", 3) == 0) {
-        instTyp = INSTR_BLN;
+        instTyp = INSTR_BRL;
         str += 3;
     } else if (strncmp(str, "b", 1) == 0) {
         instTyp = INSTR_BRN;
