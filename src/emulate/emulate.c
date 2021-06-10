@@ -30,8 +30,10 @@ int main(int argc, char** argv) {
   for (int arg = 1; arg < argc; arg++) {
     if (strcmp(argv[arg], "-v") == 0) {
       emulatorMode |= VIDEO;
+      printf("VIDEO OUTPUT ON\n");
     } else if (strcmp(argv[arg], "-g") == 0) {
       emulatorMode |= GPIO_EXTENDED;
+      printf("GPIO PIN OUTPUT ON\n");
     } else {
       if (argv[arg][0] != '-') {
         if (!filename) {
@@ -182,6 +184,11 @@ bool checkCond(instruction instr) {
 }
 
 void branchInstr(instruction instr) {
+
+  /* if a link, then store next instruction address in LR */
+  if (GETBIT(instr, 24)) {
+    *GETREG(LR) = *GETREG(PC) + 4;
+  }
 
   /* increase PC by sign extended operand, multiplied by 4*/
   *GETREG(PC) += (GETBITS(instr, 0, 23) - (GETBIT(instr, 23) << 23) + 1) << 2;
