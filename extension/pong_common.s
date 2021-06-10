@@ -1,7 +1,7 @@
 .data
 @ Common Hyperconstants
 @ Precision integer shift: 8
-@ Ball diameter:           15
+@ Ball diameter:           12
 @ Common Variables
 	bcurr:
 		.long 0  @ ball current position x coord
@@ -21,8 +21,8 @@
 @ Common Constants
 	.set width 192
 	.set height 160
-	.set paddlewidth 15
-	.set paddleheight 60
+	.set paddlewidth 5
+	.set paddleheight 30
 	.set mt 5
 	.set mb 5
 	.set ml 5
