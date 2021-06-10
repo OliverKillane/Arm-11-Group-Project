@@ -226,7 +226,7 @@ void setupWindow(char *title);
 
 
 /* Update the window to display the current video out */
-void updateOutput(word *videostart);
+void updateOutput(byte *videostart);
 
 
 /* Take the events that have happened since the last call, if characters,
