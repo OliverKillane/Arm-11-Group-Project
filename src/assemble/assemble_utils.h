@@ -11,6 +11,6 @@ void readFileLines(char *filename, List textLines, List dataLines);
 
 List tokenize(List lines, Map symbolTable, int *totalInstructions);
 
-Vector tokensToBinary(Map symbolTable, List listOfTokens, int totalInstructions);
+Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int totalInstructions);
 
 #endif

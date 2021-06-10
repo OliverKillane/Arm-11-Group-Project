@@ -62,23 +62,28 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 	file = fopen(filename, "r");
 	assert(file != NULL);
 
-	List linesLst = NewEmptyList();
+	// List linesLst = NewEmptyList();
 
 	bool readingText = true;
 
 	while ((read = getline(&line, &length, file)) != -1) {
+		// printf("%s", line);
 		
 
-		if (strncmp(line, ".text", 5)) {
+		if (strncmp(line, ".text", 5) == 0) {
 			readingText = true;
-		} else if (strncmp(line, ".data", 5)) {
+		} else if (strncmp(line, ".data", 5) == 0) {
 			readingText = false;
-		} else if (strncmp(line, ".include", 8)) {
-			// readingText = true;
-			readFileLines(line[9], textLines, dataLines);
+		} else if (strncmp(line, ".include", 8) == 0) {
+			char *pos = strchr(line,'\n');
+			if (pos != NULL) {
+				*pos = '\0';
+			}
+			readFileLines(line+9, textLines, dataLines);
 		} else {
 			char *allocatedStr = malloc(sizeof(char) * (length + 1));
 			strcpy(allocatedStr, line);
+			// printf("%s", allocatedStr);
 			if (readingText) {
 				ListPushBack(textLines, allocatedStr);
 			} else {
@@ -106,7 +111,7 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 
 		char *line = ListIteratorGet(iter);
 
-		Vector tokens = tokenizeLine(line, symbolTable, *totalInstructions);
+		Vector tokens;// = tokenizeLine(line, symbolTable, *totalInstructions);
 		bool hasInstructions = !VectorEmpty(tokens);
 		if (hasInstructions) {
 			(*totalInstructions)++;
@@ -121,7 +126,7 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 
 }
 
-Vector tokensToBinary(Map symbolTable, List listOfTokens, int totalInstructions) {
+Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int totalInstructions) {
 
 	Vector programVector = NewEmptyVector();
 	InitFunctionGen();
@@ -129,8 +134,8 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, int totalInstructions)
 	int currInstr = 0;
 	LISTFOR(listOfTokens, allTokensIter) {	
 		Vector lineTokens = ListIteratorGet(allTokensIter);
-		
-		// FunctionGen(symbolTable, lineTokens, programVector, currInstr, totalInstructions);
+		printf("Processing line %d\n", currInstr);
+		FunctionGen(symbolTable, lineTokens, programVector, dataVector, currInstr, totalInstructions);
 		
 		currInstr++;		
 	}

@@ -316,7 +316,7 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine) {
                 }else if (line[0] == '#' || line[0] == '=' || isHex(line[0])) {
                     addCharToToken(line[0]);
                     currentState = TOKENIZER_CONSTANT;
-                } else if (line[0] == '\n') {
+                } else if (line[0] == '\n' || line[0] == '@') {
                     currentState = TOKENIZER_FINISHED;
                 }
                 break;
@@ -385,98 +385,52 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine) {
 
 }
 
-List tokenizeDataLine(char *line, Map symbolTable) {
-    Vector tokenList = NewEmptyVector();
-    currentTokenLength = 0;
-    currentState = TOKENIZER_START;
+void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector dataVector) {
+    // *totalInstructions = (*totalInstructions + 3) / 4;
+    // Vector dataVector = NewEmptyVector();
+    // if (strncmp(line, ".ascii", 6) == 0) {
+    //     line += 8;
+    //     // processAscii();
+    //     char *endQuote = strchr(line, '"');
 
-    while (currentState != TOKENIZER_FINISHED 
-        && currentState != TOKENIZER_ERROR) {
+    // }
+    char *colon;
 
-        switch (currentState) {
-
-            case TOKENIZER_START:
-                if (isalpha(line[0])) {
-                    addCharToToken(line[0]);
-                    currentState = TOKENIZER_INSTR_LABEL_REG;
-                } else if (line[0] == '[')  {
-                    VectorPushBack(tokenList, NewBraceToken(true));
-                } else if (line[0] == ']')  {
-                    VectorPushBack(tokenList, NewBraceToken(false));
-                } else if (line[0] == '+')  {
-                    VectorPushBack(tokenList, NewSignToken(true));
-                } else if (line[0] == '-')  {
-                    VectorPushBack(tokenList, NewSignToken(false));
-                } else if (line[0] == '!')  {
-                    VectorPushBack(tokenList, NewExclamationToken());
-                }else if (line[0] == '#' || line[0] == '=' || isHex(line[0])) {
-                    addCharToToken(line[0]);
-                    currentState = TOKENIZER_CONSTANT;
-                } else if (line[0] == '\n') {
-                    currentState = TOKENIZER_FINISHED;
-                }
-                break;
-            case TOKENIZER_INSTR_LABEL_REG:
-                if (isalpha(line[0])) {
-                    addCharToToken(line[0]);
-                } else if (line[0] == ':') {
-                    addCharToToken('\0');
-                    addTokenToSymbolTable(symbolTable, currentToken, currentToken);
-                    resetToken();
-                    currentState = TOKENIZER_START;
-                } else if (isdigit(line[0])) {
-                    addCharToToken(line[0]);
-                    
-                } else {
-                    addCharToToken('\0');
-                    Token matchedInstruction = matchInstructionToken(currentToken);
-                    Token matchedRegister = NULL;
-                    if (matchedInstruction == NULL) {
-                        matchedRegister = matchRegister(currentToken);
-                    }
-
-                    if (matchedInstruction != NULL) {
-                        VectorPushBack(tokenList, matchedInstruction);
-                        
-                    } else if (matchedRegister != NULL) {
-                        VectorPushBack(tokenList, matchedRegister);
-                    } else {
-                        
-                        Token newToken = NewLabelToken(currentToken);
-                        VectorPushBack(tokenList, newToken);
-                    }
-                    currentState = TOKENIZER_START;
-                    resetToken();
-                    line--;
-                }
-                break;
-            case TOKENIZER_CONSTANT:
-                if (isHex(line[0]) || line[0] == 'x' || line[0] == '-') {
-                    addCharToToken(line[0]);
-                } else {
-                    addCharToToken('\0');
-                    Token matchedConstant = matchConstant(currentToken);
-                    if (matchedConstant != NULL) {
-                        VectorPushBack(tokenList, matchedConstant);
-                        resetToken();
-                        currentState = TOKENIZER_START;
-                    } else {
-                        currentState = TOKENIZER_ERROR;
-                    }
-                    currentState = TOKENIZER_START;
-                    line--;
-                }
-            
-            default:
-                break;
+    if (strncmp(line, ".set", 4) == 0) {
+        line+=5;
+        char *endLabel = strchr(line, ' ');
+        char *newLabel = malloc(sizeof(char) * (endLabel - line+1));
+        strncpy(newLabel, line, (endLabel - line));
+        newLabel[endLabel - line + 1] = '\0';
+        line = endLabel + 1;
+        int number;
+        char *endLine = strchr(line, '\n');
+        if (endLine != NULL) {
+            *endLine = '\0';
         }
-
-        if (line[0] != '\0') {
-            line++;
+        if (isHexNumber(line)) {
+            number = matchHex(line);
         } else {
-            currentState = TOKENIZER_FINISHED;
+            number = matchDecimal(line);
         }
+        MapSet(symbolTable, newLabel, number);
+    } else if (strncmp(line, ".long", 5) == 0) {
+        line += 6;
+        int number;
+        if (isHexNumber(line)) {
+            number = matchHex(line);
+        } else {
+            number = matchDecimal(line);
+        }
+        VectorPushBack(dataVector, number);
+        *currentAddress += 1;
+    } else if (*line == '@') {
+        return;
+    } else if ((colon = strchr(line, ':')) != NULL) {
+        char *newLabel = malloc((colon - line +1) * sizeof(char));
+        strncpy(newLabel, line, (colon - line));
+        newLabel[colon - line + 1] = '\0';
+        MapSet(symbolTable, newLabel, *currentAddress);
     }
-    return tokenList;
 
 }
