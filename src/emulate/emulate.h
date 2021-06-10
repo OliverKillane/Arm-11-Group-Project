@@ -14,6 +14,9 @@ typedef uint8_t byte;
 // 64KB memory (16 bit address)
 #define MEMSIZE (1 << 16)
 
+// the address containing the pointer to the start of the display.
+#define VIDEOPOINTER 0x0;
+
 // maximum word (all 1s)
 #define MAXINT32 0xFFFFFFFF
 
@@ -76,6 +79,17 @@ typedef enum {
     CORRUPT_FILE,
     INVALID_REG_ACCESS
 } errors;
+
+// EMULATOR MODES:
+typedef enum {
+    DEFAULT = 0,
+    GPIO_EXTENDED = 1,
+    VIDEO = 2
+} modes
+
+// declare the emulator Mode.
+extern mode emulatorMode;
+
 
 // UTILITIES:
 
@@ -164,7 +178,7 @@ void processDataInstr(instruction instr);
 @param loc 16bit location in memory
 @retval pointer to word in memory
 */
-word *getmemword(location loc);
+word *getmemword(word loc);
 
 
 /* Get the byte at loc (16 bit location)
@@ -172,11 +186,11 @@ word *getmemword(location loc);
 @param loc 16bit location in memory
 @retval pointer to byte in memory
 */
-byte *getmemloc(location loc);
+byte *getmemloc(word loc);
 
 
 /*  determine if the system the emulator is being run on is big or little endian 
-@retval true if littel endian, false otherwise 
+@retval true if little endian system, false otherwise (big endian)
 */
 bool littleendiancheck();
 
