@@ -19,7 +19,7 @@ all:     ../../build/tests/assemble/commandgen.o\
 	 ../../build/tests/assemble/token_utils.o\
 	 ../../build/tests/assemble/error.o\
 	 ../../build/tests/assemble/instruction_layouts.o\
-	 ../../build/tests/assemble/process_expression.o
+	 ../../build/tests/assemble/process_expression.o\
 	 ../../build/tests/assemble/process_alias.o
 	
 	 	$(CC) $(CSANITIZERS) $(CFLAGS) $(wildcard ../../build/tests/assemble/*.o)\

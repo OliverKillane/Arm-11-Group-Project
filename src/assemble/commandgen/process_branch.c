@@ -19,7 +19,7 @@ bool LayoutBranchConstant(
     ProcessDataLayout(tokens, 2, &type, &constant);
     
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
-    unsigned int jump_offset = (constant / 4 - 2 - offset) & ((1<<24) - 1);
+    long long jump_offset = (constant / 4 - 2 - offset);
     unsigned int link = (type == INSTR_BRL);
     
     if(-(1<<24) >= jump_offset || (1<<24) <= jump_offset) {
@@ -32,7 +32,7 @@ bool LayoutBranchConstant(
         cond, 28,
         0x5, 25,
         link, 24,
-        jump_offset, 0
+        jump_offset & ((1<<24) - 1), 0
     ), offset);
     return false;
 }

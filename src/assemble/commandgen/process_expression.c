@@ -71,4 +71,6 @@ bool ProcessExpression(Map restrict symbols, Vector tokens) {
     *tokens = *new_tokens;
     *new_tokens = tmp;
     DeleteVector(new_tokens);
+    
+    return false;
 }

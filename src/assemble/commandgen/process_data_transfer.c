@@ -18,7 +18,7 @@ bool LayoutTransferSet(
     long long constant = TokenConstantValue(VectorGet(tokens, 2));
     unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
 
-    if(constant < (1<<8)) {
+    if(constant < (1 << 8)) {
         SetInstruction(text, FillInstruction(
             5,
             cond, 28,
@@ -31,14 +31,14 @@ bool LayoutTransferSet(
     }
 
     long long data_offset = VectorSize(data) + instructions_num;
-    VectorPushBack(data, constant & ((1 << 32) - 1));
+    VectorPushBack(data, constant & ((1ll << 32) - 1));
 
     if((data_offset - 2 - offset) * 4 >= (1 << 12)) {
         SetErrorCode(ERROR_OFFSET_OOB);
         return true;
     }
 
-    if(constant >= (1 << 32) || constant < -(1 << 31)) {
+    if(constant >= (1ll << 32) || constant < -(1ll << 31)) {
         SetErrorCode(ERROR_CONSTANT_OOB);
         return true;
     }
