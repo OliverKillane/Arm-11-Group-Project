@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
   }
 
   if (!filename) {
-    printf("Error: no file provided");
+    printf("Error: no file provided.\n");
     exit(INVALID_ARGUMENTS);
   }
 
@@ -558,7 +558,7 @@ void processEvents() {
   static int writeIndex = 0;
 
   /* pointer to the input buffer */
-  char* buffer = getmemloc(INPUT_BUFFER);
+  byte* buffer = getmemloc(INPUT_BUFFER);
 
   SDL_Event event;
 
@@ -566,7 +566,7 @@ void processEvents() {
   /* process each waiting event */
   while(SDL_PollEvent(&event)) {
 
-    if (event.type = SDL_QUIT) {
+    if (event.type == SDL_QUIT) {
 
       /* immediately exit the program */
       freeCPU();
