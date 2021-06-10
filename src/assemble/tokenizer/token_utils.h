@@ -58,6 +58,14 @@ typedef enum {
     INSTR_ROR
 } InstructionType;
 
+typedef enum {
+    LABEL_FULL = 10, // to be able to map over them
+    LABEL_FIRST8,
+    LABEL_SECOND8,
+    LABEL_THIRD8,
+    LABEL_FOURTH8
+} LabelType;
+
 typedef struct {
     TokenKind type;
     union {
@@ -70,7 +78,10 @@ typedef struct {
             InstructionType type;
         } instruction;
         int reg_num;
-        char label[512];
+        struct {
+            char string[512];
+            LabelType type;
+        } label;
         bool is_plus;
         bool is_open;
     };
@@ -84,7 +95,7 @@ Token NewRegisterToken(int reg);
 
 Token NewConstantToken(ConstantType type, long long value);
 
-Token NewLabelToken(char *label);
+Token NewLabelToken(char *label, LabelType type);
 
 Token NewSignToken(bool is_plus);
 
@@ -108,6 +119,8 @@ InstructionType TokenInstructionType(Token token);
 int TokenRegisterNumber(Token token);
 
 char* TokenLabel(Token token);
+
+LabelType TokenLabelType(Token token);
 
 bool TokenIsPlus(Token token);
 
