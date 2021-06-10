@@ -47,6 +47,11 @@ int main(int argc, char** argv) {
     }
   }
 
+  if (!filename) {
+    printf("Error: no file provided");
+    exit(INVALID_ARGUMENTS);
+  }
+
   if (emulatorMode && VIDEO) {
     /* EXTENSION: set up the window, initialise */
     setupWindow(filename);
