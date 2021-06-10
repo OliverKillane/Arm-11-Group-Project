@@ -493,7 +493,7 @@ void freeCPU(){
   free(CPU.memory);
 }
 
-void setupWindow(){
+void setupWindow(char *title){
 
   /* initialise SDL to display the window */
   SDL_Init(SDL_INIT_VIDEO);
@@ -532,7 +532,7 @@ void setupWindow(){
   );
 }
 
-void updateOutput(word *videostart) {
+void updateOutput(byte *videostart) {
 
   /* update the texture to the pointed to region, with rows of length 4 bytes * display width */
   SDL_UpdateTexture(texture, NULL, videostart, WIDTH * 4);
