@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "SDL.h"
 
 // TYPE DECLARATIONS:
 // type definitions for readability
@@ -13,9 +14,6 @@ typedef uint8_t byte;
 
 // 64KB memory (16 bit address)
 #define MEMSIZE (1 << 16)
-
-// the address containing the pointer to the start of the display.
-#define VIDEOPOINTER 0x0;
 
 // maximum word (all 1s)
 #define MAXINT32 0xFFFFFFFF
@@ -85,10 +83,10 @@ typedef enum {
     DEFAULT = 0,
     GPIO_EXTENDED = 1,
     VIDEO = 2
-} modes
+} modes;
 
 // declare the emulator Mode.
-extern mode emulatorMode;
+extern modes emulatorMode;
 
 
 // UTILITIES:
@@ -192,7 +190,11 @@ byte *getmemloc(word loc);
 /*  determine if the system the emulator is being run on is big or little endian 
 @retval true if little endian system, false otherwise (big endian)
 */
-bool littleendiancheck();
+bool littleendiancheck(void);
+
+/* free the memory associated with the CPU struct.
+*/
+void freeCPU(void);
 
 // TERMINAL OUTPUT:
 
@@ -200,4 +202,38 @@ bool littleendiancheck();
 Print the state of the CPU to the terminal
 */
 void printState(void);
+
+// VIDEO OUTPUT:
+/* Window Size, in pixels */
+#define HEIGHT 160
+#define WIDTH 192
+
+/* the address containing the pointer to the start of the display. */
+#define VIDEO_POINTER 0x0;
+#define INPUT_BUFFER 0x0;
+#define INPUT_BUFFER_SIZE 64;
+
+
+/* the 3 main variables required, the window, the renderer to draw to the window, 
+ * and the texture to be drawn by the renderer */
+extern SDL_Window *window;
+extern SDL_Renderer *renderer;
+extern SDL_Texture *texture;
+
+
+/* Initialise the window, renderer and the texture*/
+void setupWindow(char *title);
+
+
+/* Update the window to display the current video out */
+void updateOutput(word *videostart);
+
+
+/* Take the events that have happened since the last call, if characters,
+ * add to character buffer*/
+void processEvents(void);
+
+/* close the window, and remove the associated renderer, textures */
+void destroyVideo(void);
+
 #endif

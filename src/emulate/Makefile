@@ -22,5 +22,5 @@ profile:
 clean:
 	rm -f $(wildcard ../build/emulate/*)
 	rm -f ../../bin/emulate
-	rm gmon.out
-	rm emulate_prof
+	rm -f gmon.out
+	rm -f emulate_prof

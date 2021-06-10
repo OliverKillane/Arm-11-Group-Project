@@ -4,17 +4,55 @@
 #include <assert.h>
 #include "emulate.h"
 
+/* CPU struct (state is changed to emulate) */
 machineState CPU;
+
+/* mode type of the emulator */
+modes emulatorMode;
+
+/* globals for video */
+SDL_Window *window;
+SDL_Renderer *renderer;
+SDL_Texture *texture;
+
 
 /* TEST allows for test suite to run unit tests without double definition of main */
 #ifndef TEST
 int main(int argc, char** argv) {
-  if (argc != 2) {
-    printf("Error: Invalid number of arguments provided, need only one filename\n");
-    exit(INVALID_ARGUMENTS);
+  emulatorMode = DEFAULT;
+
+  /* EXTENSION: take another argument to determine if video is on or off (-v), set accordingly */
+  /* create the window */
+
+  char *filename = NULL;
+
+  /* get the arguments, filename */
+  for (int arg = 1; arg < argc; arg++) {
+    if (strcmp(argv[arg], "-v") == 0) {
+      emulatorMode |= VIDEO;
+    } else if (strcmp(argv[arg], "-g") == 0) {
+      emulatorMode |= GPIO_EXTENDED;
+    } else {
+      if (argv[arg][0] != '-') {
+        if (!filename) {
+          filename = argv[arg];
+        } else {
+          printf("Error: Can only load one filename %s, but %s was also provided.", filename, argv[arg]);
+          exit(INVALID_ARGUMENTS);
+        }
+      } else {
+        printf("Error: invalid flag %s used. Only flags are -v (video) and -g (extended GPIO)", argv[arg]);
+        exit(INVALID_ARGUMENTS);
+      }
+    }
   }
 
-  /* set up machine initial state */
+  if (emulatorMode && VIDEO) {
+    /* EXTENSION: set up the window, initialise */
+    setupWindow();
+  }
+
+  /* set up machine initial state (all zero, stack pointer at max location*/
   CPU.CPSR = (cpsr) {.N = 0, .Z = 0, .C = 0, .V = 0};
   CPU.memory = calloc(MEMSIZE, 1);
   assert(CPU.memory);
@@ -22,12 +60,18 @@ int main(int argc, char** argv) {
   CPU.GPIO = 0;
   
   /*load, run and display final state */
-  loadProgram(argv[1]);
+  loadProgram(filename);
   runProgram();
   printState();
 
   /* CPU memory is the only memory on the heap allocated, so it must be freed */
-  free(CPU.memory);
+  freeCPU();
+
+  if (emulatorMode && VIDEO) {
+
+    /* EXTENSION: destory the window, textures associated with window */
+    destroyVideo();
+  }
 
   return EXIT_SUCCESS;
 }
@@ -80,6 +124,8 @@ void loadProgram(char* filename) {
 
 void runProgram() {
 
+  /* EXTENSION: pointer to image buffer start */
+
   /* to mimic pipelining, PC starts at 4 */
   *GETREG(PC) = 4;
   instruction currentInstr;
@@ -107,6 +153,13 @@ void runProgram() {
         exit(INVALID_INSTR);
       }
     }
+
+    /* EXTENSION: draw the screen */
+    updateOutput();
+    
+    /* EXTENSION: read in character events*/
+    processEvents();
+
   } while(currentInstr);
 }
 
@@ -137,6 +190,7 @@ void singleDataTransInstr(instruction instr) {
   bool I = GETBIT(instr, 25);
   bool P = GETBIT(instr, 24);
   bool U = GETBIT(instr, 23);
+  bool W = GETBIT(instr, 21);
   bool L = GETBIT(instr, 20);
 
   /* FATAL ERROR: PC cannot be the destination register */
@@ -162,7 +216,20 @@ void singleDataTransInstr(instruction instr) {
     offset = -offset;
   }
 
-  word memloc = P?(*RnBase + offset):*RnBase;
+  word memloc;
+  if (P) {
+
+    /* if pre indexing, pre index, use W bit to determine if to update Rn*/
+    memloc = *RnBase + offset;
+    if (W) {
+      *RnBase += offset;
+    }
+  } else {
+
+    /* if post indexing, post index and update Rn */
+    memloc = *RnBase;
+    *RnBase += offset;
+  }
 
   if (memloc == 0x20200008 || memloc == 0x20200004 || memloc == 0x20200000) {
     int region = ((memloc & 0xF) >> 2) * 10;
@@ -198,10 +265,6 @@ void singleDataTransInstr(instruction instr) {
 
     printf("Error: Out of bounds memory access at address 0x%08x\n", memloc);
     return;
-  }
-
-  if (!P) {
-    *RnBase += offset;
   }
 }
 
@@ -378,7 +441,7 @@ void processDataInstr(instruction instr) {
 
 void printState() {
 
-  /* orint out each register, except for LR and SP*/
+  /* print out each register, except for LR and SP*/
   printf("Registers:\n");
   for (int registerNo = 0; registerNo < 13; registerNo++) {
     printf("$%-3i: %10i (0x%08x)\n", registerNo, *GETREG(registerNo), *GETREG(registerNo));
@@ -405,6 +468,12 @@ void printState() {
       }
     }
   }
+
+  if (emulatorMode && GPIO_EXTENDED) {
+
+    /* gpio bits should be displayed as GPIO extended flag has been sent */
+    printf("GPIO: %10i (0x%08x)\n", CPU.GPIO, CPU.GPIO);
+  }
 }
 
 bool littleendiancheck() {
@@ -418,4 +487,114 @@ word *getmemword(location loc) {
 
 byte *getmemloc(location loc) {
   return (CPU.memory + loc);
+}
+
+void freeCPU(){
+  free(CPU.memory);
+}
+
+void setupWindow(){
+
+  /* initialise SDL to display the window */
+  SDL_Init(SDL_INIT_VIDEO);
+
+  /* initialise the window, of width by height, not resixzable and with a border 
+   * title is the filename of the program
+   */
+  window = SDL_CreateWindow(
+    title,
+    SDL_WINDOWPOS_CENTERED,
+    SDL_WINDOWPOS_CENTERED,
+    WIDTH,
+    HEIGHT,
+    SDL_WINDOW_SHOWN
+  );
+
+  /* initialise the renderer
+   * magic number -1: use first available driver supporting flags
+   */
+  renderer = SDL_CreateRenderer (
+    window,
+    -1,
+    SDL_RENDERER_ACCELERATED
+  );
+
+  /* initialise the texture, use pixel format:
+   * A R G B (each 8 bits) which matches what we will draw from our arm code
+   * this allows us to read straight from memory to the texture.
+   */
+  texture = SDL_CreateTexture(
+    renderer,
+    SDL_PIXELFORMAT_ARGB8888,
+    SDL_TEXTUREACCESS_STATIC,
+    WIDTH,
+    HEIGHT
+  );
+}
+
+void updateOutput(word *videostart) {
+
+  /* update the texture to the pointed to region, with rows of length 4 bytes * display width */
+  SDL_UpdateTexture(texture, NULL, videostart, WIDTH * 4);
+
+  /* clear the renderer */
+  SDL_RenderClear(renderer);
+
+  /* copy the texture data to the renderer so it can draw */
+  SDL_RenderCopy(renderer, texture, NULL, NULL);
+
+  /* display the rendered texture on the window */
+  SDL_RenderPresent(renderer);
+}
+
+void processEvents() {
+
+  /* writeindex is maintained between calls */
+  static int writeIndex = 0;
+
+  /* pointer to the input buffer */
+  char* buffer = getmemloc(INPUT_BUFFER);
+
+  SDL_Event event;
+
+
+  /* process each waiting event */
+  while(SDL_PollEvent(&event)) {
+
+    if (event.type = SDL_QUIT) {
+
+      /* immediately exit the program */
+      freeCPU();
+      destroyVideo();
+      exit(EXIT_SUCCESS);
+
+    } else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+      /* write new key event to the input buffer */
+
+      /* get correct write index */
+      if (writeindex >= INPUT_BUFFER_SIZE) {
+        writeIndex = 0;
+      }
+
+      SDL_KeyCode keycode = event.key.keysym.sym;
+
+
+      /* first bit is 0 for keydown, 1 for key up */
+      byte input = event.type==SDL_KEYDOWN?0:0x80;
+      
+      /* if an arrow key, use the EOT,ENQ,ACK,BEL character codes as substitutes
+       * by subtracting, otherwise if a 7 bit ascii, set character, else ignore this character */
+      if (keycode <= SDLK_UP && keycode >= SDLK_RIGHT) {
+        input += (keycode - 0x4000004D);
+      } else if (keycode < 128) {
+        input += keycode;
+      } else {
+        continue;
+      }
+
+      /* write to the buffer and increment the pointer */
+      buffer[writeIndex] = input;
+      writeIndex++;
+    }
+  }
 }
