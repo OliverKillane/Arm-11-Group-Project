@@ -386,14 +386,15 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine) {
 }
 
 void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector dataVector) {
-    // *totalInstructions = (*totalInstructions + 3) / 4;
-    // Vector dataVector = NewEmptyVector();
-    // if (strncmp(line, ".ascii", 6) == 0) {
-    //     line += 8;
-    //     // processAscii();
-    //     char *endQuote = strchr(line, '"');
-
-    // }
+    
+    char *endl = strchr(line, '\n');
+    if (endl != NULL) {
+        *endl = '\0';
+    }
+    char *at = strchr(line, '@');
+    if (at != NULL) {
+        *at = '\0';
+    }
     char *colon;
 
     if (strncmp(line, ".set", 4) == 0) {
@@ -404,10 +405,7 @@ void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector d
         newLabel[endLabel - line + 1] = '\0';
         line = endLabel + 1;
         int number;
-        char *endLine = strchr(line, '\n');
-        if (endLine != NULL) {
-            *endLine = '\0';
-        }
+
         if (isHexNumber(line)) {
             number = matchHex(line);
         } else {
@@ -424,8 +422,6 @@ void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector d
         }
         VectorPushBack(dataVector, number);
         *currentAddress += 1;
-    } else if (*line == '@') {
-        return;
     } else if ((colon = strchr(line, ':')) != NULL) {
         char *newLabel = malloc((colon - line +1) * sizeof(char));
         strncpy(newLabel, line, (colon - line));

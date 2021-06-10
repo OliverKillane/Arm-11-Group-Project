@@ -42,12 +42,12 @@ int main(int argc, char **argv) {
 	}
 
 	printf("Got to making binary vector\n");
-	Vector binaryVector = tokensToBinary(symbolTable, textTokens, dataVector, &totalInstructions);
+	Vector binaryVector = tokensToBinary(symbolTable, textTokens, dataVector, totalInstructions);
 	printf("finished making binaryvector\n");
-	// VECTORFOR(dataVector, iter) {
-	// 	int word = VectorIteratorGet(iter);
-	// 	VectorPushBack(binaryVector, word);
-	// }
+	VECTORFOR(dataVector, iter) {
+		int word = VectorIteratorGet(iter);
+		VectorPushBack(binaryVector, word);
+	}
 	
 
 	// MAPFOR(symbolTable, iter) {
