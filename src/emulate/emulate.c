@@ -598,3 +598,14 @@ void processEvents() {
     }
   }
 }
+
+void destroyVideo(){
+
+  /* destroy the SDL components used */
+  SDL_DestroyTexture(texture);
+  SDL_DestroyRenderer(renderer);
+  SDL_DestroyWindow(window);
+
+  /* end SDL */
+  SDL_Quit();
+}
