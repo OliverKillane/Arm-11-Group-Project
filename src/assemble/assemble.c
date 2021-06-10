@@ -31,26 +31,23 @@ int main(int argc, char **argv) {
 	// 	char *line = ListIteratorGet(iter);
 	// 	printf("%s", line);
 	// }
-	List textTokens = tokenizeTextLine(textLines, symbolTable, &totalInstructions);
+	List textTokens = tokenize(textLines, symbolTable, &totalInstructions);
 
 	Vector dataVector = NewEmptyVector();
 
-	int instructions = totalInstructions;
 
 	LISTFOR(dataLines, iter) {
 		char *line = ListIteratorGet(iter);
-		tokenizeDataLine(line, symbolTable, &instructions, dataVector);
+		tokenizeDataLine(line, symbolTable, &totalInstructions, dataVector);
 	}
-
-	
 
 	printf("Got to making binary vector\n");
 	Vector binaryVector = tokensToBinary(symbolTable, textTokens, dataVector, &totalInstructions);
 	printf("finished making binaryvector\n");
-	VECTORFOR(dataVector, iter) {
-		int word = VectorIteratorGet(iter);
-		VectorPushBack(binaryVector, word);
-	}
+	// VECTORFOR(dataVector, iter) {
+	// 	int word = VectorIteratorGet(iter);
+	// 	VectorPushBack(binaryVector, word);
+	// }
 	
 
 	// MAPFOR(symbolTable, iter) {

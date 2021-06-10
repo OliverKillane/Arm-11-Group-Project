@@ -7,6 +7,7 @@
 #include "stddata.h"
 #include "commandgen.h"
 #include "tokenizer.h"
+#include "error.h"
 
 
 /* Removes the colon in sourceStr by copying to targetStr.
@@ -111,7 +112,7 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 
 		char *line = ListIteratorGet(iter);
 
-		Vector tokens;// = tokenizeLine(line, symbolTable, *totalInstructions);
+		Vector tokens = tokenizeTextLine(line, symbolTable, *totalInstructions);
 		bool hasInstructions = !VectorEmpty(tokens);
 		if (hasInstructions) {
 			(*totalInstructions)++;
@@ -135,7 +136,10 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int
 	LISTFOR(listOfTokens, allTokensIter) {	
 		Vector lineTokens = ListIteratorGet(allTokensIter);
 		printf("Processing line %d\n", currInstr);
-		FunctionGen(symbolTable, lineTokens, programVector, dataVector, currInstr, totalInstructions);
+		if (FunctionGen(symbolTable, lineTokens, programVector, dataVector, currInstr, totalInstructions)) {
+			ReportError(0, "wow", "heyehye");
+		}
+		
 		
 		currInstr++;		
 	}
