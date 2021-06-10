@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 
   if (emulatorMode && VIDEO) {
     /* EXTENSION: set up the window, initialise */
-    setupWindow();
+    setupWindow(filename);
   }
 
   /* set up machine initial state (all zero, stack pointer at max location*/
@@ -155,7 +155,7 @@ void runProgram() {
     }
 
     /* EXTENSION: draw the screen */
-    updateOutput();
+    updateOutput(getmemloc(*getmemloc(VIDEO_POINTER)));
     
     /* EXTENSION: read in character events*/
     processEvents();
@@ -481,11 +481,11 @@ bool littleendiancheck() {
     return *((byte*) &test);
 }
 
-word *getmemword(location loc) {
+word *getmemword(word loc) {
   return (word *) getmemloc(loc);
 }
 
-byte *getmemloc(location loc) {
+byte *getmemloc(word loc) {
   return (CPU.memory + loc);
 }
 
@@ -572,7 +572,7 @@ void processEvents() {
       /* write new key event to the input buffer */
 
       /* get correct write index */
-      if (writeindex >= INPUT_BUFFER_SIZE) {
+      if (writeIndex >= INPUT_BUFFER_SIZE) {
         writeIndex = 0;
       }
 

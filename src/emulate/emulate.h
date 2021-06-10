@@ -209,9 +209,9 @@ void printState(void);
 #define WIDTH 192
 
 /* the address containing the pointer to the start of the display. */
-#define VIDEO_POINTER 0x0;
-#define INPUT_BUFFER 0x0;
-#define INPUT_BUFFER_SIZE 64;
+#define VIDEO_POINTER 0x0
+#define INPUT_BUFFER 0x0
+#define INPUT_BUFFER_SIZE 64
 
 
 /* the 3 main variables required, the window, the renderer to draw to the window, 
