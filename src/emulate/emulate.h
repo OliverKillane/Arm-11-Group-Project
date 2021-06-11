@@ -222,6 +222,7 @@ void printState(void);
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;
 extern SDL_Texture *texture;
+extern byte* video_pointer;
 
 
 /* Initialise the window, renderer and the texture*/

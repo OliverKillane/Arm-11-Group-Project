@@ -14,6 +14,7 @@ modes emulatorMode;
 SDL_Window *window;
 SDL_Renderer *renderer;
 SDL_Texture *texture;
+byte* video_pointer;
 
 
 /* TEST allows for test suite to run unit tests without double definition of main */
@@ -270,7 +271,16 @@ void singleDataTransInstr(instruction instr) {
     /* set pins */
     printf("PIN ON\n");
     CPU.GPIO = CPU.GPIO | *RdSrcDst;
-  } else if (memloc < MEMSIZE) {
+  } else if (memloc == VIDEO_POINTER) {
+	  /* if setting the video pointer */
+	  if (L) {
+		/* for load get the address in the emulator (pointer - memory start) */
+		*RdSrcDst = video_pointer - CPU.memory;
+	  } else {
+		/* for store, set video pointer as a pointer to the memory location memloc*/
+		video_pointer = getmemloc(memloc);
+	  }
+  }else if (memloc < MEMSIZE) {
 
     /* interacting with 64KB of main memory */
     if (L) {
@@ -553,14 +563,15 @@ void setupWindow(char *title){
   
   /* scale up resolution to make it more playable */
   SDL_RenderSetLogicalSize(renderer, WIDTH, HEIGHT);
+  
+  /* initialise the video pointer to show memory */
+  video_pointer = CPU.memory;
 }
 
 void updateOutput() {
-	
-  byte* videostart = getmemloc(*getmemloc(VIDEO_POINTER));
 
   /* update the texture to the pointed to region, with rows of length 4 bytes * display width */
-  SDL_UpdateTexture(texture, NULL, videostart, WIDTH * 4);
+  SDL_UpdateTexture(texture, NULL, video_pointer, WIDTH * 4);
 
   /* clear the renderer */
   SDL_RenderClear(renderer);
