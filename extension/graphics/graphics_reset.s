@@ -1,7 +1,7 @@
 .text
-graphics_reset:
+reset:
 	
-	@ register parameters: 
+	@ function parameters: 
 	@ r0  <- x0
 	@ r1  <- y0
 	@ r2  <- width  (X axis)
@@ -85,4 +85,5 @@ graphics_reset:
 		pop r6
 		pop r5
         pop r4
+
 		ret    

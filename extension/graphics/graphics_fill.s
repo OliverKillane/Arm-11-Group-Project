@@ -1,7 +1,7 @@
 .text
-graphics_fill:
+fill:
 	
-	@ register parameters: 
+	@ function parameters: 
 	@ r0  <- x0
 	@ r1  <- y0
 	@ r2  <- width  (X axis)
@@ -76,4 +76,5 @@ graphics_fill:
 		pop r8
 		pop r6
 		pop r5
+		
 		ret	
