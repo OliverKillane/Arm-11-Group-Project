@@ -15,9 +15,9 @@ graphics_reset:
 	@ r10 <- array iterator index
     @ r11 <- auxiliary register 
     @ r12 <- background register
-    @ r15 <- write_image_buffer register
+    @ r4 <- write_image_buffer register
 		
-
+    push r4
     push r5
 	push r6
 	push r8
@@ -25,7 +25,7 @@ graphics_reset:
 	push r10
 	push r11
     push r12
-    push r15
+
 
     @ y-axis iterator
 	mov r6, r1
@@ -49,10 +49,10 @@ graphics_reset:
     orr r12 #:third8:background
     orr r12 #:fourth8:background
 
-    mov r15 #:first8:write_image_buffer
-    orr r15 #:second8:write_image_buffer
-    orr r15 #:third8:write_image_buffer
-    orr r15 #:fourth8:write_image_buffer
+    mov r4 #:first8:write_image_buffer
+    orr r4 #:second8:write_image_buffer
+    orr r4 #:third8:write_image_buffer
+    orr r4 #:fourth8:write_image_buffer
 
 
 	condX:
@@ -79,7 +79,6 @@ graphics_reset:
 		b condY
 
     end:
-        pop r15
         pop r12
 		pop r11
 		pop r10
@@ -87,4 +86,5 @@ graphics_reset:
 		pop r8
 		pop r6
 		pop r5
+        pop r4
 		ret    
