@@ -5,8 +5,3 @@
 .include graphics_digits.s
 .include graphics_paddle.s
 .include graphics_fill.s
-
-mov r0 #:first8:label
-mov r0 #:second8:label
-mov r0 #:third8:label
-mov r0 #:fourth8:label
