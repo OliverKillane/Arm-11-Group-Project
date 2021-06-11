@@ -161,11 +161,16 @@ void runProgram() {
       }
     }
 
-    /* EXTENSION: draw the screen */
-    updateOutput(getmemloc(*getmemloc(VIDEO_POINTER)));
-    
-    /* EXTENSION: read in character events*/
-    processEvents();
+
+    if (emulatorMode && VIDEO) {
+
+      /* EXTENSION: draw the screen */
+      updateOutput(getmemloc(*getmemloc(VIDEO_POINTER)));
+      
+      /* EXTENSION: read in character events*/
+      processEvents();
+
+    }
 
   } while(currentInstr);
 }
