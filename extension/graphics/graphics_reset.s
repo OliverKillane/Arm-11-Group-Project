@@ -8,6 +8,7 @@ graphics_reset:
 	@ r3  <- height (Y axis)
 
 	@ internal registers for local variables: 
+    @ r4 <- write_image_buffer register
 	@ r5  <- x iterator
 	@ r6  <- y iterator
 	@ r8  <- X-axis target pixel index
@@ -15,7 +16,6 @@ graphics_reset:
 	@ r10 <- array iterator index
     @ r11 <- auxiliary register 
     @ r12 <- background register
-    @ r4 <- write_image_buffer register
 		
     push r4
     push r5
@@ -33,12 +33,10 @@ graphics_reset:
 	mov r5, r0
 
     @ set target width-x
-	mov r8, r2
-	add r8, r1
+	add r8, r2, r1
 
     @ set target height-y
-	mov r9, r3 
-	add r9, r9, r1
+	add r9, r3, r1
 
     @ array iterator
 	mov r11, height

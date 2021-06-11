@@ -31,12 +31,10 @@ graphics_fill:
 	mov r5, r0
 
     @ set target width-x
-	mov r8, r2
-	add r8, r1
+	add r8, r2, r1
 
-    @ set target height-y
-	mov r9, r3 
-	add r9, r9, r1
+    @ set target height-y 
+	add r9, r3, r1
 
     @ array iterator
 	mov r11, height
