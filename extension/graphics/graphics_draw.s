@@ -14,6 +14,8 @@
 		orr r5, :fourth8:bcurr
 		ldr r0, [r5]
 		ldr r1, [r5, #0x4]
+		lsl r0, #8
+		lsl r1, #8
 		add r0, r0, ml
 		add r1, r1, mt
 		mov r2, ball_width
@@ -32,6 +34,7 @@
 		orr r5, :fourth8:pcurr
 		mov r0, ml
 		ldr r1, [r5]
+		lsl r1, #8
 		add r1, r1, mt
 		mov r2, paddlewidth
 		mov r3, paddleheight
@@ -44,6 +47,7 @@
 
 		mov r0, ml
 		ldr r1, [r5, #0x4]
+		lsl r1, #8
 		add r1, r1, mt
 		mov r2, paddlewidth
 		mov r3, paddleheight

@@ -12,6 +12,8 @@
 		orr r4, :fourth8:bprev
 		ldr r0, [r4]
 		ldr r1, [r4, #0x4]
+		lsl r0, #8
+		lsl r1, #8
 		add r0, r0, ml
 		add r1, r1, mt
 		mov r2, ball_width
@@ -25,6 +27,7 @@
 		orr r4, :fourth8:pprev
 		mov r0, ml
 		ldr r1, [r4]
+		lsl r1, #8
 		add r1, r1, mt
 		mov r2, paddlewidth
 		mov r3, paddleheight
@@ -32,6 +35,7 @@
 
 		mov r0, ml
 		ldr r1, [r4, #0x4]
+		lsl r1, #8
 		add r1, r1, mt
 		mov r2, paddlewidth
 		mov r3, paddleheight
