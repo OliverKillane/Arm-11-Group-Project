@@ -42,16 +42,27 @@ reset:
 	mov r11, height
 	mla r10, r0, r11, r1
 
+	@ load background values into register
     mov r12 :first8:background
     orr r12 :second8:background
     orr r12 :third8:background
     orr r12 :fourth8:background
 
+	@ load write_image_buffer values into register
     mov r4 :first8:write_image_buffer
     orr r4 :second8:write_image_buffer
     orr r4 :third8:write_image_buffer
     orr r4 :fourth8:write_image_buffer
 
+	@ ensure X coordinate is within image bounds
+	cmp r8, height
+	ble condX
+	mov r8, height 
+
+	@ ensure Y coordinate is within image bounds
+	cmp r9, width
+	ble condX
+	mov r9, width
 
 	condX:
 		cmp r5, r8
