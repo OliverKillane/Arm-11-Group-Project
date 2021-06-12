@@ -1,5 +1,6 @@
 #include <stddata.h>
 #include <stdio.h>
+#include <ctype.h>
 #include "error.h"
 
 #define RED "\e[31m"
@@ -30,6 +31,9 @@ void ReportError(int line_num, char* file_name, char* line_contents) {
     }
     Map error_messages = ErrorMessagesMap();
 
+    while(isspace(*line_contents)) {
+        line_contents++;
+    }
     printf(
         "%s:%d: %s\n" RED "error: " WHITE "%s\n", 
         file_name, 
