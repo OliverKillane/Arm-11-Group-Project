@@ -1,5 +1,6 @@
 #include "instruction_layouts.h"
 #include "../tokenizer.h"
+#include "common_defs.h"
 #include "process_branch.h"
 #include "process_multiply.h"
 #include "process_shift.h"
@@ -14,9 +15,9 @@
 DecisionTree instruction_layouts;
 DecisionTree data_layouts;
 DecisionTree bracket_layouts;
-List layout_tokens;
-List data_layout_vectors;
-Set single_group_tokens;
+static List layout_tokens;
+static List data_layout_vectors;
+static Set single_group_tokens;
 
 unsigned long long InstructionLayoutHashFunc(void* token_ptr) {
     Token token = token_ptr;
@@ -73,6 +74,11 @@ bool InstructionLayoutEqFunc(void* token_a_ptr, void* token_b_ptr) {
                         TokenInstructionType(token_a) == INSTR_BRL) &&
                        (TokenInstructionType(token_b) == INSTR_BRN ||
                         TokenInstructionType(token_b) == INSTR_BRL);
+            }
+            if(MapQuery(shift_codes, (void*)TokenInstructionType(token_a)) ||
+               MapQuery(shift_codes, (void*)TokenInstructionType(token_b))) {
+                return MapQuery(shift_codes, (void*)TokenInstructionType(token_a)) &&
+                       MapQuery(shift_codes, (void*)TokenInstructionType(token_b));
             }
             return true;
             

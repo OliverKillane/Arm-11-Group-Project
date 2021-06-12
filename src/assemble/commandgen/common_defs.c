@@ -44,8 +44,8 @@ void InitLabelMask() {
 void InitFunctionGen() {
     InitDataProcOpcodes();
     InitShiftCodes();
-    InitInstructionLayouts();
     InitLabelMask();
+    InitInstructionLayouts();
 }
 
 void FinishFunctionGen() {
