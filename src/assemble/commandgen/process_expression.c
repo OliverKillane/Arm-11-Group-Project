@@ -41,7 +41,7 @@ bool ProcessExpression(Map restrict symbols, Vector tokens) {
             SetErrorCode(ERROR_LABEL_NOT_FOUND);
             return true;
         }
-        long long address = (long long)MapGet(symbols, TokenLabel(VectorIteratorGet(iter))) * 4;
+        long long address = (long long)MapGet(symbols, TokenLabel(VectorIteratorGet(iter)));
         address &= (long long)MapGet(label_masks, (int)TokenLabelType(VectorIteratorGet(iter)));
         DeleteToken(VectorIteratorGet(iter));
         VectorIterator next = iter;
