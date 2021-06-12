@@ -138,6 +138,7 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int
 		char *line = VectorPopBack(lineTokens);
 		if (FunctionGen(symbolTable, lineTokens, programVector, dataVector, currInstr, totalInstructions)) {
 			ReportError(0, "wow", line);
+			exit(1);
 		}
 		
 		

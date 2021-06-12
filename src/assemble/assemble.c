@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
 
 	LISTFOR(dataLines, iter) {
 		char *line = ListIteratorGet(iter);
-		tokenizeTextLine(line, symbolTable, &totalInstructions, dataVector);
+		tokenizeTextLine(line, symbolTable, totalInstructions + VectorSize(dataVector), dataVector);
 	}
 
 	printf("Got to making binary vector\n");

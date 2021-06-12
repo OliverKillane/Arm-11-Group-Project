@@ -305,9 +305,9 @@ LabelType matchLabelType(char *str) {
 }
 
 DirectiveType matchDirective(char *str) {
-    if (strcmp(str, "set")) {
+    if (strcmp(str, "set") == 0) {
         return DIRECTIVE_SET;
-    } else if (strcmp(str, "long")) {
+    } else if (strcmp(str, "long") == 0) {
         return DIRECTIVE_LONG;
     }
     assert(false);
@@ -359,7 +359,7 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataV
                     addCharToToken(line[0]);
                 } else if (line[0] == ':') {
                     addCharToToken('\0');
-                    currentLabelType = matchLabelType(line);
+                    currentLabelType = matchLabelType(currentToken);
                     resetToken();
                     currentState = TOKENIZER_START;
                 }
@@ -369,10 +369,13 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataV
                     addCharToToken(line[0]);
                 } else {
                     addCharToToken('\0');
-                    currentDirectiveType = matchDirective(line);
+                    // printf("heyy %s\n", currentToken);
+                    currentDirectiveType = matchDirective(currentToken);
                     if (currentDirectiveType == DIRECTIVE_SET) {
+                        // printf("wow matched set directive\n");
                         currentState = TOKENIZER_INSTR_LABEL_REG;
                     } else if (currentDirectiveType == DIRECTIVE_LONG) {
+                        // printf("wow matched long directive\n");
                         currentState = TOKENIZER_CONSTANT;
                     }
                     resetToken();
@@ -383,6 +386,7 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataV
                     addCharToToken(line[0]);
                 } else if (line[0] == ':') {
                     addCharToToken('\0');
+                    printf("Label set %s %d\n", currentToken, currentLine);
                     addTokenToSymbolTable(symbolTable, currentLine, currentToken);
                     resetToken();
                     currentState = TOKENIZER_START;
@@ -431,7 +435,8 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataV
                         if (currentDirectiveType == DIRECTIVE_NONE) {
                             VectorPushBack(tokenList, matchedConstant);
                         } else if (currentDirectiveType == DIRECTIVE_LONG) {
-                            VectorPushBack(dataVector, matchedConstant);
+                            printf("%d\n", matchedConstant->constant.value);
+                            VectorPushBack(dataVector, matchedConstant->constant.value);
                             currentDirectiveType = DIRECTIVE_NONE;
                         } else if (currentDirectiveType == DIRECTIVE_SET) {
                             MapSet(symbolTable, currentDirectiveLabel, matchedConstant);
