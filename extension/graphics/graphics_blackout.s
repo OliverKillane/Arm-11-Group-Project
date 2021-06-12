@@ -7,9 +7,9 @@
 
 		@ Blacking out the ball
 		mov r4, :first8:bprev
-		orr r4, :second8:bprev
-		orr r4, :third8:bprev
-		orr r4, :fourth8:bprev
+		orr r4, r4, :second8:bprev
+		orr r4, r4, :third8:bprev
+		orr r4, r4, :fourth8:bprev
 		ldr r0, [r4]
 		ldr r1, [r4, #0x4]
 		lsl r0, #8
@@ -22,9 +22,9 @@
 
 		@ Blacking out the paddles
 		mov r4, :first8:pprev
-		orr r4, :second8:pprev
-		orr r4, :third8:pprev
-		orr r4, :fourth8:pprev
+		orr r4, r4, :second8:pprev
+		orr r4, r4, :third8:pprev
+		orr r4, r4, :fourth8:pprev
 		mov r0, ml
 		ldr r1, [r4]
 		lsl r1, #8
