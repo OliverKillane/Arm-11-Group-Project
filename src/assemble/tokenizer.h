@@ -42,7 +42,7 @@ int matchHex(char *str);
 Token matchRegister(char *str);
 Token matchConstant(char *str);
 void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token);
-List tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataVector);
+Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataVector, char *filename, int lineNumber);
 void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector dataVector);
 
 #endif /* ASSEMBLE_TOKENIZER_H_ */

@@ -313,7 +313,7 @@ DirectiveType matchDirective(char *str) {
     assert(false);
 }
 
-List tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataVector) {
+Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataVector, char *filename, int lineNumber) {
     Vector tokenList = NewEmptyVector();
 
     char *preservedLine = line;
@@ -465,6 +465,8 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataV
     }
 
     VectorPushBack(tokenList, preservedLine);
+    VectorPushBack(tokenList, filename);
+    VectorPushBack(tokenList, lineNumber);
     return tokenList;
 
 }

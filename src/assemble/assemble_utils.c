@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <math.h>
 #include "stddata.h"
 #include "commandgen.h"
 #include "tokenizer.h"
@@ -60,6 +61,8 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 	size_t length = 0;
 	ssize_t read;
 
+	int lineNum = 1;
+
 	file = fopen(filename, "r");
 	assert(file != NULL);
 
@@ -84,14 +87,22 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 		} else {
 			char *allocatedStr = malloc(sizeof(char) * (length + 1));
 			strcpy(allocatedStr, line);
-			// printf("%s", allocatedStr);
+			// int *lineNum = malloc(sizeof(int));
+			// *lineNum = line;
+			char *filenameCpy = malloc(sizeof(char) * (strlen(filename) + 1));
+			strcpy(filenameCpy, filename);
 			if (readingText) {
+
 				ListPushBack(textLines, allocatedStr);
+				ListPushBack(textLines, lineNum);
+				ListPushBack(textLines, filenameCpy);
 			} else {
 				ListPushBack(dataLines, allocatedStr);
+				// ListPushBack(dataLines, lineNum);
+				// ListPushBack(dataLines, filenameCpy);
 			}
 		}
-
+		lineNum++;
 
 		// ListPushBack(linesLst, allocatedStr);
 	}
@@ -111,9 +122,14 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions, Vector dataVe
 	LISTFOR(lines, iter) {
 
 		char *line = ListIteratorGet(iter);
+		ListIteratorIncr(&iter);
+		int lineNum = ListIteratorGet(iter);
+		ListIteratorIncr(&iter);
+		char *filename = ListIteratorGet(iter);
 
-		Vector tokens = tokenizeTextLine(line, symbolTable, *totalInstructions, dataVector);
-		bool hasInstructions = VectorSize(tokens) >= 2;
+
+		Vector tokens = tokenizeTextLine(line, symbolTable, *totalInstructions, dataVector, filename, lineNum);
+		bool hasInstructions = VectorSize(tokens) >= 4;
 		if (hasInstructions) {
 			(*totalInstructions)++;
 			ListPushBack(listOfTokens, tokens);
@@ -134,10 +150,13 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int
 
 	int currInstr = 0;
 	LISTFOR(listOfTokens, allTokensIter) {	
+		
 		Vector lineTokens = ListIteratorGet(allTokensIter);
+		int lineNum = VectorPopBack(lineTokens);
+		char *filename = VectorPopBack(lineTokens);
 		char *line = VectorPopBack(lineTokens);
 		if (FunctionGen(symbolTable, lineTokens, programVector, dataVector, currInstr, totalInstructions)) {
-			ReportError(0, "wow", line);
+			ReportError(lineNum, filename, line);
 			exit(1);
 		}
 		
