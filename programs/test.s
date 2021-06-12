@@ -1,8 +1,7 @@
 .data
 	x:
 		.long 0x5
-	y:
-		.long 0x6
+	.set y 0x6
 .text
 	mov r2, :first8:x
 	orr r2, r2, :second8:x
@@ -14,9 +13,10 @@
 	orr r1, r1, :second8:y
 	orr r1, r1, :third8:y
 	orr r1, r1, :fourth8:y
-	ldr r1, [r1]
 
 	mov r0, #1
+
+	hlt
 
 	cmp r1, #0
 	ble end

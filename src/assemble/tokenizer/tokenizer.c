@@ -441,6 +441,7 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataV
                         } else if (currentDirectiveType == DIRECTIVE_SET) {
                             printf("Label set %s %d\n", currentDirectiveLabel, matchedConstant->constant.value);
                             MapSet(symbolTable, currentDirectiveLabel, matchedConstant->constant.value);
+                            printf("%s %d\n", currentDirectiveLabel, MapGet(symbolTable, currentDirectiveLabel));
                             currentDirectiveType = DIRECTIVE_NONE;
                         }
                         resetToken();
