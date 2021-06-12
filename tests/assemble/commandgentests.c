@@ -38,7 +38,7 @@ void ProcessBranchTests() {
 
     SingleProcessBranch(symbols, 2, (Token[]){
         NewInstructionToken(COND_EQ, INSTR_BRN),
-        NewLabelToken("label")
+        NewLabelToken("label", LABEL_FULL)
     }, text, data, 0, 4);
     SingleProcessBranch(symbols, 2, (Token[]){
         NewInstructionToken(COND_NE, INSTR_BRN), 
@@ -46,7 +46,7 @@ void ProcessBranchTests() {
     }, text, data, 1, 4);
     SingleProcessBranch(symbols, 2, (Token[]){
         NewInstructionToken(COND_GE, INSTR_BRL),
-        NewLabelToken("wait")
+        NewLabelToken("wait", LABEL_FULL)
     }, text, data, 2, 4);
     SingleProcessBranch(symbols, 2, (Token[]){
         NewInstructionToken(COND_LT, INSTR_BRN),

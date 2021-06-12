@@ -13,9 +13,13 @@
  */
 extern Map data_proc_opcodes; 
 /**
- * @brief Map < @ref InstructionType, unsigned int> from the shift instructions to their shift codes
+ * @brief Map < @ref InstructionType , unsigned int> from the shift instructions to their shift codes
  */
 extern Map shift_codes;
+/**
+ * @brief Map < @ref LabelType , unsigned int> from the label types to the AND mask for them
+ */
+extern Map label_masks;
 
 /**
  * @brief Initializes the enum maps used in the commandgen
