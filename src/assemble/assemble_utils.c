@@ -113,7 +113,7 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions, Vector dataVe
 		char *line = ListIteratorGet(iter);
 
 		Vector tokens = tokenizeTextLine(line, symbolTable, *totalInstructions, dataVector);
-		bool hasInstructions = !VectorEmpty(tokens);
+		bool hasInstructions = VectorSize(tokens) >= 2;
 		if (hasInstructions) {
 			(*totalInstructions)++;
 			ListPushBack(listOfTokens, tokens);
@@ -135,9 +135,9 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int
 	int currInstr = 0;
 	LISTFOR(listOfTokens, allTokensIter) {	
 		Vector lineTokens = ListIteratorGet(allTokensIter);
-		printf("Processing line %s\n", VectorPopBack(lineTokens));
+		char *line = VectorPopBack(lineTokens);
 		if (FunctionGen(symbolTable, lineTokens, programVector, dataVector, currInstr, totalInstructions)) {
-			ReportError(0, "wow", "heyehye");
+			ReportError(0, "wow", line);
 		}
 		
 		

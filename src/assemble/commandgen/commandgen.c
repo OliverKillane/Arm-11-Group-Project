@@ -16,9 +16,6 @@ bool FunctionGen(
     if(ProcessExpression(symbols, tokens)) {
         return true;
     }
-    VECTORFOR(tokens, iter) {
-        fprintf(stderr, "%d\n", TokenType(VectorIteratorGet(iter)));
-    }
     bool(*process_function)(Map, Vector, Vector, Vector, int, int) = DecisionTreeQuery(instruction_layouts, tokens);
     if(process_function == NULL) {
         SetErrorCode(ERROR_INVALID_PATTERN);

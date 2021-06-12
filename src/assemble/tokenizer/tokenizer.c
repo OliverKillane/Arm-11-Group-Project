@@ -84,6 +84,9 @@ Token matchInstructionToken(char *str) {
     } else if (strncmp(str, "sub", 3) == 0) {
         instTyp = INSTR_SUB;
         str += 3;
+    } else if (strncmp(str, "hlt", 3) == 0) {
+        instTyp = INSTR_HLT;
+        str += 3;
     } else if (strncmp(str, "rsb", 3) == 0) {
         instTyp = INSTR_RSB;
         str += 3;
