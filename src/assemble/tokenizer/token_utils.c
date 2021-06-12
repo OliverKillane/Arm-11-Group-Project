@@ -114,7 +114,7 @@ char* TokenLabel(Token token) {
     return token -> label.string;
 }
 
-LabelType TokenLabel(Token token) {
+LabelType TokenLabelType(Token token) {
     assert(token != NULL);
     assert(token -> type == TOKEN_LABEL);
     return token -> label.type;

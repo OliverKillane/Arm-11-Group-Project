@@ -13,11 +13,20 @@ typedef enum {
     TOKENIZER_INSTR,
     TOKENIZER_ERROR,
     TOKENIZER_FINISHED,
+    TOKENIZER_LABEL_ORDER,
+    TOKENIZER_DIRECTIVE,
+    TOKENIZER_SET,
+    TOKENIZER_LONG
 } TokenizerState;
 
+typedef enum {
+    DIRECTIVE_SET,
+    DIRECTIVE_LONG,
+    DIRECTIVE_NONE
+} DirectiveType;
+
 static char currentToken[512];
-static int currentTokenLength;
-static TokenizerState currentState;
+static int currentTokenLength = 0;
 
 bool matchAlpha(char c);
 bool isHex(char c);
@@ -33,7 +42,7 @@ int matchHex(char *str);
 Token matchRegister(char *str);
 Token matchConstant(char *str);
 void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token);
-List tokenizeTextLine(char *line, Map symbolTable, int currentLine);
+List tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataVector);
 void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector dataVector);
 
 #endif /* ASSEMBLE_TOKENIZER_H_ */

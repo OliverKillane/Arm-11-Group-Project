@@ -104,7 +104,7 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 	// return linesLst;
 }
 
-List tokenize(List lines, Map symbolTable, int *totalInstructions) {
+List tokenize(List lines, Map symbolTable, int *totalInstructions, Vector dataVector) {
 
 	List listOfTokens = NewEmptyList();
 
@@ -112,7 +112,7 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions) {
 
 		char *line = ListIteratorGet(iter);
 
-		Vector tokens = tokenizeTextLine(line, symbolTable, *totalInstructions);
+		Vector tokens = tokenizeTextLine(line, symbolTable, *totalInstructions, dataVector);
 		bool hasInstructions = !VectorEmpty(tokens);
 		if (hasInstructions) {
 			(*totalInstructions)++;
@@ -135,7 +135,7 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int
 	int currInstr = 0;
 	LISTFOR(listOfTokens, allTokensIter) {	
 		Vector lineTokens = ListIteratorGet(allTokensIter);
-		printf("Processing line %d\n", currInstr);
+		printf("Processing line %s\n", VectorPopBack(lineTokens));
 		if (FunctionGen(symbolTable, lineTokens, programVector, dataVector, currInstr, totalInstructions)) {
 			ReportError(0, "wow", "heyehye");
 		}

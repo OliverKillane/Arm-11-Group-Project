@@ -288,11 +288,38 @@ void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
     MapSet(symbolTable, label, currentLine);
 }
 
+LabelType matchLabelType(char *str) {
+    if (strcmp(str, "first8")) {
+        return LABEL_FIRST8;
+    } else if (strcmp(str, "second8")) {
+        return LABEL_SECOND8;
+    } else if (strcmp(str, "third8")) {
+        return LABEL_THIRD8;
+    } else if (strcmp(str, "fourth8")) {
+        return LABEL_FOURTH8;
+    }
+    assert(false);
+}
 
-List tokenizeTextLine(char *line, Map symbolTable, int currentLine) {
+DirectiveType matchDirective(char *str) {
+    if (strcmp(str, "set")) {
+        return DIRECTIVE_SET;
+    } else if (strcmp(str, "long")) {
+        return DIRECTIVE_LONG;
+    }
+    assert(false);
+}
+
+List tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataVector) {
     Vector tokenList = NewEmptyVector();
-    currentTokenLength = 0;
-    currentState = TOKENIZER_START;
+
+    char *preservedLine = line;
+    
+    
+    TokenizerState currentState = TOKENIZER_START;
+    LabelType currentLabelType = LABEL_FULL;
+    DirectiveType currentDirectiveType = DIRECTIVE_NONE;
+    char *currentDirectiveLabel;
 
     while (currentState != TOKENIZER_FINISHED 
         && currentState != TOKENIZER_ERROR) {
@@ -318,6 +345,34 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine) {
                     currentState = TOKENIZER_CONSTANT;
                 } else if (line[0] == '\n' || line[0] == '@') {
                     currentState = TOKENIZER_FINISHED;
+                } else if (line[0] == ':') {
+                    currentState = TOKENIZER_LABEL_ORDER;
+                } else if (line[0] == '.') {
+                    currentState = TOKENIZER_DIRECTIVE;
+                }
+                break;
+            case TOKENIZER_LABEL_ORDER:
+                if (isalpha(line[0])) {
+                    addCharToToken(line[0]);
+                } else if (line[0] == ':') {
+                    addCharToToken('\0');
+                    currentLabelType = matchLabelType(line);
+                    resetToken();
+                    currentState = TOKENIZER_START;
+                }
+                break;
+            case TOKENIZER_DIRECTIVE:
+                if (isalpha(line[0])) {
+                    addCharToToken(line[0]);
+                } else {
+                    addCharToToken('\0');
+                    currentDirectiveType = matchDirective(line);
+                    if (currentDirectiveType == DIRECTIVE_SET) {
+                        currentState = TOKENIZER_INSTR_LABEL_REG;
+                    } else if (currentDirectiveType == DIRECTIVE_LONG) {
+                        currentState = TOKENIZER_CONSTANT;
+                    }
+                    resetToken();
                 }
                 break;
             case TOKENIZER_INSTR_LABEL_REG:
@@ -345,9 +400,18 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine) {
                     } else if (matchedRegister != NULL) {
                         VectorPushBack(tokenList, matchedRegister);
                     } else {
-                        
-                        Token newToken = NewLabelToken(currentToken);
-                        VectorPushBack(tokenList, newToken);
+                        if (currentDirectiveType == DIRECTIVE_SET) {
+                            addCharToToken('\0');
+                            currentDirectiveLabel = malloc((strlen(currentToken) + 1) * sizeof(char));
+                            strcpy(currentDirectiveLabel, currentToken);
+                            resetToken();
+                            currentState = TOKENIZER_CONSTANT;
+
+                        } else {
+                            Token newToken = NewLabelToken(currentToken, currentLabelType);
+                            VectorPushBack(tokenList, newToken);
+                            currentLabelType = LABEL_FULL;
+                        }
                     }
                     currentState = TOKENIZER_START;
                     resetToken();
@@ -361,7 +425,15 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine) {
                     addCharToToken('\0');
                     Token matchedConstant = matchConstant(currentToken);
                     if (matchedConstant != NULL) {
-                        VectorPushBack(tokenList, matchedConstant);
+                        if (currentDirectiveType == DIRECTIVE_NONE) {
+                            VectorPushBack(tokenList, matchedConstant);
+                        } else if (currentDirectiveType == DIRECTIVE_LONG) {
+                            VectorPushBack(dataVector, matchedConstant);
+                            currentDirectiveType = DIRECTIVE_NONE;
+                        } else if (currentDirectiveType == DIRECTIVE_SET) {
+                            MapSet(symbolTable, currentDirectiveLabel, matchedConstant);
+                            currentDirectiveType = DIRECTIVE_NONE;
+                        }
                         resetToken();
                         currentState = TOKENIZER_START;
                     } else {
@@ -381,52 +453,54 @@ List tokenizeTextLine(char *line, Map symbolTable, int currentLine) {
             currentState = TOKENIZER_FINISHED;
         }
     }
+
+    VectorPushBack(tokenList, preservedLine);
     return tokenList;
 
 }
 
-void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector dataVector) {
-    
-    char *endl = strchr(line, '\n');
-    if (endl != NULL) {
-        *endl = '\0';
-    }
-    char *at = strchr(line, '@');
-    if (at != NULL) {
-        *at = '\0';
-    }
-    char *colon;
+// void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector dataVector) {
 
-    if (strncmp(line, ".set", 4) == 0) {
-        line+=5;
-        char *endLabel = strchr(line, ' ');
-        char *newLabel = malloc(sizeof(char) * (endLabel - line+1));
-        strncpy(newLabel, line, (endLabel - line));
-        newLabel[endLabel - line + 1] = '\0';
-        line = endLabel + 1;
-        int number;
+//     char *endl = strchr(line, '\n');
+//     if (endl != NULL) {
+//         *endl = '\0';
+//     }
+//     char *at = strchr(line, '@');
+//     if (at != NULL) {
+//         *at = '\0';
+//     }
+//     char *colon;
 
-        if (isHexNumber(line)) {
-            number = matchHex(line);
-        } else {
-            number = matchDecimal(line);
-        }
-        MapSet(symbolTable, newLabel, number);
-    } else if (strncmp(line, ".long", 5) == 0) {
-        line += 6;
-        int number;
-        if (isHexNumber(line)) {
-            number = matchHex(line);
-        } else {
-            number = matchDecimal(line);
-        }
-        VectorPushBack(dataVector, number);
-        *currentAddress += 1;
-    } else if ((colon = strchr(line, ':')) != NULL) {
-        char *newLabel = malloc((colon - line +1) * sizeof(char));
-        strncpy(newLabel, line, (colon - line));
-        newLabel[colon - line + 1] = '\0';
-        MapSet(symbolTable, newLabel, *currentAddress);
-    }
+//     if (strncmp(line, ".set", 4) == 0) {
+//         line+=5;
+//         char *endLabel = strchr(line, ' ');
+//         char *newLabel = malloc(sizeof(char) * (endLabel - line+1));
+//         strncpy(newLabel, line, (endLabel - line));
+//         newLabel[endLabel - line + 1] = '\0';
+//         line = endLabel + 1;
+//         int number;
 
-}
+//         if (isHexNumber(line)) {
+//             number = matchHex(line);
+//         } else {
+//             number = matchDecimal(line);
+//         }
+//         MapSet(symbolTable, newLabel, number);
+//     } else if (strncmp(line, ".long", 5) == 0) {
+//         line += 6;
+//         int number;
+//         if (isHexNumber(line)) {
+//             number = matchHex(line);
+//         } else {
+//             number = matchDecimal(line);
+//         }
+//         VectorPushBack(dataVector, number);
+//         *currentAddress += 1;
+//     } else if ((colon = strchr(line, ':')) != NULL) {
+//         char *newLabel = malloc((colon - line +1) * sizeof(char));
+//         strncpy(newLabel, line, (colon - line));
+//         newLabel[colon - line + 1] = '\0';
+//         MapSet(symbolTable, newLabel, *currentAddress);
+//     }
+
+// }

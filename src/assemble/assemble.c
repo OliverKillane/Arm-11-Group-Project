@@ -31,14 +31,15 @@ int main(int argc, char **argv) {
 	// 	char *line = ListIteratorGet(iter);
 	// 	printf("%s", line);
 	// }
-	List textTokens = tokenize(textLines, symbolTable, &totalInstructions);
-
 	Vector dataVector = NewEmptyVector();
+	List textTokens = tokenize(textLines, symbolTable, &totalInstructions, dataVector);
+
+	
 
 
 	LISTFOR(dataLines, iter) {
 		char *line = ListIteratorGet(iter);
-		tokenizeDataLine(line, symbolTable, &totalInstructions, dataVector);
+		tokenizeTextLine(line, symbolTable, &totalInstructions, dataVector);
 	}
 
 	printf("Got to making binary vector\n");
