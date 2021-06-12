@@ -205,10 +205,10 @@ void printState(void);
 
 // VIDEO OUTPUT:
 /* Window Size, in pixels */
-#define HEIGHT 160
+#define HEIGHT 108
 #define WIDTH 192
 
-#define WINDOW_HEIGHT 640
+#define WINDOW_HEIGHT 432
 #define WINDOW_WIDTH 768
 
 /* the address containing the pointer to the start of the display. */

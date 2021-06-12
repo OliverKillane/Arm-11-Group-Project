@@ -169,7 +169,7 @@ void runProgram() {
     if (emulatorMode && VIDEO) {
 
       /* EXTENSION: draw the screen */
-      updateOutput();
+      //updateOutput();
       
       /* EXTENSION: read in character events*/
       processEvents();
@@ -271,14 +271,23 @@ void singleDataTransInstr(instruction instr) {
     /* set pins */
     printf("PIN ON\n");
     CPU.GPIO = CPU.GPIO | *RdSrcDst;
-  } else if (memloc == VIDEO_POINTER) {
+  } else if (memloc == VIDEO_POINTER && (emulatorMode & VIDEO)) {
 	  /* if setting the video pointer */
 	  if (L) {
 		/* for load get the address in the emulator (pointer - memory start) */
 		*RdSrcDst = video_pointer - CPU.memory;
 	  } else {
-		/* for store, set video pointer as a pointer to the memory location memloc*/
-		video_pointer = getmemloc(memloc);
+		  
+		if (*RdSrcDst > MEMSIZE || *RdSrcDst < 0) {
+		  	printf("Error: Video pointer set to invalid memory address in instruction %08x", instr);
+		  	exit(INVALID_INSTR);
+		} else {
+			/* for store, set video pointer as a pointer to the memory location*/
+			video_pointer = getmemloc(*RdSrcDst);
+			
+			/* video pointer has changed, update the screen */
+			updateOutput();
+		}
 	  }
   }else if (memloc < MEMSIZE) {
 
