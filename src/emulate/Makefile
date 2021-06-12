@@ -1,12 +1,23 @@
 CC      = gcc
-CFLAGS  = -Wall -g -I../../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -Werror -pedantic
+CFLAGS  = -Wall -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -pedantic
+PROFILETARGET = ../../bin/stresstest
 
 .PHONY: all clean
 
 all:
-	cp ../build/stddata.o ../build/emulate/
-	cp ../build/emulate/emulate ../bin/
+	$(CC) $(CFLAGS) emulate.c -o emulate
+	mv ./emulate ../../bin/
+
+profile:
+	$(CC) $(CFLAGS) -pg emulate.c -o emulate_prof
+	./emulate_prof $(PROFILETARGET)
+	gprof emulate_prof gmon.out > analysis.txt
+	rm -f gmon.out
+	rm -f emulate_prof
+	less analysis.txt
 
 clean:
 	rm -f $(wildcard ../build/emulate/*)
-	rm -f ../bin/emulate
+	rm -f ../../bin/emulate
+	rm -f gmon.out
+	rm -f emulate_prof

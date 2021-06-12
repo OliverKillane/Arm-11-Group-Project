@@ -3,7 +3,6 @@
  * @author Bartłomiej Cieślar
  * @brief data transfer instructions processing
  */
-
 #ifndef ASSEMBLE_COMMANDGEN_PROCESS_DATA_TRANSFER_H_
 #define ASSEMBLE_COMMANDGEN_PROCESS_DATA_TRANSFER_H_
 

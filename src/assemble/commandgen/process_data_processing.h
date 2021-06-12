@@ -3,7 +3,6 @@
  * @author Bartłomiej Cieślar
  * @brief data processing instructions processing
  */
-
 #ifndef ASSEMBLE_COMMANDGEN_PROCESS_DATA_PROCESSING_H_
 #define ASSEMBLE_COMMANDGEN_PROCESS_DATA_PROCESSING_H_
 
