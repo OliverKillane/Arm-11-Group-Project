@@ -17,6 +17,7 @@ reset:
     @ r11 <- auxiliary register 
     @ r12 <- background register
 		
+	@ Saving onto the stack	
     push r4
     push r5
 	push r6
@@ -66,27 +67,36 @@ reset:
 
 	condX:
 		cmp r5, r8
-		bgt end
+		bgt end @ X-iterator > target-X
 
 	condY:
 		cmp r6, r9
-		ble loop @ y-iterator <= target-y
+		ble loop @ Y-iterator <= target-Y
 
+		@ reinitialize Y-iterator
 		sub r6, r6, r3
 
+		@ move matrix iterator to next row
 		sub r10, r10, r3
 		add r10, r10, height
 
+		@ increment X-iterator
 		add r5, r5, #1
 		b condX	
 
 	loop:
+		@ load pixel from background
         ldr r11, [r12, r10]
-		str r11, [r15, r10] 
-		add r6, r6, #1
+		@ store background pixel value into the write image buffer
+		str r11, [r4, r10] 
+
+		@ increment iterators
+		add r6,  r6, #1
 		add r10, r10, #1
+
 		b condY
 
+	@ Clean up
     end:
         pop r12
 		pop r11
