@@ -288,7 +288,7 @@ void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
     char *label = malloc(strlen(token)+1);
     strcpy(label,token);
 
-    MapSet(symbolTable, label, currentLine);
+    MapSet(symbolTable, label, currentLine*4);
 }
 
 LabelType matchLabelType(char *str) {
