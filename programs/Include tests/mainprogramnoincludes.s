@@ -1,7 +1,7 @@
 @ main program where files are included
 
 mov r0, #6
-call factorialsub
+brl factorialsub
 
 @ includes
 @ factorial subroutine, 
