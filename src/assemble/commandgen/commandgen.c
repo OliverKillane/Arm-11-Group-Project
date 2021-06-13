@@ -13,6 +13,10 @@ bool FunctionGen(
     int offset, 
     int instructions_num
 ) {
+    if(VectorSize(tokens) == 0 || TokenType(VectorGet(tokens, 1)) != TOKEN_INSTRUCTION) {
+        SetErrorCode(ERROR_INVALID_PATTERN);
+        return true;
+    }
     if(ProcessExpression(symbols, tokens)) {
         return true;
     }
