@@ -9,7 +9,6 @@
 \date{\vspace*{-1cm}12 June 2021}
 
 \begin{document}
-
 \maketitle
 
 \section{Introduction}
@@ -59,15 +58,14 @@ The full documentation of this library (generated using doxygen) can be accessed
 \includegraphics[width=\textwidth]{commandgen}
 The command generation consist of 2 stages: processing function dispatch and data conversion to a binary representation. The processing function dispatch uses the sequence of the tokens and a decision tree to determine the appropriate function for the sequence. Then, now inside the processing funciton, it uses another decision tree to determine which fields inside the function need to be set according to which tokens. Since the fields can be set to some values before that step, this allows for highly flexible default values and a greatly reduced number of processing function (in a previous implementation without that feature the code was 3-4x longer). A simmilar decision tree is used for determining if a data transfer funciton is pre or post.
 \subsection*{Testing}
-<A couple of lines about the way we tested our code>
+For the testing, we wrote our own automated test suite using assertions, which covered middle, edge and corner cases, along with the test suite provided to us along with the task. Our tests helped us identify and correct many problems in our code that would not have been found otherwise by the base test suite. The tests, simmilar to the enitrety of our project, use the Make tool for compilation and execution.
 \section{Extension}
-[2 pages]
 For the extension we settled on adding enough support to the assembler and emulator to write a simple pong game in pure assembly, inspired by Atari's product with the same name from 1972. This decision was made based on many factors, including time left, team size, capabilities of the implementation at the moment of choosing and potential educational benefits for us.
 \subsection*{Assembler}
 The most extension was required by the assembler, having to add support for the data section, stack and subroutines. However, thanks to the foresight while writing the base implementation, this proved to be rather straigtforward.
-\paragraph*{Data Section}
+\subparagraph*{Data Section}
 The data section added the capability to store data for our code, for example the images for our game or global variables. All of the contents of the data section are always stored after the instructions, i.e. the the text section.
-\paragraph*{Assembler Directives} The support for assembler directives was required due to the data section and the need to collaborate on the code. After some research, we settled on supporting the following:
+\subparagraph*{Assembler Directives} The support for assembler directives was required due to the data section and the need to collaborate on the code. After some research, we settled on supporting the following:
 \begin{center}
 	\begin{tabular}{r|l}
 		\textbf{Directive} & \textbf{Purpose} \\
@@ -79,7 +77,7 @@ The data section added the capability to store data for our code, for example th
 	\end{tabular}
 \end{center}
 The .include direcitve, altough not in the standard assembly, has allowed us to split our code into multiple files while removing a need to write a more elaborate solution, for example a linker.
-\paragraph*{Additional Commands}
+\subparagraph*{Additional Commands}
 In order to support the stack and subroutines, the following extensions to the available commands were added:
 \begin{center}
 	\begin{tabular}{r|l}
@@ -101,7 +99,7 @@ along with the following aliases for the ease of use
 		hlt<cond> & andeq r0, r0, r0
 	\end{tabular}
 \end{center}
-\paragraph*{Miscellaneous}
+\subparagraph*{Miscellaneous}
 \begin{itemize}
 \item Support for meaningful assembling errors
 \item All constants can now be substituted for labels
@@ -110,34 +108,43 @@ along with the following aliases for the ease of use
 \end{itemize}
 \subsection*{Emulator}
 <A couple of lines of introduction to the emulator extensions>
-\paragraph*{Additional Commands}
+\subparagraph*{Additional Commands}
 <More detailed explanation of supporting the additional commands>
-\paragraph*{Keystrokes}
+\subparagraph*{Keystrokes}
 <More detailed explanation of supporting the keystrokes>
-\paragraph*{Display}
+\subparagraph*{Display}
 <More detailed explanation of supporting the display>
 \subsection*{Pong}
 \begin{center}
 	\includegraphics[scale=0.7]{pong}\\
 \end{center}
-\begin{tabular}{l|c|r}
-	\textbf{Subroutine} & \textbf{Purpose} & \textbf{Assigned to}\\
-	main & the main loop of the program & Jordan \& Oliver\\
-	initdraw & draws the initial page of the pong game & Bartek \& Ioana\\
-	blackout & removes the old instances of screen elements from the buffer & Bartek \& Ioana\\
-	recalculate & performs the physics calculation and advances the time step & Jordan \& Oliver\\
-	draw & draws the new components and updates the screen & Bartek \& Ioana\\
-\end{tabular}
+\begin{center}
+	\begin{tabular}{l|c|r}
+		\textbf{Subroutine} & \textbf{Purpose} & \textbf{Assigned to}\\
+		main & the main loop of the program & Jordan \& Oliver\\
+		initdraw & draws the initial page of the pong game & Bartek \& Ioana\\
+		blackout & removes the old instances of screen elements from the buffer & Bartek \& Ioana\\
+		recalculate & performs the physics calculation and advances the time step & Jordan \& Oliver\\
+		draw & draws the new components and updates the screen & Bartek \& Ioana\\
+	\end{tabular}
+\end{center}
 \section{Group Reflection}
 \subsection*{Communication}
-<A couple of lines on the quality of communication inside the group>
+In order to keep a high level of information synchronization between the team members, we used the following techniques:
+\begin{itemize}
+\item \textbf{Meetings:}\\
+Our team held at least 2 meetings per week to discuss the progress with the task, the technical difficulties that might had arisen and the goals of the next sprint (as in the SCRAM team project methodology). Furthermore, summaries have been compiled after each meeting to allow to easily refer to the contents of the meeting when needed. 
+\item \textbf{Pair communication:}\\
+Apart from our meetings, we kept a higher throughput of communication in pairs to allow for easy and quick resolution of any problems in more than one area of development. For that reason, some of our in-pair meetings were held in person, especially in the groups that developed the assembler and emulator.
+\end{itemize}
+
 \subsection*{Individual Reflections}
-\paragraph*{Jordan}
+\subparagraph*{Jordan}
 <Here go a couple of lines from Jordan on how he did in the project>
-\paragraph*{Ioana}
+\subparagraph*{Ioana}
 <Here go a couple of lines from Ioana on how she did in the project>
-\paragraph*{Oliver}
+\subparagraph*{Oliver}
 <Here go a couple of lines from Oliver on how he did in the project>
-\paragraph*{Bartek}
-<Here go a couple of lines from Bartek on how he did in the project>
+\subparagraph*{Bartek}
+I believe I did everything I could as far as this project goes. My code looks fairly clean, my testing is as robust as I could have made it provdied this amount of time and the optimizations are as good as they could have been in c. Also, I was able to trust my groupmates with the code more than I did in all my past projects. The only things that I would change is a better work life ballance, learn a different collaborated coding style (the only one I know is to split the workload into non-overlaping sections with known interfaces) and improve my git workflow to make it a bit cleaner.
 \end{document}
