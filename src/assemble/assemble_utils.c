@@ -55,7 +55,7 @@ void writeBinary(Vector program, char *filename) {
 }
 
 void readFileLines(char *filename, List textLines, List dataLines) {
-
+	printf("reading file %s\n", filename);
 	FILE *file;
 	char *line = NULL;
 	size_t length = 0;
@@ -83,7 +83,22 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 			if (pos != NULL) {
 				*pos = '\0';
 			}
-			readFileLines(line+9, textLines, dataLines);
+			line += 9;
+			char *slash = strrchr(filename, '/');
+			char *newFileName;
+			if (slash != NULL) {
+				newFileName = malloc(sizeof(char) * (strlen(line) + strlen(filename) + 1));
+				// printf("%d\n", slash - filename);
+				strncpy(newFileName, filename, slash - filename + 1);
+				// strcat(newFileName, "/");
+				strcat(newFileName, line);
+			} else {
+				newFileName = malloc(sizeof(char) * (strlen(line) + 3));
+				strcpy(newFileName, "./");
+				strcat(newFileName, line);
+			}
+			// printf("reading new %s", newFileName);
+			readFileLines(newFileName, textLines, dataLines);
 		} else {
 			char *allocatedStr = malloc(sizeof(char) * (length + 1));
 			strcpy(allocatedStr, line);
@@ -106,9 +121,9 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 
 		// ListPushBack(linesLst, allocatedStr);
 	}
-	if (line != NULL) {
-		free(line);
-	}
+	// if (line != NULL) {
+	// 	// free(line);
+	// }
 
     fclose(file);
 
