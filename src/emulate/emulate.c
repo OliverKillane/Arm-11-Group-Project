@@ -493,6 +493,7 @@ void printState() {
   /* print out the memory, note: on big endian systems, this memory will be printed as big endian */
   printf("Non-zero memory:\n");
 
+
   bool littleEndian = littleendiancheck();
   byte *memByte;
   for (int loc = 0; loc < MEMSIZE; loc += 4) {
@@ -622,8 +623,6 @@ void processEvents() {
       }
 
       SDL_KeyCode keycode = event.key.keysym.sym;
-      printf("keycode: %i %c\n", keycode, keycode);
-
 
       /* first bit is 0 for keydown, 1 for key up */
       byte input = event.type==SDL_KEYDOWN?0:0x80;
@@ -631,9 +630,9 @@ void processEvents() {
       /* if an arrow key, use the EOT,ENQ,ACK,BEL character codes as substitutes
        * by subtracting, otherwise if a 7 bit ascii, set character, else ignore this character */
       if (keycode <= SDLK_UP && keycode >= SDLK_RIGHT) {
-        input += (keycode - 0x4000004D);
+        input |= (keycode - 0x4000004D);
       } else if (keycode < 128) {
-        input += keycode;
+        input |= keycode;
       } else {
         continue;
       }

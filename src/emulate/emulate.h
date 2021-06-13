@@ -213,7 +213,7 @@ void printState(void);
 
 /* the address containing the pointer to the start of the display. */
 #define VIDEO_POINTER 0x1000000
-#define INPUT_BUFFER 0xFFF
+#define INPUT_BUFFER 0x30000
 #define INPUT_BUFFER_SIZE 64
 
 
