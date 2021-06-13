@@ -55,7 +55,7 @@ void writeBinary(Vector program, char *filename) {
 }
 
 void readFileLines(char *filename, List textLines, List dataLines) {
-	printf("reading file %s\n", filename);
+	
 	FILE *file;
 	char *line = NULL;
 	size_t length = 0;
@@ -79,26 +79,32 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 		} else if (strncmp(line, ".data", 5) == 0) {
 			readingText = false;
 		} else if (strncmp(line, ".include", 8) == 0) {
-			char *pos = strchr(line,'\n');
+			char *pos = strrchr(line,'\n');
 			if (pos != NULL) {
 				*pos = '\0';
+				// *(pos+1) = 0;
 			}
 			line += 9;
 			char *slash = strrchr(filename, '/');
-			char *newFileName;
+			
 			if (slash != NULL) {
-				newFileName = malloc(sizeof(char) * (strlen(line) + strlen(filename) + 1));
-				// printf("%d\n", slash - filename);
+				char *newFileName = calloc(sizeof(char), (strlen(line) + strlen(filename) + 1000000));
+				printf("reading file '%s'\n", newFileName);
 				strncpy(newFileName, filename, slash - filename + 1);
-				// strcat(newFileName, "/");
+				printf("reading file '%s'\n", newFileName);
 				strcat(newFileName, line);
+				printf("reading file '%s'\n", line);
+				readFileLines(newFileName, textLines, dataLines);
+
 			} else {
-				newFileName = malloc(sizeof(char) * (strlen(line) + 3));
+				char *newFileName = calloc(sizeof(char), (strlen(line) + 3));
 				strcpy(newFileName, "./");
 				strcat(newFileName, line);
+				printf("reading file '%s'\n", newFileName);
+				readFileLines(newFileName, textLines, dataLines);
+
 			}
 			// printf("reading new %s", newFileName);
-			readFileLines(newFileName, textLines, dataLines);
 		} else {
 			char *allocatedStr = malloc(sizeof(char) * (length + 1));
 			strcpy(allocatedStr, line);
