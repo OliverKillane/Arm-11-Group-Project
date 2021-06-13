@@ -435,13 +435,13 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                         if (currentDirectiveType == DIRECTIVE_NONE) {
                             VectorPushBack(tokenList, matchedConstant);
                         } else if (currentDirectiveType == DIRECTIVE_LONG) {
-                            printf("%d\n", matchedConstant->constant.value);
+                            // printf("%d\n", matchedConstant->constant.value);
                             VectorPushBack(dataVector, matchedConstant->constant.value);
                             currentDirectiveType = DIRECTIVE_NONE;
                         } else if (currentDirectiveType == DIRECTIVE_SET) {
                             printf("Label set %s %d\n", currentDirectiveLabel, matchedConstant->constant.value);
                             MapSet(symbolTable, currentDirectiveLabel, matchedConstant->constant.value);
-                            printf("%s %d\n", currentDirectiveLabel, MapGet(symbolTable, currentDirectiveLabel));
+                            // printf("%s %d\n", currentDirectiveLabel, MapGet(symbolTable, currentDirectiveLabel));
                             currentDirectiveType = DIRECTIVE_NONE;
                         }
                         resetToken();

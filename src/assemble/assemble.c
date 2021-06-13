@@ -35,17 +35,17 @@ int main(int argc, char **argv) {
 	List textTokens = tokenize(textLines, symbolTable, &totalInstructions, dataVector);
 
 	
-	printf("finished making binaryvector\n");
+	// printf("finished making binaryvector\n");
 
 	LISTFOR(dataLines, iter) {
 		char *line = ListIteratorGet(iter);
 		tokenizeTextLine(line, symbolTable, totalInstructions + VectorSize(dataVector), dataVector, NULL, 0);
 	}
-	printf("finished making binaryvector\n");
+	// printf("finished making binaryvector\n");
 
 	// printf("Got to making binary vector\n");
 	Vector binaryVector = tokensToBinary(symbolTable, textTokens, dataVector, totalInstructions);
-	printf("finished making binaryvector\n");
+	// printf("finished making binaryvector\n");
 	VECTORFOR(dataVector, iter) {
 		int word = VectorIteratorGet(iter);
 		// VectorIteratorIncr(&iter);
@@ -75,9 +75,9 @@ int main(int argc, char **argv) {
 	// DeleteList(listOfTokens);
 
 
-	printf("finished making binaryvector\n");
+	// printf("finished making binaryvector\n");
 	writeBinary(binaryVector, argv[2]);
-	printf("finished making binaryvector\n");
+	// printf("finished making binaryvector\n");
 
 	DeleteVector(binaryVector);
 	
