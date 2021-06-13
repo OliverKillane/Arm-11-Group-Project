@@ -1,24 +1,24 @@
 mov r0, #0x1000
-call setstackpointer
+brl setstackpointer
 
-call setR1white
-call drawpong
+brl setR1white
+brl drawpong
 
 @ white, then wait, then clear, then wait, repeat
 startscreenloop:
 mov r0, #0x1000
-call setR1white
-call drawspacetostart
+brl setR1white
+brl drawspacetostart
 
 mov r0, #0xF
-call waitcycles
+brl waitcycles
 
 mov r0, #0x1000
 mov r1, #0
-call drawspacetostart
+brl drawspacetostart
 
 mov r0, #0xF
-call waitcycles
+brl waitcycles
 
 b startscreenloop
 
