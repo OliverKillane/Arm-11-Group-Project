@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Wall -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -pedantic 
+CFLAGS  = -Wall -o3  -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c11 -pedantic 
 INCLUDE = -I../../lib/SDL2/include
 LINK = -L/usr/local/lib -lSDL2 -Wl,--no-undefined -lm -ldl -Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lbcm_host -lpthread -lrt
 PROFILETARGET = ../../bin/stresstest

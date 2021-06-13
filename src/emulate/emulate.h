@@ -12,8 +12,8 @@ typedef uint32_t instruction;
 typedef uint16_t location;
 typedef uint8_t byte;
 
-// 64KB memory (16 bit address)
-#define MEMSIZE (1 << 16)
+// 524KB memory (16 bit address)
+#define MEMSIZE (1 << 19)
 
 // maximum word (all 1s)
 #define MAXINT32 0xFFFFFFFF
@@ -205,12 +205,15 @@ void printState(void);
 
 // VIDEO OUTPUT:
 /* Window Size, in pixels */
-#define HEIGHT 160
+#define HEIGHT 108
 #define WIDTH 192
 
+#define WINDOW_HEIGHT 432
+#define WINDOW_WIDTH 768
+
 /* the address containing the pointer to the start of the display. */
-#define VIDEO_POINTER 0x0
-#define INPUT_BUFFER 0x0
+#define VIDEO_POINTER 0x1000000
+#define INPUT_BUFFER 0xFFF
 #define INPUT_BUFFER_SIZE 64
 
 
@@ -219,6 +222,7 @@ void printState(void);
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;
 extern SDL_Texture *texture;
+extern byte* video_pointer;
 
 
 /* Initialise the window, renderer and the texture*/
@@ -226,7 +230,7 @@ void setupWindow(char *title);
 
 
 /* Update the window to display the current video out */
-void updateOutput(byte *videostart);
+void updateOutput(void);
 
 
 /* Take the events that have happened since the last call, if characters,

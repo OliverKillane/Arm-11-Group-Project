@@ -14,6 +14,7 @@ modes emulatorMode;
 SDL_Window *window;
 SDL_Renderer *renderer;
 SDL_Texture *texture;
+byte* video_pointer;
 
 
 /* TEST allows for test suite to run unit tests without double definition of main */
@@ -54,17 +55,20 @@ int main(int argc, char** argv) {
     exit(INVALID_ARGUMENTS);
   }
 
-  if (emulatorMode && VIDEO) {
-    /* EXTENSION: set up the window, initialise */
-    setupWindow(filename);
-  }
-
   /* set up machine initial state (all zero, stack pointer at max location*/
   CPU.CPSR = (cpsr) {.N = 0, .Z = 0, .C = 0, .V = 0};
   CPU.memory = calloc(MEMSIZE, 1);
   assert(CPU.memory);
   memset(CPU.registers, 0, 64);
   CPU.GPIO = 0;
+  
+  if (emulatorMode & VIDEO) {
+    /* EXTENSION: set up the window, initialise */
+    setupWindow(filename);
+    
+    /* draw the first frame */
+    updateOutput();
+  }
   
   /*load, run and display final state */
   loadProgram(filename);
@@ -74,7 +78,7 @@ int main(int argc, char** argv) {
   /* CPU memory is the only memory on the heap allocated, so it must be freed */
   freeCPU();
 
-  if (emulatorMode && VIDEO) {
+  if (emulatorMode & VIDEO) {
 
     /* EXTENSION: destory the window, textures associated with window */
     destroyVideo();
@@ -146,9 +150,9 @@ void runProgram() {
 
     /* if instruction condition is satisfied, decide which type and process*/
     if (checkCond(currentInstr)) {
-      if(GETBITS(currentInstr, 24, 4) == 0xA) {
+      if(GETBITS(currentInstr, 24, 4) == 0xA || GETBITS(currentInstr, 24, 4) == 0xB) {
         branchInstr(currentInstr);
-      } else if(GETBITS(currentInstr, 26, 2) && !GETBITS(currentInstr, 21, 2)) {
+      } else if(GETBITS(currentInstr, 26, 2)  == 1 && !GETBIT(currentInstr, 22)) {
         singleDataTransInstr(currentInstr);
       } else if(!GETBITS(currentInstr, 22, 6) && GETBITS(currentInstr, 4, 4) == 0x9) {
         multiplyInstr(currentInstr);
@@ -165,7 +169,7 @@ void runProgram() {
     if (emulatorMode && VIDEO) {
 
       /* EXTENSION: draw the screen */
-      updateOutput(getmemloc(*getmemloc(VIDEO_POINTER)));
+      //updateOutput();
       
       /* EXTENSION: read in character events*/
       processEvents();
@@ -267,7 +271,25 @@ void singleDataTransInstr(instruction instr) {
     /* set pins */
     printf("PIN ON\n");
     CPU.GPIO = CPU.GPIO | *RdSrcDst;
-  } else if (memloc < MEMSIZE) {
+  } else if (memloc == VIDEO_POINTER && (emulatorMode & VIDEO)) {
+	  /* if setting the video pointer */
+	  if (L) {
+		/* for load get the address in the emulator (pointer - memory start) */
+		*RdSrcDst = video_pointer - CPU.memory;
+	  } else {
+		  
+		if (*RdSrcDst > MEMSIZE || *RdSrcDst < 0) {
+		  	printf("Error: Video pointer set to invalid memory address in instruction %08x", instr);
+		  	exit(INVALID_INSTR);
+		} else {
+			/* for store, set video pointer as a pointer to the memory location*/
+			video_pointer = getmemloc(*RdSrcDst);
+			
+			/* video pointer has changed, update the screen */
+			updateOutput();
+		}
+	  }
+  }else if (memloc < MEMSIZE) {
 
     /* interacting with 64KB of main memory */
     if (L) {
@@ -486,10 +508,10 @@ void printState() {
     }
   }
 
-  if (emulatorMode && GPIO_EXTENDED) {
-
+  if (emulatorMode & GPIO_EXTENDED) {
+	
     /* gpio bits should be displayed as GPIO extended flag has been sent */
-    printf("GPIO: %10i (0x%08x)\n", CPU.GPIO, CPU.GPIO);
+    printf("\nGPIO: (0x%08x)\n", CPU.GPIO);
   }
 }
 
@@ -522,8 +544,8 @@ void setupWindow(char *title){
     title,
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
-    WIDTH,
-    HEIGHT,
+    WINDOW_WIDTH,
+    WINDOW_HEIGHT,
     SDL_WINDOW_SHOWN
   );
 
@@ -547,12 +569,18 @@ void setupWindow(char *title){
     WIDTH,
     HEIGHT
   );
+  
+  /* scale up resolution to make it more playable */
+  SDL_RenderSetLogicalSize(renderer, WIDTH, HEIGHT);
+  
+  /* initialise the video pointer to show memory */
+  video_pointer = CPU.memory;
 }
 
-void updateOutput(byte *videostart) {
+void updateOutput() {
 
   /* update the texture to the pointed to region, with rows of length 4 bytes * display width */
-  SDL_UpdateTexture(texture, NULL, videostart, WIDTH * 4);
+  SDL_UpdateTexture(texture, NULL, video_pointer, WIDTH * 4);
 
   /* clear the renderer */
   SDL_RenderClear(renderer);
@@ -594,6 +622,7 @@ void processEvents() {
       }
 
       SDL_KeyCode keycode = event.key.keysym.sym;
+      printf("keycode: %i %c\n", keycode, keycode);
 
 
       /* first bit is 0 for keydown, 1 for key up */
