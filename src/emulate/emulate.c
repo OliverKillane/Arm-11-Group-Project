@@ -150,9 +150,9 @@ void runProgram() {
 
     /* if instruction condition is satisfied, decide which type and process*/
     if (checkCond(currentInstr)) {
-      if(GETBITS(currentInstr, 24, 4) == 0xA) {
+      if(GETBITS(currentInstr, 24, 4) == 0xA || GETBITS(currentInstr, 24, 4) == 0xB) {
         branchInstr(currentInstr);
-      } else if(GETBITS(currentInstr, 26, 2) && !GETBITS(currentInstr, 21, 2)) {
+      } else if(GETBITS(currentInstr, 26, 2)  == 1 && !GETBIT(currentInstr, 22)) {
         singleDataTransInstr(currentInstr);
       } else if(!GETBITS(currentInstr, 22, 6) && GETBITS(currentInstr, 4, 4) == 0x9) {
         multiplyInstr(currentInstr);
