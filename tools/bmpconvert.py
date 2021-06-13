@@ -66,7 +66,7 @@ def generatedraw(pixels : list[tuple[int, int]], width: str, name: str) -> str:
         result += "\nstr r1, [r4]"
 
     #draw to screen by storing start of buffer in the video pointer
-    result += "\nldr r4, =" + str(hex(VIDEO_POINTER))
+    result += "\nmov r4, #" + str(hex(VIDEO_POINTER))
     result += "\nstr r0, [r4]"
 
     #put local vars back
