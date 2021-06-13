@@ -196,7 +196,7 @@ void branchInstr(instruction instr) {
 
   /* if a link, then store next instruction address in LR */
   if (GETBIT(instr, 24)) {
-    *GETREG(LR) = *GETREG(PC) + 4;
+    *GETREG(LR) = *GETREG(PC);
   }
 
   /* increase PC by sign extended operand, multiplied by 4*/
