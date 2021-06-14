@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Wall -g -I../../lib/stddata/include -Icommandgen -Itokenizer -I. -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -pedantic -fsanitize=address,undefined
+CFLAGS  = -Wall -g -I../../lib/stddata/include -Icommandgen -Itokenizer -I. -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -pedantic
 
 .PHONY: all clean
 

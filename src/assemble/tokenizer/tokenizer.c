@@ -310,7 +310,6 @@ DirectiveType matchDirective(char *str) {
     } else if (strcmp(str, "long") == 0) {
         return DIRECTIVE_LONG;
     }
-    printf("unrecognized directive %s\n", str);
     assert(false);
 }
 
@@ -383,7 +382,7 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                 }
                 break;
             case TOKENIZER_INSTR_LABEL_REG:
-                if (isalpha(line[0]) || line[0] == '_') {
+                if (isalpha(line[0])) {
                     addCharToToken(line[0]);
                 } else if (line[0] == ':') {
                     addCharToToken('\0');
