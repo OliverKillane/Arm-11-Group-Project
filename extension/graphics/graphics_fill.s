@@ -12,7 +12,7 @@ fill:
     @ r4  <- write_image_buffer register	
 	@ r5  <- X-axis iterator
 	@ r6  <- Y-axis iterator
-	@ r7  <- auxiliary register
+	@ r7  <- background pixel register
 	@ r8  <- X-axis target pixel index
 	@ r9  <- Y-axis target pixel index
 	@ r10 <- array iterator index
@@ -31,9 +31,9 @@ fill:
     push r12
 	
     @ y-axis iterator
-	mov r6, r1
+	mov r6, #0
     @ x-axis iterator
-	mov r5, r0
+	mov r5, #0
 
     @ set target width-X
 	add r8, r2, r0
@@ -70,19 +70,15 @@ fill:
 		mov r9, height
 
 	condY_fill:
-		cmp r6, r9
+		cmp r6, r3
 		bgt end_fill @ Y-iterator > target-Y
 
 	condX_fill:
-		cmp r5, r8
+		cmp r5, r2
 		ble loop_fill @ X-iterator <= target-X
 
 		@ reinitialize X-iterator
-		sub r5, r5, r2
-
-		@ move matrix iterator to next row
-		@sub r10, r10, r2
-		@add r10, r10, width
+		mov r5, #0
 
 		@ increment Y-iterator
 		add r6, r6, #1
@@ -90,32 +86,24 @@ fill:
 
 	loop_fill:
 		ldr r11, [r13]
-		
-		push r6
-		push r5
+
 		push r2
 		push r1
 		push r0
 
-		mov r0, r11
+		mla r10, r6, r2, r5
+		
+		@ load pixel from memory to be displayed
+		ldr r0, [r11, r10, lsl #2]
 
 		@ compute array iterator
 		mov r11, width
-		mla r10, r6, r11, r5
-		mov r11, r0
-
-		pop r0 
-		push r0
-		sub r5, r5, r0
-		sub r6, r6, r1
-		mla r7, r6, r2, r5
-
-		@ load pixel from memory to be displayed
-		ldr r0, [r7, r11, lsl #2]
-		mov r11, width
-
+		add r8, r5, r0
+		add r9, r6, r1
+		mla r10, r9, r11, r8
+	
 		@ load pixel from background 
-		ldr r7, [r10, r12, lsl #2]
+		ldr r7, [r12, r10, lsl #2]
 
 		@ separate pixel into channels by byte
 		@ r3 - Alpha channel (Byte 3)
@@ -156,16 +144,15 @@ fill:
 		add r0, r0, r2, lsr #16
 
 		@ store new pixel value in the write image buffer
-		str r0, [r10, r4, lsl #2] 
+		str r0, [r4, r10, lsl #2] 
+
+		@ increment iterators
+		add r5, r5, #1
 
 		pop r0
 		pop r1
 		pop r2
-		pop r5
-		pop r6
 
-		@ increment iterators
-		add r5, r5, #1
 
 		b condX_fill
 
