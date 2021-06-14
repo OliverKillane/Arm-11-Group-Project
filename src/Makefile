@@ -23,3 +23,4 @@ clean:
 	rm -f $(wildcard ../build/*.o)
 	cd assemble && $(MAKE) clean
 	cd emulate && $(MAKE) clean
+	cd emulate_extension && $(MAKE) clean
