@@ -31,6 +31,38 @@ int main(int argc, char **argv) {
 
 	writeBinary(binaryVector, argv[2]);
 	DeleteVector(binaryVector);
+
+	MAPFOR(symbolTable, iter) {
+ 	    free((char*)(MapIteratorGet(iter).key));
+  	}
+	DeleteMap(symbolTable);
+
+	LISTFOR(textLines, iter) {
+		free(ListIteratorGet(iter));
+	}
+	DeleteList(textLines);
+
+	LISTFOR(dataLines, iter) {
+		free(ListIteratorGet(iter));
+	}
+	DeleteList(dataLines);
+
+	LISTFOR(textTokens, iter1) {
+		Vector line = ListIteratorGet(iter1);
+		VECTORFOR(line, iter2) {
+			Token token = VectorIteratorGet(iter2);
+			DeleteToken(token);
+		}
+		DeleteVector(line);
+	}
+	DeleteList(textTokens);
+
+
+
+	writeBinary(binaryVector, argv[2]);
+
+	DeleteVector(binaryVector);
+
     return EXIT_SUCCESS;
 }
 

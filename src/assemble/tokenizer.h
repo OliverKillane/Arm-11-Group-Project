@@ -38,7 +38,7 @@ bool isNumber(char *str);
 ConditionType matchConditionType(char *str);
 Token matchInstructionToken(char *str);
 int matchDecimal(char *str);
-int matchHex(char *str);
+long long matchHex(char *str);
 Token matchRegister(char *str);
 Token matchConstant(char *str);
 void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token);
