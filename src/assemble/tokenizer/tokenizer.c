@@ -193,13 +193,13 @@ bool isHexNumber(char *str) {
 }
 
 
-int matchHex(char *str) {
+long long matchHex(char *str) {
     bool negated = false;
     if (*str == '-') {
         negated = true;
         str++;
     }
-    int num = 0;
+    long long num = 0;
     // printf("%s\n", str);
 
     for (; *str != '\0'; str++)
