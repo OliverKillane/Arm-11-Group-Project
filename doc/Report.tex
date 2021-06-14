@@ -106,14 +106,24 @@ along with the following aliases for the ease of use
 \item All labels in expressions can now be offset by +/- value
 \item :first8:label, :second8:label, ... allow for refering to bits of label separately (useful for loading a value of the label into a register)
 \end{itemize}
+\pagebreak
 \subsection*{Emulator}
-<A couple of lines of introduction to the emulator extensions>
-\subparagraph*{Additional Commands}
-<More detailed explanation of supporting the additional commands>
+\centerline{\textbf{Memory Layout}}
+\includegraphics[width=\textwidth]{emulator memory}
+\subparagraph*{Stack}
+Pre-indexing with base register alteration, and branches with linking work, allowing the assembled brl (branch link), ret, push and pop commands to function.
+\subparagraph*{GPIO}
+By passing the \textbf{-g} flag, the GPIO bits are displayed as a memory location (only 1/0 for pin ON/OFF) when the output of the emulator is printed.\\
 \subparagraph*{Keystrokes}
-<More detailed explanation of supporting the keystrokes>
+Using SDL's keyboard input functionality, the ascii codes of keys (of value less than 128) are written to a 64 byte buffer as 8 bit values (most significant is 1/0 for key up/down, lower 7 are the ascii code). The arrow keys replace EOT-BEL characters ascii codes. The buffer is written to as a circular queue capable of holding 64 keyboard events, with the
+\newline binary being run responsible for reading from the queue, nullifying the characters read, and moving up the queue to the next read keystroke.
 \subparagraph*{Display}
-<More detailed explanation of supporting the display>
+By passing the \textbf{-v} flag the emulator will display the memory region starting at the pointer contained in special location (0x1000000 - the vide pointer) at a fixed resolution (192x108) with full RGB colour (4 bytes per pixel, lower 3 are rgb). When a value is stored to the memory pointer, the display is updated.
+\newline\newline We used the SDL2 graphics library to render a texture, which used the data stored at the memory pointer (a part of the addressable emulator memory). The graphics are scaled up by 4 as on newer monitors the window would be too small to play PONG.
+\newline\newline Reading texture data directly from the emulator memory proved to be much faster than iterating through the all pixels, rendering. Though this meant that each pixel had a redundant byte (alpha value) associated.
+\subparagraph*{Testing}
+We developed a small python program to convert images into a convention respecting subroutine (not using any constants allocated memory) draw all black pixels in the image, to a colour stored in an argument register. And used this to build a basic test of a 'classic' pong open screen, with space bar input to move to the next screen.
+In the final pong program, the .data section will be used instead so we can simply change the video pointer rather than redrawing the display.
 \subsection*{Pong}
 \begin{center}
 	\includegraphics[scale=0.7]{pong}\\
@@ -144,7 +154,7 @@ Apart from our meetings, we kept a higher throughput of communication in pairs t
 \subparagraph*{Ioana}
 <Here go a couple of lines from Ioana on how she did in the project>
 \subparagraph*{Oliver}
-<Here go a couple of lines from Oliver on how he did in the project>
+I was more satisfied with the level of performance and cleanliness of my code. The emulator is fast, robust and the extension doubly so. While I had done C before, it was never to this standard and I am happy to say I have learnt a lot, not just about writing good C, but also in project structure/build, git repo management, graphics and making the best use/being the best use to my teammates. One thing I would improve with more time would be profiling done on the emulator, we had limited success getting analysis through gprof (make profile in src/emulate) and with more time I'm sure we could improve speed (especially on lower spec devices such as the pi, with graphics).
 \subparagraph*{Bartek}
 I believe I did everything I could as far as this project goes. My code looks fairly clean, my testing is as robust as I could have made it provdied this amount of time and the optimizations are as good as they could have been in c. Also, I was able to trust my groupmates with the code more than I did in all my past projects. The only things that I would change is a better work life ballance, learn a different collaborated coding style (the only one I know is to split the workload into non-overlaping sections with known interfaces) and improve my git workflow to make it a bit cleaner.
 \end{document}
