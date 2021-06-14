@@ -89,30 +89,33 @@ fill:
 		b condY_fill	
 
 	loop_fill:
+		ldr r11, [r13]
+		
 		push r6
 		push r5
 		push r2
 		push r1
 		push r0
 
+		mov r0, r11
+
 		@ compute array iterator
 		mov r11, width
 		mla r10, r6, r11, r5
+		mov r11, r0
 
+		pop r0 
+		push r0
 		sub r5, r5, r0
 		sub r6, r6, r1
-
-		push r11
-		mov r11, r2
-		mla r7, r6, r11, r5
-		pop r11
+		mla r7, r6, r2, r5
 
 		@ load pixel from memory to be displayed
-		ldr r0, [r13]
-		ldr r0, [r7, r0]
+		ldr r0, [r7, r11, lsl #2]
+		mov r11, width
 
 		@ load pixel from background 
-		ldr r7, [r10, r12]
+		ldr r7, [r10, r12, lsl #2]
 
 		@ separate pixel into channels by byte
 		@ r3 - Alpha channel (Byte 3)
@@ -153,7 +156,7 @@ fill:
 		add r0, r0, r2, lsr #16
 
 		@ store new pixel value in the write image buffer
-		str r0, [r10, r4] 
+		str r0, [r10, r4, lsl #2] 
 
 		pop r0
 		pop r1
@@ -162,7 +165,7 @@ fill:
 		pop r6
 
 		@ increment iterators
-		add r5,  r5,  #1
+		add r5, r5, #1
 
 		b condX_fill
 
