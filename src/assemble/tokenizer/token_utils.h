@@ -70,10 +70,6 @@ typedef enum {
     INSTR_ROR
 } InstructionType;
 
-
-/**
- * @brief Enum that determines the type of label a label token represents.
- */
 typedef enum {
     LABEL_FULL = 10, // to be able to map over them
     LABEL_FIRST8,
@@ -82,9 +78,6 @@ typedef enum {
     LABEL_FOURTH8
 } LabelType;
 
-/**
- * @brief A struct that contains all of the token information. This is used for tokenizing and command generation.
- */
 typedef struct {
     TokenKind type;
     union {
@@ -126,10 +119,6 @@ Token NewRegisterToken(int reg);
  */
 Token NewConstantToken(ConstantType type, long long value);
 
-/**
- * @brief Creates a new token of type TOKEN_LABEL.
- * @param label is a pointer to a string that will be copied into the token.
- */
 Token NewLabelToken(char *label, LabelType type);
 
 /**
@@ -144,10 +133,8 @@ Token NewSignToken(bool is_plus);
  */
 Token NewBraceToken(bool is_open);
 
-/**
- * @brief Creates a new token of type TOKEN_EXCLAIMATION.
- */
 Token NewExclamationToken();
+
 
 /**
  * @brief Deallocates the given token.
@@ -202,18 +189,8 @@ int TokenRegisterNumber(Token token);
  */
 char* TokenLabel(Token token);
 
-/**
- * @brief Returns the label type of a provided token.
- * 
- * @warning asserts token is of type TOKEN_LABEL
- */
 LabelType TokenLabelType(Token token);
 
-/**
- * @brief Returns true if the token is '+' and not if the token is '-'.
- * 
- * @warning asserts token is of type TOKEN_SIGN
- */
 bool TokenIsPlus(Token token);
 
 /**

@@ -362,7 +362,7 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                 }
                 break;
             case TOKENIZER_LABEL_ORDER:
-                if (isalpha(line[0])) {
+                if (isalpha(line[0]) || line[0] == '8') {
                     addCharToToken(line[0]);
                 } else if (line[0] == ':') {
                     addCharToToken('\0');
@@ -444,16 +444,12 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                         } else if (currentDirectiveType == DIRECTIVE_LONG) {
                             // printf("%d\n", matchedConstant->constant.value);
                             VectorPushBack(dataVector, matchedConstant->constant.value);
+                            DeleteToken(matchedConstant);
                             currentDirectiveType = DIRECTIVE_NONE;
                         } else if (currentDirectiveType == DIRECTIVE_SET) {
                             printf("Label set %s %d\n", currentDirectiveLabel, matchedConstant->constant.value);
-                            bool isInMap = MapQuery(symbolTable, currentDirectiveLabel);
-
-                            if (isInMap) {
-                                printf("Attempting to set the %s label twice.", currentDirectiveLabel);
-                                exit(1);
-                            }
                             MapSet(symbolTable, currentDirectiveLabel, matchedConstant->constant.value);
+                            DeleteToken(matchedConstant);
                             // printf("%s %d\n", currentDirectiveLabel, MapGet(symbolTable, currentDirectiveLabel));
                             currentDirectiveType = DIRECTIVE_NONE;
                         }
@@ -483,3 +479,49 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
     return tokenList;
 
 }
+
+// void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector dataVector) {
+
+//     char *endl = strchr(line, '\n');
+//     if (endl != NULL) {
+//         *endl = '\0';
+//     }
+//     char *at = strchr(line, '@');
+//     if (at != NULL) {
+//         *at = '\0';
+//     }
+//     char *colon;
+
+//     if (strncmp(line, ".set", 4) == 0) {
+//         line+=5;
+//         char *endLabel = strchr(line, ' ');
+//         char *newLabel = malloc(sizeof(char) * (endLabel - line+1));
+//         strncpy(newLabel, line, (endLabel - line));
+//         newLabel[endLabel - line + 1] = '\0';
+//         line = endLabel + 1;
+//         int number;
+
+//         if (isHexNumber(line)) {
+//             number = matchHex(line);
+//         } else {
+//             number = matchDecimal(line);
+//         }
+//         MapSet(symbolTable, newLabel, number);
+//     } else if (strncmp(line, ".long", 5) == 0) {
+//         line += 6;
+//         int number;
+//         if (isHexNumber(line)) {
+//             number = matchHex(line);
+//         } else {
+//             number = matchDecimal(line);
+//         }
+//         VectorPushBack(dataVector, number);
+//         *currentAddress += 1;
+//     } else if ((colon = strchr(line, ':')) != NULL) {
+//         char *newLabel = malloc((colon - line +1) * sizeof(char));
+//         strncpy(newLabel, line, (colon - line));
+//         newLabel[colon - line + 1] = '\0';
+//         MapSet(symbolTable, newLabel, *currentAddress);
+//     }
+
+// }
