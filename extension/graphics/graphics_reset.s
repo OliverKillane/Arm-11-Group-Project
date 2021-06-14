@@ -4,13 +4,13 @@ reset:
 	@ function parameters: 
 	@ r0  <- x0
 	@ r1  <- y0
-	@ r2  <- width  (X axis)
-	@ r3  <- height (Y axis)
+	@ r2  <- width  (Y axis)
+	@ r3  <- height (X axis)
 
 	@ internal registers for local variables: 
     @ r4 <- write_image_buffer register
-	@ r5  <- x iterator
-	@ r6  <- y iterator
+	@ r5  <- X-axis iterator
+	@ r6  <- Y-axis iterator
 	@ r8  <- X-axis target pixel index
 	@ r9  <- Y-axis target pixel index
 	@ r10 <- array iterator index
@@ -37,54 +37,56 @@ reset:
 	add r8, r2, r1
 
     @ set target height-y
-	add r9, r3, r1
+	add r9, r3, r0
 
     @ array iterator
-	mov r11, height
+	mov r11, width
 	mla r10, r0, r11, r1
 
 	@ load background values into register
-    mov r12 :first8:background
-    orr r12, r12 :second8:background
-    orr r12, r12 :third8:background
-    orr r12, r12 :fourth8:background
+    mov r12, :first8:background
+    orr r12, r12, :second8:background
+    orr r12, r12, :third8:background
+    orr r12, r12, :fourth8:background
 
 	@ load write_image_buffer values into register
-    mov r4 :first8:write_image_buffer
-    orr r4, r4 :second8:write_image_buffer
-    orr r4, r4 :third8:write_image_buffer
-    orr r4, r4 :fourth8:write_image_buffer
+    mov r4, :first8:write_image_buffer
+    orr r4, r4, :second8:write_image_buffer
+    orr r4, r4, :third8:write_image_buffer
+    orr r4, r4, :fourth8:write_image_buffer
 
 	@ ensure X coordinate is within image bounds
-	cmp r8, height
-	ble condX
-	mov r8, height 
+	boundX_reset:
+		cmp r8, height
+		ble boundY_reset
+		mov r8, height 
 
 	@ ensure Y coordinate is within image bounds
-	cmp r9, width
-	ble condX
-	mov r9, width
+	boundY_reset:
+		cmp r9, width
+		ble condX_reset
+		mov r9, width
 
-	condX:
+	condX_reset:
 		cmp r5, r8
-		bgt end @ X-iterator > target-X
+		bgt end_reset @ X-iterator > target-X
 
-	condY:
+	condY_reset:
 		cmp r6, r9
-		ble loop @ Y-iterator <= target-Y
+		ble loop_reset @ Y-iterator <= target-Y
 
 		@ reinitialize Y-iterator
-		sub r6, r6, r3
+		sub r6, r6, r2
 
 		@ move matrix iterator to next row
-		sub r10, r10, r3
-		add r10, r10, height
+		sub r10, r10, r2
+		add r10, r10, width
 
 		@ increment X-iterator
 		add r5, r5, #1
-		b condX	
+		b condX_reset	
 
-	loop:
+	loop_reset:
 		@ load pixel from background
         ldr r11, [r12, r10]
 		@ store background pixel value into the write image buffer
@@ -94,10 +96,10 @@ reset:
 		add r6,  r6, #1
 		add r10, r10, #1
 
-		b condY
+		b condY_reset
 
 	@ Clean up
-    end:
+    end_reset:
         pop r12
 		pop r11
 		pop r10
