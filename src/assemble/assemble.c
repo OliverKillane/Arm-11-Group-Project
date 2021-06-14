@@ -39,6 +39,9 @@ int main(int argc, char **argv) {
 
 	LISTFOR(textLines, iter) {
 		free(ListIteratorGet(iter));
+		ListIteratorIncr(&iter);
+		ListIteratorIncr(&iter);
+		free(ListIteratorGet(iter));
 	}
 	DeleteList(textLines);
 
