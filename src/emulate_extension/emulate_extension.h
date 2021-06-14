@@ -1,5 +1,5 @@
-#ifndef EMULATOR_H
-#define EMULATOR_H
+#ifndef EMULATOR_EXTENSION_H
+#define EMULATOR_EXTENSION_H
 
 #include <stdint.h>
 #include <stdbool.h>

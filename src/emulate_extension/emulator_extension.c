@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include "emulate.h"
+#include "emulate_extension.h"
 
 /* CPU struct (state is changed to emulate) */
 machineState CPU;

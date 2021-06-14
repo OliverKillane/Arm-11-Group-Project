@@ -7,16 +7,16 @@ PROFILETARGET = ../../bin/stresstest
 
 .PHONY: all clean
 
-all: emulate
+all: emulate_extension
 
 # currently on dynamic linking, which we should change to static with the .a included in /lib
-emulate:
-	$(CC) $(CFLAGS) emulate.c -o emulate $(INCLUDE) $(LINK) || echo "\nmay need to install -SDL2, ./configure, make, make install to allow dynamic linking to work\n"
-	mv ./emulate ../../bin/
+emulate_extension:
+	$(CC) $(CFLAGS) emulate_extension.c -o emulate_extension $(INCLUDE) $(LINK) || echo "\nmay need to install -SDL2, ./configure, make, make install to allow dynamic linking to work\n"
+	mv ./emulate_extension ../../bin/
 	
 
 profile:
-	$(CC) $(CFLAGS) -pg emulate.c -o emulate_prof $(INCLUDE) $(LINK)
+	$(CC) $(CFLAGS) -pg emulate_extension.c -o emulate_prof $(INCLUDE) $(LINK)
 	./emulate_prof $(PROFILETARGET)
 	gprof emulate_prof gmon.out > analysis.txt
 	rm gmon.out
@@ -24,7 +24,7 @@ profile:
 	less analysis.txt
 
 clean:
-	rm -f $(wildcard ../build/emulate/*)
-	rm -f ../../bin/emulate
+	rm -f $(wildcard ../build/emulate_extension/*)
+	rm -f ../../bin/emulate_extension
 	rm -f gmon.out
 	rm -f emulate_prof

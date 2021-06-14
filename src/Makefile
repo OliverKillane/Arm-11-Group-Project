@@ -3,13 +3,16 @@ CFLAGS  = -Wall -g -I../lib/stddata/include -D_POSIX_SOURCE -D_DEFAULT_SOURCE -s
 
 .PHONY: all clean assemble emulate stddata
 
-all: stddata assemble emulate
+all: stddata assemble emulate emulate_extension
 
 assemble: stddata
 	cd assemble && $(MAKE)
 
 emulate:
 	cd emulate && $(MAKE)
+
+emulate_extension:
+	cd emulate_extension && $(MAKE)
 
 stddata:
 	cd ../lib/stddata && $(MAKE) library
