@@ -10,9 +10,8 @@ img = cv2.imread(sys.argv[1], cv2.IMREAD_UNCHANGED)
 
 indent = "\t"*int(sys.argv[2])
 
-for x in range(img.shape[1]):
-	for y in range(img.shape[0]):
-		pixel = img[y][x]
+for line in img:
+	for pixel in line:
 		value = pixel[2] + 2**8 * pixel[1] + 2**16 * pixel[0] + 2**24 * pixel[3]
 		print(f"{indent}.long {hex(value)}")
 
