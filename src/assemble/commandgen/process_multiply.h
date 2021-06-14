@@ -9,18 +9,26 @@
 #include <stddata.h>
 #include <stdbool.h>
 
+/**
+ * @brief Handles all "mul ..." instructions
+ */
 bool LayoutMUL(
-    Map restrict symbols, 
-    Vector restrict tokens, 
-    Vector restrict output, 
+    Map symbols, 
+    Vector tokens, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
 
+/**
+ * @brief Handles all "mla ..." instructions
+ */
 bool LayoutMLA(
-    Map restrict symbols, 
-    Vector restrict tokens, 
-    Vector restrict output, 
+    Map symbols, 
+    Vector tokens, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );

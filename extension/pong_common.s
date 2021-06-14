@@ -27,4 +27,4 @@
 	.set mb 5
 	.set ml 5
 	.set mr 5
-
+	.set stack_start 0x7FFFF
