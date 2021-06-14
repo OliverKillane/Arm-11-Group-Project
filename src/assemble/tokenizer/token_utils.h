@@ -10,11 +10,13 @@ typedef enum {
     TOKEN_LABEL,
     TOKEN_SIGN,
     TOKEN_BRACE,
+    TOKEN_EXCLAMATION
 } TokenKind;
 typedef enum {
     CONST_HASH = 10, // to be able to map over them
     CONST_EQUALS,
-    CONST_PURE
+    CONST_PURE,
+    CONST_ANY // for handling labels
 } ConstantType;
 
 typedef enum {
@@ -30,6 +32,11 @@ typedef enum {
 
 typedef enum {
     INSTR_BRN = 10, // to be able to map over them
+    INSTR_BRL,
+    INSTR_RET,
+    INSTR_PSH,
+    INSTR_POP,
+    INSTR_HLT,
     INSTR_ADD,
     INSTR_SUB,
     INSTR_RSB,
@@ -50,6 +57,14 @@ typedef enum {
     INSTR_ROR
 } InstructionType;
 
+typedef enum {
+    LABEL_FULL = 10, // to be able to map over them
+    LABEL_FIRST8,
+    LABEL_SECOND8,
+    LABEL_THIRD8,
+    LABEL_FOURTH8
+} LabelType;
+
 typedef struct {
     TokenKind type;
     union {
@@ -62,7 +77,10 @@ typedef struct {
             InstructionType type;
         } instruction;
         int reg_num;
-        char label[512];
+        struct {
+            char string[512];
+            LabelType type;
+        } label;
         bool is_plus;
         bool is_open;
     };
@@ -76,11 +94,13 @@ Token NewRegisterToken(int reg);
 
 Token NewConstantToken(ConstantType type, long long value);
 
-Token NewLabelToken(char *label);
+Token NewLabelToken(char *label, LabelType type);
 
 Token NewSignToken(bool is_plus);
 
 Token NewBraceToken(bool is_open);
+
+Token NewExclamationToken();
 
 
 void DeleteToken(Token token);
@@ -98,6 +118,8 @@ InstructionType TokenInstructionType(Token token);
 int TokenRegisterNumber(Token token);
 
 char* TokenLabel(Token token);
+
+LabelType TokenLabelType(Token token);
 
 bool TokenIsPlus(Token token);
 

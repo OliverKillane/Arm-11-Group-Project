@@ -7,10 +7,10 @@ void removeColon(char *str);
 
 void writeBinary(Vector program, char *filename);
 
-List readFileLines(char *filename);
+void readFileLines(char *filename, List textLines, List dataLines);
 
-List tokenize(List lines, Map symbolTable, int *totalInstructions);
+List tokenize(List lines, Map symbolTable, int *totalInstructions, Vector dataVector);
 
-Vector tokensToBinary(Map symbolTable, List listOfTokens, int totalInstructions);
+Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int totalInstructions);
 
 #endif
