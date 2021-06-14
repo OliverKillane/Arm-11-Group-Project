@@ -98,9 +98,14 @@ fill:
 		@ compute array iterator
 		mov r11, width
 		mla r10, r6, r11, r5
+
 		sub r5, r5, r0
 		sub r6, r6, r1
+
+		push r11
+		mov r11, r2
 		mla r7, r6, r11, r5
+		pop r11
 
 		@ load pixel from memory to be displayed
 		ldr r0, [r13]
@@ -150,14 +155,14 @@ fill:
 		@ store new pixel value in the write image buffer
 		str r0, [r10, r4] 
 
-		@ increment iterators
-		add r5,  r5,  #1
-
 		pop r0
 		pop r1
 		pop r2
 		pop r5
 		pop r6
+
+		@ increment iterators
+		add r5,  r5,  #1
 
 		b condX_fill
 
