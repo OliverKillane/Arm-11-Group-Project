@@ -4,12 +4,12 @@ fill:
 	@ Function parameters: 
 	@ r0  <- x0 
 	@ r1  <- y0 
-	@ r2  <- width  (Y axis)
-	@ r3  <- height (X axis) 
+	@ r2  <- width  (X axis)
+	@ r3  <- height (Y axis) 
 	@ r13 <- memory pointer register
 
 	@ Internal registers for local variables: 
-    @ r4 <- write_image_buffer register	
+    @ r4  <- write_image_buffer register	
 	@ r5  <- X-axis iterator
 	@ r6  <- Y-axis iterator
 	@ r7  <- auxiliary register
@@ -36,11 +36,11 @@ fill:
     @ x-axis iterator
 	mov r5, r0
 
-    @ set target height-x
-	add r8, r2, r1
+    @ set target width-X
+	add r8, r2, r0
 
-    @ set target width-y 
-	add r9, r3, r0
+    @ set target height-Y 
+	add r9, r3, r1
 
     @ array iterator
 	mov r11, width
@@ -60,34 +60,34 @@ fill:
 
 	@ ensure X coordinate is within image bounds
 	boundX_fill:
-		cmp r8, height
+		cmp r8, width
 		ble boundY_fill
-		mov r8, height 
+		mov r8, width 
 
 	@ ensure Y coordinate is within image bounds
 	boundY_fill:
-		cmp r9, width
+		cmp r9, height
 		ble condX_fill
-		mov r9, width
-
-	condX_fill:
-		cmp r5, r8
-		bgt end_fill @ X-iterator > target-X
+		mov r9, height
 
 	condY_fill:
 		cmp r6, r9
-		ble loop_fill @ Y-iterator <= target-Y
+		bgt end_fill @ Y-iterator > target-Y
 
-		@ reinitialize Y-iterator
-		sub r6, r6, r2
+	condX_fill:
+		cmp r5, r8
+		ble loop_fill @ X-iterator <= target-X
+
+		@ reinitialize X-iterator
+		sub r5, r5, r2
 
 		@ move matrix iterator to next row
 		sub r10, r10, r2
 		add r10, r10, width
 
-		@ increment X-iterator
-		add r5, r5, #1
-		b condX_fill	
+		@ increment Y-iterator
+		add r6, r6, #1
+		b condY_fill	
 
 	loop_fill:
 		@ load pixel from memory to be displayed
@@ -137,10 +137,10 @@ fill:
 		str r0, [r10, r4] 
 
 		@ increment iterators
-		add r6,  r6,  #1
+		add r5,  r5,  #1
 		add r10, r10, #1
 
-		b condY_fill
+		b condX_fill
 
 	@ Cleaning up
 	end_fill:
