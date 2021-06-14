@@ -3,6 +3,9 @@
 
 #include <stdbool.h>
 
+/**
+ * @brief Enum that determines the type of token.
+ */
 typedef enum {
     TOKEN_INSTRUCTION = 10, // to be able to map over them
     TOKEN_REGISTER,
@@ -10,13 +13,22 @@ typedef enum {
     TOKEN_LABEL,
     TOKEN_SIGN,
     TOKEN_BRACE,
+    TOKEN_EXCLAMATION
 } TokenKind;
+
+/**
+ * @brief Enum that determines the type constant a constant token represents.
+ */
 typedef enum {
     CONST_HASH = 10, // to be able to map over them
     CONST_EQUALS,
-    CONST_PURE
+    CONST_PURE,
+    CONST_ANY // for handling labels
 } ConstantType;
 
+/**
+ * @brief Enum that determines the type condition an instruction token represents.
+ */
 typedef enum {
     COND_EQ = 0x0, // to be able to map over them
     COND_NE = 0x1,
@@ -28,8 +40,16 @@ typedef enum {
     COND_FAIL // Used in token matching.
 } ConditionType;
 
+/**
+ * @brief Enum that determines the type instruction an instruction token represents.
+ */
 typedef enum {
     INSTR_BRN = 10, // to be able to map over them
+    INSTR_BRL,
+    INSTR_RET,
+    INSTR_PSH,
+    INSTR_POP,
+    INSTR_HLT,
     INSTR_ADD,
     INSTR_SUB,
     INSTR_RSB,
@@ -50,6 +70,14 @@ typedef enum {
     INSTR_ROR
 } InstructionType;
 
+typedef enum {
+    LABEL_FULL = 10, // to be able to map over them
+    LABEL_FIRST8,
+    LABEL_SECOND8,
+    LABEL_THIRD8,
+    LABEL_FOURTH8
+} LabelType;
+
 typedef struct {
     TokenKind type;
     union {
@@ -62,7 +90,10 @@ typedef struct {
             InstructionType type;
         } instruction;
         int reg_num;
-        char label[512];
+        struct {
+            char string[512];
+            LabelType type;
+        } label;
         bool is_plus;
         bool is_open;
     };
@@ -70,37 +101,103 @@ typedef struct {
 
 typedef TokenRepr * Token;
 
+/**
+ * @brief Creates a new token of type TOKEN_INSTRUCTION.
+ */
 Token NewInstructionToken(ConditionType cond, InstructionType instr);
 
+/**
+ * @brief Creates a new token of type TOKEN_REGISTER.
+ * @param reg is the register that is being referenced.
+ * @warning @p reg should be in the range 0-16.
+ */
 Token NewRegisterToken(int reg);
 
+/**
+ * @brief Creates a new token of type TOKEN_CONSTANT.
+ * @param value is the value of the constant token
+ */
 Token NewConstantToken(ConstantType type, long long value);
 
-Token NewLabelToken(char *label);
+Token NewLabelToken(char *label, LabelType type);
 
+/**
+ * @brief Creates a new token of type TOKEN_SIGN.
+ * @param is_plus is true if the token was '+' and false if the token was '-'.
+ */
 Token NewSignToken(bool is_plus);
 
+/**
+ * @brief Creates a new token of type TOKEN_BRACE.
+ * @param is_open is true if the token was '[' and false if the token was ']'.
+ */
 Token NewBraceToken(bool is_open);
 
+Token NewExclamationToken();
 
+
+/**
+ * @brief Deallocates the given token.
+ */
 void DeleteToken(Token token);
 
+/**
+ * @brief Returns the token type of a given token.
+ */
 TokenKind TokenType(Token token);
 
+
+/**
+ * @brief Returns the token constant type of a provided token.
+ * 
+ * @warning asserts token is of type TOKEN_CONSTANT
+ */
 ConstantType TokenConstantType(Token token);
 
+/**
+ * @brief Returns the token constant value of a provided token.
+ * 
+ * @warning asserts token is of type TOKEN_CONSTANT
+ */
 long long TokenConstantValue(Token token);
 
+/**
+ * @brief Returns the instruction condition type of a provided token.
+ * 
+ * @warning asserts token is of type TOKEN_INSTRUCTION
+ */
 ConditionType TokenInstructionConditionType(Token token);
 
+/**
+ * @brief Returns the instruction type of a provided token.
+ * 
+ * @warning asserts token is of type TOKEN_INSTRUCTION
+ */
 InstructionType TokenInstructionType(Token token);
 
+/**
+ * @brief Returns the register type value of a provided token.
+ * 
+ * @warning asserts token is of type TOKEN_REGISTER
+ */
 int TokenRegisterNumber(Token token);
 
+/**
+ * @brief Returns the label string of a provided token.
+ * 
+ * @warning asserts token is of type TOKEN_LABEL
+ */
 char* TokenLabel(Token token);
+
+LabelType TokenLabelType(Token token);
 
 bool TokenIsPlus(Token token);
 
+/**
+ * @brief Returns true if the token is '[' and not if the token is ']'.
+ * 
+ * @warning asserts token is of type TOKEN_BRACE
+ */
 bool TokenIsOpenBracket(Token token);
 
 #endif /* ASSEMBLE_TOKEN_UTILS_H_ */

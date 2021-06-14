@@ -11,47 +11,23 @@
  */
 typedef enum {
     ERROR_EMPTY = 10,
-    ERROR_EXPECTED_INSTRUCTION,
-    ERROR_TOO_SHORT,
-    ERROR_TOO_LONG,
-    ERROR_INVALID_INSTRUCTION,
-    ERROR_INVALID_LABEL,
-    ERROR_EXPECTED_LABEL_OR_PURE_CONSTANT,
-    ERROR_EXPECTED_4_DIVISIBLE,
-    ERROR_CONST_OOB,
-    ERROR_EXPECTED_REGISTER_OR_HASH_CONSTANT,
+    ERROR_INVALID_PATTERN,
+    ERROR_LABEL_NOT_FOUND,
     ERROR_INVALID_REGISTER,
-    ERROR_EXPECTED_REGISTER,
-    ERROR_OFFSET_TOO_FAR,
-    ERROR_EXPECTED_EQUALS_CONSTANT_OR_BRACE,
-    ERROR_EXPECTED_CLOSED_BRACE,
-    ERROR_EXPECTED_HASH_CONSTANT,
-    ERROR_SHIFT_OOB,
-    ERROR_EXPECTED_CONDITIONLESS_SHIFT
+    ERROR_CONSTANT_OOB,
+    ERROR_SAME_REGISTERS,
+    ERROR_OFFSET_OOB,
+    ERROR_CONDITIONAL_SHIFT
 } ErrorCodes;
 
-/**
- * @brief Describes the stages of assembling on which the errors can occur
- */
-typedef enum {
-    STAGE_NONE = 10,
-    STAGE_DISPATCH,
-    STAGE_BRANCH,
-    STAGE_MULTIPLY,
-    STAGE_DATA_TRANSFER,
-    STAGE_SHIFTED_REGISTER,
-    STAGE_DATA_PROCESSING
-} ProcessingStage;
-
 extern ErrorCodes error_code;
-extern ProcessingStage processing_stage;
 
 /**
  * @brief Sets the error data
  * 
  * @warning Can be used only once before reporting it with @ref ReportError
  */
-void SetErrorCode(ProcessingStage stage, ErrorCodes new_error_code);
+void SetErrorCode(ErrorCodes new_error_code);
 
 /**
  * @brief Reports an error set with @ref SetErrorCode and allows for setting another error

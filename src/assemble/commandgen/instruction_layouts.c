@@ -1,10 +1,12 @@
 #include "instruction_layouts.h"
 #include "../tokenizer.h"
+#include "common_defs.h"
 #include "process_branch.h"
 #include "process_multiply.h"
 #include "process_shift.h"
 #include "process_data_processing.h"
 #include "process_data_transfer.h"
+#include "process_alias.h"
 #include <stddata.h>
 #include <stdbool.h>
 #include <stdarg.h>
@@ -13,9 +15,9 @@
 DecisionTree instruction_layouts;
 DecisionTree data_layouts;
 DecisionTree bracket_layouts;
-List layout_tokens;
-List data_layout_vectors;
-Set single_group_tokens;
+static List layout_tokens;
+static List data_layout_vectors;
+static Set single_group_tokens;
 
 unsigned long long InstructionLayoutHashFunc(void* token_ptr) {
     Token token = token_ptr;
@@ -34,7 +36,9 @@ bool InstructionLayoutEqFunc(void* token_a_ptr, void* token_b_ptr) {
         case TOKEN_BRACE:
             return TokenIsOpenBracket(token_a) == TokenIsOpenBracket(token_b);
         case TOKEN_CONSTANT:
-            return TokenConstantType(token_a) == TokenConstantType(token_b);
+            return TokenConstantType(token_a) == TokenConstantType(token_b) ||
+                   TokenConstantType(token_a) == CONST_ANY || 
+                   TokenConstantType(token_b) == CONST_ANY;
         case TOKEN_INSTRUCTION:
             if(SetQuery(single_group_tokens, (void*)TokenInstructionType(token_a)) ||
                SetQuery(single_group_tokens, (void*)TokenInstructionType(token_b))) {
@@ -62,6 +66,20 @@ bool InstructionLayoutEqFunc(void* token_a_ptr, void* token_b_ptr) {
                        TokenInstructionType(token_b) == INSTR_TEQ ||
                        TokenInstructionType(token_b) == INSTR_CMP);
             }
+            if(TokenInstructionType(token_a) == INSTR_BRN ||
+               TokenInstructionType(token_a) == INSTR_BRL ||
+               TokenInstructionType(token_b) == INSTR_BRN ||
+               TokenInstructionType(token_b) == INSTR_BRL) {
+                return (TokenInstructionType(token_a) == INSTR_BRN ||
+                        TokenInstructionType(token_a) == INSTR_BRL) &&
+                       (TokenInstructionType(token_b) == INSTR_BRN ||
+                        TokenInstructionType(token_b) == INSTR_BRL);
+            }
+            if(MapQuery(shift_codes, (void*)TokenInstructionType(token_a)) ||
+               MapQuery(shift_codes, (void*)TokenInstructionType(token_b))) {
+                return MapQuery(shift_codes, (void*)TokenInstructionType(token_a)) &&
+                       MapQuery(shift_codes, (void*)TokenInstructionType(token_b));
+            }
             return true;
             
         default:
@@ -74,7 +92,10 @@ void InitSingleGroupTokens() {
     SetInsert(single_group_tokens, INSTR_MOV);
     SetInsert(single_group_tokens, INSTR_MUL);
     SetInsert(single_group_tokens, INSTR_MLA);
-    SetInsert(single_group_tokens, INSTR_BRN);
+    SetInsert(single_group_tokens, INSTR_RET);
+    SetInsert(single_group_tokens, INSTR_PSH);
+    SetInsert(single_group_tokens, INSTR_POP);
+    SetInsert(single_group_tokens, INSTR_HLT);
 }
 
 void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, int, int), int num_indicies, 
@@ -100,9 +121,6 @@ void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, int, int
             case '=':
                 ListPushBack(layout, NewConstantToken(CONST_EQUALS, 0));
                 break;
-            case 'l':
-                ListPushBack(layout, NewLabelToken(""));
-                break;
             case 's':
                 ListPushBack(layout, NewSignToken(true));
                 break;
@@ -111,6 +129,9 @@ void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, int, int
                 break;
             case ']':
                 ListPushBack(layout, NewBraceToken(false));
+                break;
+            case '!':
+                ListPushBack(layout, NewExclamationToken());
                 break;
         }
     }
@@ -143,6 +164,7 @@ void ProcessDataLayout(Vector tokens, int n, ...) {
     int i = 0;
     VECTORFOR(tokens, tokens_iter) {
         switch(TokenType(VectorIteratorGet(tokens_iter))) {
+            case TOKEN_EXCLAMATION:
             case TOKEN_BRACE:
                 VectorIteratorDecr(&layout_args_iter);
                 break;
@@ -153,10 +175,6 @@ void ProcessDataLayout(Vector tokens, int n, ...) {
             case TOKEN_INSTRUCTION:
                 *(InstructionType*)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] =
                         TokenInstructionType(VectorIteratorGet(tokens_iter));
-                break;
-            case TOKEN_LABEL:
-                *(char**)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] =
-                        TokenLabel(VectorIteratorGet(tokens_iter));
                 break;
             case TOKEN_REGISTER:
                 *(unsigned int*)args_ptrs[(int)VectorIteratorGet(layout_args_iter)] = 
@@ -208,6 +226,13 @@ void InitInstructionLayouts() {
     AddSingleLayout("ir[rrir]", LayoutTransferShiftReg, 6, (void*[]){0, 2, 1, 3, 5, 6}, 1, INSTR_LDR, INSTR_LSL);
     AddSingleLayout("ir[rsri#]", LayoutTransferShiftConst, 7, (void*[]){0, 2, 1, 4, 3, 5, 6}, 1, INSTR_LDR, INSTR_LSL);
     AddSingleLayout("ir[rsrir]", LayoutTransferShiftReg, 7, (void*[]){0, 2, 1, 4, 3, 5, 6}, 1, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[r#]!", LayoutTransferConst, 4, (void*[]){0, 2, 1, 3}, 2, INSTR_LDR);
+    AddSingleLayout("ir[rr]!", LayoutTransferShiftConst, 4, (void*[]){0, 2, 1, 3}, 2, INSTR_LDR);
+    AddSingleLayout("ir[rsr]!", LayoutTransferShiftConst, 5, (void*[]){0, 2, 1, 4, 3}, 2, INSTR_LDR);
+    AddSingleLayout("ir[rri#]!", LayoutTransferShiftConst, 6, (void*[]){0, 2, 1, 3, 5, 6}, 2, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[rrir]!", LayoutTransferShiftReg, 6, (void*[]){0, 2, 1, 3, 5, 6}, 2, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[rsri#]!", LayoutTransferShiftConst, 7, (void*[]){0, 2, 1, 4, 3, 5, 6}, 2, INSTR_LDR, INSTR_LSL);
+    AddSingleLayout("ir[rsrir]!", LayoutTransferShiftReg, 7, (void*[]){0, 2, 1, 4, 3, 5, 6}, 2, INSTR_LDR, INSTR_LSL);
     AddSingleLayout("ir[r]#", LayoutTransferConst, 4, (void*[]){0, 2, 1, 3}, 0, INSTR_LDR);
     AddSingleLayout("ir[r]r", LayoutTransferShiftConst, 4, (void*[]){0, 2, 1, 3}, 0, INSTR_LDR);
     AddSingleLayout("ir[r]sr", LayoutTransferShiftConst, 5, (void*[]){0, 2, 1, 4, 3}, 0, INSTR_LDR);
@@ -217,12 +242,17 @@ void InitInstructionLayouts() {
     AddSingleLayout("ir[r]srir", LayoutTransferShiftReg, 7, (void*[]){0, 2, 1, 4, 3, 5, 6}, 0, INSTR_LDR, INSTR_LSL);
 
     /* Branch Instructions */
-    AddSingleLayout("il", LayoutBranchLabel, 0, NULL, NULL, INSTR_BRN);
-    AddSingleLayout("ic", LayoutBranchConstant, 0, NULL, NULL, INSTR_BRN);
+    AddSingleLayout("ic", LayoutBranchConstant, 2, (void*[]){0, 1}, NULL, INSTR_BRN);
 
     /* Shift Instructions */
     AddSingleLayout("ir#", LayoutShiftConst, 0, NULL, NULL, INSTR_LSL);
     AddSingleLayout("irr", LayoutShiftReg, 0, NULL, NULL, INSTR_LSL);
+
+    /* Aliased Instructions */
+    AddSingleLayout("i", LayoutRet, 0, NULL, NULL, INSTR_RET);
+    AddSingleLayout("i", LayoutHalt, 0, NULL, NULL, INSTR_HLT);
+    AddSingleLayout("ir", LayoutPush, 2, (void*[]){0, 1}, NULL, INSTR_PSH);
+    AddSingleLayout("ir", LayoutPop, 2, (void*[]){0, 1}, NULL, INSTR_POP);
 }
 
 void FinishInstructionLayouts() {
