@@ -89,10 +89,11 @@ fill:
 		b condY_fill	
 
 	loop_fill:
+		push r2
 		@ compute array iterator
 		mov r11, width
 		mla r10, r6, r11, r5
-		
+
 		@ load pixel from memory to be displayed
 		ldr r0, [r13]
 		ldr r0, [r10, r0]
@@ -143,8 +144,9 @@ fill:
 
 		@ increment iterators
 		add r5,  r5,  #1
-		add r10, r10, #1
+		@add r10, r10, #1
 
+		pop r2
 		b condX_fill
 
 	@ Cleaning up
