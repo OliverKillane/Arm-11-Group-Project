@@ -292,15 +292,16 @@ void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
 }
 
 LabelType matchLabelType(char *str) {
-    if (strcmp(str, "first8")) {
+    if (strcmp(str, "first8") == 0) {
         return LABEL_FIRST8;
-    } else if (strcmp(str, "second8")) {
+    } else if (strcmp(str, "second8") == 0) {
         return LABEL_SECOND8;
-    } else if (strcmp(str, "third8")) {
+    } else if (strcmp(str, "third8") == 0) {
         return LABEL_THIRD8;
-    } else if (strcmp(str, "fourth8")) {
+    } else if (strcmp(str, "fourth8") == 0) {
         return LABEL_FOURTH8;
     }
+    printf("Failed to match a label type %s\n", str);
     assert(false);
 }
 
@@ -356,7 +357,7 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                 }
                 break;
             case TOKENIZER_LABEL_ORDER:
-                if (isalpha(line[0])) {
+                if (isalpha(line[0]) || line[0] == '8') {
                     addCharToToken(line[0]);
                 } else if (line[0] == ':') {
                     addCharToToken('\0');

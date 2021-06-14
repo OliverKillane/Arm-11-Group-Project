@@ -27,6 +27,9 @@
 		push r4
 		brl fill
 
+		mainloop:
+		b mainloop
+
 		@ Drawing the paddles
 		mov r5, :first8:pcurr
 		orr r5, r5, :second8:pcurr
@@ -100,9 +103,6 @@
 		ldr r3, [r1]
 		str r3, [r0]
 		str r2, [r1]
-
-		mainloop:
-		b mainloop
 
 		@ Cleaning everything up
 		sub r13, r13, #0x4

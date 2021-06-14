@@ -1,26 +1,19 @@
 CC      = gcc
-CFLAGS  = -Wall -g -o3  -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c11 -pedantic 
-INCLUDE = -I../../lib/SDL2/include
-LINK = -L/usr/local/lib -I/usr/include/SDL2 -lSDL2 -Wl,--no-undefined -lm -ldl -Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lpthread -lrt
+CFLAGS  = -Wall -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -O3 -pedantic
 PROFILETARGET = ../../bin/stresstest
-
 
 .PHONY: all clean
 
-all: emulate
-
-# currently on dynamic linking, which we should change to static with the .a included in /lib
-emulate:
-	$(CC) $(CFLAGS) emulate.c -o emulate $(INCLUDE) $(LINK)
+all:
+	$(CC) $(CFLAGS) emulate.c -o emulate
 	mv ./emulate ../../bin/
-	
 
 profile:
-	$(CC) $(CFLAGS) -pg emulate.c -o emulate_prof $(INCLUDE) $(LINK)
+	$(CC) $(CFLAGS) -pg emulate.c -o emulate_prof
 	./emulate_prof $(PROFILETARGET)
 	gprof emulate_prof gmon.out > analysis.txt
-	rm gmon.out
-	rm emulate_prof
+	rm -f gmon.out
+	rm -f emulate_prof
 	less analysis.txt
 
 clean:

@@ -11,7 +11,7 @@
     .set press_key_y 70
     .set read_image_buffer 0x1000000
     write_image_buffer:
-        .long image_buffer_1
+        .long 0x0
     image_buffer_0:
         .include graphics_background_raw.s
     image_buffer_1:
