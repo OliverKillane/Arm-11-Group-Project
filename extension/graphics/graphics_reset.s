@@ -76,7 +76,7 @@ reset:
 		ble loop_reset @ X-iterator <= target-X
 
 		@ reinitialize X-iterator
-		sub r5, r5, r2
+		mov r5, r5, r2
 
 		@ move matrix iterator to next row
 		@ sub r10, r10, r2
