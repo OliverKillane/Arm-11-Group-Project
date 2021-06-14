@@ -101,6 +101,9 @@
 		str r3, [r0]
 		str r2, [r1]
 
+		mainloop:
+		b mainloop
+
 		@ Cleaning everything up
 		sub r13, r13, #0x4
 		pop r6
