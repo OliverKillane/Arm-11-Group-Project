@@ -29,8 +29,7 @@ fill:
 	push r10
 	push r11
     push r12
-	push r13
-
+	
     @ y-axis iterator
 	mov r6, r1
     @ x-axis iterator
@@ -91,7 +90,8 @@ fill:
 
 	loop_fill:
 		@ load pixel from memory to be displayed
-		ldr r0, [r10, r13]
+		ldr r0, [r13]
+		ldr r0, [r10, r0]
 		@ load pixel from background 
 		ldr r7, [r10, r12]
 
@@ -144,7 +144,6 @@ fill:
 
 	@ Cleaning up
 	end_fill:
-		pop r13
 		pop r12
 		pop r11
 		pop r10
