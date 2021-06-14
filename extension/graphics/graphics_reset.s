@@ -79,14 +79,18 @@ reset:
 		sub r5, r5, r2
 
 		@ move matrix iterator to next row
-		sub r10, r10, r2
-		add r10, r10, width
+		@ sub r10, r10, r2
+		@ add r10, r10, width
 
 		@ increment Y-iterator
 		add r6, r6, #1
 		b condY_reset	
 
 	loop_reset:
+		@ compute array iterator
+		mov r11, width
+		mla r10, r6, r11, r5
+
 		@ load pixel from background
         ldr r11, [r12, r10]
 		@ store background pixel value into the write image buffer

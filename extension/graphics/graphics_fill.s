@@ -41,7 +41,7 @@ fill:
     @ set target height-Y 
 	add r9, r3, r1
 
-    @ array iterator
+    @ compute array iterator
 	mov r11, width
 	mla r10, r1, r11, r0
 
@@ -81,17 +81,22 @@ fill:
 		sub r5, r5, r2
 
 		@ move matrix iterator to next row
-		sub r10, r10, r2
-		add r10, r10, width
+		@sub r10, r10, r2
+		@add r10, r10, width
 
 		@ increment Y-iterator
 		add r6, r6, #1
 		b condY_fill	
 
 	loop_fill:
+		@ compute array iterator
+		mov r11, width
+		mla r10, r6, r11, r5
+		
 		@ load pixel from memory to be displayed
 		ldr r0, [r13]
 		ldr r0, [r10, r0]
+
 		@ load pixel from background 
 		ldr r7, [r10, r12]
 
