@@ -102,9 +102,9 @@ fill:
 		mov r3, r0, lsl #24
 		mov r2, r0, lsl #16
 		mov r1, r0, lsl #8
-		and r2, 0xFF
-		and r1, 0xFF
-		and r0, 0xFF
+		and r2, r2 #0xFF
+		and r1, r1 #0xFF
+		and r0, r0 #0xFF
 
 		@ mix background with new pixel
 		rsb r11, r3, #255
@@ -128,8 +128,8 @@ fill:
 		lsl r2, #8 
 
 		@ add Green and Blue channels
-		add r0, r1, lsr #8
-		add r0, r2, lsr #16
+		add r0, r0, r1, lsr #8
+		add r0,, r0, r2, lsr #16
 
 		@ store new pixel value in the write image buffer
 		str r0, [r10, r4] 

@@ -11,5 +11,6 @@
         orr r1, r1, :third8:read_image_buffer
         orr r1, r1, :fourth8:read_image_buffer
         str r0 [r1]
-        
+
         ret
+        hlt

@@ -25,7 +25,7 @@
 		orr r4, r4, :third8:ball
 		orr r4, r4, :fourth8:ball
 		push r4
-		bln fill
+		brl fill
 
 		@ Drawing the paddles
 		mov r5, :first8:pcurr
@@ -43,7 +43,7 @@
 		orr r4, r4, :third8:paddle_left
 		orr r4, r4, :fourth8:paddle_left
 		str r4, [r13]
-		bln fill
+		brl fill
 
 		mov r0, ml
 		ldr r1, [r5, #0x4]
@@ -56,7 +56,7 @@
 		orr r4, r4, :third8:paddle_right
 		orr r4, r4, :fourth8:paddle_right
 		str r4, [r13]
-		bln fill
+		brl fill
 		
 		@ Drawing the score
 		mov r5, :first8:score
@@ -75,7 +75,7 @@
 		mul r6, r2, r6
 		mla r6, r3, r6, r4
 		str r6, [r13]
-		bln fill
+		brl fill
 		
 		mov r0, score_right_x
 		mov r1, score_right_y
@@ -85,7 +85,7 @@
 		mul r6, r2, r6
 		mla r6, r3, r6, r4
 		str r6, [r13]
-		bln fill
+		brl fill
 		
 		@ Changing the drawing buffers
 		mov r0, :first8:read_image_buffer

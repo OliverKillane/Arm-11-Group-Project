@@ -18,7 +18,7 @@
 		add r1, r1, mt
 		mov r2, ball_width
 		mov r3, ball_height
-		bln reset
+		brl reset
 
 		@ Blacking out the paddles
 		mov r4, :first8:pprev
@@ -31,7 +31,7 @@
 		add r1, r1, mt
 		mov r2, paddlewidth
 		mov r3, paddleheight
-		bln reset
+		brl reset
 
 		mov r0, ml
 		ldr r1, [r4, #0x4]
@@ -39,20 +39,20 @@
 		add r1, r1, mt
 		mov r2, paddlewidth
 		mov r3, paddleheight
-		bln reset
+		brl reset
 		
 		@ Blacking out the score
 		mov r0, score_left_x
 		mov r1, score_left_y
 		mov r2, digits_width
 		mov r3, digits_height
-		bln reset
+		brl reset
 		
 		mov r0, score_right_x
 		mov r1, score_right_y
 		mov r2, digits_width
 		mov r3, digits_height
-		bln reset
+		brl reset
 
 		@ Cleaning everything up
 		pop r4
