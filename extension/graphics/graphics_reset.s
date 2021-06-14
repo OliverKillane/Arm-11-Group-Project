@@ -41,7 +41,7 @@ reset:
 
     @ array iterator
 	mov r11, width
-	mla r10, r0, r11, r1
+	mla r10, r1, r11, r0
 
 	@ load background values into register
     mov r12, :first8:background
