@@ -97,7 +97,7 @@ reset:
 		str r11, [r4, r10] 
 
 		@ increment iterators
-		add r5,  r5, #1
+		add r5, r5, #1
 		add r10, r10, #1
 
 		b condX_reset
