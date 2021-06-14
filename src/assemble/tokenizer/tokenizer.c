@@ -383,7 +383,7 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                 }
                 break;
             case TOKENIZER_INSTR_LABEL_REG:
-                if (isalpha(line[0])) {
+                if (isalpha(line[0]) || line[0] == '_') {
                     addCharToToken(line[0]);
                 } else if (line[0] == ':') {
                     addCharToToken('\0');
