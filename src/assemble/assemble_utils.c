@@ -72,8 +72,10 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 
 	
 	bool readingText = true;
+	char *preservedLine;
 
-	while ((read = getline(&line, &length, file)) != -1) {
+	while ((read = getline(&preservedLine, &length, file)) != -1) {
+		line = preservedLine;
 		while(isWhitespace(*line)) {
 			line++;
 		}
@@ -87,7 +89,7 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 			char *pos = strrchr(line,'\n');
 			if (pos != NULL) {
 				*pos = '\0';
-							}
+			}
 			line += 9;
 			char *slash = strrchr(filename, '/');
 			
@@ -96,34 +98,44 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 				strncpy(newFileName, filename, slash - filename + 1);
 				strcat(newFileName, line);
 				readFileLines(newFileName, textLines, dataLines);
+				free(newFileName);
 
 			} else {
 				char *newFileName = calloc(sizeof(char), (strlen(line) + 3));
 				strcpy(newFileName, "./");
 				strcat(newFileName, line);
 				readFileLines(newFileName, textLines, dataLines);
-
+				free(newFileName);
 			}
-					} else {
+		} else {
 			char *allocatedStr = malloc(sizeof(char) * (length + 1));
 			strcpy(allocatedStr, line);
-									char *filenameCpy = malloc(sizeof(char) * (strlen(filename) + 1));
-			strcpy(filenameCpy, filename);
+			
 			if (readingText) {
+				
+				char *filenameCpy = malloc(sizeof(char) * (strlen(filename) + 1));
+				strcpy(filenameCpy, filename);
 				ListPushBack(textLines, allocatedStr);
 				ListPushBack(textLines, lineNum);
 				ListPushBack(textLines, filenameCpy);
 			} else {
 				ListPushBack(dataLines, allocatedStr);
-											}
+			}
 		}
 		lineNum++;
-		line = NULL;
+		// line = NULL;
+		
+		// if (preservedLine != NULL) {
+		// 	free(preservedLine);
+		// }
+	}
+	if (preservedLine != NULL) {
+		free(preservedLine);
 	}
 			
     fclose(file);
 
-	}
+}
 
 List tokenize(List lines, Map symbolTable, int *totalInstructions, Vector dataVector) {
 
@@ -166,6 +178,7 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int
 			ReportError(lineNum, filename, line);
 			exit(1);
 		}
+		// free(filename);
 		
 		
 		currInstr++;		

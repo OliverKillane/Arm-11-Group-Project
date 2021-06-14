@@ -439,10 +439,12 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                         } else if (currentDirectiveType == DIRECTIVE_LONG) {
                             // printf("%d\n", matchedConstant->constant.value);
                             VectorPushBack(dataVector, matchedConstant->constant.value);
+                            DeleteToken(matchedConstant);
                             currentDirectiveType = DIRECTIVE_NONE;
                         } else if (currentDirectiveType == DIRECTIVE_SET) {
                             printf("Label set %s %d\n", currentDirectiveLabel, matchedConstant->constant.value);
                             MapSet(symbolTable, currentDirectiveLabel, matchedConstant->constant.value);
+                            DeleteToken(matchedConstant);
                             // printf("%s %d\n", currentDirectiveLabel, MapGet(symbolTable, currentDirectiveLabel));
                             currentDirectiveType = DIRECTIVE_NONE;
                         }

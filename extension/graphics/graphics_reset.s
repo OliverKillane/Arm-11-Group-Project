@@ -4,11 +4,11 @@ reset:
 	@ function parameters: 
 	@ r0  <- x0
 	@ r1  <- y0
-	@ r2  <- width  (Y axis)
-	@ r3  <- height (X axis)
+	@ r2  <- width  (X axis)
+	@ r3  <- height (Y axis)
 
 	@ internal registers for local variables: 
-    @ r4 <- write_image_buffer register
+    @ r4  <- write_image_buffer register
 	@ r5  <- X-axis iterator
 	@ r6  <- Y-axis iterator
 	@ r8  <- X-axis target pixel index
@@ -34,10 +34,10 @@ reset:
 	mov r5, r0
 
     @ set target width-x
-	add r8, r2, r1
+	add r8, r2, r0
 
     @ set target height-y
-	add r9, r3, r0
+	add r9, r3, r1
 
     @ array iterator
 	mov r11, width
@@ -57,34 +57,34 @@ reset:
 
 	@ ensure X coordinate is within image bounds
 	boundX_reset:
-		cmp r8, height
+		cmp r8, width
 		ble boundY_reset
-		mov r8, height 
+		mov r8, width 
 
 	@ ensure Y coordinate is within image bounds
 	boundY_reset:
-		cmp r9, width
+		cmp r9, height
 		ble condX_reset
-		mov r9, width
-
-	condX_reset:
-		cmp r5, r8
-		bgt end_reset @ X-iterator > target-X
+		mov r9, height
 
 	condY_reset:
 		cmp r6, r9
-		ble loop_reset @ Y-iterator <= target-Y
+		bgt end_reset @ Y-iterator > target-Y
 
-		@ reinitialize Y-iterator
-		sub r6, r6, r2
+	condX_reset:
+		cmp r5, r8
+		ble loop_reset @ X-iterator <= target-X
+
+		@ reinitialize X-iterator
+		sub r5, r5, r2
 
 		@ move matrix iterator to next row
 		sub r10, r10, r2
 		add r10, r10, width
 
-		@ increment X-iterator
-		add r5, r5, #1
-		b condX_reset	
+		@ increment Y-iterator
+		add r6, r6, #1
+		b condY_reset	
 
 	loop_reset:
 		@ load pixel from background
@@ -93,10 +93,10 @@ reset:
 		str r11, [r4, r10] 
 
 		@ increment iterators
-		add r6,  r6, #1
+		add r5,  r5, #1
 		add r10, r10, #1
 
-		b condY_reset
+		b condX_reset
 
 	@ Clean up
     end_reset:
