@@ -310,6 +310,7 @@ DirectiveType matchDirective(char *str) {
     } else if (strcmp(str, "long") == 0) {
         return DIRECTIVE_LONG;
     }
+    printf("unrecognized directive %s\n", str);
     assert(false);
 }
 

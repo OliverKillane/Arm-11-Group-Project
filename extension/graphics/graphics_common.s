@@ -13,6 +13,6 @@
     write_image_buffer:
         .long image_buffer_1
     image_buffer_0:
-        .include graphics_background_raw
+        .include graphics_background_raw.s
     image_buffer_1:
-        .incldue graphics_background_raw
+        .include graphics_background_raw.s

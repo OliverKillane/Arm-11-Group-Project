@@ -63,15 +63,20 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 
 	int lineNum = 1;
 
+	printf("reading file '%s'\n", filename);
 	file = fopen(filename, "r");
-	assert(file != NULL);
+	if(file == NULL) {
+		fprintf(stderr, "Couldn't open file %s\n", filename);
+		assert(false);
+	}
 
-	// List linesLst = NewEmptyList();
-
+	
 	bool readingText = true;
 
 	while ((read = getline(&line, &length, file)) != -1) {
-		// printf("%s", line);
+		while(isWhitespace(*line)) {
+			line++;
+		}
 		
 
 		if (strncmp(line, ".text", 5) == 0) {
@@ -82,72 +87,54 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 			char *pos = strrchr(line,'\n');
 			if (pos != NULL) {
 				*pos = '\0';
-				// *(pos+1) = 0;
-			}
+							}
 			line += 9;
 			char *slash = strrchr(filename, '/');
 			
 			if (slash != NULL) {
-				char *newFileName = calloc(sizeof(char), (strlen(line) + strlen(filename) + 1000000));
-				printf("reading file '%s'\n", newFileName);
+				char *newFileName = calloc(sizeof(char), (strlen(line) + strlen(filename) + 10));
 				strncpy(newFileName, filename, slash - filename + 1);
-				printf("reading file '%s'\n", newFileName);
 				strcat(newFileName, line);
-				printf("reading file '%s'\n", line);
 				readFileLines(newFileName, textLines, dataLines);
 
 			} else {
 				char *newFileName = calloc(sizeof(char), (strlen(line) + 3));
 				strcpy(newFileName, "./");
 				strcat(newFileName, line);
-				printf("reading file '%s'\n", newFileName);
 				readFileLines(newFileName, textLines, dataLines);
 
 			}
-			// printf("reading new %s", newFileName);
-		} else {
+					} else {
 			char *allocatedStr = malloc(sizeof(char) * (length + 1));
 			strcpy(allocatedStr, line);
-			// int *lineNum = malloc(sizeof(int));
-			// *lineNum = line;
-			char *filenameCpy = malloc(sizeof(char) * (strlen(filename) + 1));
+									char *filenameCpy = malloc(sizeof(char) * (strlen(filename) + 1));
 			strcpy(filenameCpy, filename);
 			if (readingText) {
-
 				ListPushBack(textLines, allocatedStr);
 				ListPushBack(textLines, lineNum);
 				ListPushBack(textLines, filenameCpy);
 			} else {
 				ListPushBack(dataLines, allocatedStr);
-				// ListPushBack(dataLines, lineNum);
-				// ListPushBack(dataLines, filenameCpy);
-			}
+											}
 		}
 		lineNum++;
-
-		// ListPushBack(linesLst, allocatedStr);
+		line = NULL;
 	}
-	// if (line != NULL) {
-	// 	// free(line);
-	// }
-
+			
     fclose(file);
 
-	// return linesLst;
-}
+	}
 
 List tokenize(List lines, Map symbolTable, int *totalInstructions, Vector dataVector) {
 
 	List listOfTokens = NewEmptyList();
 
 	LISTFOR(lines, iter) {
-
 		char *line = ListIteratorGet(iter);
 		ListIteratorIncr(&iter);
 		int lineNum = ListIteratorGet(iter);
 		ListIteratorIncr(&iter);
 		char *filename = ListIteratorGet(iter);
-
 
 		Vector tokens = tokenizeTextLine(line, symbolTable, *totalInstructions, dataVector, filename, lineNum);
 		bool hasInstructions = VectorSize(tokens) >= 4;
@@ -157,7 +144,6 @@ List tokenize(List lines, Map symbolTable, int *totalInstructions, Vector dataVe
 		} else {
 			DeleteVector(tokens);
 		}
-
 	}
 
 	return listOfTokens;
