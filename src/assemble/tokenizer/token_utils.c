@@ -33,10 +33,11 @@ Token NewConstantToken(ConstantType type, long long value) {
     return token;
 }
 
-Token NewLabelToken(char *label) {
+Token NewLabelToken(char *label, LabelType type) {
     Token token = malloc(sizeof(TokenRepr));
     token -> type = TOKEN_LABEL;
-    strncpy(token -> label, label, 512);
+    token -> label.type = type;
+    strncpy(token -> label.string, label, 512);
     return token;
 }
 
@@ -54,6 +55,14 @@ Token NewBraceToken(bool is_open) {
     *token = (TokenRepr) {
         .type = TOKEN_BRACE, 
         .is_open = is_open
+    };
+    return token;
+}
+
+Token NewExclamationToken() {
+    Token token = malloc(sizeof(TokenRepr));
+    *token = (TokenRepr) {
+        .type = TOKEN_EXCLAMATION
     };
     return token;
 }
@@ -102,7 +111,13 @@ int TokenRegisterNumber(Token token) {
 char* TokenLabel(Token token) {
     assert(token != NULL);
     assert(token -> type == TOKEN_LABEL);
-    return token -> label;
+    return token -> label.string;
+}
+
+LabelType TokenLabelType(Token token) {
+    assert(token != NULL);
+    assert(token -> type == TOKEN_LABEL);
+    return token -> label.type;
 }
 
 bool TokenIsPlus(Token token) {

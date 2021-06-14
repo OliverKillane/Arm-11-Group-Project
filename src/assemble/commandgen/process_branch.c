@@ -1,36 +1,38 @@
+#include "common_defs.h"
 #include "process_branch.h"
+#include "instruction_layouts.h"
 #include "../tokenizer.h"
+#include "../error.h"
 #include <stddata.h>
 #include <stdio.h>
-
-bool LayoutBranchLabel(
-    Map restrict symbols, 
-    Vector restrict tokens, 
-    Vector restrict output, 
-    int offset, 
-    int instructions_num
-) {
-    SetInstruction(output, FillInstruction(
-        3,
-        TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
-        0xA, 24,
-        ((int)MapGet(symbols, TokenLabel(VectorGet(tokens, 1))) - 2 - offset) & ((1<<24) - 1), 0
-    ), offset);
-    return false;
-}
 
 bool LayoutBranchConstant(
     Map restrict symbols, 
     Vector restrict tokens, 
-    Vector restrict output, 
+    Vector restrict text,
+    Vector restrict data, 
     int offset, 
     int instructions_num
 ) {
-    SetInstruction(output, FillInstruction(
-        3,
-        TokenInstructionConditionType(VectorGet(tokens, 0)), 28,
-        0xA, 24,
-        (TokenConstantValue(VectorGet(tokens, 1)) / 4 - 2 - offset) & ((1<<24) - 1), 0
+    InstructionType type;
+    long long constant;
+    ProcessDataLayout(tokens, 2, &type, &constant);
+    
+    unsigned int cond = TokenInstructionConditionType(VectorGet(tokens, 0));
+    long long jump_offset = (constant / 4 - 2 - offset);
+    unsigned int link = (type == INSTR_BRL);
+    
+    if(-(1<<24) >= jump_offset || (1<<24) <= jump_offset) {
+        SetErrorCode(ERROR_OFFSET_OOB);
+        return true;
+    }
+
+    SetInstruction(text, FillInstruction(
+        4,
+        cond, 28,
+        0x5, 25,
+        link, 24,
+        jump_offset & ((1<<24) - 1), 0
     ), offset);
     return false;
 }

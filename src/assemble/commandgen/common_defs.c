@@ -6,6 +6,7 @@
 
 Map data_proc_opcodes;
 Map shift_codes;
+Map label_masks;
 
 /* Helper Functions */
 void InitDataProcOpcodes() {
@@ -30,10 +31,20 @@ void InitShiftCodes() {
     MapSet(shift_codes, INSTR_ROR, 0b11);
 }
 
+void InitLabelMask() {
+    label_masks = NewEmptyMap(UnsafeIntHash, UnsafeIntEq);
+    MapSet(label_masks, LABEL_FULL,    0xFFFFFFFF);
+    MapSet(label_masks, LABEL_FIRST8,  0x000000FF);
+    MapSet(label_masks, LABEL_SECOND8, 0x0000FF00);
+    MapSet(label_masks, LABEL_THIRD8,  0x00FF0000);
+    MapSet(label_masks, LABEL_FOURTH8, 0xFF000000);
+}
+
 /* Interface Definitions */
 void InitFunctionGen() {
     InitDataProcOpcodes();
     InitShiftCodes();
+    InitLabelMask();
     InitInstructionLayouts();
 }
 
@@ -41,6 +52,7 @@ void FinishFunctionGen() {
     FinishInstructionLayouts();
     DeleteMap(data_proc_opcodes);
     DeleteMap(shift_codes);
+    DeleteMap(label_masks);
 }
 
 void SetInstruction(Vector restrict output, int instruction, int offset) {
