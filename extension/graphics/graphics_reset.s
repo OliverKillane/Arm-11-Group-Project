@@ -76,7 +76,7 @@ reset:
 		ble loop_reset @ X-iterator <= target-X
 
 		@ reinitialize X-iterator
-		mov r5, r5, r2
+		sub r5, r5, r2
 
 		@ move matrix iterator to next row
 		@ sub r10, r10, r2
@@ -92,9 +92,9 @@ reset:
 		mla r10, r6, r11, r5
 
 		@ load pixel from background
-        ldr r11, [r12, r10]
+        ldr r11, [r12, r10, lsl #2]
 		@ store background pixel value into the write image buffer
-		str r11, [r4, r10] 
+		str r11, [r4, r10, lsl #2] 
 
 		@ increment iterators
 		add r5, r5, #1
