@@ -3,8 +3,10 @@
 
 #include "stddata.h"
 
-void removeColon(char *str);
-
+/**
+ * @brief Given a vector of integers @p program, writes the binary value of these integers to the file of @p filename .
+ * @warning asserts that the path to filename exists.
+ */
 void writeBinary(Vector program, char *filename);
 
 void readFileLines(char *filename, List textLines, List dataLines);

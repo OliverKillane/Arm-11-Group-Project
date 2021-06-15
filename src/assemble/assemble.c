@@ -73,7 +73,6 @@ int main(int argc, char **argv) {
 		DeleteVector(line);
 	}
 	DeleteList(textTokens);
-
     return EXIT_SUCCESS;
 }
 

@@ -20,7 +20,7 @@
 		.long 0  @ right player score
 @ Common Constants
 	.set width 192
-	.set height 160
+	.set height 108
 	.set paddlewidth 5
 	.set paddleheight 30
 	.set mt 5

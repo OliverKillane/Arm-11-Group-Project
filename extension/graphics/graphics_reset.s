@@ -54,6 +54,7 @@ reset:
     orr r4, r4, :second8:write_image_buffer
     orr r4, r4, :third8:write_image_buffer
     orr r4, r4, :fourth8:write_image_buffer
+	ldr r4 [r4]
 
 	@ ensure X coordinate is within image bounds
 	boundX_reset:
@@ -69,18 +70,14 @@ reset:
 
 	condY_reset:
 		cmp r6, r9
-		bgt end_reset @ Y-iterator > target-Y
+		bge end_reset @ Y-iterator > target-Y
 
 	condX_reset:
 		cmp r5, r8
-		ble loop_reset @ X-iterator <= target-X
+		blt loop_reset @ X-iterator <= target-X
 
 		@ reinitialize X-iterator
 		sub r5, r5, r2
-
-		@ move matrix iterator to next row
-		@ sub r10, r10, r2
-		@ add r10, r10, width
 
 		@ increment Y-iterator
 		add r6, r6, #1

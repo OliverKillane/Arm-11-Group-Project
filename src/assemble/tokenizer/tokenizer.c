@@ -156,13 +156,13 @@ Token matchInstructionToken(char *str) {
     return NewInstructionToken(condTyp, instTyp);
 }
 
-int matchDecimal(char *str) {
+long long matchDecimal(char *str) {
     bool negated = false;
     if (*str == '-') {
         negated = true;
         str++;
     }
-    int num = 0;
+    long long num = 0;
     for (; *str != '\0'; str++)
     {
         assert(isdigit(*str));
@@ -285,6 +285,12 @@ Token matchConstant(char *str) {
 }
 
 void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
+
+    if (MapQuery(symbolTable, token)) {
+        printf("Attempting to set the %s label twice.", token);
+        exit(1);
+    }
+
     char *label = malloc(strlen(token)+1);
     strcpy(label,token);
 
@@ -301,7 +307,6 @@ LabelType matchLabelType(char *str) {
     } else if (strcmp(str, "fourth8") == 0) {
         return LABEL_FOURTH8;
     }
-    printf("Failed to match a label type %s\n", str);
     assert(false);
 }
 
