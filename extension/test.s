@@ -5,11 +5,10 @@
 	orr r13, r13 :fourth8:stack_start
 	brl initdraw
 	
-
 	mov r5 #0
 	testloop:
 	add r5, r5 #1
-	cmp r5 #0x10000
+	cmp r5 #0x100000
 	ble testloop
 
 	brl blackout
@@ -18,8 +17,10 @@
 	mov r5 #0
 	testloop2:
 	add r5, r5 #1
-	cmp r5 #0x10000000
-	b testloop2
+	cmp r5 #0x100000
+	ble testloop2
+
+	hlt
 	
 .include pong_common.s
 .include graphics.s

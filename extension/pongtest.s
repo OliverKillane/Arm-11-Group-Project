@@ -40,9 +40,17 @@ pop r0
 
 @ the mainloop of the program (get user input, draw next frame)
 mainloop:
-
-@ swap coordinates
 brl swapcoors
+
+push r0
+push r1
+push r2
+push r3
+@brl blackout
+pop r3
+pop r2
+pop r1
+pop r0
 
 @blackout the screen to remove the old frame
 push r0
@@ -55,19 +63,14 @@ pop r2
 pop r1
 pop r0
 
+
 @ get user input to paddles, update paddles
+push r0
 push r1
 push r3
 brl paddlereact
 pop r3
 pop r1
-
-@ get next ball position
-@brl ballupdate
-
-@ check win condition, go back top start if a win
-push r0
-brl wincheck
 pop r0
 
 @ draw the display

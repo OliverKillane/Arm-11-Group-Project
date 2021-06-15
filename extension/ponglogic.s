@@ -12,7 +12,7 @@ swapcoors:
     ldr r0, [r2]
     str r0, [r3]
 
-    @ Move and store the ball's current x position to the previous x position.
+    @ Move and store the ball's current y position to the previous y position.
     ldr r0, [r2, #4]
     str r0, [r3, #4]
 
@@ -31,15 +31,12 @@ swapcoors:
 @ PADDLEREACT:
 @
 @ go through input buffer determine each character, run appropriate function
-@ arguments:
-@ r0 <- current buffer index
-@ returns:
-@ r0 <- current buffer index
+@ arguments:    None
+@ returns:      None
 @ side effects: alters current positions of paddles
 paddlereact:
 
     @ save registers, convention
-    push r14
 
     @ following is basically:
     @ while (not 0) {
@@ -51,38 +48,45 @@ paddlereact:
     @    }
     @ }
 
+    @ get input buffer location and 0 (for nullifying) in a register
+    mov r0, input_buffer
+    mov r1, #0
+
     paddlereactloop:
 
     @ get the next input (r3) next pointer (r2)
-    brl getnextinput
+    ldr r3, [r0]
 
     @ if null, at end of written buffer, return
     cmp r3, #0
     beq paddlereactend
 
+    @ nullify the character
+    str r1, [r0]
+
     @ get lower 7 bits
     and r3, r3, #0x7F
 
-    @ if an up arrow (code = 7)
-    cmp r3, #7
+    @ if an up arrow (code = 5)
+    cmp r3, #5
     bne notuparrow
 
-    ldr r3, [r5]
+    ldr r3, [r4, #4]
     cmp r3, #0
-    addgt r3, r3, paddlespeed
-    str r3, [r4]
+    subgt r3, r3, paddlespeed
+    str r3, [r4, #4]
 
     b paddlereactloop
 
     notuparrow:
-    @ if a down arrow (code = 6)
-    cmp r3, #6
+    @ if a down arrow (code = 4)
+    cmp r3, #4
     bne notdownarrow
 
-    ldr r3, [r5]
+    ldr r3, [r4, #4]
     cmp r3, paddlemaxY
-    sublt r3, r3, paddlespeed
-    str r3, [r4]
+    addlt r3, r3, paddlespeed
+    str r3, [r4, #4]
 
     b paddlereactloop
 
@@ -91,29 +95,34 @@ paddlereact:
     cmp r3, #119
     bne notwkey
 
-    ldr r3, [r5, #4]
+    ldr r3, [r5]
     cmp r3, #0
-    addgt r3, r3, paddlespeed
-    str r3, [r4, #4]
+    subgt r3, r3, paddlespeed
+    str r3, [r4]
 
     b paddlereactloop
 
     notwkey:
     @ if an s (code = 115)
     cmp r3, #115
-    bne paddlereactloop
+    bne notskey
 
-    ldr r3, [r5, #4]
+    ldr r3, [r5]
     cmp r3, paddlemaxY
-    sublt r3, r3, paddlespeed
-    str r3, [r4, #4]
+    addlt r3, r3, paddlespeed
+    str r3, [r4]
+
+    notskey:
+    @ if an ESC (code = 27)
+    cmp r3, #27
+    bne paddlereactloop
+    hlt
 
     b paddlereactloop
 
 
+    @ use reteq?
     paddlereactend:
-    @ restore registers
-    pop r14
     ret
 
     @===============================================================================
@@ -251,8 +260,161 @@ paddlereact:
     @ returns:      None
     @ side-effects: ball position, points
     ballupdate:
+    @ determine if ball has hit a bat, alter velocity accordingly
 
+    @ change current ball position based off of the new velocity.
+
+    @ add current ball positions with the velocity vectors
+
+    @ check that ball has hit the margins
+    
+    @ push registers onto stack
+    push r0
+    push r1
+    push r9 @ aux register
+    push r14
+
+
+    @ load coordinates of the ball
+    ldr r0, [r2] 
+    ldr r1, [r2, #4]
+
+    @ add velocity to coordinates
+    add r0, r0, r7
+    add r1, r1, r8
+
+    @ update current coordinates of the ball
+    str r0, [r2]
+    str r1, [r2, #4]
+
+   
+    push r12
+    brl checkcollision
+
+    cmp r12, #0
+    beq end_ballupdate
+
+    cmp r12, #1
+    beq leftwall
+    cmp r12, #5
+    beq rightwall
+
+    @ reflect velocity by XY axis
+    ldr r0, [r7]
+    rsb r0, r0, #0
+    str r0, [r7] 
+
+    ldr r0, [r8]
+    rsb r0, r0, #0
+    str r0, [r8]
+    
+    
+    cmp r12, #2
+    beq leftpaddle
+    cmp r12, #3
+    beq topwall
+    cmp r12, #4
+    beq rightpaddle
+    cmp r12, #6
+    beq bottomwall
+
+    leftwall:
+        @ Player 2 score +1
+        ldr r0, [r6, #4]
+        add r0, r0, #1
+        str r0, [r6, #4] 
+        brl resetball
+        b end_ballupdate
+
+    rightwall:
+        @ Player 1 score +1
+        ldr r0, [r6]
+        add r0, r0, #1
+        str r0, [r6] 
+        brl resetball
+        b end_ballupdate
+
+    leftpaddle:
+
+        @ ball current X coord
+        ldr r0, [r2]
+
+        @ updated ball X coord = 
+        @ 2 x paddle width - current ball X-coord
+        rsb r0, r0, #0
+        mov r1, paddlewidth
+        add r0, r0, r1, lsl #9
+
+        str r0, [r2]
+
+        b end_ballupdate
+
+    rightpaddle:
+       
+        @ load ball current X coord
+        ldr r0, [r2]
+
+        @ updated ball X coord = 
+        @ 2 x (width - paddle width - ball width) - current ball X-coord
+        rsb r0, r0, #0
+        mov r1, width
+        mov r9, paddlewidth
+        sub r1, r1, r9
+        mov r9, #12 @ ball width
+        add r1, r1, r9
+        add r0, r0, r1, lsl #9
+
+        str r0, [r2]
+
+        b end_ballupdate
+    
+    topwall:
+            
+        @ ball current Y coord
+        ldr r0, [r2, #4]
+
+        @ updated ball Y coord = 
+        @ - 2 x current ball Y-coord
+        rsb r0, r0, #0
+        lsl r0, #1
+        str r0, [r2, #4]
+
+        b end_ballupdate
+
+    bottomwall:
+        @ load ball current Y coord
+        ldr r0, [r2, #4]
+
+        @ updated ball Y coord = 
+        @ 2 x (height - ball width) - current ball Y-coord
+        mov r1, height
+        mov r9, #12 @ ball width
+        sub r1, r1, r9
+        rsb r0, r0, #0
+        add r0, r0, r1, lsl #9
+
+        str r0, [r2]
+
+        b end_ballupdate
+
+    end_ballupdate:
+        @ stack clean up
+        pop r14
+        pop r12
+        pop r9
+        pop r1
+        pop r0
+        ret
+
+@===============================================================================
+@ CHECKCOLLISION:
+@
+@ arguments:    None
+@ returns:      None
+@ side-effects: None
+checkcollision:
     ret
+
 
 @===============================================================================
 @ WINCHECK:
@@ -304,19 +466,21 @@ newgame:
 @ returns:      None
 @ side-effects: ball position (), ball velocity
 resetball:
-@ set ball x and y to the center
 
+    @ set ball x to the center
     mov r0, maxXcoor
     lsr r0, #1
     sub r0, r0, #0x600
     str r0, [r2]
+    str r0, [r3]
 
+    @ set ball y to the center
     mov r0, maxYcoor
     lsr r0, #1
     sub r0, r0, #0x600
     str r0, [r2, #4]
+    str r0, [r3, #4]
 
-@set ball velocity
 ret
 
 @===============================================================================
@@ -370,7 +534,7 @@ getnextinput:
 @ sets up the local variables for the main loop as follows:
 @ global reg values:
 @ r13 <- stack pointer (stack_start)
-@ r0 <- current buffer index
+@ r0 <- EMPTY (uSE FOR gui MODE LATER)
 @ r1 <- EMPTY (uSE FOR gui MODE LATER)
 @ r2 <- bcurr address
 @ r3 <- bprev address
@@ -381,48 +545,46 @@ getnextinput:
 @ r8 <- ball y velocity
 
 setvars:
-    @ loading globals:
+@ loading globals:
 
-    @ stack pointer
-    mov r13 :first8:stack_start
-    orr r13, r13 :second8:stack_start
-    orr r13, r13 :third8:stack_start
-    orr r13, r13 :fourth8:stack_start
-    ldr r13, [r13]
+@ stack pointer
+mov r13 :first8:stack_start
+orr r13, r13 :second8:stack_start
+orr r13, r13 :third8:stack_start
+orr r13, r13 :fourth8:stack_start
 
-    @ current buffer index
-    mov r0, #0
+@anything you want in r0
 
-    @ anything you want in r1
+@ anything you want in r1
 
-    @ bcurr address
-    mov r2 :first8:bcurr
-    orr r2, r2 :second8:bcurr
-    orr r2, r2 :third8:bcurr
-    orr r2, r2 :fourth8:bcurr
+@ bcurr address
+mov r2 :first8:bcurr
+orr r2, r2 :second8:bcurr
+orr r2, r2 :third8:bcurr
+orr r2, r2 :fourth8:bcurr
 
-    @ bprev address
-    mov r3 :first8:bprev
-    orr r3, r3 :second8:bprev
-    orr r3, r3 :third8:bprev
-    orr r3, r3 :fourth8:bprev
+@ bprev address
+mov r3 :first8:bprev
+orr r3, r3 :second8:bprev
+orr r3, r3 :third8:bprev
+orr r3, r3 :fourth8:bprev
 
-    @ pcurr address
-    mov r4 :first8:pcurr
-    orr r4, r4 :second8:pcurr
-    orr r4, r4 :third8:pcurr
-    orr r4, r4 :fourth8:pcurr
+@ pcurr address
+mov r4 :first8:pcurr
+orr r4, r4 :second8:pcurr
+orr r4, r4 :third8:pcurr
+orr r4, r4 :fourth8:pcurr
 
-    @ pprev address
-    mov r5 :first8:pprev
-    orr r5, r5 :second8:pprev
-    orr r5, r5 :third8:pprev
-    orr r5, r5 :fourth8:pprev
+@ pprev address
+mov r5 :first8:pprev
+orr r5, r5 :second8:pprev
+orr r5, r5 :third8:pprev
+orr r5, r5 :fourth8:pprev
 
-    @ score address
-    mov r6 :first8:score
-    orr r6, r6 :second8:score
-    orr r6, r6 :third8:score
-    orr r6, r6 :fourth8:score
+@ score address
+mov r6 :first8:score
+orr r6, r6 :second8:score
+orr r6, r6 :third8:score
+orr r6, r6 :fourth8:score
 
-    ret
+ret

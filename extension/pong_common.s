@@ -21,8 +21,7 @@
 	score:
 		.long 0  @ left player score
 		.long 0  @ right player score
-	stack_start:
-		.long 0x7FFFF @ the stack start
+	.set stack_start 0x7FFFF @ the stack start
 @ Common Constants
 	.set width 192
 	.set height 108
@@ -32,7 +31,6 @@
 	.set mb 5
 	.set ml 5 
 	.set mr 5
-	.set inputbuffersize 64
 	.set paddlespeed 0x400
 	.set paddlemaxY 0x4400
 
@@ -41,4 +39,4 @@
 	.set maxXcoor 0xB600
 
 	@ the input buffer start
-	.set input_buffer_start  0x42000
+	.set input_buffer 0x3000000
