@@ -18,7 +18,8 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 SDL_Texture *texture;
 byte* video_pointer;
-word input_buffer;
+byte input_buffer[INPUT_BUFFER_SIZE];
+word input;
 
 
 /* TEST allows for test suite to run unit tests without double definition of main */
@@ -299,13 +300,13 @@ void singleDataTransInstr(instruction instr) {
         updateOutput();
       }
 	  }
-  } else if (memloc == INPUT_BUFFER) {
+  } else if (memloc == INPUT_POINTER) {
 
     /* program is accessing the input buffer */
     if (L) {
-      *RdSrcDst = input_buffer;
+      *RdSrcDst = input;
     } else {
-      input_buffer = *RdSrcDst;
+      input = *RdSrcDst;
     }
 
   } else if (memloc < MEMSIZE) {
@@ -610,42 +611,57 @@ void updateOutput() {
 
 void processEvents() {
 
+  /* read index chases the write index, when program reads, it must nullify the read keys */
+  static int writeIndex = 0;
+  static int readIndex = 0;
+
+  /* the event struct (to hold the new event read) */
   SDL_Event event;
 
-  /* if the buffer is empty, write the next character */
-  if (!input_buffer) {
+  /* if larger than buffer, wrap around to beginning */
+  if (readIndex >= INPUT_BUFFER_SIZE) {
+    readIndex = 0;
+  }
 
-    /* if there is a next character write */
-    if (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) {
+  /* if the current input has been nullified, and new keystrokes are present, transfer to input */
+  if (!input && input_buffer[readIndex]) {
+    input = input_buffer[readIndex];
+    readIndex++;
+  }
 
-        /* immediately exit the porgram after displaying state output if the user quits*/
-        freeCPU();
-        printState();
-        destroyVideo();
-        exit(EXIT_SUCCESS);
 
-      } else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+  while (SDL_PollEvent(&event)) {
+    if (event.type == SDL_QUIT) {
 
-        /* get the keycode */
-        SDL_KeyCode keycode = event.key.keysym.sym;
+      /* immediately exit the program after displaying state output if the user quits*/
+      freeCPU();
+      printState();
+      destroyVideo();
+      exit(EXIT_SUCCESS);
 
-        if (keycode <= SDLK_UP && keycode >= SDLK_RIGHT) {
+    } else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
 
-          /* if it is an arrow key we use EOR-BEL characters' codes by subtracting*/
-          input_buffer = (keycode - 0x4000004D);
-        } else if (keycode < 128) {
+      /* determine the 'next key' information to add to the buffer */
+      byte nextkey;
+      SDL_KeyCode keycode = event.key.keysym.sym;
 
-          /* if it is an ascii character we use the ascii keycode*/
-          input_buffer = keycode;
-        } else {
+      if (keycode <= SDLK_UP && keycode >= SDLK_RIGHT) {
+        nextkey = (keycode - 0x4000004D);
+      } else if (keycode < 128) {
+        nextkey = keycode;
+      } else {
+        continue;
+      }
 
-          /* not a character we need to input */
-          return;
-        }
+      /* if key is down, MSD = 0, if it is UP, then MSB = 1 */
+      nextkey |= event.type==SDL_KEYDOWN?0:0x80;
 
-        /* for a key up/down write the msb as 1/0 */
-        input_buffer |= event.type==SDL_KEYDOWN?0:0x80;
+      /* input the key into the input buffer, increment write index and continue */
+      input_buffer[writeIndex] = nextkey;
+      writeIndex++;
+
+      if (writeIndex >= INPUT_BUFFER_SIZE) {
+        writeIndex = 0;
       }
     }
   }

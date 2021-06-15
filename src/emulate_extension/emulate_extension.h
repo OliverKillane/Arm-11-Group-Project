@@ -198,7 +198,8 @@ void printState(void);
 
 /* the address containing the pointer to the start of the display. */
 #define VIDEO_POINTER 0x1000000
-#define INPUT_BUFFER 0x3000000
+#define INPUT_POINTER 0x3000000
+#define INPUT_BUFFER_SIZE 256
 
 
 /* the 3 main variables required, the window, the renderer to draw to the window, 
@@ -207,6 +208,8 @@ extern SDL_Window *window;
 extern SDL_Renderer *renderer;
 extern SDL_Texture *texture;
 extern byte* video_pointer;
+extern byte input_buffer[INPUT_BUFFER_SIZE];
+extern word input;
 
 
 /* Initialise the window, renderer and the texture*/
