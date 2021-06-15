@@ -246,7 +246,7 @@ paddlereact:
         @ updated ball Y coord = 
         @ - 2 x current ball Y-coord
         rsb r0, r0, #0
-        lsl r0, r0, #1
+        lsl r0, #1
         str r0, [r2, #4]
 
         b end_ballupdate
@@ -275,6 +275,16 @@ paddlereact:
         pop r1
         pop r0
         ret
+
+@===============================================================================
+@ CHECKCOLLISION:
+@
+@ arguments:    None
+@ returns:      None
+@ side-effects: None
+checkcollision:
+    ret
+
 
 @===============================================================================
 @ WINCHECK:
@@ -326,20 +336,23 @@ newgame:
 @ returns:      None
 @ side-effects: ball position (), ball velocity
 resetball:
-@ set ball x and y to the center
 
+    @ set ball x to the center
     mov r0, maxXcoor
     lsr r0, #1
     sub r0, r0, #0x600
     str r0, [r2]
+    str r0, [r3, #4]
 
+    @ set ball y to the center
     mov r0, maxYcoor
     lsr r0, #1
     sub r0, r0, #0x600
     str r0, [r2, #4]
+    str r0, [r3, #4]
 
-@set ball velocity
-ret
+    @set ball velocity
+    ret
 
 @===============================================================================
 @ SETVARS:
