@@ -1,7 +1,7 @@
-PWD c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc
+PWD c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface
 INPUT C:\Users\olive\AppData\Local\MiKTeX\miktex\data\le\pdftex\pdflatex.fmt
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Checkpoint.tex
-OUTPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Checkpoint.log
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\emulator video interface.tex
+OUTPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\emulator video interface.log
 INPUT C:\Program Files\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Program Files\MiKTeX\tex\latex\base\article.cls
 INPUT C:\Program Files\MiKTeX\tex\latex\base\article.cls
@@ -117,10 +117,10 @@ INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Checkpoint.aux
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Checkpoint.aux
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Checkpoint.aux
-OUTPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Checkpoint.aux
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\emulator video interface.aux
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\emulator video interface.aux
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\emulator video interface.aux
+OUTPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\emulator video interface.aux
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
 INPUT C:\Program Files\MiKTeX\tex\context\base\mkii\supp-pdf.mkii
@@ -209,25 +209,30 @@ INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmsy8.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmsy6.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmr12.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx12.tfm
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\memory layout.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\memory layout.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\memory layout.png
+OUTPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\emulator video interface.pdf
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\memory layout.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\memory layout.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\memory layout.png
+INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx10.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmmi10.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmsy10.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx10.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmbx12.tfm
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\development cycle.png
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\development cycle.png
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\development cycle.png
-OUTPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Checkpoint.pdf
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\development cycle.png
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\development cycle.png
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\development cycle.png
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\project status.png
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\project status.png
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\project status.png
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\project status.png
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\project status.png
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\img\project status.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input storage.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input storage.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input storage.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input storage.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input storage.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input storage.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input queue.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input queue.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input queue.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input queue.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input queue.png
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\img\key input queue.png
 INPUT C:\Users\olive\AppData\Local\MiKTeX\pdftex\config\pdftex.map
-INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Checkpoint.aux
+INPUT c:\Oliver Killane's Files\A - Computer Science Degree\COMP40009 - Programming\C Project\arm11_16\doc\Emulator Video Interface\emulator video interface.aux
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmbx10.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmbx10.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmbx12.pfb
@@ -238,3 +243,5 @@ INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr12.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr12.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr17.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr17.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy10.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy10.pfb
