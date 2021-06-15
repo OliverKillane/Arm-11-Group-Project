@@ -195,12 +195,12 @@ push r0
 @ set ball x and y to the center
 mov r0, maxXcoor
 lsr r0, r0
-sub r0, r0, #6
+sub r0, r0, #0x600
 str r0, [r2]
 
 mov r0, maxYcoor
 lsr r0, r0
-sub r0, r0, #6
+sub r0, r0, #0x600
 str r0, [r2, #4]
 
 @set ball velocity
