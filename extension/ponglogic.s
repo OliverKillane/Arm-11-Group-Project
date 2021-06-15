@@ -224,7 +224,7 @@ paddlereact:
     @ }
 
     ldr r9, [r2, #4]    @ y coor of ball
-    add r9, r9, 0xC00   @ bottom of the ball
+    add r9, r9, #0xC00   @ bottom of the ball
     cmp r9, maxYcoor
     blt endtopcheck
     mov r12, #6
