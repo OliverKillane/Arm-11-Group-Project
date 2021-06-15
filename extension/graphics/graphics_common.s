@@ -10,7 +10,7 @@
     .set press_key_x 49
     .set press_key_y 70
     push_button_erased:
-        .long 1
+        .long 2
     .set read_image_buffer 0x1000000
     write_image_buffer:
         .long 0x0

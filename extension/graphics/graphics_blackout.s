@@ -14,7 +14,7 @@
 		ldr r0 [r4]
 		cmp r0, #0
 		beq continue_blackout
-		mov r0, #0
+		sub r0, r0, #1
 		str r0 [r4]
 
 		mov r0, #0

@@ -266,7 +266,6 @@ mov r13 :first8:stack_start
 orr r13, r13 :second8:stack_start
 orr r13, r13 :third8:stack_start
 orr r13, r13 :fourth8:stack_start
-ldr r13, [r13]
 
 @ current buffer index
 mov r0, #0

@@ -21,8 +21,7 @@
 	score:
 		.long 0  @ left player score
 		.long 0  @ right player score
-	stack_start:
-		.long 0x7FFFF @ the stack start
+	.set stack_start 0x7FFFF @ the stack start
 @ Common Constants
 	.set width 192
 	.set height 108
