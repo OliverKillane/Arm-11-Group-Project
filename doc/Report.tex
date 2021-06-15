@@ -3,7 +3,7 @@
 \usepackage[T1]{fontenc}
 \pagenumbering{gobble}
 \usepackage{graphicx}
-\graphicspath{{img}}
+\graphicspath{{img/}}
 
 \title{\vspace*{-1cm}Assembler, Extension and Group Reflection}
 \date{\vspace*{-1cm}12 June 2021}
@@ -22,7 +22,7 @@ As the emulator and assembler are separate programs that can be tested and imple
 \section{Assembler}
 \subsection*{Workflow}
 The development cycle for the assembler was very simmilar to that of the emulator:\\\\
-\includegraphics[width = \textwidth]{development cycle}
+\includegraphics[width = \textwidth]{development_cycle}
 In addition, the workload of the assembler was split as follows:\\
 \begin{center}
 	\begin{tabular}{r|l}
@@ -53,7 +53,12 @@ The full documentation of this library (generated using doxygen) can be accessed
 \subsection*{Data Flow}
 \includegraphics[scale=0.6]{assembler_dataflow}
 \subsection*{Tokenization}
-<A couple of lines explaining the tokenizer in assembler>
+The tokenizer is a finite state machine (FSM) that follows the state transition diagram below:
+\begin{center}
+	\includegraphics[scale=0.6]{fsmDiagram}
+\end{center}
+The finite state machine interprets each line character-by-character, and changes its state depending on the above diagram. Single circles are intermediate states, where a token can't be produced if the line ends on that token. Double-circles are the end states, and a token is produced when an end state is reached. The tokenizer does not produce any tokens for lines that have assembler directives on them, and instead will produce directly the desired result of said directive.
+The choice to make the tokenizer a finite state machine was most beneficial, allowing us to easily show the correctness of our tokenizer graphically and separate the logic of each state to make the code more readable and easily debuggable.  
 \subsection*{Command Generation}
 \includegraphics[width=\textwidth]{commandgen}
 The command generation consist of 2 stages: processing function dispatch and data conversion to a binary representation. The processing function dispatch uses the sequence of the tokens and a decision tree to determine the appropriate function for the sequence. Then, now inside the processing funciton, it uses another decision tree to determine which fields inside the function need to be set according to which tokens. Since the fields can be set to some values before that step, this allows for highly flexible default values and a greatly reduced number of processing function (in a previous implementation without that feature the code was 3-4x longer). A simmilar decision tree is used for determining if a data transfer funciton is pre or post.
@@ -137,10 +142,9 @@ Our team held at least 2 meetings per week to discuss the progress with the task
 \item \textbf{Pair communication:}\\
 Apart from our meetings, we kept a higher throughput of communication in pairs to allow for easy and quick resolution of any problems in more than one area of development. For that reason, some of our in-pair meetings were held in person, especially in the groups that developed the assembler and emulator.
 \end{itemize}
-
 \subsection*{Individual Reflections}
 \subparagraph*{Jordan}
-<Here go a couple of lines from Jordan on how he did in the project>
+During the course of this project, I made a great effort to integrate well with my team mates. From my group feedback and continuous feedback from my colleagues, I believe I fitted in with my team mates considerably well. As a result, group communication between myself and my team mates was smooth and effective, and I enjoyed working with my team.
 \subparagraph*{Ioana}
 <Here go a couple of lines from Ioana on how she did in the project>
 \subparagraph*{Oliver}
