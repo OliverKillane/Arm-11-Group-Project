@@ -33,7 +33,9 @@
 		mov r3, paddleheight
 		brl reset
 
-		mov r0, ml
+		mov r0, width
+		sub r0, r0, ml
+		sub r0, r0, paddlewidth
 		ldr r1, [r4, #0x4]
 		lsl r1, #8
 		add r1, r1, mt
