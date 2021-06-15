@@ -103,12 +103,18 @@ paddlereact:
     notwkey:
     @ if an s (code = 115)
     cmp r3, #115
-    bne paddlereactloop
+    bne notskey
 
     ldr r3, [r5, #4]
     cmp r3, paddlemaxY
     sublt r3, r3, paddlespeed
     str r3, [r4, #4]
+
+    notskey:
+    @ if an ESC (code = 27)
+    cmp r3, #27
+    bne paddlereactloop
+    hlt
 
     b paddlereactloop
 
@@ -342,7 +348,7 @@ resetball:
     lsr r0, #1
     sub r0, r0, #0x600
     str r0, [r2]
-    str r0, [r3, #4]
+    str r0, [r3]
 
     @ set ball y to the center
     mov r0, maxYcoor
