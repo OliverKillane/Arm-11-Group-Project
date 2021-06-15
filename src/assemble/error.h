@@ -1,6 +1,6 @@
 /**
  * @file error.h
- * @author your name (you@domain.com)
+ * @author Bartlomeij
  * @brief Definitions regarding  error messages for assembler
  */
 #ifndef ASSEMBLE_ERROR_H_
