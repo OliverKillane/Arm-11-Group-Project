@@ -28,15 +28,13 @@ typedef struct {
     unsigned int V : 1;
 } cpsr;
 
-typedef struct {
-    word registers[16];
-    cpsr CPSR;
-    byte *memory; 
-    word GPIO;
-} machineState;
+/* the emulator state */
+extern word registers[16];
+extern cpsr CPSR;
+extern byte *memory; 
+extern word GPIO;
 
 // declared the CPU that will be used.
-extern machineState CPU;
 
 // struct to hold shift function results.
 typedef struct {
@@ -109,7 +107,11 @@ extern modes emulatorMode;
 Get a pointer to a register.
 @param Reg <- either enum reg or
 */
-#define GETREG(reg) (CPU.registers + reg)
+#define GETREG(reg) (registers + reg)
+
+#define GETMEMLOC(loc) (memory + loc)
+
+#define GETMEMWORD(loc) ((word*) (memory + loc))
 
 
 // INSTRUCTION PROCESSING:
@@ -170,24 +172,6 @@ Execute an arithmetic instruction based on opcode provided
 */
 void processDataInstr(instruction instr);
 
-// EMULATOR DATA ACCESS:
-
-/* return the word (32 bits) starting at byte loc (16 bit location)
- Can never segfault as 16 bit address.
-@param loc 16bit location in memory
-@retval pointer to word in memory
-*/
-word *getmemword(word loc);
-
-
-/* Get the byte at loc (16 bit location)
- Can never segfault as 16 bit address.
-@param loc 16bit location in memory
-@retval pointer to byte in memory
-*/
-byte *getmemloc(word loc);
-
-
 /*  determine if the system the emulator is being run on is big or little endian 
 @retval true if little endian system, false otherwise (big endian)
 */
@@ -214,8 +198,8 @@ void printState(void);
 
 /* the address containing the pointer to the start of the display. */
 #define VIDEO_POINTER 0x1000000
-#define INPUT_BUFFER 0x42000
-#define INPUT_BUFFER_SIZE 64
+#define INPUT_POINTER 0x3000000
+#define INPUT_BUFFER_SIZE 256
 
 
 /* the 3 main variables required, the window, the renderer to draw to the window, 
@@ -224,6 +208,8 @@ extern SDL_Window *window;
 extern SDL_Renderer *renderer;
 extern SDL_Texture *texture;
 extern byte* video_pointer;
+extern byte input_buffer[INPUT_BUFFER_SIZE];
+extern word input;
 
 
 /* Initialise the window, renderer and the texture*/
