@@ -156,7 +156,7 @@ paddlereact:
     checkcollision
 
     cmp r12, #0
-    beq end
+    beq end_ballupdate
 
     cmp r12, #1
     beq leftwall
@@ -188,7 +188,7 @@ paddlereact:
         add r0, r0, #1
         str r0, [r6, #4] 
         resetball
-        b end
+        b end_ballupdate
 
     rightwall:
         @ Player 1 score +1
@@ -196,7 +196,7 @@ paddlereact:
         add r0, r0, #1
         str r0, [r6] 
         resetball
-        b end
+        b end_ballupdate
 
     leftpaddle:
 
@@ -211,7 +211,7 @@ paddlereact:
 
         str r0, [r2]
 
-        b end
+        b end_ballupdate
 
     rightpaddle:
        
@@ -230,7 +230,7 @@ paddlereact:
 
         str r0, [r2]
 
-        b end
+        b end_ballupdate
     
     topwall:
             
@@ -243,7 +243,7 @@ paddlereact:
         lsl r0, r0, #1
         str r0, [r2, #4]
 
-        b end
+        b end_ballupdate
 
     bottomwall:
         @ load ball current Y coord
@@ -259,9 +259,9 @@ paddlereact:
 
         str r0, [r2]
 
-        b end
+        b end_ballupdate
 
-    end:
+    end_ballupdate:
         @ stack clean up
         pop r12
         pop r9
