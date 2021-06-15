@@ -25,7 +25,11 @@
 		.long 0x7FFFF @ the stack start
 @ Common Constants
 	.set width 192
+<<<<<<< HEAD
+	.set height 160
+=======
 	.set height 108
+>>>>>>> pong_graphics
 	.set paddlewidth 5
 	.set paddleheight 30
 	.set mt 5
