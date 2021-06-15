@@ -6,24 +6,24 @@
 @ returns:      None
 @ side-effects: current->prev
 swapcoors:
-push r0 @ Push r0 to stack in case it was used in caller function.
+    push r0 @ Push r0 to stack in case it was used in caller function.
 
-@ Move and store the ball's current x position to the previous x position.
-ldr r0, [r2]
-str r0, [r3]
+    @ Move and store the ball's current x position to the previous x position.
+    ldr r0, [r2]
+    str r0, [r3]
 
-@ Move and store the ball's current x position to the previous x position.
-ldr r0, [r2, #4]
-str r0, [r3, #4]
+    @ Move and store the ball's current x position to the previous x position.
+    ldr r0, [r2, #4]
+    str r0, [r3, #4]
 
-ldr r0, [r4]
-str r0, [r5]
+    ldr r0, [r4]
+    str r0, [r5]
 
-ldr r0, [r4, #4]
-str r0, [r5, #4]
+    ldr r0, [r4, #4]
+    str r0, [r5, #4]
 
-pop r0 @ Pop r0 from stack so there are no side effects apart from the specified side effects.
-ret
+    pop r0 @ Pop r0 from stack so there are no side effects apart from the specified side effects.
+    ret
 
 @===============================================================================
 @ PADDLEREACT:
@@ -36,101 +36,101 @@ ret
 @ side effects: alters current positions of paddles
 paddlereact:
 
-@ save registers, convention
-push r14
+    @ save registers, convention
+    push r14
 
-@ following is basically:
-@ while (not 0) {
-@   keyinput = getnextinput
-@   switch(keyinput) {
-@       case THISKEY:
-@           paddlepos = paddlebounds?newpos:samepos
-@           break
-@    }
-@ }
+    @ following is basically:
+    @ while (not 0) {
+    @   keyinput = getnextinput
+    @   switch(keyinput) {
+    @       case THISKEY:
+    @           paddlepos = paddlebounds?newpos:samepos
+    @           break
+    @    }
+    @ }
 
-paddlereactloop:
+    paddlereactloop:
 
-@ get the next input (r3) next pointer (r2)
-brl getnextinput
+    @ get the next input (r3) next pointer (r2)
+    brl getnextinput
 
-@ if null, at end of written buffer, return
-cmp r3, #0
-beq paddlereactend
+    @ if null, at end of written buffer, return
+    cmp r3, #0
+    beq paddlereactend
 
-@ get lower 7 bits
-and r3, r3, #0x7F
+    @ get lower 7 bits
+    and r3, r3, #0x7F
 
-@ if an up arrow (code = 7)
-cmp r3, #7
-bne notuparrow
+    @ if an up arrow (code = 7)
+    cmp r3, #7
+    bne notuparrow
 
-ldr r3, [r5]
-cmp r3, #0
-addgt r3, r3, paddlespeed
-str r3, [r4]
+    ldr r3, [r5]
+    cmp r3, #0
+    addgt r3, r3, paddlespeed
+    str r3, [r4]
 
-b paddlereactloop
+    b paddlereactloop
 
-notuparrow:
-@ if a down arrow (code = 6)
-cmp r3, #6
-bne notdownarrow
+    notuparrow:
+    @ if a down arrow (code = 6)
+    cmp r3, #6
+    bne notdownarrow
 
-ldr r3, [r5]
-cmp r3, paddlemaxY
-sublt r3, r3, paddlespeed
-str r3, [r4]
+    ldr r3, [r5]
+    cmp r3, paddlemaxY
+    sublt r3, r3, paddlespeed
+    str r3, [r4]
 
-b paddlereactloop
+    b paddlereactloop
 
-notdownarrow:
-@ if a w (code = 119)
-cmp r3, #119
-bne notwkey
+    notdownarrow:
+    @ if a w (code = 119)
+    cmp r3, #119
+    bne notwkey
 
-ldr r3, [r5, #4]
-cmp r3, #0
-addgt r3, r3, paddlespeed
-str r3, [r4, #4]
+    ldr r3, [r5, #4]
+    cmp r3, #0
+    addgt r3, r3, paddlespeed
+    str r3, [r4, #4]
 
-b paddlereactloop
+    b paddlereactloop
 
-notwkey:
-@ if an s (code = 115)
-cmp r3, #115
-bne paddlereactloop
+    notwkey:
+    @ if an s (code = 115)
+    cmp r3, #115
+    bne paddlereactloop
 
-ldr r3, [r5, #4]
-cmp r3, paddlemaxY
-sublt r3, r3, paddlespeed
-str r3, [r4, #4]
+    ldr r3, [r5, #4]
+    cmp r3, paddlemaxY
+    sublt r3, r3, paddlespeed
+    str r3, [r4, #4]
 
-b paddlereactloop
-
-
-paddlereactend:
-@ restore registers
-pop r14
-ret
-
-@===============================================================================
-@ BALLUPDATE:
-@
-@ arguments:    None
-@ returns:      None
-@ side-effects: ball position, points
-ballupdate:
-
-@ determine if the ball is at side edge
-@ if so, then add 1 to score based on pos, and resetball
-
-@ determine if ball on top/bottom edge if so change velocity accordingly
-
-@determine if ball has hit a bat, alter velocity accordingly
+    b paddlereactloop
 
 
-ret
+    paddlereactend:
+    @ restore registers
+    pop r14
+    ret
+
+    @===============================================================================
+    @ BALLUPDATE:
+    @
+    @ arguments:    None
+    @ returns:      None
+    @ side-effects: ball position, points
+    ballupdate:
+
+    @ determine if the ball is at side edge
+    @ if so, then add 1 to score based on pos, and resetball
+
+    @ determine if ball on top/bottom edge if so change velocity accordingly
+
+    @determine if ball has hit a bat, alter velocity accordingly
+
+
+    ret
 
 @===============================================================================
 @ WINCHECK:
@@ -139,18 +139,18 @@ ret
 @ returns:      None
 @ side-effects: ball position, points, paddlepositions
 wincheck:
-push r14
-ldr r0, [r6]
-cmp r0, #10
-brl newgame
+    push r14
+    ldr r0, [r6]
+    cmp r0, #10
+    brl newgame
 
-ldr r0, [r6, #4]
-cmp r0, #10
-brl newgame
+    ldr r0, [r6, #4]
+    cmp r0, #10
+    brl newgame
 
-wincheckend:
-pop r14
-ret
+    wincheckend:
+    pop r14
+    ret
 
 @===============================================================================
 @ NEWGAME:
@@ -161,18 +161,18 @@ ret
 @ side-effects: ball position, points, paddlepositions
 @ uses constants: r6 (score address), r2 (bcurr address)
 newgame:
-push r14
+    push r14
 
-@ reset scores to 0
-mov r0, #0
-str r0, [r6]
-str r0, [r6, #4]
+    @ reset scores to 0
+    mov r0, #0
+    str r0, [r6]
+    str r0, [r6, #4]
 
-@ move ball to the center
-brl resetball
+    @ move ball to the center
+    brl resetball
 
-pop r14
-ret
+    pop r14
+    ret
 
 @===============================================================================
 @ RESETBALL:
@@ -184,15 +184,15 @@ ret
 resetball:
 @ set ball x and y to the center
 
-mov r0, maxXcoor
-lsr r0, #1
-sub r0, r0, #0x600
-str r0, [r2]
+    mov r0, maxXcoor
+    lsr r0, #1
+    sub r0, r0, #0x600
+    str r0, [r2]
 
-mov r0, maxYcoor
-lsr r0, #1
-sub r0, r0, #0x600
-str r0, [r2, #4]
+    mov r0, maxYcoor
+    lsr r0, #1
+    sub r0, r0, #0x600
+    str r0, [r2, #4]
 
 @set ball velocity
 ret
@@ -209,38 +209,38 @@ ret
 @ r0 <- next index
 @ r3 <- the next character
 getnextinput:
-push r4
+    push r4
 
-mov r1, input_buffer_start
+    mov r1, input_buffer_start
 
-@ load the next word, get most significant byte
-ldr r4, [r1, r0]
-and r3, r4, #0xFF
+    @ load the next word, get most significant byte
+    ldr r4, [r1, r0]
+    and r3, r4, #0xFF
 
-@ if still zero, ignore
-cmp r3, #0
-beq getinputend
+    @ if still zero, ignore
+    cmp r3, #0
+    beq getinputend
 
-@ store the rest back
-sub r4, r4, r3
-str r4, [r1, r0]
+    @ store the rest back
+    sub r4, r4, r3
+    str r4, [r1, r0]
 
-@ move r2 to next index, set to zero if at end
-cmp r0, inputbuffersize
-bne getinputnextindex
+    @ move r2 to next index, set to zero if at end
+    cmp r0, inputbuffersize
+    bne getinputnextindex
 
-@ reset to start
-mov r0, #0
-b getinputend
+    @ reset to start
+    mov r0, #0
+    b getinputend
 
-@ increment the index
-getinputnextindex:
-add r0, r0, #1
+    @ increment the index
+    getinputnextindex:
+    add r0, r0, #1
 
-getinputend:
-@ restore the local var registers and return
-pop r4
-ret
+    getinputend:
+    @ restore the local var registers and return
+    pop r4
+    ret
 
 @===============================================================================
 @ SETVARS:
