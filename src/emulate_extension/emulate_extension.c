@@ -489,8 +489,6 @@ void printState() {
   word cpsrReg = ((CPU.CPSR.N << 3) + (CPU.CPSR.Z << 2) + (CPU.CPSR.C << 1) + CPU.CPSR.V) << 28;
   printf("CPSR: %10i (0x%08x)\n", cpsrReg, cpsrReg);
 
-  return;
-
   /* print out the memory, note: on big endian systems, this memory will be printed as big endian */
   printf("Non-zero memory:\n");
 

@@ -9,7 +9,7 @@
 @ global reg values:
 @ r13 <- stack pointer (stack_start)
 @ r0 <- current buffer index
-@ r1 <- input buffer pointer
+@ r1 <- EMPTY (for the gui mode later - startscreen, quitmenu etc)
 @ r2 <- bcurr address
 @ r3 <- bprev address
 @ r4 <- pcurr address
@@ -23,31 +23,64 @@
 brl setvars
 
 @ startup draw the display
+push r0
+push r1
+push r2
+push r3
 brl initdraw
+pop r3
+pop r2
+pop r1
+pop r0
 
 @ set initial positions
+push r0
 brl newgame
+pop r0
 
 @ the mainloop of the program (get user input, draw next frame)
 mainloop:
 
-@blackout the screen to remove the old frame
-brl blackout
-
 @ swap coordinates
 brl swapcoors
 
+@blackout the screen to remove the old frame
+push r0
+push r1
+push r2
+push r3
+brl blackout
+pop r3
+pop r2
+pop r1
+pop r0
+
 @ get user input to paddles, update paddles
+push r1
+push r3
 brl paddlereact
+pop r3
+pop r1
 
 @ get next ball position
-brl ballupdate
+@brl ballupdate
 
 @ check win condition, go back top start if a win
+push r0
 brl wincheck
+pop r0
 
 @ draw the display
+
+push r0
+push r1
+push r2
+push r3
 brl draw
+pop r3
+pop r2
+pop r1
+pop r0
 
 b mainloop
 @ functions (move to another file later)

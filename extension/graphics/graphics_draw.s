@@ -2,10 +2,10 @@
 .text
 	draw:
 		@ Saving onto the stack
-		push r14
 		push r4
 		push r5
 		push r6
+		push r14
 
 		@ Drawing the ball
 		mov r5, :first8:bcurr
@@ -107,8 +107,9 @@
 
 		@ Cleaning everything up
 		add r13, r13, #0x4
-		pop r4
-		pop r5
-		pop r6
+
 		pop r14
+		pop r6
+		pop r5
+		pop r4
 		ret

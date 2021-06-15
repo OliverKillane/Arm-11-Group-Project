@@ -37,7 +37,6 @@ ret
 paddlereact:
 
 @ save registers, convention
-push r3
 push r14
 
 @ following is basically:
@@ -55,12 +54,12 @@ paddlereactloop:
 @ get the next input (r3) next pointer (r2)
 brl getnextinput
 
-@ get lower 7 bits
-and r3, r3, #0x7F
-
 @ if null, at end of written buffer, return
 cmp r3, #0
 beq paddlereactend
+
+@ get lower 7 bits
+and r3, r3, #0x7F
 
 @ if an up arrow (code = 7)
 cmp r3, #7
@@ -69,7 +68,7 @@ bne notuparrow
 ldr r3, [r5]
 cmp r3, #0
 addgt r3, r3, paddlespeed
-str r3, [r5]
+str r3, [r4]
 
 b paddlereactloop
 
@@ -81,7 +80,7 @@ bne notdownarrow
 ldr r3, [r5]
 cmp r3, paddlemaxY
 sublt r3, r3, paddlespeed
-str r3, [r5]
+str r3, [r4]
 
 b paddlereactloop
 
@@ -93,7 +92,7 @@ bne notwkey
 ldr r3, [r5, #4]
 cmp r3, #0
 addgt r3, r3, paddlespeed
-str r3, [r5, #4]
+str r3, [r4, #4]
 
 b paddlereactloop
 
@@ -105,17 +104,14 @@ bne paddlereactloop
 ldr r3, [r5, #4]
 cmp r3, paddlemaxY
 sublt r3, r3, paddlespeed
-str r3, [r5, #4]
+str r3, [r4, #4]
 
 b paddlereactloop
 
 
 paddlereactend:
-
 @ restore registers
 pop r14
-pop r3
-
 ret
 
 @===============================================================================
@@ -143,7 +139,6 @@ ret
 @ returns:      None
 @ side-effects: ball position, points, paddlepositions
 wincheck:
-push r0
 push r14
 ldr r0, [r6]
 cmp r0, #10
@@ -155,7 +150,6 @@ brl newgame
 
 wincheckend:
 pop r14
-pop r0
 ret
 
 @===============================================================================
@@ -167,7 +161,6 @@ ret
 @ side-effects: ball position, points, paddlepositions
 @ uses constants: r6 (score address), r2 (bcurr address)
 newgame:
-push r0
 push r14
 
 @ reset scores to 0
@@ -179,7 +172,6 @@ str r0, [r6, #4]
 brl resetball
 
 pop r14
-pop r0
 ret
 
 @===============================================================================
@@ -190,22 +182,19 @@ ret
 @ returns:      None
 @ side-effects: ball position (), ball velocity
 resetball:
-push r0
-
 @ set ball x and y to the center
+
 mov r0, maxXcoor
-lsr r0, r0
+lsr r0, #1
 sub r0, r0, #0x600
 str r0, [r2]
 
 mov r0, maxYcoor
-lsr r0, r0
+lsr r0, #1
 sub r0, r0, #0x600
 str r0, [r2, #4]
 
 @set ball velocity
-
-pop r0
 ret
 
 @===============================================================================
@@ -222,6 +211,8 @@ ret
 getnextinput:
 push r4
 
+mov r1, input_buffer_start
+
 @ load the next word, get most significant byte
 ldr r4, [r1, r0]
 and r3, r4, #0xFF
@@ -232,10 +223,10 @@ beq getinputend
 
 @ store the rest back
 sub r4, r4, r3
-str r4, [r1, r2]
+str r4, [r1, r0]
 
 @ move r2 to next index, set to zero if at end
-cmp r2, inputbuffersize
+cmp r0, inputbuffersize
 bne getinputnextindex
 
 @ reset to start
@@ -258,7 +249,7 @@ ret
 @ global reg values:
 @ r13 <- stack pointer (stack_start)
 @ r0 <- current buffer index
-@ r1 <- input buffer pointer
+@ r1 <- EMPTY (uSE FOR gui MODE LATER)
 @ r2 <- bcurr address
 @ r3 <- bprev address
 @ r4 <- pcurr address
@@ -280,12 +271,7 @@ ldr r13, [r13]
 @ current buffer index
 mov r0, #0
 
-@ input buffer start
-mov r1 :first8:input_buffer_start
-orr r1, r1 :second8:input_buffer_start
-orr r1, r1 :third8:input_buffer_start
-orr r1, r1 :fourth8:input_buffer_start
-ldr r1, [r1]
+@ anything you want in r1
 
 @ bcurr address
 mov r2 :first8:bcurr

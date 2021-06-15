@@ -1,6 +1,7 @@
 @ This file defines an initdraw subroutine used in the main loop
 .text
 	initdraw:
+
         @ Initializing the read image buffer
         mov r0, :first8:image_buffer_0
         orr r0, r0, :second8:image_buffer_0
@@ -20,4 +21,5 @@
         orr r3, r3, :fourth8:write_image_buffer
         str r0 [r1]
         str r2 [r3]
+
         ret
