@@ -82,7 +82,8 @@ typedef enum {
 typedef enum {
     DEFAULT = 0,
     GPIO_EXTENDED = 1,
-    VIDEO = 2
+    VIDEO = 2,
+    NO_MEM = 4
 } modes;
 
 // declare the emulator Mode.
@@ -213,7 +214,7 @@ void printState(void);
 
 /* the address containing the pointer to the start of the display. */
 #define VIDEO_POINTER 0x1000000
-#define INPUT_BUFFER 0x30000
+#define INPUT_BUFFER 0x42000
 #define INPUT_BUFFER_SIZE 64
 
 
