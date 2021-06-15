@@ -407,16 +407,6 @@ paddlereact:
         ret
 
 @===============================================================================
-@ CHECKCOLLISION:
-@
-@ arguments:    None
-@ returns:      None
-@ side-effects: None
-checkcollision:
-    ret
-
-
-@===============================================================================
 @ WINCHECK:
 @
 @ arguments:    None
@@ -482,51 +472,6 @@ resetball:
     str r0, [r3, #4]
 
 ret
-
-@===============================================================================
-@ GETNEXTINPUT:
-@
-@ gets the next input as an ascii, assumes little endian storage
-@ arguments:
-@ r0 <- buffer index to read from
-@ r1 <- the buffer start/pointer
-@ r2 <- buffer index to read from
-@ returns:
-@ r0 <- next index
-@ r3 <- the next character
-getnextinput:
-    push r4
-
-    mov r1, input_buffer_start
-
-    @ load the next word, get most significant byte
-    ldr r4, [r1, r0]
-    and r3, r4, #0xFF
-
-    @ if still zero, ignore
-    cmp r3, #0
-    beq getinputend
-
-    @ store the rest back
-    sub r4, r4, r3
-    str r4, [r1, r0]
- 
-    @ move r2 to next index, set to zero if at end
-    cmp r0, inputbuffersize
-    bne getinputnextindex
-
-    @ reset to start
-    mov r0, #0
-    b getinputend
-
-    @ increment the index
-    getinputnextindex:
-    add r0, r0, #1
-
-    getinputend:
-    @ restore the local var registers and return
-    pop r4
-    ret
 
 @===============================================================================
 @ SETVARS:
