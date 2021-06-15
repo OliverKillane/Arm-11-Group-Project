@@ -69,10 +69,10 @@ paddlereact:
     cmp r3, #5
     bne notuparrow
 
-    ldr r3, [r4]
+    ldr r3, [r4, #4]
     cmp r3, #0
-    addgt r3, r3, paddlespeed
-    str r3, [r4]
+    subgt r3, r3, paddlespeed
+    str r3, [r4, #4]
 
     b paddlereactloop
 
@@ -81,10 +81,10 @@ paddlereact:
     cmp r3, #4
     bne notdownarrow
 
-    ldr r3, [r4]
+    ldr r3, [r4, #4]
     cmp r3, paddlemaxY
-    sublt r3, r3, paddlespeed
-    str r3, [r4]
+    addlt r3, r3, paddlespeed
+    str r3, [r4, #4]
 
     b paddlereactloop
 
@@ -93,10 +93,10 @@ paddlereact:
     cmp r3, #119
     bne notwkey
 
-    ldr r3, [r5, #4]
+    ldr r3, [r5]
     cmp r3, #0
-    addgt r3, r3, paddlespeed
-    str r3, [r4, #4]
+    subgt r3, r3, paddlespeed
+    str r3, [r4]
 
     b paddlereactloop
 
@@ -105,10 +105,10 @@ paddlereact:
     cmp r3, #115
     bne notskey
 
-    ldr r3, [r5, #4]
+    ldr r3, [r5]
     cmp r3, paddlemaxY
-    sublt r3, r3, paddlespeed
-    str r3, [r4, #4]
+    addlt r3, r3, paddlespeed
+    str r3, [r4]
 
     notskey:
     @ if an ESC (code = 27)
