@@ -65,8 +65,8 @@ paddlereact:
     @ get lower 7 bits
     and r3, r3, #0x7F
 
-    @ if an up arrow (code = 7)
-    cmp r3, #7
+    @ if an up arrow (code = 5)
+    cmp r3, #5
     bne notuparrow
 
     ldr r3, [r4]
@@ -77,8 +77,8 @@ paddlereact:
     b paddlereactloop
 
     notuparrow:
-    @ if a down arrow (code = 6)
-    cmp r3, #6
+    @ if a down arrow (code = 4)
+    cmp r3, #4
     bne notdownarrow
 
     ldr r3, [r4]
