@@ -3,7 +3,7 @@
 
 brl setvars
 
-brl initdraw
+brl resetball
 
 brl draw
 
