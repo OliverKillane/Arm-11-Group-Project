@@ -72,7 +72,10 @@ ConditionType matchConditionType(char *str) {
 
 Token matchInstructionToken(char *str) {
     InstructionType instTyp;
-    if (*str == 'b') {
+    if (strncmp(str, "brl", 3) == 0) {
+        instTyp = INSTR_BRL;
+        str += 3;
+    } else if (strncmp(str, "b", 1) == 0) {
         instTyp = INSTR_BRN;
         str += 1;
     } else if (strncmp(str, "add", 3) == 0) {
@@ -80,6 +83,9 @@ Token matchInstructionToken(char *str) {
         str += 3;
     } else if (strncmp(str, "sub", 3) == 0) {
         instTyp = INSTR_SUB;
+        str += 3;
+    } else if (strncmp(str, "hlt", 3) == 0) {
+        instTyp = INSTR_HLT;
         str += 3;
     } else if (strncmp(str, "rsb", 3) == 0) {
         instTyp = INSTR_RSB;
@@ -129,6 +135,17 @@ Token matchInstructionToken(char *str) {
     } else if (strncmp(str, "ror", 3) == 0) {
         instTyp = INSTR_ROR;
         str += 3;
+    } else if (strncmp(str, "pop", 3) == 0) {
+        instTyp = INSTR_POP;
+        str += 3;
+    } else if (strncmp(str, "ret", 3) == 0) {
+        instTyp = INSTR_RET;
+        str += 3;
+    } else if (strncmp(str, "halt", 4) == 0) {
+        return NewInstructionToken(COND_AL, INSTR_HLT);
+    } else if (strncmp(str, "push", 4) == 0) {
+        instTyp = INSTR_PSH;
+        str += 4;
     } else {
         return NULL;
     }
@@ -139,13 +156,13 @@ Token matchInstructionToken(char *str) {
     return NewInstructionToken(condTyp, instTyp);
 }
 
-int matchDecimal(char *str) {
+long long matchDecimal(char *str) {
     bool negated = false;
     if (*str == '-') {
         negated = true;
         str++;
     }
-    int num = 0;
+    long long num = 0;
     for (; *str != '\0'; str++)
     {
         assert(isdigit(*str));
@@ -176,13 +193,13 @@ bool isHexNumber(char *str) {
 }
 
 
-int matchHex(char *str) {
+long long matchHex(char *str) {
     bool negated = false;
     if (*str == '-') {
         negated = true;
         str++;
     }
-    int num = 0;
+    long long num = 0;
     // printf("%s\n", str);
 
     for (; *str != '\0'; str++)
@@ -268,17 +285,51 @@ Token matchConstant(char *str) {
 }
 
 void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
+
+    if (MapQuery(symbolTable, token)) {
+        printf("Attempting to set the %s label twice.", token);
+        exit(1);
+    }
+
     char *label = malloc(strlen(token)+1);
     strcpy(label,token);
 
-    MapSet(symbolTable, label, currentLine);
+    MapSet(symbolTable, label, currentLine*4);
 }
 
+LabelType matchLabelType(char *str) {
+    if (strcmp(str, "first8") == 0) {
+        return LABEL_FIRST8;
+    } else if (strcmp(str, "second8") == 0) {
+        return LABEL_SECOND8;
+    } else if (strcmp(str, "third8") == 0) {
+        return LABEL_THIRD8;
+    } else if (strcmp(str, "fourth8") == 0) {
+        return LABEL_FOURTH8;
+    }
+    assert(false);
+}
 
-List tokenizeLine(char *line, Map symbolTable, int currentLine) {
+DirectiveType matchDirective(char *str) {
+    if (strcmp(str, "set") == 0) {
+        return DIRECTIVE_SET;
+    } else if (strcmp(str, "long") == 0) {
+        return DIRECTIVE_LONG;
+    }
+    printf("unrecognized directive %s\n", str);
+    assert(false);
+}
+
+Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataVector, char *filename, int lineNumber) {
     Vector tokenList = NewEmptyVector();
-    currentTokenLength = 0;
-    currentState = TOKENIZER_START;
+
+    char *preservedLine = line;
+    
+    
+    TokenizerState currentState = TOKENIZER_START;
+    LabelType currentLabelType = LABEL_FULL;
+    DirectiveType currentDirectiveType = DIRECTIVE_NONE;
+    char *currentDirectiveLabel;
 
     while (currentState != TOKENIZER_FINISHED 
         && currentState != TOKENIZER_ERROR) {
@@ -297,18 +348,52 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     VectorPushBack(tokenList, NewSignToken(true));
                 } else if (line[0] == '-')  {
                     VectorPushBack(tokenList, NewSignToken(false));
-                } else if (line[0] == '#' || line[0] == '=' || isHex(line[0])) {
+                } else if (line[0] == '!')  {
+                    VectorPushBack(tokenList, NewExclamationToken());
+                }else if (line[0] == '#' || line[0] == '=' || isHex(line[0])) {
                     addCharToToken(line[0]);
                     currentState = TOKENIZER_CONSTANT;
-                } else if (line[0] == '\n') {
+                } else if (line[0] == '\n' || line[0] == '@') {
                     currentState = TOKENIZER_FINISHED;
+                } else if (line[0] == ':') {
+                    currentState = TOKENIZER_LABEL_ORDER;
+                } else if (line[0] == '.') {
+                    currentState = TOKENIZER_DIRECTIVE;
                 }
                 break;
-            case TOKENIZER_INSTR_LABEL_REG:
-                if (isalpha(line[0])) {
+            case TOKENIZER_LABEL_ORDER:
+                if (isalpha(line[0]) || line[0] == '8') {
                     addCharToToken(line[0]);
                 } else if (line[0] == ':') {
                     addCharToToken('\0');
+                    currentLabelType = matchLabelType(currentToken);
+                    resetToken();
+                    currentState = TOKENIZER_START;
+                }
+                break;
+            case TOKENIZER_DIRECTIVE:
+                if (isalpha(line[0])) {
+                    addCharToToken(line[0]);
+                } else {
+                    addCharToToken('\0');
+                    // printf("heyy %s\n", currentToken);
+                    currentDirectiveType = matchDirective(currentToken);
+                    if (currentDirectiveType == DIRECTIVE_SET) {
+                        // printf("wow matched set directive\n");
+                        currentState = TOKENIZER_INSTR_LABEL_REG;
+                    } else if (currentDirectiveType == DIRECTIVE_LONG) {
+                        // printf("wow matched long directive\n");
+                        currentState = TOKENIZER_CONSTANT;
+                    }
+                    resetToken();
+                }
+                break;
+            case TOKENIZER_INSTR_LABEL_REG:
+                if (isalpha(line[0]) || line[0] == '_') {
+                    addCharToToken(line[0]);
+                } else if (line[0] == ':') {
+                    addCharToToken('\0');
+                    printf("Label set %s %d\n", currentToken, currentLine);
                     addTokenToSymbolTable(symbolTable, currentLine, currentToken);
                     resetToken();
                     currentState = TOKENIZER_START;
@@ -329,9 +414,18 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     } else if (matchedRegister != NULL) {
                         VectorPushBack(tokenList, matchedRegister);
                     } else {
-                        
-                        Token newToken = NewLabelToken(currentToken);
-                        VectorPushBack(tokenList, newToken);
+                        if (currentDirectiveType == DIRECTIVE_SET) {
+                            addCharToToken('\0');
+                            currentDirectiveLabel = malloc((strlen(currentToken) + 1) * sizeof(char));
+                            strcpy(currentDirectiveLabel, currentToken);
+                            resetToken();
+                            currentState = TOKENIZER_CONSTANT;
+
+                        } else {
+                            Token newToken = NewLabelToken(currentToken, currentLabelType);
+                            VectorPushBack(tokenList, newToken);
+                            currentLabelType = LABEL_FULL;
+                        }
                     }
                     currentState = TOKENIZER_START;
                     resetToken();
@@ -345,7 +439,20 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
                     addCharToToken('\0');
                     Token matchedConstant = matchConstant(currentToken);
                     if (matchedConstant != NULL) {
-                        VectorPushBack(tokenList, matchedConstant);
+                        if (currentDirectiveType == DIRECTIVE_NONE) {
+                            VectorPushBack(tokenList, matchedConstant);
+                        } else if (currentDirectiveType == DIRECTIVE_LONG) {
+                            // printf("%d\n", matchedConstant->constant.value);
+                            VectorPushBack(dataVector, matchedConstant->constant.value);
+                            DeleteToken(matchedConstant);
+                            currentDirectiveType = DIRECTIVE_NONE;
+                        } else if (currentDirectiveType == DIRECTIVE_SET) {
+                            printf("Label set %s %d\n", currentDirectiveLabel, matchedConstant->constant.value);
+                            MapSet(symbolTable, currentDirectiveLabel, matchedConstant->constant.value);
+                            DeleteToken(matchedConstant);
+                            // printf("%s %d\n", currentDirectiveLabel, MapGet(symbolTable, currentDirectiveLabel));
+                            currentDirectiveType = DIRECTIVE_NONE;
+                        }
                         resetToken();
                         currentState = TOKENIZER_START;
                     } else {
@@ -361,8 +468,60 @@ List tokenizeLine(char *line, Map symbolTable, int currentLine) {
 
         if (line[0] != '\0') {
             line++;
+        } else {
+            currentState = TOKENIZER_FINISHED;
         }
     }
+
+    VectorPushBack(tokenList, preservedLine);
+    VectorPushBack(tokenList, filename);
+    VectorPushBack(tokenList, lineNumber);
     return tokenList;
 
 }
+
+// void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector dataVector) {
+
+//     char *endl = strchr(line, '\n');
+//     if (endl != NULL) {
+//         *endl = '\0';
+//     }
+//     char *at = strchr(line, '@');
+//     if (at != NULL) {
+//         *at = '\0';
+//     }
+//     char *colon;
+
+//     if (strncmp(line, ".set", 4) == 0) {
+//         line+=5;
+//         char *endLabel = strchr(line, ' ');
+//         char *newLabel = malloc(sizeof(char) * (endLabel - line+1));
+//         strncpy(newLabel, line, (endLabel - line));
+//         newLabel[endLabel - line + 1] = '\0';
+//         line = endLabel + 1;
+//         int number;
+
+//         if (isHexNumber(line)) {
+//             number = matchHex(line);
+//         } else {
+//             number = matchDecimal(line);
+//         }
+//         MapSet(symbolTable, newLabel, number);
+//     } else if (strncmp(line, ".long", 5) == 0) {
+//         line += 6;
+//         int number;
+//         if (isHexNumber(line)) {
+//             number = matchHex(line);
+//         } else {
+//             number = matchDecimal(line);
+//         }
+//         VectorPushBack(dataVector, number);
+//         *currentAddress += 1;
+//     } else if ((colon = strchr(line, ':')) != NULL) {
+//         char *newLabel = malloc((colon - line +1) * sizeof(char));
+//         strncpy(newLabel, line, (colon - line));
+//         newLabel[colon - line + 1] = '\0';
+//         MapSet(symbolTable, newLabel, *currentAddress);
+//     }
+
+// }

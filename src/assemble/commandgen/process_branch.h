@@ -9,18 +9,14 @@
 #include <stddata.h>
 #include <stdbool.h>
 
-bool LayoutBranchLabel(
-    Map restrict symbols, 
-    Vector restrict tokens, 
-    Vector restrict output, 
-    int offset, 
-    int instructions_num
-);
-
+/**
+ * @brief Handles all branch instruction layouts
+ */
 bool LayoutBranchConstant(
-    Map restrict symbols, 
-    Vector restrict tokens, 
-    Vector restrict output, 
+    Map symbols, 
+    Vector tokens, 
+    Vector text,
+    Vector data, 
     int offset, 
     int instructions_num
 );
