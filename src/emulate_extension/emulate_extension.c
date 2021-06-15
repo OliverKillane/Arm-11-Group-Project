@@ -4,17 +4,21 @@
 #include <assert.h>
 #include "emulate_extension.h"
 
-/* CPU struct (state is changed to emulate) */
-machineState CPU;
-
 /* mode type of the emulator */
 modes emulatorMode;
+
+/* CPU state as globals */
+word registers[16];
+cpsr CPSR;
+byte *memory; 
+word GPIO;
 
 /* globals for video */
 SDL_Window *window;
 SDL_Renderer *renderer;
 SDL_Texture *texture;
 byte* video_pointer;
+word input_buffer;
 
 
 /* TEST allows for test suite to run unit tests without double definition of main */
@@ -62,11 +66,11 @@ int main(int argc, char** argv) {
   }
 
   /* set up machine initial state (all zero, stack pointer at max location*/
-  CPU.CPSR = (cpsr) {.N = 0, .Z = 0, .C = 0, .V = 0};
-  CPU.memory = calloc(MEMSIZE, 1);
-  assert(CPU.memory);
-  memset(CPU.registers, 0, 64);
-  CPU.GPIO = 0;
+  CPSR = (cpsr) {.N = 0, .Z = 0, .C = 0, .V = 0};
+  memory = calloc(MEMSIZE, 1);
+  assert(memory);
+  memset(registers, 0, 64);
+  GPIO = 0;
   
   if (emulatorMode & VIDEO) {
     /* EXTENSION: set up the window, initialise */
@@ -111,7 +115,7 @@ void loadProgram(char* filename) {
   fseek(file, 0, SEEK_SET);
 
   /* read file contents */
-  if (fread(CPU.memory, 1, length, file) != length) {
+  if (fread(memory, 1, length, file) != length) {
     printf("Error: Unable to load all instructions\n");
     exit(INVALID_FILE);
   }
@@ -123,7 +127,7 @@ void loadProgram(char* filename) {
 
     /* for each memory location, swap order of bytes from 0123 to 3210 */
     for (int loc = 0; loc < length; loc += 4) {
-      memloc = getmemloc(loc);
+      memloc = GETMEMLOC(loc);
 
       holder = memloc[0];
       memloc[0] = memloc[3];
@@ -152,7 +156,7 @@ void runProgram() {
 
     /* increment PC and fetch instruction */
     *GETREG(PC) += 4;
-    currentInstr = *getmemword(*GETREG(PC) - 8);
+    currentInstr = *GETMEMWORD(*GETREG(PC) - 8);
 
     /* if instruction condition is satisfied, decide which type and process*/
     if (checkCond(currentInstr)) {
@@ -174,9 +178,6 @@ void runProgram() {
 
     if (emulatorMode && VIDEO) {
 
-      /* EXTENSION: draw the screen */
-      //updateOutput();
-      
       /* EXTENSION: read in character events*/
       processEvents();
 
@@ -187,12 +188,12 @@ void runProgram() {
 
 bool checkCond(instruction instr) {
   switch(GETBITS(instr, 28, 4)) {
-    case EQ: return CPU.CPSR.Z;
-    case NE: return !CPU.CPSR.Z;
-    case GE: return CPU.CPSR.N == CPU.CPSR.V;
-    case LT: return CPU.CPSR.N != CPU.CPSR.V;
-    case GT: return !CPU.CPSR.Z && (CPU.CPSR.N == CPU.CPSR.V);
-    case LE: return CPU.CPSR.Z || (CPU.CPSR.N != CPU.CPSR.V);
+    case EQ: return CPSR.Z;
+    case NE: return !CPSR.Z;
+    case GE: return CPSR.N == CPSR.V;
+    case LT: return CPSR.N != CPSR.V;
+    case GT: return !CPSR.Z && (CPSR.N == CPSR.V);
+    case LE: return CPSR.Z || (CPSR.N != CPSR.V);
     case AL: return true;
     default: return false;
   }
@@ -270,37 +271,50 @@ void singleDataTransInstr(instruction instr) {
     
     /* clear pins */
     printf("PIN OFF\n");
-    CPU.GPIO = CPU.GPIO & !*RdSrcDst;
+    GPIO = GPIO & !*RdSrcDst;
   } else if (memloc == 0x2020001C && !L) {
 
     /* set pins */
     printf("PIN ON\n");
-    CPU.GPIO = CPU.GPIO | *RdSrcDst;
+    GPIO = GPIO | *RdSrcDst;
   } else if (memloc == VIDEO_POINTER && (emulatorMode & VIDEO)) {
+
 	  /* if setting the video pointer */
 	  if (L) {
-		/* for load get the address in the emulator (pointer - memory start) */
-		*RdSrcDst = video_pointer - CPU.memory;
+
+      /* for load get the address in the emulator (pointer - memory start) */
+      *RdSrcDst = video_pointer - memory;
 	  } else {
 		  
-		if (*RdSrcDst > MEMSIZE || *RdSrcDst < 0) {
-		  	printf("Error: Video pointer set to invalid memory address in instruction %08x", instr);
-		  	exit(INVALID_INSTR);
-		} else {
-			/* for store, set video pointer as a pointer to the memory location*/
-			video_pointer = getmemloc(*RdSrcDst);
-			
-			/* video pointer has changed, update the screen */
-			updateOutput();
-		}
+      /*check the new video pointer is valid*/
+      if (*RdSrcDst > MEMSIZE || *RdSrcDst < 0) {
+          printf("Error: Video pointer set to invalid memory address in instruction %08x", instr);
+          exit(INVALID_INSTR);
+      } else {
+
+        /* for store, set video pointer as a pointer to the memory location*/
+        video_pointer = GETMEMLOC(*RdSrcDst);
+        
+        /* video pointer has changed, update the screen */
+        updateOutput();
+      }
 	  }
-  }else if (memloc < MEMSIZE) {
+  } else if (memloc == INPUT_BUFFER) {
+
+    /* program is accessing the input buffer */
+    if (L) {
+      *RdSrcDst = input_buffer;
+    } else {
+      input_buffer = *RdSrcDst;
+    }
+
+  } else if (memloc < MEMSIZE) {
 
     /* interacting with 64KB of main memory */
     if (L) {
-      *RdSrcDst = *getmemword(memloc);
+      *RdSrcDst = *GETMEMWORD(memloc);
     } else {
-      *getmemword(memloc) = *RdSrcDst;
+      *GETMEMWORD(memloc) = *RdSrcDst;
     }
   } else {
 
@@ -394,8 +408,8 @@ void multiplyInstr(instruction instr) {
   *Rd = result;
 
   if (S) {
-    CPU.CPSR.N = GETBIT(result, 31);
-    CPU.CPSR.Z = result == 0;
+    CPSR.N = GETBIT(result, 31);
+    CPSR.Z = result == 0;
   }
 }
 
@@ -470,16 +484,16 @@ void processDataInstr(instruction instr) {
   /* if S set then reassign CPSR flags */
   if(S) {
     if (instrOpCode == AND || instrOpCode == EOR || instrOpCode == ORR || instrOpCode == TEQ || instrOpCode == TST || instrOpCode == MOV) {
-      CPU.CPSR.C = shiftCarryOut;
+      CPSR.C = shiftCarryOut;
     } else if (instrOpCode == ADD || instrOpCode == RSB) {
-      CPU.CPSR.C = (GETBIT(RnVal, 31) || GETBIT(operand2Value, 31)) && !GETBIT(result, 31);
+      CPSR.C = (GETBIT(RnVal, 31) || GETBIT(operand2Value, 31)) && !GETBIT(result, 31);
     } else {
       /* Opcode must BE SUB or CMP */
-      CPU.CPSR.C = operand2Value <= RnVal;
+      CPSR.C = operand2Value <= RnVal;
     }
 
-    CPU.CPSR.Z = result == 0;
-    CPU.CPSR.N = GETBIT(result, 31);
+    CPSR.Z = result == 0;
+    CPSR.N = GETBIT(result, 31);
   }
 }
 
@@ -494,7 +508,7 @@ void printState() {
   printf("LR  : %10i (0x%08x)\n", *GETREG(LR), *GETREG(LR));
   printf("PC  : %10i (0x%08x)\n", *GETREG(PC), *GETREG(PC));
 
-  word cpsrReg = ((CPU.CPSR.N << 3) + (CPU.CPSR.Z << 2) + (CPU.CPSR.C << 1) + CPU.CPSR.V) << 28;
+  word cpsrReg = ((CPSR.N << 3) + (CPSR.Z << 2) + (CPSR.C << 1) + CPSR.V) << 28;
   printf("CPSR: %10i (0x%08x)\n", cpsrReg, cpsrReg);
 
 
@@ -505,7 +519,7 @@ void printState() {
 	bool littleEndian = littleendiancheck();
 	byte *memByte;
 	for (int loc = 0; loc < MEMSIZE; loc += 4) {
-      memByte = getmemloc(loc);
+      memByte = GETMEMLOC(loc);
       if (*(word*)memByte){
 
         /* if little endian, print out in order, if big, swap bytes to mimic little endian */
@@ -521,7 +535,7 @@ void printState() {
   if (emulatorMode & GPIO_EXTENDED) {
 	
     /* gpio bits should be displayed as GPIO extended flag has been sent */
-    printf("\nGPIO: (0x%08x)\n", CPU.GPIO);
+    printf("\nGPIO: (0x%08x)\n", GPIO);
   }
 }
 
@@ -530,16 +544,8 @@ bool littleendiancheck() {
     return *((byte*) &test);
 }
 
-word *getmemword(word loc) {
-  return (word *) getmemloc(loc);
-}
-
-byte *getmemloc(word loc) {
-  return (CPU.memory + loc);
-}
-
 void freeCPU(){
-  free(CPU.memory);
+  free(memory);
 }
 
 void setupWindow(char *title){
@@ -584,7 +590,7 @@ void setupWindow(char *title){
   SDL_RenderSetLogicalSize(renderer, WIDTH, HEIGHT);
   
   /* initialise the video pointer to show memory */
-  video_pointer = CPU.memory;
+  video_pointer = memory;
 }
 
 void updateOutput() {
@@ -604,51 +610,43 @@ void updateOutput() {
 
 void processEvents() {
 
-  /* writeindex is maintained between calls */
-  static int writeIndex = 0;
-
-  /* pointer to the input buffer */
-  byte* buffer = getmemloc(INPUT_BUFFER);
-
   SDL_Event event;
 
+  /* if the buffer is empty, write the next character */
+  if (!input_buffer) {
 
-  /* process each waiting event */
-  while(SDL_PollEvent(&event)) {
+    /* if there is a next character write */
+    if (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT) {
 
-    if (event.type == SDL_QUIT) {
+        /* immediately exit the porgram after displaying state output if the user quits*/
+        freeCPU();
+        printState();
+        destroyVideo();
+        exit(EXIT_SUCCESS);
 
-      /* immediately exit the program */
-      freeCPU();
-      destroyVideo();
-      exit(EXIT_SUCCESS);
+      } else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
 
-    } else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
-      /* write new key event to the input buffer */
+        /* get the keycode */
+        SDL_KeyCode keycode = event.key.keysym.sym;
 
-      /* get correct write index */
-      if (writeIndex >= INPUT_BUFFER_SIZE) {
-        writeIndex = 0;
+        if (keycode <= SDLK_UP && keycode >= SDLK_RIGHT) {
+
+          /* if it is an arrow key we use EOR-BEL characters' codes by subtracting*/
+          input_buffer = (keycode - 0x4000004D);
+        } else if (keycode < 128) {
+
+          /* if it is an ascii character we use the ascii keycode*/
+          input_buffer = keycode;
+        } else {
+
+          /* not a character we need to input */
+          return;
+        }
+
+        /* for a key up/down write the msb as 1/0 */
+        input_buffer |= event.type==SDL_KEYDOWN?0:0x80;
       }
-
-      SDL_KeyCode keycode = event.key.keysym.sym;
-
-      /* first bit is 0 for keydown, 1 for key up */
-      byte input = event.type==SDL_KEYDOWN?0:0x80;
-      
-      /* if an arrow key, use the EOT,ENQ,ACK,BEL character codes as substitutes
-       * by subtracting, otherwise if a 7 bit ascii, set character, else ignore this character */
-      if (keycode <= SDLK_UP && keycode >= SDLK_RIGHT) {
-        input |= (keycode - 0x4000004D);
-      } else if (keycode < 128) {
-        input |= keycode;
-      } else {
-        continue;
-      }
-
-      /* write to the buffer and increment the pointer */
-      buffer[writeIndex] = input;
-      writeIndex++;
     }
   }
 }
