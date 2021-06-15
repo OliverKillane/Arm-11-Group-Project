@@ -298,13 +298,13 @@ void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token) {
 }
 
 LabelType matchLabelType(char *str) {
-    if (strcmp(str, "first8")) {
+    if (strcmp(str, "first8") == 0) {
         return LABEL_FIRST8;
-    } else if (strcmp(str, "second8")) {
+    } else if (strcmp(str, "second8") == 0) {
         return LABEL_SECOND8;
-    } else if (strcmp(str, "third8")) {
+    } else if (strcmp(str, "third8") == 0) {
         return LABEL_THIRD8;
-    } else if (strcmp(str, "fourth8")) {
+    } else if (strcmp(str, "fourth8") == 0) {
         return LABEL_FOURTH8;
     }
     assert(false);
