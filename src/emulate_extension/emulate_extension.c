@@ -35,7 +35,13 @@ int main(int argc, char** argv) {
     } else if (strcmp(argv[arg], "-g") == 0) {
       emulatorMode |= GPIO_EXTENDED;
       printf("GPIO PIN OUTPUT ON\n");
-    } else {
+    } else if (strcmp(argv[arg], "-n") == 0) {
+	  emulatorMode |= NO_MEM;
+      printf("MEMORY OUTPUT OFF\n");
+	} else if (strcmp(argv[arg], "-h") == 0) {
+	  printf("emulate_extension [flags] [file]\n -v (video mode)\n -g (extended gpio)\n -n (no memory output)\n -h (this help)");
+	  exit(EXIT_SUCCESS);
+	} else {
       if (argv[arg][0] != '-') {
         if (!filename) {
           filename = argv[arg];
@@ -484,26 +490,30 @@ void printState() {
   for (int registerNo = 0; registerNo < 13; registerNo++) {
     printf("$%-3i: %10i (0x%08x)\n", registerNo, *GETREG(registerNo), *GETREG(registerNo));
   }
+  printf("SP  : %10i (0x%08x)\n", *GETREG(SP), *GETREG(SP));
+  printf("LR  : %10i (0x%08x)\n", *GETREG(LR), *GETREG(LR));
   printf("PC  : %10i (0x%08x)\n", *GETREG(PC), *GETREG(PC));
 
   word cpsrReg = ((CPU.CPSR.N << 3) + (CPU.CPSR.Z << 2) + (CPU.CPSR.C << 1) + CPU.CPSR.V) << 28;
   printf("CPSR: %10i (0x%08x)\n", cpsrReg, cpsrReg);
 
-  /* print out the memory, note: on big endian systems, this memory will be printed as big endian */
-  printf("Non-zero memory:\n");
 
+  if (!(emulatorMode & NO_MEM)) {
+	/* print out the memory, note: on big endian systems, this memory will be printed as big endian */
+    printf("Non-zero memory:\n");
+	  
+	bool littleEndian = littleendiancheck();
+	byte *memByte;
+	for (int loc = 0; loc < MEMSIZE; loc += 4) {
+      memByte = getmemloc(loc);
+      if (*(word*)memByte){
 
-  bool littleEndian = littleendiancheck();
-  byte *memByte;
-  for (int loc = 0; loc < MEMSIZE; loc += 4) {
-    memByte = getmemloc(loc);
-    if (*(word*)memByte){
-
-      /* if little endian, print out in order, if big, swap bytes to mimic little endian */
-      if (littleEndian) {
-        printf("0x%08x: 0x%02x%02x%02x%02x\n", loc, memByte[0], memByte[1], memByte[2], memByte[3]);
-      } else {
-        printf("0x%08x: 0x%02x%02x%02x%02x\n", loc, memByte[3], memByte[2], memByte[1], memByte[0]);
+        /* if little endian, print out in order, if big, swap bytes to mimic little endian */
+        if (littleEndian) {
+          printf("0x%08x: 0x%02x%02x%02x%02x\n", loc, memByte[0], memByte[1], memByte[2], memByte[3]);
+        } else {
+          printf("0x%08x: 0x%02x%02x%02x%02x\n", loc, memByte[3], memByte[2], memByte[1], memByte[0]);
+        }
       }
     }
   }
