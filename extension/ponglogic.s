@@ -135,9 +135,8 @@ paddlereact:
     push r0
     push r1
     push r9 @ aux register
+    push r14
 
-    @ update previous coordinates of the ball to the current
-    swapcoors
 
     @ load coordinates of the ball
     ldr r0, [r2] 
@@ -153,7 +152,7 @@ paddlereact:
 
    
     push r12
-    checkcollision
+    brl checkcollision
 
     cmp r12, #0
     beq end_ballupdate
@@ -187,7 +186,7 @@ paddlereact:
         ldr r0, [r6, #4]
         add r0, r0, #1
         str r0, [r6, #4] 
-        resetball
+        brl resetball
         b end_ballupdate
 
     rightwall:
@@ -195,7 +194,7 @@ paddlereact:
         ldr r0, [r6]
         add r0, r0, #1
         str r0, [r6] 
-        resetball
+        brl resetball
         b end_ballupdate
 
     leftpaddle:
@@ -263,6 +262,7 @@ paddlereact:
 
     end_ballupdate:
         @ stack clean up
+        pop r14
         pop r12
         pop r9
         pop r1
