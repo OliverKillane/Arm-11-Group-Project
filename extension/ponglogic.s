@@ -46,15 +46,21 @@ paddlereact:
     @    }
     @ }
 
+    @ get input buffer location and 0 (for nullifying) in a register
+    mov r0, input_buffer
+    mov r1, #0
+
     paddlereactloop:
 
     @ get the next input (r3) next pointer (r2)
-    mov r0, input_buffer
     ldr r3, [r0]
 
     @ if null, at end of written buffer, return
     cmp r3, #0
     beq paddlereactend
+
+    @ nullify the character
+    str r1, [r0]
 
     @ get lower 7 bits
     and r3, r3, #0x7F
@@ -63,7 +69,7 @@ paddlereact:
     cmp r3, #7
     bne notuparrow
 
-    ldr r3, [r5]
+    ldr r3, [r4]
     cmp r3, #0
     addgt r3, r3, paddlespeed
     str r3, [r4]
@@ -75,7 +81,7 @@ paddlereact:
     cmp r3, #6
     bne notdownarrow
 
-    ldr r3, [r5]
+    ldr r3, [r4]
     cmp r3, paddlemaxY
     sublt r3, r3, paddlespeed
     str r3, [r4]
@@ -106,11 +112,12 @@ paddlereact:
 
     b paddlereactloop
 
+
     @ use reteq?
     paddlereactend:
     ret
 
-    @===============================================================================
+    @===========================================================================
     @ BALLUPDATE:
     @
     @ arguments:    None
