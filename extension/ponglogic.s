@@ -29,15 +29,12 @@ swapcoors:
 @ PADDLEREACT:
 @
 @ go through input buffer determine each character, run appropriate function
-@ arguments:
-@ r0 <- current buffer index
-@ returns:
-@ r0 <- current buffer index
+@ arguments:    None
+@ returns:      None
 @ side effects: alters current positions of paddles
 paddlereact:
 
     @ save registers, convention
-    push r14
 
     @ following is basically:
     @ while (not 0) {
@@ -52,7 +49,8 @@ paddlereact:
     paddlereactloop:
 
     @ get the next input (r3) next pointer (r2)
-    brl getnextinput
+    mov r0, input_buffer
+    ldr r3, [r0]
 
     @ if null, at end of written buffer, return
     cmp r3, #0
@@ -108,10 +106,8 @@ paddlereact:
 
     b paddlereactloop
 
-
+    @ use reteq?
     paddlereactend:
-    @ restore registers
-    pop r14
     ret
 
     @===============================================================================
@@ -198,57 +194,12 @@ resetball:
 ret
 
 @===============================================================================
-@ GETNEXTINPUT:
-@
-@ gets the next input as an ascii, assumes little endian storage
-@ arguments:
-@ r0 <- buffer index to read from
-@ r1 <- the buffer start/pointer
-@ r2 <- buffer index to read from
-@ returns:
-@ r0 <- next index
-@ r3 <- the next character
-getnextinput:
-    push r4
-
-    mov r1, input_buffer_start
-
-    @ load the next word, get most significant byte
-    ldr r4, [r1, r0]
-    and r3, r4, #0xFF
-
-    @ if still zero, ignore
-    cmp r3, #0
-    beq getinputend
-
-    @ store the rest back
-    sub r4, r4, r3
-    str r4, [r1, r0]
-
-    @ move r2 to next index, set to zero if at end
-    cmp r0, inputbuffersize
-    bne getinputnextindex
-
-    @ reset to start
-    mov r0, #0
-    b getinputend
-
-    @ increment the index
-    getinputnextindex:
-    add r0, r0, #1
-
-    getinputend:
-    @ restore the local var registers and return
-    pop r4
-    ret
-
-@===============================================================================
 @ SETVARS:
 @
 @ sets up the local variables for the main loop as follows:
 @ global reg values:
 @ r13 <- stack pointer (stack_start)
-@ r0 <- current buffer index
+@ r0 <- EMPTY (uSE FOR gui MODE LATER)
 @ r1 <- EMPTY (uSE FOR gui MODE LATER)
 @ r2 <- bcurr address
 @ r3 <- bprev address
@@ -267,8 +218,7 @@ orr r13, r13 :second8:stack_start
 orr r13, r13 :third8:stack_start
 orr r13, r13 :fourth8:stack_start
 
-@ current buffer index
-mov r0, #0
+@anything you want in r0
 
 @ anything you want in r1
 
