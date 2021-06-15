@@ -45,13 +45,6 @@ fill:
 	mov r11, width
 	mla r10, r1, r11, r0
 
-	@ load background values into register
-    mov r12, :first8:background
-    orr r12, r12, :second8:background
-    orr r12, r12, :third8:background
-    orr r12, r12, :fourth8:background
-	ldr r12, [r12]
-
 	@ load write_image_buffer values into register
     mov r4, :first8:write_image_buffer
     orr r4, r4, :second8:write_image_buffer
@@ -89,6 +82,7 @@ fill:
 	loop_fill:
 		ldr r11, [r13, #0x24]
 
+		push r3
 		push r2
 		push r1
 		push r0
@@ -105,7 +99,7 @@ fill:
 		mla r10, r9, r11, r8
 	
 		@ load pixel from background 
-		ldr r7, [r12, r10, lsl #2]
+		ldr r7, [r4, r10, lsl #2]
 
 		@ separate pixel into channels by byte
 		@ r3 - Alpha channel (Byte 3)
@@ -113,51 +107,49 @@ fill:
 		@ r1 - Green channel (Byte 1)
 		@ r0 - Red channel   (Byte 0)
 
-		mov r3, r0, lsl #24
-		mov r2, r0, lsl #16
-		mov r1, r0, lsl #8
+		mov r3, r0, lsr #0x18
+		mov r2, r0, lsr #0x10
+		mov r1, r0, lsr #0x8
 		and r2, r2, #0xFF
 		and r1, r1, #0xFF
 		and r0, r0, #0xFF
 
 		@ mix background with new pixel
-		rsb r11, r3, #255
+		rsb r11, r3, #0xFF
 
 		@ mix Red channel
 		push r7
 		and r7, r7, #0xFF
 		mul r0, r3, r0
 		mla r0, r11, r7, r0
-		add r0, r0, r0, lsl #8
-		lsl r0, #8
-		pop r7 
+		add r0, r0, r0, lsr #8
+		lsr r0, #8
+		ldr r7 [r13]
 
 		@ mix Green channel
-		push r7
-		mov r7, r7, lsl #8
+		lsr r7, #8
 		and r7, r7, #0xFF
 		mul r1, r3, r1
 		mla r1, r11, r7, r1
-		add r1, r1, r1, lsl #8
-		lsl r1, #8 
-		pop r7
+		add r1, r1, r1, lsr #8
+		lsr r1, #8 
+		ldr r7 [r13]
 
 		@ mix Blue channel
-		push r7
-		mov r7, r7, lsl #16
+		lsr r7 #16
 		and r7, r7, #0xFF
 		mul r2, r3, r2
 		mla r2, r11, r7, r2
-		add r2, r2, r2, lsl #8
-		lsl r2, #8 
-		pop r7
+		add r2, r2, r2, lsr #8
+		lsr r2, #8 
+		ldr r7 [r13] #4
 
 		@ add Green and Blue channels
-		add r0, r0, r1, lsr #8
-		add r0, r0, r2, lsr #16
+		add r0, r0, r1, lsl #8
+		add r0, r0, r2, lsl #16
 
 		@ store new pixel value in the write image buffer
-		str r0, [r4, r10, lsl #2] 
+		str r0, [r4, r10, lsl #2]
 
 		@ increment iterators
 		add r5, r5, #1
@@ -165,7 +157,7 @@ fill:
 		pop r0
 		pop r1
 		pop r2
-
+		pop r3
 
 		b condX_fill
 
