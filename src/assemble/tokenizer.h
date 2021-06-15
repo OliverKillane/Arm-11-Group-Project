@@ -3,7 +3,6 @@
 
 #include "stddata.h"
 #include "./tokenizer/token_utils.h"
-
 typedef enum {
     TOKENIZER_START,
     TOKENIZER_INSTR_LABEL_REG,
@@ -28,19 +27,52 @@ typedef enum {
 static char currentToken[512];
 static int currentTokenLength = 0;
 
+/**
+ * @brief returns true if @p c is an alpha character.
+ */
 bool matchAlpha(char c);
+/**
+ * @brief returns true if @p c is a 0-9 | a-f.
+ */
 bool isHex(char c);
+/**
+ * @brief returns true if @p c is a tab or space or newline.
+ */
 bool isWhitespace(char c);
+/**
+ * @brief adds a @p c to the currentToken variable and increments currentTokenLength.
+ */
 void addCharToToken(char c);
+/**
+ * @brief removes a character from currentToken and decrements currentTokenLength.
+ */
 void removeCharFromToken();
+/**
+ * @brief sets currentTokenLength to 0.
+ */
 void resetToken();
+/**
+ * @brief returns true if the null-terminated string @p str is a decimal number.
+ */
 bool isNumber(char *str);
+/**
+ * @brief Matches @p str to a selection of condition types.
+ */
 ConditionType matchConditionType(char *str);
+/**
+ * @brief Matches @p str to a selection of instruction types.
+ */
 Token matchInstructionToken(char *str);
-int matchDecimal(char *str);
+long long matchDecimal(char *str);
 long long matchHex(char *str);
 Token matchRegister(char *str);
+/**
+ * @brief matches a constant type token with the null-terminated string @p str .
+ */
 Token matchConstant(char *str);
+/**
+ * @brief copies the null-terminated string @p token and adds it as a key to @p symbolTable with @p currentLine as the value.
+ */
 void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token);
 Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataVector, char *filename, int lineNumber);
 void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector dataVector);
