@@ -5,6 +5,25 @@
 		push r14
 		push r4
 
+		@ Blacking out the text
+		mov r4 :first8:push_button_erased
+		orr r4, r4 :second8:push_button_erased
+		orr r4, r4 :third8:push_button_erased
+		orr r4, r4 :fourth8:push_button_erased
+		ldr r0 [r4]
+		cmp r0, #0
+		beq continue_blackout
+		mov r0, #0
+		str r0 [r4]
+
+		mov r0, #0
+		mov r1, #0
+		mov r2, width
+		mov r3, height
+		brl reset
+		b end_blackout
+
+		continue_blackout:
 		@ Blacking out the ball
 		mov r4, :first8:bprev
 		orr r4, r4, :second8:bprev
@@ -57,6 +76,7 @@
 		brl reset
 
 		@ Cleaning everything up
+		end_blackout:
 		pop r4
 		pop r14
 		ret

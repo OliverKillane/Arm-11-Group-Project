@@ -6,3 +6,4 @@
 .include graphics_ball.s
 .include graphics_digits.s
 .include graphics_paddle.s
+.include graphics_text.s
