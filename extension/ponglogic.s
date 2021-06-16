@@ -25,6 +25,8 @@ swapcoors:
     pop r0 @ Pop r0 from stack so there are no side effects apart from the specified side effects.
     ret
 
+
+
 @===============================================================================
 @ PADDLEREACT:
 @
@@ -123,19 +125,141 @@ paddlereact:
     paddlereactend:
     ret
 
-    @===========================================================================
+    @===============================================================================
+    @ CHECKCOLLISION:
+    @
+    @ COLLIDE_ENUM:
+    @   0 - NO_COLLISION
+    @   1 - LEFT_WALL
+    @   2 - LEFT_PADDLE
+    @   3 - TOP_WALL
+    @   4 - RIGHT_PADDLE
+    @   5 - RIGHT WALL
+    @   6 - BOTTOM_WALL
+    @ arguments:    None
+    @ returns:      r12 <- COLLIDE_ENUM
+    @ side-effects: None
+    checkcollision:
+    push r9         @ r9 to store ball's x position
+    push r10        @ r10 to paddle top y position
+    push r11        @ r11 to store ball's y position
+    push r0         @ r0 to store any temporary variable
+    @ check if ball has collided with left wall
+    ldr r9, [r2]    @ move ball x position into r9
+    cmp r9, #0
+    bgt checkright
+    mov r12, #1
+    b endcheckcollision
+
+    checkright: 
+    add r9, r9, #0xC00
+    cmp r9, maxXcoor
+    blt checkleftpaddle
+    mov r12, #5
+    b endcheckcollision
+
+    checkleftpaddle:
+    
+    @ if ((ballY + ballHeight) >= paddleTop && ballY <= (paddltTop + paddleHeight) && ballX <= paddleWidth) {
+    @     return 2
+    @ }
+          
+    ldr r10, [r4]               @ left paddleTop y position
+    ldr r11, [r2, #4]           @ ball y pos
+    add r11, r11, #0xC00        @ bottom of the ball
+    cmp r11, r10
+    blt endleftpaddlecheck
+
+    ldr r9, [r2]                @ top of ball
+    mov r0, paddleheight        @ move paddle height into r0 to be shifted during addition
+    add r10, r10, r0, lsl #8    @ calculates the bottom of the left paddle.
+    cmp r9, r10
+    bgt endleftpaddlecheck
+
+    ldr r9, [r2]
+    mov r0, paddlewidth
+    lsl r0, #8
+    cmp r9, r0
+    bgt endleftpaddlecheck
+
+    mov r12, #2
+    b endcheckcollision
+
+    endleftpaddlecheck:
+
+    @ if ((ballY + ballHeight) >= paddleTop && ballY <= (paddltTop + paddleHeight) && (ballX + ballWidth) >= (maxXcoor - paddleWidth)) {
+    @     return 4
+    @ }
+
+    ldr r10, [r4, #4]           @ right paddleTop y position
+    ldr r11, [r2, #4]           @ ball y pos
+    add r11, r11, #0xC00        @ bottom of the ball
+    cmp r11, r10
+    blt endrightpaddlecheck
+
+    ldr r9, [r2, #4]            @ y of ball
+    mov r0, paddleheight        @ move paddle height into r0 to be shifted during addition
+    add r10, r10, r0, lsl #8    @ calculates the bottom of the left paddle.
+    cmp r9, r10
+    bgt endrightpaddlecheck
+
+    ldr r9, [r2]                @ x of ball
+    add r9, r9, #0xC00              @ far right of ball
+    @ calculate maxXcoor - paddlewidth
+    mov r10, paddlewidth            
+    lsl r10, #8
+    mov r0, maxXcoor
+    sub r0, r0, paddlewidth
+
+    cmp r9, r0
+    blt endrightpaddlecheck
+
+    mov r12, #4
+    b endcheckcollision
+
+    endrightpaddlecheck:
+
+    @ if (ballY + ballwidth >= maxYcoor) {
+    @     return 6
+    @ }
+
+    ldr r9, [r2, #4]    @ y coor of ball
+    add r9, r9, #0xC00   @ bottom of the ball
+    cmp r9, maxYcoor
+    blt endtopcheck
+    mov r12, #6
+    b endcheckcollision
+
+    endtopcheck:
+
+    @ if (ballY <= 0) {
+    @     return 3
+    @ }
+
+    ldr r9, [r2, #4]    @ y coor of ball
+    cmp r9, #0
+    blt endbottomcheck
+    mov r12, #3
+    b endcheckcollision
+
+    endbottomcheck:
+
+    mov r12, #0
+
+    endcheckcollision:
+    pop r0
+    pop r11
+    pop r10
+    pop r9
+    ret
+
+    @===============================================================================
     @ BALLUPDATE:
     @
     @ arguments:    None
     @ returns:      None
     @ side-effects: ball position, points
     ballupdate:
-
-    @ determine if the ball is at side edge
-    @ if so, then add 1 to score based on pos, and resetball
-
-    @ determine if ball on top/bottom edge if so change velocity accordingly
-
     @ determine if ball has hit a bat, alter velocity accordingly
 
     @ change current ball position based off of the new velocity.
@@ -283,16 +407,6 @@ paddlereact:
         ret
 
 @===============================================================================
-@ CHECKCOLLISION:
-@
-@ arguments:    None
-@ returns:      None
-@ side-effects: None
-checkcollision:
-    ret
-
-
-@===============================================================================
 @ WINCHECK:
 @
 @ arguments:    None
@@ -357,8 +471,7 @@ resetball:
     str r0, [r2, #4]
     str r0, [r3, #4]
 
-    @set ball velocity
-    ret
+ret
 
 @===============================================================================
 @ SETVARS:
