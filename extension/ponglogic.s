@@ -1,119 +1,177 @@
-
 @===============================================================================
-@ PADDLEREACT:
-@
-@ go through input buffer determine each character, change appropriate paddle
-@ arguments:    None
-@ returns:      None
-@ side effects: alters current positions of paddles
-paddlereact:
-    push r14
+@ USERINPUT:
+@ 
+@ Get the user's key inputs, and either end (ESC) or for w/s and UP/DOWN keys
+@ change the paddle veloctiy
+@ arguments:    NONE
+@ returns:      NONE
+@ side effects: paddle velocity
+@ alters regs:  r0, r1, r2, r3  
 
-    @ save registers, convention
-
-    @ following is basically:
-    @ while (not 0) {
-    @   keyinput = getnextinput
-    @   switch(keyinput) {
-    @       case THISKEY:
-    @           paddlepos = paddlebounds?newpos:samepos
-    @           break
-    @    }
-    @ }
-
-    @ get input buffer location and 0 (for nullifying) in a register
+userinput:
+    
+    @ store pointer to input buffer
     mov r0, input_buffer
+
+    @ store 0 for nullifying
     mov r1, #0
 
-    paddlereactloop:
+    inputloop:
 
-    @ get the next input (r3) next pointer (r2)
-    ldr r3, [r0]
+        @ get the user input keycode
+        ldr r3, [r0]
 
-    @ if null, at end of written buffer, return
-    cmp r3, #0
-    beq paddlereactend
+        @ if at a null character, return
+        cmp r3, #0
+        reteq
 
-    @ nullify the character
-    str r1, [r0]
+        @ nullify the character buffer
+        str r1, [r0]
 
-    tst r3, #0x80
-    bne paddlereactloop
+        @ test the key UP/DOWN bit
+        tst r3, #0x80
+        bne upKey
 
-    @ get lower 7 bits
-    and r3, r3, #0x7F
+        @ get lower 7 bits
+        and r3, r3, #0x7F
 
-    @ if an up arrow (code = 5)
-    cmp r3, #5
-    bne notuparrow
+        @is a key down (set velocity accordingly)
 
-    brl blackoutrightpaddle
+        @ if an up arrow (code = 5)
+        cmp r3, #5
+        bne testdownarrowDOWN
 
-    ldr r3, [r4, #4]
-    cmp r3, #0
-    subgt r3, r3, paddlespeed
-    str r3, [r4, #4]
+        mov r2, paddlespeed
+        str r2, [r5, #4]
 
-    brl drawrightpaddle
+        b inputloop
 
-    b paddlereactloop
+        @ if a down arrow (code = 4)
+        testdownarrowDOWN:
+        cmp r3, #4
+        bne testWkeyDOWN
 
-    notuparrow:
-    @ if a down arrow (code = 4)
-    cmp r3, #4
-    bne notdownarrow
+        sub r2, r1, paddlespeed
+        str r2, [r5, #4]
 
-    brl blackoutrightpaddle
+        b inputloop
 
-    ldr r3, [r4, #4]
-    cmp r3, paddlemaxY
-    addlt r3, r3, paddlespeed
-    str r3, [r4, #4]
+        @ if a w (code = 119)
+        testWkeyDOWN:
+        cmp r3, #119
+        bne testSkeyDOWN
 
-    brl drawrightpaddle
+        mov r2, paddlespeed
+        str r2, [r5]
 
-    b paddlereactloop
+        b inputloop
 
-    notdownarrow:
-    @ if a w (code = 119)
-    cmp r3, #119
-    bne notwkey
+        @ if an s (code = 115)
+        testSkeyDOWN:
+        cmp r3, #115
+        bne testESCkey
 
+        sub r2, r1, paddlespeed
+        str r2, [r5]
+
+        b inputloop
+
+        @ if an ESC key (code = 27)
+        testESCkey:
+        cmp r3, #27
+        bne inputloop
+
+        hlt
+
+        @ is a key up - set velocity to zero
+        upKey:
+
+        @ get lower 7 bits
+        and r3, r3, #0x7F
+
+        @ if an up arrow (code = 5)
+        cmp r3, #5
+        bne testdownarrowUP
+
+        str r1, [r5, #4]
+
+        b inputloop
+
+        @ if a down arrow (code = 4)
+        testdownarrowUP:
+        cmp r3, #4
+        bne testWkeyUP
+
+        str r1, [r5, #4]
+
+        b inputloop
+
+        @ if a w (code = 119)
+        testWkeyUP:
+        cmp r3, #119
+        bne testSkeyUP
+
+        str r1, [r5]
+
+        b inputloop
+
+        @ if an s (code = 115)
+        testSkeyUP:
+        cmp r3, #115
+        bne testESCkey
+
+        str r1, [r5]
+        b inputloop
+@===============================================================================
+@ MOVEPADDLES:
+@
+@ using velocity, determine if a paddle must be moved, if so clear, calaculate
+@ new position and redraw.
+@ arguments:    NONE
+@ returns:      NONE
+@ side effects: Ball position
+@ alters regs:  r0, r1
+@ const-used:   r5 (pvel address), r4 (pcurr address)
+
+movepaddles:
+    push r14
+
+    @get left paddle velocity
+    ldr r0, [r5]
+    cmp r0, #0
+    beq rightpaddlecheck
+
+    @ clear the paddle
     brl blackoutleftpaddle
 
-    ldr r3, [r4]
-    cmp r3, #0
-    subgt r3, r3, paddlespeed
-    str r3, [r4]
+    @calculate the new position
 
+    ldr r1, [r4]
+    add r1, r1, r0
+    str r1, [r4]
+
+    @ draw paddle at new position
     brl drawleftpaddle
 
-    b paddlereactloop
+    rightpaddlecheck:
 
-    notwkey:
-    @ if an s (code = 115)
-    cmp r3, #115
-    bne notskey
+    ldr r0, [r5, #4]
+    cmp r0, #0
+    beq endpaddlemove
 
-    brl blackoutleftpaddle
+    @ clear the paddle
+    brl blackoutrightpaddle
 
-    ldr r3, [r4]
-    cmp r3, paddlemaxY
-    addlt r3, r3, paddlespeed
-    str r3, [r4]
+    @calculate the new position
 
-    brl drawleftpaddle
+    ldr r1, [r4, #4]
+    add r1, r1, r0
+    str r1, [r4, #4]
 
-    b paddlereactloop
+    @ draw paddle at new position
+    brl drawrightpaddle
 
-    notskey:
-    @ if an ESC (code = 27)
-    cmp r3, #27
-    bne paddlereactloop
-
-    b paddlereactloop
-
-    paddlereactend:
+    endpaddlemove:
     pop r14
     ret
 
@@ -415,6 +473,7 @@ ballupdate:
 @ arguments:    None
 @ returns:      None
 @ side-effects: ball position, points, paddlepositions
+@ alters regs:  r0
 wincheck:
     push r14
     ldr r0, [r6]
@@ -436,7 +495,8 @@ wincheck:
 @ arguments:    None
 @ returns:      None
 @ side-effects: ball position, points, paddlepositions
-@ uses constants: r6 (score address), r2 (bcurr address)
+@ alters regs:  r0
+@ const-used:   r6 (score address), r2 (bcurr address), r4 (pcurr address)
 newgame:
     push r14
 
@@ -444,6 +504,16 @@ newgame:
     mov r0, #0
     str r0, [r6]
     str r0, [r6, #4]
+
+    @ reset paddles to middle
+    @ get the middle coor
+    mov r0, paddlemaxY
+    lsr r0, #1
+    add r0, r0, #0xF00
+    
+    @ store to paddle pos
+    str r0, [r4]
+    str r0, [r4, #4]
 
     @ move ball to the center
     brl resetball
@@ -457,7 +527,9 @@ newgame:
 @ place ball in starting position and the ball velocity random
 @ arguments:    None
 @ returns:      None
-@ side-effects: ball position (), ball velocity
+@ side-effects: ball position, ball velocity
+@ alters regs:  r0
+@ const-used:   r2 (bcurr address)
 resetball:
 
     @ set ball x to the center
@@ -465,76 +537,95 @@ resetball:
     lsr r0, #1
     sub r0, r0, #0x600
     str r0, [r2]
-    str r0, [r3]
 
     @ set ball y to the center
     mov r0, maxYcoor
     lsr r0, #1
     sub r0, r0, #0x600
     str r0, [r2, #4]
-    str r0, [r3, #4]
 
-ret
+    @TODO: add ball velocity changing code here
+    ret
 
 @===============================================================================
 @ SETVARS:
 @
 @ global reg values:
+@ r0  <- EMPTY
+@ r1  <- EMPTY
+@ r2  <- bcurr address
+@ r3  <- EMPTY
+@ r4  <- pcurr address
+@ r5  <- pvel address
+@ r6  <- score address
+@ r7  <- ball x velocity
+@ r8  <- ball y velocity
+@ r9  <- EMPTY
+@ r10 <- EMPTY
+@ r11 <- EMPTY
+@ r12 <- EMPTY
 @ r13 <- stack pointer (stack_start)
-@ r0 <- the input buffer pointer
-@ r1 <- EMPTY
-@ r2 <- bcurr address
-@ r3 <- EMPTY
-@ r4 <- pcurr address
-@ r5 <- EMPTY
-@ r6 <- score address
-@ r7 <- ball x velocity
-@ r8 <- ball y velocity
+@
+@ arguments:    NONE
+@ returns:      NONE
+@ alters regs:  r3,r4,r5,r6,r13
 
 setvars:
-@ loading globals:
+    @ loading globals:
 
-@ stack pointer
-mov r13 :first8:stack_start
-orr r13, r13 :second8:stack_start
-orr r13, r13 :third8:stack_start
-orr r13, r13 :fourth8:stack_start
+    @ r0:  NOTHING
+    @ r1:  NOTHING
 
-@ place the input buffer
-mov r0, input_buffer
+    @ r3: bcurr address
+    mov r2 :first8:bcurr
+    orr r2, r2 :second8:bcurr
+    orr r2, r2 :third8:bcurr
+    orr r2, r2 :fourth8:bcurr
 
-@ anything you want in r1
+    @ r3:  NOTHING
 
-@ bcurr address
-mov r2 :first8:bcurr
-orr r2, r2 :second8:bcurr
-orr r2, r2 :third8:bcurr
-orr r2, r2 :fourth8:bcurr
+    @ r4:  pcurr address
+    mov r4 :first8:pcurr
+    orr r4, r4 :second8:pcurr
+    orr r4, r4 :third8:pcurr
+    orr r4, r4 :fourth8:pcurr
 
-@ anything for r3
+    @ r5:  pvel address
+    mov r5 :first8:pvel
+    orr r5, r5 :second8:pvel
+    orr r5, r5 :third8:pvel
+    orr r5, r5 :fourth8:pvel
+
+    @ r6:  score address
+    mov r6 :first8:score
+    orr r6, r6 :second8:score
+    orr r6, r6 :third8:score
+    orr r6, r6 :fourth8:score
+
+    @ r7:  BALL X VELOCITY
+    @ r8:  BALL Y VELOCITY
+
+    @ r9:  NOTHING
+    @ r10: NOTHING
+    @ r11: NOTHING
+    @ r12: NOTHING
 
 
-@ pcurr address
-mov r4 :first8:pcurr
-orr r4, r4 :second8:pcurr
-orr r4, r4 :third8:pcurr
-orr r4, r4 :fourth8:pcurr
+    @ r13: stack_pointer
+    mov r13 :first8:stack_start
+    orr r13, r13 :second8:stack_start
+    orr r13, r13 :third8:stack_start
+    orr r13, r13 :fourth8:stack_start
 
-@ anything for r6
-
-@ score address
-mov r6 :first8:score
-orr r6, r6 :second8:score
-orr r6, r6 :third8:score
-orr r6, r6 :fourth8:score
-
-ret
+    ret
 
 @===============================================================================
 @ WAITKEYPRESS:
 @
 @ waits for a keypress
-@ side-effects: 
+@ arguments:    NONE
+@ returns       NONE
+@ side-effects: r0, r1
  waitforkeypress:
     push r0
     push r1
