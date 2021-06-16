@@ -70,7 +70,7 @@ For the extension we settled on adding enough support to the assembler and emula
 \subsection*{Assembler}
 The most extension was required by the assembler, having to add support for the data section, stack and subroutines. However, thanks to the foresight while writing the base implementation, this proved to be rather straigtforward.
 \subparagraph*{Data Section}
-The data section added the capability to store data for our code, for example the images for our game or global variables. All of the contents of the data section are always stored after the instructions, i.e. the the text section.
+The data section added the capability to store data for our code, for example the images for our game or global variables. All of the contents of the data section are always stored after the instructions, i.e. the text section.
 \subparagraph*{Assembler Directives} The support for assembler directives was required due to the data section and the need to collaborate on the code. After some research, we settled on supporting the following:
 \begin{center}
 	\begin{tabular}{r|l}
@@ -123,7 +123,7 @@ By passing the \textbf{-g} flag, the GPIO bits are displayed as a memory locatio
 Using SDL's keyboard input functionality, the ascii codes of keys (of value less than 128) are written to a 64 byte buffer as 8 bit values (most significant is 1/0 for key up/down, lower 7 are the ascii code). The arrow keys replace EOT-BEL characters ascii codes. The buffer is written to as a circular queue capable of holding 64 keyboard events, with the
 \newline binary being run responsible for reading from the queue, nullifying the characters read, and moving up the queue to the next read keystroke.
 \subparagraph*{Display}
-By passing the \textbf{-v} flag the emulator will display the memory region starting at the pointer contained in special location (0x1000000 - the vide pointer) at a fixed resolution (192x108) with full RGB colour (4 bytes per pixel, lower 3 are rgb). When a value is stored to the memory pointer, the display is updated.
+By passing the \textbf{-v} flag the emulator will display the memory region starting at the pointer contained in special location (0x1000000 - the video pointer) at a fixed resolution (192x108) with full RGB colour (4 bytes per pixel, lower 3 are rgb). When a value is stored to the memory pointer, the display is updated.
 \newline\newline We used the SDL2 graphics library to render a texture, which used the data stored at the memory pointer (a part of the addressable emulator memory). The graphics are scaled up by 4 as on newer monitors the window would be too small to play PONG.
 \newline\newline Reading texture data directly from the emulator memory proved to be much faster than iterating through the all pixels, rendering. Though this meant that each pixel had a redundant byte (alpha value) associated.
 \subparagraph*{Testing}
@@ -148,7 +148,7 @@ In the final pong program, the .data section will be used instead so we can simp
 In order to keep a high level of information synchronization between the team members, we used the following techniques:
 \begin{itemize}
 \item \textbf{Meetings:}\\
-Our team held at least 2 meetings per week to discuss the progress with the task, the technical difficulties that might had arisen and the goals of the next sprint (as in the SCRAM team project methodology). Furthermore, summaries have been compiled after each meeting to allow to easily refer to the contents of the meeting when needed. 
+Our team held at least 2 meetings per week to discuss the progress with the task, the technical difficulties that might had arisen and the goals of the next sprint (as in the SCRUM team project methodology). Furthermore, summaries have been compiled after each meeting to allow to easily refer to the contents of the meeting when needed. 
 \item \textbf{Pair communication:}\\
 Apart from our meetings, we kept a higher throughput of communication in pairs to allow for easy and quick resolution of any problems in more than one area of development. For that reason, some of our in-pair meetings were held in person, especially in the groups that developed the assembler and emulator.
 \end{itemize}
