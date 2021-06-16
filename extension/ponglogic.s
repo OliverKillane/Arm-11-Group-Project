@@ -266,13 +266,15 @@ checkcollision:
 
     ldr r9, [r2, #4]    @ y coor of ball
     cmp r9, #0
-    blt endbottomcheck
+    bge endbottomcheck
     mov r12, #3
     b endcheckcollision
 
     endbottomcheck:
-
-    mov r12, #0
+    add r9, r9, #0xC00
+    cmp r9, maxYcoor
+    movgt r12, #6
+    movle r12, #0
 
     endcheckcollision:
     pop r14
@@ -318,8 +320,7 @@ ballupdate:
     str r1, [r2, #4]
 
    
-    @brl checkcollision
-    mov r12, #0
+    brl checkcollision
     cmp r12, #0
     beq end_ballupdate
 
@@ -512,8 +513,6 @@ newgame:
 @ alters regs:  r0
 @ const-used:   r2 (bcurr address)
 resetball:
-    push r3 @ Ball X velocity
-    push r5 @ Ball Y velocity
     push r14
 
     @ set ball x to the center
@@ -545,8 +544,6 @@ resetball:
     rsbeq r8, r8, #0
 
     pop r14
-    pop r5
-    pop r3
     ret
 
 @===============================================================================
