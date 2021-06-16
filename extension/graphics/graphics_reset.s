@@ -8,7 +8,7 @@ reset:
 	@ r3  <- height (Y axis)
 
 	@ internal registers for local variables: 
-    @ r4  <- write_image_buffer register
+    @ r4  <- image_buffer_ptr register
 	@ r5  <- X-axis iterator
 	@ r6  <- Y-axis iterator
 	@ r8  <- X-axis target pixel index
@@ -49,24 +49,12 @@ reset:
     orr r12, r12, :third8:background
     orr r12, r12, :fourth8:background
 
-	@ load write_image_buffer values into register
-    mov r4, :first8:write_image_buffer
-    orr r4, r4, :second8:write_image_buffer
-    orr r4, r4, :third8:write_image_buffer
-    orr r4, r4, :fourth8:write_image_buffer
+	@ load image_buffer_ptr values into register
+    mov r4, :first8:image_buffer_ptr
+    orr r4, r4, :second8:image_buffer_ptr
+    orr r4, r4, :third8:image_buffer_ptr
+    orr r4, r4, :fourth8:image_buffer_ptr
 	ldr r4 [r4]
-
-	@ ensure X coordinate is within image bounds
-	boundX_reset:
-		cmp r8, width
-		ble boundY_reset
-		mov r8, width 
-
-	@ ensure Y coordinate is within image bounds
-	boundY_reset:
-		cmp r9, height
-		ble condX_reset
-		mov r9, height
 
 	condY_reset:
 		cmp r6, r9

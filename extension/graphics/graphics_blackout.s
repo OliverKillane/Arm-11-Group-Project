@@ -1,83 +1,157 @@
 @ This file defines a blackout subroutine used in the main loop
 .text
-	blackout:
-		@ Saving onto the stack
+	blackouttext:
+		@ Setup
 		push r14
-		push r4
+		push r3
+		push r2
+		push r1
+		push r0
 
-		@ Blacking out the text
-		mov r4 :first8:push_button_erased
-		orr r4, r4 :second8:push_button_erased
-		orr r4, r4 :third8:push_button_erased
-		orr r4, r4 :fourth8:push_button_erased
-		
-		ldr r0 [r4]
-		cmp r0, #0
-		beq continue_blackout
-		sub r0, r0, #1
-		str r0 [r4]
-
+		@ Logic
 		mov r0, #0
-		mov r1, #0
+		mov r1, #1
 		mov r2, width
 		mov r3, height
 		brl reset
-		b end_blackout
 
-		continue_blackout:
-		@ Blacking out the ball
-		mov r4, :first8:bprev
-		orr r4, r4, :second8:bprev
-		orr r4, r4, :third8:bprev
-		orr r4, r4, :fourth8:bprev
-		ldr r0, [r4]
-		ldr r1, [r4, #0x4]
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	blackoutball:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
+		ldr r0, [r2]
+		ldr r1, [r2, #0x4]
 		lsr r0, #8
 		lsr r1, #8
 		add r0, r0, ml
 		add r1, r1, mt
+
 		mov r2, ball_width
 		mov r3, ball_height
+		
 		brl reset
 
-		@ Blacking out the paddles
-		mov r4, :first8:pprev
-		orr r4, r4, :second8:pprev
-		orr r4, r4, :third8:pprev
-		orr r4, r4, :fourth8:pprev
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	blackoutleftpaddle:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
 		mov r0, ml
 		ldr r1, [r4]
 		lsr r1, #8
 		add r1, r1, mt
+
 		mov r2, paddlewidth
 		mov r3, paddleheight
-		brl reset
 
+		brl reset
+		
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	blackoutrightpaddle:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
 		mov r0, width
 		sub r0, r0, ml
 		sub r0, r0, paddlewidth
 		ldr r1, [r4, #0x4]
 		lsr r1, #8
 		add r1, r1, mt
+
 		mov r2, paddlewidth
 		mov r3, paddleheight
+
 		brl reset
 		
-		@ Blacking out the score
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	blackoutleftscore:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
 		mov r0, score_left_x
 		mov r1, score_left_y
 		mov r2, digits_width
 		mov r3, digits_height
 		brl reset
-		
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	blackoutrightscore:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
 		mov r0, score_right_x
 		mov r1, score_right_y
 		mov r2, digits_width
 		mov r3, digits_height
 		brl reset
 
-		@ Cleaning everything up
-		end_blackout:
-		pop r4
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
 		pop r14
 		ret

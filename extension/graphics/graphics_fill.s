@@ -9,7 +9,7 @@ fill:
 	@ r13 <- memory pointer register
 
 	@ Internal registers for local variables: 
-    @ r4  <- write_image_buffer register	
+    @ r4  <- image_buffer_ptr register	
 	@ r5  <- X-axis iterator
 	@ r6  <- Y-axis iterator
 	@ r7  <- background pixel register
@@ -45,11 +45,11 @@ fill:
 	mov r11, width
 	mla r10, r1, r11, r0
 
-	@ load write_image_buffer values into register
-    mov r4, :first8:write_image_buffer
-    orr r4, r4, :second8:write_image_buffer
-    orr r4, r4, :third8:write_image_buffer
-    orr r4, r4, :fourth8:write_image_buffer
+	@ load image_buffer_ptr values into register
+    mov r4, :first8:image_buffer_ptr
+    orr r4, r4, :second8:image_buffer_ptr
+    orr r4, r4, :third8:image_buffer_ptr
+    orr r4, r4, :fourth8:image_buffer_ptr
 	ldr r4, [r4]
 
 	@ ensure X coordinate is within image bounds

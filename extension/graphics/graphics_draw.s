@@ -1,115 +1,196 @@
 @ This file defines a draw subroutine used in the main loop
 .text
-	draw:
-		@ Saving onto the stack
-		push r4
-		push r5
-		push r6
+	drawball:
+		@ Setup
 		push r14
+		push r3
+		push r2
+		push r1
+		push r0
 
-		@ Drawing the ball
-		mov r5, :first8:bcurr
-		orr r5, r5, :second8:bcurr
-		orr r5, r5, :third8:bcurr
-		orr r5, r5, :fourth8:bcurr
-		ldr r0, [r5]
-		ldr r1, [r5, #0x4]
+		@ Logic
+		mov r0, :first8:ball
+		orr r0, r0, :second8:ball
+		orr r0, r0, :third8:ball
+		orr r0, r0, :fourth8:ball
+		push r0
+
+		ldr r0, [r2]
+		ldr r1, [r2, #0x4]
 		lsr r0, #8
 		lsr r1, #8
 		add r0, r0, ml
 		add r1, r1, mt
+		
 		mov r2, ball_width
 		mov r3, ball_height
-		mov r4, :first8:ball
-		orr r4, r4, :second8:ball
-		orr r4, r4, :third8:ball
-		orr r4, r4, :fourth8:ball
-		push r4
+
 		brl fill
 
-		@ Drawing the paddles
-		mov r5, :first8:pcurr
-		orr r5, r5, :second8:pcurr
-		orr r5, r5, :third8:pcurr
-		orr r5, r5, :fourth8:pcurr
-		mov r0, ml
-		ldr r1, [r5]
-		lsr r1, #8
-		add r1, r1, mt
-		mov r2, paddlewidth
-		mov r3, paddleheight
-		mov r4, :first8:paddle_left
-		orr r4, r4, :second8:paddle_left
-		orr r4, r4, :third8:paddle_left
-		orr r4, r4, :fourth8:paddle_left
-		str r4, [r13]
-		brl fill
-
-		mov r0, width
-		sub r0, r0, ml
-		sub r0, r0, paddlewidth
-		ldr r1, [r5, #0x4]
-		lsr r1, #8
-		add r1, r1, mt
-		mov r2, paddlewidth
-		mov r3, paddleheight
-		mov r4, :first8:paddle_right
-		orr r4, r4, :second8:paddle_right
-		orr r4, r4, :third8:paddle_right
-		orr r4, r4, :fourth8:paddle_right
-		str r4, [r13]
-		brl fill
-		
-		@ Drawing the score
-		mov r5, :first8:score
-		orr r5, r5, :second8:score
-		orr r5, r5, :third8:score
-		orr r5, r5, :fourth8:score
-		mov r0, score_left_x
-		mov r1, score_left_y
-		mov r2, digits_width
-		mov r3, digits_height
-		mov r4, :first8:digits
-		orr r4, r4, :second8:digits
-		orr r4, r4, :third8:digits
-		orr r4, r4, :fourth8:digits
-		ldr r6, [r5]
-		lsl r6, #2
-		mul r6, r2, r6
-		mla r6, r3, r6, r4
-		str r6, [r13]
-		brl fill
-		
-		mov r0, score_right_x
-		mov r1, score_right_y
-		mov r2, digits_width
-		mov r3, digits_height
-		ldr r6, [r5, #0x4]
-		lsl r6, #2
-		mul r6, r2, r6
-		mla r6, r3, r6, r4
-		str r6, [r13]
-		brl fill
-		
-		@ Changing the drawing buffers
-		mov r0, :first8:read_image_buffer
-		orr r0, r0, :second8:read_image_buffer
-		orr r0, r0, :third8:read_image_buffer
-		orr r0, r0, :fourth8:read_image_buffer
-		mov r1, :first8:write_image_buffer
-		orr r1, r1, :second8:write_image_buffer
-		orr r1, r1, :third8:write_image_buffer
-		orr r1, r1, :fourth8:write_image_buffer
-		ldr r2, [r0]
-		ldr r3, [r1]
-		str r3, [r0]
-		str r2, [r1]
-
-		@ Cleaning everything up
 		add r13, r13, #0x4
 
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
 		pop r14
-		pop r6
-		pop r5
-		pop r4
+		ret
+
+	
+	drawleftpaddle:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
+		mov r0, :first8:paddle_left
+		orr r0, r0, :second8:paddle_left
+		orr r0, r0, :third8:paddle_left
+		orr r0, r0, :fourth8:paddle_left
+		push r0
+
+		mov r0, ml
+		ldr r1, [r4]
+		lsr r1, #8
+		add r1, r1, mt
+		mov r2, paddlewidth
+		mov r3, paddleheight
+		brl fill
+
+		add r13, r13, #0x4
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	drawrightpaddle:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
+		mov r0, :first8:paddle_right
+		orr r0, r0, :second8:paddle_right
+		orr r0, r0, :third8:paddle_right
+		orr r0, r0, :fourth8:paddle_right
+		push r0
+
+		mov r0, width
+		sub r0, r0, mr
+		sub r0, r0, paddlewidth
+		ldr r1, [r4, #0x4]
+		lsr r1, #8
+		add r1, r1, mt
+		mov r2, paddlewidth
+		mov r3, paddleheight
+		brl fill
+
+		add r13, r13, #0x4
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	drawleftscore:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
+		mov r0, :first8:digits
+		orr r0, r0, :second8:digits
+		orr r0, r0, :third8:digits
+		orr r0, r0, :fourth8:digits
+		
+		mov r2, digits_width
+		mov r3, digits_height
+
+		ldr r1, [r6]
+		lsl r1, #2
+		mul r1, r2, r1
+		mla r1, r3, r1, r0
+		push r1
+
+		mov r0, score_left_x
+		mov r1, score_left_y
+		brl fill
+
+		add r13, r13, #0x4
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	drawrightscore:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
+		mov r0, :first8:digits
+		orr r0, r0, :second8:digits
+		orr r0, r0, :third8:digits
+		orr r0, r0, :fourth8:digits
+		
+		mov r2, digits_width
+		mov r3, digits_height
+
+		ldr r1, [r6, #4]
+		lsl r1, #2
+		mul r1, r2, r1
+		mla r1, r3, r1, r0
+		push r1
+
+		mov r0, score_right_x
+		mov r1, score_right_y
+		brl fill
+
+		add r13, r13, #0x4
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	update:
+		push r0
+		push r1
+
+		mov r0, :first8:image_buffer_ptr
+		orr r0, r0, :second8:image_buffer_ptr
+		orr r0, r0, :third8:image_buffer_ptr
+		orr r0, r0, :fourth8:image_buffer_ptr
+		ldr r1 [r0]
+		str r1 [r0]
+
+		push r1
+		push r0
 		ret
