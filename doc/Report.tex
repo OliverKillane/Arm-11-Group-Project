@@ -6,7 +6,8 @@
 \graphicspath{{img/}}
 
 \title{\vspace*{-1cm}Assembler, Extension and Group Reflection}
-\date{\vspace*{-1cm}12 June 2021}
+\author{\vspace*{-0.1cm}Bartłomiej Cieślar, Jordan Hall, Oliver Killane and Ioana Mihăilescu}
+\date{\vspace*{-0.15cm}18 June 2021}
 
 \begin{document}
 \maketitle
@@ -34,7 +35,7 @@ In addition, the workload of the assembler was split as follows:\\
 	\end{tabular}
 \end{center}
 \subsection*{StdData}
-The stddata library, inspired by c++'s STL, has proved invaluable in the implementation of the assembler, although has not been utilized in the emulator. The library features the following structures, the interface of which mimics that of the stl library (with accommodations to the lack of some featues in c):
+The stddata library, inspired by C++'s STL, has proved invaluable in the implementation of the assembler, although has not been utilized in the emulator. The library features the following structures, the interface of which mimics that of the stl library (with accommodations to the lack of some featues in C):
 \begin{itemize}
 \item Stack (unused) - an implementation of a vector-based stack
 \item Queue (unused) - an implementation of a list-based queue
@@ -111,7 +112,6 @@ along with the following aliases for the ease of use
 \item All labels in expressions can now be offset by +/- value
 \item :first8:label, :second8:label, ... allow for refering to bits of label separately (useful for loading a value of the label into a register)
 \end{itemize}
-\pagebreak
 \subsection*{Emulator}
 \centerline{\textbf{Memory Layout}}
 \includegraphics[width=\textwidth]{emulator memory}
@@ -153,6 +153,7 @@ Our team held at least 2 meetings per week to discuss the progress with the task
 Apart from our meetings, we kept a higher throughput of communication in pairs to allow for easy and quick resolution of any problems in more than one area of development. For that reason, some of our in-pair meetings were held in person, especially in the groups that developed the assembler and emulator.
 \end{itemize}
 \subsection*{Individual Reflections}
+
 \subparagraph*{Jordan}
 During the course of this project, I made a great effort to integrate well with my team mates. From my group feedback and continuous feedback from my colleagues, I believe I fitted in with my team mates considerably well. As a result, group communication between myself and my team mates was smooth and effective, and I enjoyed working with my team.
 \subparagraph*{Ioana}
