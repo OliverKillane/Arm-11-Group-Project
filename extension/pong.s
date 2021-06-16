@@ -61,8 +61,6 @@ brl paddlereact
 @check win condition
 brl wincheck
 
-@ update scores
-@ todo
 
 brl update
 
