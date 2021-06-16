@@ -172,19 +172,6 @@ checkcollision:
     push r10        @ r10 to paddle top y position
     push r11        @ r11 to store ball's y position
     push r14
-    @ check if ball has collided with left wall
-    ldr r9, [r2]    @ move ball x position into r9
-    cmp r9, #0
-    bgt checkright
-    mov r12, #1
-    b endcheckcollision
-
-    checkright: 
-    add r9, r9, #0xC00
-    cmp r9, maxXcoor
-    blt checkleftpaddle
-    mov r12, #5
-    b endcheckcollision
 
     checkleftpaddle:
     
@@ -196,24 +183,24 @@ checkcollision:
     ldr r11, [r2, #4]           @ ball y pos
     add r11, r11, #0xC00        @ bottom of the ball
     cmp r11, r10
-    blt endleftpaddlecheck
+    blt checkrightpaddle
 
-    ldr r9, [r2]                @ top of ball
+    ldr r11, [r2, #4]           @ ball y pos
     mov r0, paddleheight        @ move paddle height into r0 to be shifted during addition
     add r10, r10, r0, lsl #8    @ calculates the bottom of the left paddle.
-    cmp r9, r10
-    bgt endleftpaddlecheck
+    cmp r11, r10
+    bgt checkrightpaddle
 
-    ldr r9, [r2]
+    ldr r9, [r2]                @ top of ball
     mov r0, paddlewidth
     lsl r0, #8
     cmp r9, r0
-    bgt endleftpaddlecheck
+    bgt checkrightpaddle
 
     mov r12, #2
     b endcheckcollision
 
-    endleftpaddlecheck:
+    checkrightpaddle:
 
     @ if ((ballY + ballHeight) >= paddleTop && ballY <= (paddltTop + paddleHeight) && (ballX + ballWidth) >= (maxXcoor - paddleWidth)) {
     @     return 4
@@ -223,29 +210,44 @@ checkcollision:
     ldr r11, [r2, #4]           @ ball y pos
     add r11, r11, #0xC00        @ bottom of the ball
     cmp r11, r10
-    blt endrightpaddlecheck
+    blt checkleft
 
-    ldr r9, [r2, #4]            @ y of ball
+    ldr r11, [r2, #4]            @ y of ball
     mov r0, paddleheight        @ move paddle height into r0 to be shifted during addition
     add r10, r10, r0, lsl #8    @ calculates the bottom of the left paddle.
-    cmp r9, r10
-    bgt endrightpaddlecheck
+    cmp r11, r10
+    bgt checkleft
 
     ldr r9, [r2]                @ x of ball
     add r9, r9, #0xC00              @ far right of ball
     @ calculate maxXcoor - paddlewidth
     mov r10, paddlewidth            
-    lsl r10, #8
     mov r0, maxXcoor
-    sub r0, r0, paddlewidth
+    sub r0, r0, r10, lsl #8
 
     cmp r9, r0
-    blt endrightpaddlecheck
+    blt checkleft
 
     mov r12, #4
     b endcheckcollision
 
-    endrightpaddlecheck:
+
+    checkleft:
+    ldr r9, [r2]    @ move ball x position into r9
+    cmp r9, #0
+    bgt checkright
+
+    mov r12, #1
+    b endcheckcollision
+
+    checkright: 
+    add r9, r9, #0xC00
+    cmp r9, maxXcoor
+    blt checkbottom
+    mov r12, #5
+    b endcheckcollision
+
+    checkbottom:
 
     @ if (ballY + ballwidth >= maxYcoor) {
     @     return 6
@@ -254,11 +256,11 @@ checkcollision:
     ldr r9, [r2, #4]    @ y coor of ball
     add r9, r9, #0xC00   @ bottom of the ball
     cmp r9, maxYcoor
-    blt endtopcheck
+    blt checktop
     mov r12, #6
     b endcheckcollision
 
-    endtopcheck:
+    checktop:
 
     @ if (ballY <= 0) {
     @     return 3
@@ -271,10 +273,7 @@ checkcollision:
     b endcheckcollision
 
     endbottomcheck:
-    add r9, r9, #0xC00
-    cmp r9, maxYcoor
-    movgt r12, #6
-    movle r12, #0
+    mov r12, #0
 
     endcheckcollision:
     pop r14
@@ -341,7 +340,6 @@ ballupdate:
 
     leftwall:
 
-        brl blackoutleftscore
 
         @ Player 2 score +1
         ldr r0, [r6, #4]
@@ -349,12 +347,16 @@ ballupdate:
         str r0, [r6, #4] 
         brl resetball
 
-        brl drawleftscore
+        mov r0 :first8:scorechanged
+        orr r0, r0, :second8:scorechanged
+        orr r0, r0, :third8:scorechanged
+        orr r0, r0, :fourth8:scorechanged
+        mov r1, #1
+        str r1, [r0]
 
         b end_ballupdate
 
     rightwall:
-        brl blackoutrightscore
 
         @ Player 1 score +1
         ldr r0, [r6]
@@ -362,15 +364,18 @@ ballupdate:
         str r0, [r6] 
         brl resetball
 
-        brl drawrightscore
+        mov r0 :first8:scorechanged
+        orr r0, r0, :second8:scorechanged
+        orr r0, r0, :third8:scorechanged
+        orr r0, r0, :fourth8:scorechanged
+        mov r1, #1
+        str r1, [r0]
 
         b end_ballupdate
 
     leftpaddle:
 
-        ldr r0, [r7]
-        rsb r0, r0, #0
-        str r0, [r7] 
+        rsb r7, r7, #0
 
         @ ball current X coord
         ldr r0, [r2]
@@ -387,22 +392,17 @@ ballupdate:
 
     rightpaddle:
 
-        ldr r0, [r7]
-        rsb r0, r0, #0
-        str r0, [r7] 
+        rsb r7, r7, #0
      
         @ load ball current X coord
         ldr r0, [r2]
 
         @ updated ball X coord = 
         @ 2 x (width - paddle width - ball width) - current ball X-coord
-        rsb r0, r0, #0
-        mov r1, width
-        mov r9, paddlewidth
-        sub r1, r1, r9
-        mov r9, #12 @ ball width
-        add r1, r1, r9
-        add r0, r0, r1, lsl #9
+        mov r1, maxXcoor - 0xC00
+        rsb r0, r0, r1, lsl #1
+        mov r1, paddlewidth
+        sub r0, r0, r1, lsl #9
 
         str r0, [r2]
 
@@ -410,9 +410,7 @@ ballupdate:
     
     topwall:
 
-        ldr r0, [r8]
-        rsb r0, r0, #0
-        str r0, [r8]
+        rsb r8, r8, #0
              
         @ ball current Y coord
         ldr r0, [r2, #4]
@@ -427,22 +425,18 @@ ballupdate:
 
     bottomwall:
 
-        ldr r0, [r8]
-        rsb r0, r0, #0
-        str r0, [r8]
+        rsb r8, r8, #0
     
         @ load ball current Y coord
         ldr r0, [r2, #4]
 
         @ updated ball Y coord = 
         @ 2 x (height - ball width) - current ball Y-coord
-        mov r1, height
-        mov r9, #12 @ ball width
-        sub r1, r1, r9
-        rsb r0, r0, #0
-        add r0, r0, r1, lsl #9
+        mov r1, maxYcoor - 0xC00
+        lsl r1, #1
+        sub r0, r1, r0
 
-        str r0, [r2]
+        str r0, [r2, #4]
 
         b end_ballupdate
 
@@ -466,17 +460,20 @@ wincheck:
     push r14
     ldr r0, [r6]
     cmp r0, #10
-    brleq newgame
-    
+    blt checkrightscore
+    brl newgame
     b wincheckend
 
+    checkrightscore:
     ldr r0, [r6, #4]
     cmp r0, #10
-    brleq newgame
+    blt wincheckend
+    brl newgame
 
     wincheckend:
     pop r14
     ret
+
 
 @===============================================================================
 @ NEWGAME:
@@ -485,10 +482,14 @@ wincheck:
 @ arguments:    None
 @ returns:      None
 @ side-effects: ball position, points, paddlepositions
-@ alters regs:  r0
+@ alters regs:  r0, r1
 @ const-used:   r6 (score address), r2 (bcurr address), r4 (pcurr address)
 newgame:
     push r14
+
+    brl blackoutleftpaddle
+    brl blackoutrightpaddle
+    brl blackoutball
 
     @ reset scores to 0
     mov r0, #0
@@ -507,6 +508,10 @@ newgame:
 
     @ move ball to the center
     brl resetball
+
+    brl drawball
+    brl drawleftpaddle
+    brl drawrightpaddle
 
     pop r14
     ret
@@ -687,66 +692,7 @@ waitforkeydown:
     ldr r0, [r1]
     cmp r0, #0
     beq waitdownloop
-    tst r0, #0x80
-    bne waitdownloop
 
     pop r1
     pop r0
     ret
-
-
-@===============================================================================
-@ BALLSCORECOLLISION:
-@
-@ determines if the ball is intersecting with the scoreboard, if so redraws it
-@ side-effects: redraws the scoreboard
-@ 
-
-ballscorecollision:
-    
-    @ calling convention
-    push r1
-    push r14
-
-    @ check if ball y coor high enough
-    ldr r1, [r2, #4]
-    cmp r1, digits_height
-    bgt ballscoreend
-
-    @ if x is smaller than 100 - 5 + 13 and larger than 100 - 5, right digit
-    ldr r1, [r2]
-    cmp r1, #0x5F00
-    blt notright
-
-    cmp r1, #0x6C00
-    bgt ballscoreend
-
-    @ it is blocking the right digit, so draw right over it 
-    @ (score has not changed, so no need to blackout)
-    brl drawrightscore
-
-    notright:
-    @ if x smaller than 79 - 5 + 13 and larger than 79 - 5, left digit
-
-    cmp r1, #0x5C00
-    blt ballscoreend
-
-    cmp r1, #0x6900
-    bgt ballscoreend
-
-    @ it is blocking the left digit, so redraw it
-
-    brl drawleftscore
-
-    ballscoreend:
-    pop r14
-    pop r1
-    ret
-    
-
-
-
-
-
-    
-

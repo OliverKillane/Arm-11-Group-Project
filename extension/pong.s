@@ -32,26 +32,36 @@ brl blackouttext
 @ setup ball position, scores
 brl newgame
 
-@ draw the game initially
-brl drawball
-brl drawleftpaddle
-brl drawrightpaddle
-brl drawleftscore
-brl drawrightscore
-
-@ update the display
-brl update
-
-@ before starting to move the ball
-brl waitforkeydown
-
 @ the main program loop
 mainloop:
+mov r0 :first8:scorechanged
+orr r0, r0, :second8:scorechanged
+orr r0, r0, :third8:scorechanged
+orr r0, r0, :fourth8:scorechanged
+ldr r1, [r0]
+
+cmp r1, #0
+beq notwaitforkeydown
+
+push r1
+push r0
+brl drawleftscore
+brl drawrightscore
+brl update
+brl waitforkeydown
+brl blackoutleftscore
+brl blackoutrightscore
+pop r0
+pop r1
+
+mov r1, #0
+str r1, [r0]
+
+notwaitforkeydown:
 
 @ clear and redraw ball, score, paddles dependinbg on ball physics adn user input
 brl blackoutball
 brl ballupdate
-brl ballscorecollision
 brl drawball
 
 @ move the paddles and redraw

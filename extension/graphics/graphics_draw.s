@@ -191,6 +191,6 @@
 		ldr r1 [r0]
 		str r1 [r0]
 
-		push r1
-		push r0
+		pop r1
+		pop r0
 		ret

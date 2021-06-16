@@ -19,6 +19,8 @@
 	score:
 		.long 0  @ left player score
 		.long 0  @ right player score
+	scorechanged:
+		.long 1
 	
 
 @ Common Constants
@@ -30,7 +32,7 @@
 	.set mb 5
 	.set ml 5 
 	.set mr 5
-	.set paddlespeed 0x100
+	.set paddlespeed 0x200
 	.set paddlemaxY 0x4400
 
 	@ the maximum coordinates for the ml, mr mb mt and width/height
