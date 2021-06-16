@@ -306,25 +306,28 @@ ballupdate:
     beq bottomwall
 
     leftwall:
+
+        brl blackoutleftscore
+
         @ Player 2 score +1
         ldr r0, [r6, #4]
         add r0, r0, #1
         str r0, [r6, #4] 
         brl resetball
 
-        brl blackoutleftscore
         brl drawleftscore
 
         b end_ballupdate
 
     rightwall:
+        brl blackoutrightscore
+
         @ Player 1 score +1
         ldr r0, [r6]
         add r0, r0, #1
         str r0, [r6] 
         brl resetball
 
-        brl blackoutrightscore
         brl drawrightscore
 
         b end_ballupdate
