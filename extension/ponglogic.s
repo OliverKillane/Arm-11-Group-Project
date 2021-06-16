@@ -106,8 +106,8 @@ movepaddles:
 
     @get left paddle velocity
     ldr r0, [r5]
-    cmp r0, #0
-    beq rightpaddlecheck
+    @cmp r0, #0
+    @beq rightpaddlecheck
 
     @ clear the paddle
     brl blackoutleftpaddle
@@ -126,11 +126,11 @@ movepaddles:
     @ draw paddle at new position
     brl drawleftpaddle
 
-    rightpaddlecheck:
+    @rightpaddlecheck:
 
     ldr r0, [r5, #4]
-    cmp r0, #0
-    beq endpaddlemove
+    @cmp r0, #0
+    @beq endpaddlemove
 
     @ clear the paddle
     brl blackoutrightpaddle
@@ -530,23 +530,19 @@ resetball:
 
         
     tst r12, #1
-    moveq r3, #0x9B
-    orreq r3, r3, #0xA
-    moveq r5, r3
+    moveq r7, #0xA7
+    orreq r7, r7, #0x200
+    moveq r8, r7
 
-    movne r3, #0xFE
-    movne r3, #0xC
-    movne r5, r3
+    movne r7, #0x3F
+    orrne r7, r7 #0x300
+    movne r8 #0x1E0
 
     tst r12, #2
-    rsbeq r3, r3, #0
+    rsbeq r7, r7, #0
 
     tst r12, #4
-    rsbeq r5, r5, #0 
-
-
-    str r3, [r7]
-    str r5, [r8]
+    rsbeq r8, r8, #0
 
     pop r14
     pop r5

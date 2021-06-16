@@ -47,7 +47,7 @@ mainloop:
 
 @ clear and redraw ball, score, paddles dependinbg on ball physics adn user input
 brl blackoutball
-@brl ballupdate
+brl ballupdate
 brl ballscorecollision
 brl drawball
 
