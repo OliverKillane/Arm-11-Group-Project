@@ -7,6 +7,7 @@
 @ returns:      None
 @ side effects: alters current positions of paddles
 paddlereact:
+    push r14
 
     @ save registers, convention
 
@@ -100,6 +101,8 @@ paddlereact:
 
     brl drawleftpaddle
 
+    hlt
+
     b paddlereactloop
 
     notskey:
@@ -110,6 +113,7 @@ paddlereact:
     b paddlereactloop
 
     paddlereactend:
+    pop r14
     ret
 
 @===============================================================================
