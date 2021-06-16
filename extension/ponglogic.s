@@ -530,11 +530,13 @@ resetball:
 
         
     tst r12, #1
-    moveq r3, #0xA9B
-    moveq r5, #0xA9B
+    moveq r3, #0x9B
+    orreq r3, r3, #0xA
+    moveq r5, r3
 
-    movne r3, #0xCFE
-    movne r5, #0x780 
+    movne r3, #0xFE
+    movne r3, #0xC
+    movne r5, r3
 
     tst r12, #2
     rsbeq r3, r3, #0
