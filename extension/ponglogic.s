@@ -147,6 +147,8 @@ movepaddles:
     @calculate the new position
 
     ldr r1, [r4]
+
+
     add r1, r1, r0
     str r1, [r4]
 
@@ -478,11 +480,13 @@ wincheck:
     push r14
     ldr r0, [r6]
     cmp r0, #10
-    brl newgame
+    brleq newgame
+    
+    b wincheckend
 
     ldr r0, [r6, #4]
     cmp r0, #10
-    brl newgame
+    brleq newgame
 
     wincheckend:
     pop r14
@@ -509,7 +513,7 @@ newgame:
     @ get the middle coor
     mov r0, paddlemaxY
     lsr r0, #1
-    add r0, r0, #0xF00
+    sub r0, r0, #0xF00
     
     @ store to paddle pos
     str r0, [r4]
