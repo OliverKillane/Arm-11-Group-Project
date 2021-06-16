@@ -114,6 +114,8 @@ movepaddles:
 
     @calculate the new position
     ldr r1, [r4]
+
+
     add r1, r1, r0
     cmp r1, paddlemaxY
     movgt r1, paddlemaxY
@@ -453,11 +455,13 @@ wincheck:
     push r14
     ldr r0, [r6]
     cmp r0, #10
-    brl newgame
+    brleq newgame
+    
+    b wincheckend
 
     ldr r0, [r6, #4]
     cmp r0, #10
-    brl newgame
+    brleq newgame
 
     wincheckend:
     pop r14
