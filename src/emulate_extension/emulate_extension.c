@@ -618,17 +618,11 @@ void processEvents() {
   /* the event struct (to hold the new event read) */
   SDL_Event event;
 
-  /* if larger than buffer, wrap around to beginning */
-  if (readIndex >= INPUT_BUFFER_SIZE) {
-    readIndex = 0;
-  }
-
   /* if the current input has been nullified, and new keystrokes are present, transfer to input */
-  if (!input && input_buffer[readIndex]) {
-    input = input_buffer[readIndex];
+  if (!input && readIndex < writeIndex) {
+    input = input_buffer[readIndex % INPUT_BUFFER_SIZE];
     readIndex++;
   }
-
 
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT) {
@@ -639,7 +633,7 @@ void processEvents() {
       destroyVideo();
       exit(EXIT_SUCCESS);
 
-    } else if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
+    } else if ((event.type == SDL_KEYDOWN) || (event.type == SDL_KEYUP)) {
 
       /* determine the 'next key' information to add to the buffer */
       byte nextkey;
@@ -657,12 +651,8 @@ void processEvents() {
       nextkey |= event.type==SDL_KEYDOWN?0:0x80;
 
       /* input the key into the input buffer, increment write index and continue */
-      input_buffer[writeIndex] = nextkey;
+      input_buffer[writeIndex % INPUT_BUFFER_SIZE] = nextkey;
       writeIndex++;
-
-      if (writeIndex >= INPUT_BUFFER_SIZE) {
-        writeIndex = 0;
-      }
     }
   }
 }
