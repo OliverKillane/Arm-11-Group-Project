@@ -58,10 +58,10 @@ brl drawball
 @ get user input and move the paddles
 brl paddlereact
 
-@check win condition
+@ check win condition
 brl wincheck
 
-
+@ 
 brl update
 
 b mainloop
