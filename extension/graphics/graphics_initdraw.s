@@ -3,6 +3,7 @@
     initdraw:
         @ Saving onto the stack
         push r14
+        push r4
         push r3
         push r2
         push r1
@@ -13,11 +14,11 @@
         orr r2, r2, :second8:image_buffer
         orr r2, r2, :third8:image_buffer
         orr r2, r2, :fourth8:image_buffer
-        mov r3, :first8:image_buffer_ptr
-        orr r3, r3, :second8:image_buffer_ptr
-        orr r3, r3, :third8:image_buffer_ptr
-        orr r3, r3, :fourth8:image_buffer_ptr
-        str r2 [r3]
+        mov r4, :first8:image_buffer_ptr
+        orr r4, r4, :second8:image_buffer_ptr
+        orr r4, r4, :third8:image_buffer_ptr
+        orr r4, r4, :fourth8:image_buffer_ptr
+        str r2 [r4]
 
         @ Drawing the press any key text
         mov r0, :first8:press_key
@@ -30,7 +31,12 @@
         mov r2 press_key_width
         mov r3 press_key_height
         brl fill
+        
         add r13, r13, #0x4
+
+        @ Update the screen
+        ldr r0, [r4]
+        str r0, [r4]
 
 
         @ Cleaning everything up
@@ -38,5 +44,6 @@
         pop r1
         pop r2
         pop r3
+        pop r4
         pop r14
         ret

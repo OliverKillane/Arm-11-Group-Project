@@ -27,6 +27,10 @@
 	brl blackouttext
 	brl update
 
+	mov r7, #0xF00
+	str r7 [r4]
+	str r7 [r4, #4]
+
 	mainloop:
 
 	brl blackoutball
@@ -36,11 +40,11 @@
 	brl blackoutrightscore
 
 	ldr r7 [r2]
-	add r7, r7, #100
+	add r7, r7, #0x100
 	str r7 [r2]
 
 	ldr r7 [r2, #0x4]
-	add r7, r7, #100
+	add r7, r7, #0x100
 	str r7 [r2, #0x4]
 
 	brl drawleftpaddle

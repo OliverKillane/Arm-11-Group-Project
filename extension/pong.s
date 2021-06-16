@@ -28,6 +28,9 @@ brl initdraw
 
 brl waitforkeypress
 
+@ start the new game
+brl newgame
+
 brl blackouttext
 
 @ draw the start
@@ -39,10 +42,6 @@ brl drawrightscore
 
 
 brl update
-
-
-@ start the new game
-brl newgame
 
 mainloop:
 
