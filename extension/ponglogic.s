@@ -101,8 +101,6 @@ paddlereact:
 
     brl drawleftpaddle
 
-    hlt
-
     b paddlereactloop
 
     notskey:
