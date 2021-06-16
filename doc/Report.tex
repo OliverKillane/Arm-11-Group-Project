@@ -48,7 +48,7 @@ The stddata library, inspired by C++'s STL, has proved invaluable in the impleme
 \item SetIterator - an iterator for looping over the elements of a set
 \item Map - a hashmap implementation with buckets implemented using linear probing
 \item MapIterator - an iterator for looping over the elements of a map
-\item DecisionTree - a custom data structure simmilar to a trie working as a map with keys as sequences of items
+\item DecisionTree - a custom data structure similar to a trie working as a map with keys as sequences of items
 \end{itemize}
 The full documentation of this library (generated using doxygen) can be accessed under lib/stddata/doc/refman.pdf
 \subsection*{Data Flow}
@@ -59,7 +59,7 @@ The tokenizer is a finite state machine (FSM) that follows the state transition 
 	\includegraphics[scale=0.6]{fsmDiagram}
 \end{center}
 The finite state machine interprets each line character-by-character, and changes its state depending on the above diagram. Single circles are intermediate states, where a token can't be produced if the line ends on that token. Double-circles are the end states, and a token is produced when an end state is reached. The tokenizer does not produce any tokens for lines that have assembler directives on them, and instead will produce directly the desired result of said directive.
-The choice to make the tokenizer a finite state machine was most beneficial, allowing us to easily show the correctness of our tokenizer graphically and separate the logic of each state to make the code more readable and easily debuggable.  
+The choice to make the tokenizer a finite state machine was most beneficial, allowing us to easily show the correctness of our tokenizer graphically and separate the logic of each state to make the code more readable and easily debug-able.  
 \subsection*{Command Generation}
 \includegraphics[width=\textwidth]{commandgen}
 The command generation consist of 2 stages: processing function dispatch and data conversion to a binary representation. The processing function dispatch uses the sequence of the tokens and a decision tree to determine the appropriate function for the sequence. Then, now inside the processing funciton, it uses another decision tree to determine which fields inside the function need to be set according to which tokens. Since the fields can be set to some values before that step, this allows for highly flexible default values and a greatly reduced number of processing function (in a previous implementation without that feature the code was 3-4x longer). A simmilar decision tree is used for determining if a data transfer funciton is pre or post.
@@ -68,7 +68,7 @@ For the testing, we wrote our own automated test suite using assertions, which c
 \section{Extension}
 For the extension we settled on adding enough support to the assembler and emulator to write a simple pong game in pure assembly, inspired by Atari's product with the same name from 1972. This decision was made based on many factors, including time left, team size, capabilities of the implementation at the moment of choosing and potential educational benefits for us.
 \subsection*{Assembler}
-The most extension was required by the assembler, having to add support for the data section, stack and subroutines. However, thanks to the foresight while writing the base implementation, this proved to be rather straigtforward.
+The most extension was required by the assembler, having to add support for the data section, stack and subroutines. However, thanks to the foresight while writing the base implementation, this proved to be rather straightforward.
 \subparagraph*{Data Section}
 The data section added the capability to store data for our code, for example the images for our game or global variables. All of the contents of the data section are always stored after the instructions, i.e. the text section.
 \subparagraph*{Assembler Directives} The support for assembler directives was required due to the data section and the need to collaborate on the code. After some research, we settled on supporting the following:
@@ -82,7 +82,7 @@ The data section added the capability to store data for our code, for example th
 		.include <filepath> & Pastes the contents of a file in its place
 	\end{tabular}
 \end{center}
-The .include direcitve, altough not in the standard assembly, has allowed us to split our code into multiple files while removing a need to write a more elaborate solution, for example a linker.
+The .include directive, although not in the standard assembly, has allowed us to split our code into multiple files while removing a need to write a more elaborate solution, for example a linker.
 \subparagraph*{Additional Commands}
 In order to support the stack and subroutines, the following extensions to the available commands were added:
 \begin{center}
@@ -113,36 +113,45 @@ along with the following aliases for the ease of use
 \item :first8:label, :second8:label, ... allow for refering to bits of label separately (useful for loading a value of the label into a register)
 \end{itemize}
 \subsection*{Emulator}
-\centerline{\textbf{Memory Layout}}
+\centerline{\textbf{Emulator Memory Layout}}
 \includegraphics[width=\textwidth]{emulator memory}
+
 \subparagraph*{Stack}
 Pre-indexing with base register alteration, and branches with linking work, allowing the assembled brl (branch link), ret, push and pop commands to function.
-\subparagraph*{GPIO}
-By passing the \textbf{-g} flag, the GPIO bits are displayed as a memory location (only 1/0 for pin ON/OFF) when the output of the emulator is printed.\\
-\subparagraph*{Keystrokes}
-Using SDL's keyboard input functionality, the ascii codes of keys (of value less than 128) are written to a 64 byte buffer as 8 bit values (most significant is 1/0 for key up/down, lower 7 are the ascii code). The arrow keys replace EOT-BEL characters ascii codes. The buffer is written to as a circular queue capable of holding 64 keyboard events, with the
-\newline binary being run responsible for reading from the queue, nullifying the characters read, and moving up the queue to the next read keystroke.
+\subparagraph*{New Flags}
+Added flags for \textbf{-v} (video output, keyboard input on), \textbf{-n} (do not display memory), \textbf{-g} (show GPIO bits), \textbf{-h} show help menu. The register output has also been updated to show the \textbf{SP} and \textbf{LR} registers.
 \subparagraph*{Display}
-By passing the \textbf{-v} flag the emulator will display the memory region starting at the pointer contained in special location (0x1000000 - the video pointer) at a fixed resolution (192x108) with full RGB colour (4 bytes per pixel, lower 3 are rgb). When a value is stored to the memory pointer, the display is updated.
+By passing the \textbf{-v} flag the emulator will display the memory region starting at the pointer contained in special location (0x1000000 - the video pointer) at a fixed resolution (192x108) with full RGB colour (4 bytes per pixel, ABGR format). When a value is stored to the memory pointer, the display is updated.
 \newline\newline We used the SDL2 graphics library to render a texture, which used the data stored at the memory pointer (a part of the addressable emulator memory). The graphics are scaled up by 4 as on newer monitors the window would be too small to play PONG.
 \newline\newline Reading texture data directly from the emulator memory proved to be much faster than iterating through the all pixels, rendering. Though this meant that each pixel had a redundant byte (alpha value) associated.
+\subparagraph{Keyboard Input}
+When the video output is on, input keystrokes are taken and written to a buffer. To access this buffer the program being run must access the input buffer at memory location (0x3000000), which will contain the next character. By storing 0 to this location, the buffer is cleared, and the emulator will place the next key pressed in the location.
+\begin{center}
+	\includegraphics[scale = 0.5]{emulator keyboard input}
+\end{center}
 \subparagraph*{Testing}
-We developed a small python program to convert images into a convention respecting subroutine (not using any constants allocated memory) draw all black pixels in the image, to a colour stored in an argument register. And used this to build a basic test of a 'classic' pong open screen, with space bar input to move to the next screen.
-In the final pong program, the .data section will be used instead so we can simply change the video pointer rather than redrawing the display.
+To test the graphics and keyboard input, we created a small python program to convert an image's black pixels into an ARM subroutine to draw pixels. This was then used to create a a test program, with flashing text and that responded to a space key press to change the display.
+We changed the input buffer from a cyclical array queue in emulator memory, to a special memory location to simplify the arm code and fix issues with input in response to the tests.
+\centerline{\textbf{Initial Test program for Emulator Keyboard Input and Graphics}}
+\includegraphics[width = \textwidth]{emulator testing PONG program}
+For the final program, to reduce draw time for complex graphics, we made use of the .data region of the program to store image data ready to display. This data was generated by a bmp to ARM .data section file converter built in python.
 \subsection*{Pong}
 \begin{center}
-	\includegraphics[scale=0.7]{pong}\\
+	\includegraphics[width = \textwidth]{pong game structure}\\
 \end{center}
 \begin{center}
 	\begin{tabular}{l|c|r}
-		\textbf{Subroutine} & \textbf{Purpose} & \textbf{Assigned to}\\
-		main & the main loop of the program & Jordan \& Oliver\\
-		initdraw & draws the initial page of the pong game & Bartek \& Ioana\\
-		blackout & removes the old instances of screen elements from the buffer & Bartek \& Ioana\\
-		recalculate & performs the physics calculation and advances the time step & Jordan \& Oliver\\
-		draw & draws the new components and updates the screen & Bartek \& Ioana\\
+		\textbf{Section} & \textbf{Purpose} & \textbf{Assigned to}\\
+		Mainloop & The main loop of the program. Updating display, checking win conditions. & Oliver\\
+		Initialise & Draws the initial page of the pong game. & Bartek \& Ioana\\
+		Draw & Independent subroutines to draw ball, paddles, digits for score. & Bartek \& Ioana\\
+		Blackout & Removes the old instances of screen elements. & Bartek \& Ioana\\
+		Ball Update & Performs collision detection, changing ball position and velocity as well as score. & Jordan \& Ioana\\
+		User Input & Takes input from buffer provided by emulator and moves paddles accordingly. & Oliver \\
 	\end{tabular}
 \end{center}
+
+\centerline{\textbf{INSERT PICTURES OF PONG GAME HERE}}
 \section{Group Reflection}
 \subsection*{Communication}
 In order to keep a high level of information synchronization between the team members, we used the following techniques:
@@ -157,9 +166,9 @@ Apart from our meetings, we kept a higher throughput of communication in pairs t
 \subparagraph*{Jordan}
 During the course of this project, I made a great effort to integrate well with my team mates. From my group feedback and continuous feedback from my colleagues, I believe I fitted in with my team mates considerably well. As a result, group communication between myself and my team mates was smooth and effective, and I enjoyed working with my team.
 \subparagraph*{Ioana}
-This project has been a great opportunity to improve myself. I learnt how to write cleaner code, how to document it properly, and also how to divide complex problems into manageable tasks. Unlike some of my groupmates, I had no prior experience with graphics or compilers, but I made a genuine effort and picked up the pace quite fast. I think one of my biggest strengths has been my communication skills: whenever I didn't understand something, I asked, whenever I thought I could handle a task, I claimed it. I enjoyed working on this project a lot, I'm proud of our end result, and I'm grateful for what I learnt from my groupmates.
+This project has been a great opportunity to improve myself. I learnt how to write cleaner code, how to document it properly, and also how to divide complex problems into manageable tasks. Unlike some of my teammates, I had no prior experience with graphics or compilers, but I made a genuine effort and picked up the pace quite fast. I think one of my biggest strengths has been my communication skills: whenever I didn't understand something, I asked, whenever I thought I could handle a task, I claimed it. I enjoyed working on this project a lot, I'm proud of our end result, and I'm grateful for what I learnt from my teammates.
 \subparagraph*{Oliver}
-I was more satisfied with the level of performance and cleanliness of my code. The emulator is fast, robust and the extension doubly so. While I had done C before, it was never to this standard and I am happy to say I have learnt a lot, not just about writing good C, but also in project structure/build, git repo management, graphics and making the best use/being the best use to my teammates. One thing I would improve with more time would be profiling done on the emulator, we had limited success getting analysis through gprof (make profile in src/emulate) and with more time I'm sure we could improve speed (especially on lower spec devices such as the pi, with graphics).
+I was more than satisfied with the level of performance and cleanliness of my code. The emulator is fast, reliable and the extension doubly so. While I had done C before, it was never to this standard and I am happy to say I have learnt a lot, not just about writing good C, but also in project structure/build, git repo management, graphics as well as making the best use of, and being the best use to, my teammates. One thing I would improve with more time would be profiling done on the emulator, we had limited success getting analysis through gprof (make profile in src/emulate) and with more time I'm sure we could improve speed (especially on lower spec devices such as the pi, with graphics).
 \subparagraph*{Bartek}
-I believe I did everything I could as far as this project goes. My code looks fairly clean, my testing is as robust as I could have made it provdied this amount of time and the optimizations are as good as they could have been in C. Also, I was able to trust my groupmates with the code more than I did in all my past projects. The only things that I would change is a better work life ballance, learn a different collaborative coding style (the only one I know is to split the workload into non-overlaping sections with known interfaces) and improve my git workflow to make it a bit cleaner.
+I believe I did everything I could as far as this project goes. My code looks fairly clean, my testing is as robust as I could have made it provided this amount of time and the optimizations are as good as they could have been in C. Also, I was able to trust my teammates with the code more than I did in all my past projects. The only things that I would change is a better work life ballance, learn a different collaborative coding style (the only one I know is to split the workload into non-overlaping sections with known interfaces) and improve my git workflow to make it a bit cleaner.
 \end{document}
