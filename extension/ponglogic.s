@@ -37,6 +37,9 @@ paddlereact:
     @ nullify the character
     str r1, [r0]
 
+    tst r3, #0x80
+    bne paddlereactloop
+
     @ get lower 7 bits
     and r3, r3, #0x7F
 

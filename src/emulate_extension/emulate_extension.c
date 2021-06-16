@@ -633,7 +633,7 @@ void processEvents() {
       destroyVideo();
       exit(EXIT_SUCCESS);
 
-    } else if ((event.type == SDL_KEYDOWN) || (event.type == SDL_KEYUP)) {
+    } else if (((event.type == SDL_KEYDOWN) || (event.type == SDL_KEYUP)) && event.key.repeat == 0) {
 
       /* determine the 'next key' information to add to the buffer */
       byte nextkey;
@@ -648,7 +648,7 @@ void processEvents() {
       }
 
       /* if key is down, MSD = 0, if it is UP, then MSB = 1 */
-      nextkey |= event.type==SDL_KEYDOWN?0:0x80;
+      nextkey |= (event.type==SDL_KEYDOWN)?0:0x80;
 
       /* input the key into the input buffer, increment write index and continue */
       input_buffer[writeIndex % INPUT_BUFFER_SIZE] = nextkey;
