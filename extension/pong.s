@@ -17,7 +17,7 @@ brl setvars
 @ r9  <- EMPTY
 @ r10 <- EMPTY
 @ r11 <- EMPTY
-@ r12 <- EMPTY
+@ r12 <- global loop counter
 @ r13 <- stack pointer (stack_start)
 
 @ draw 'press any key'
@@ -52,9 +52,7 @@ brl ballscorecollision
 brl drawball
 
 @ move the paddles and redraw
-push r2
 brl userinput
-pop r2
 
 brl movepaddles
 
@@ -64,6 +62,7 @@ brl wincheck
 @ update the display
 brl update
 
+add r12, r12, #1
 b mainloop
 
 @ Includes

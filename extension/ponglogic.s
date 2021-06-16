@@ -587,8 +587,9 @@ setvars:
     @ r9:  NOTHING
     @ r10: NOTHING
     @ r11: NOTHING
-    @ r12: NOTHING
 
+    @ r12: global loop counter
+    mov r12, #0
 
     @ r13: stack_pointer
     mov r13 :first8:stack_start
