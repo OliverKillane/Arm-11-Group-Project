@@ -6,7 +6,7 @@
 @ arguments:    NONE
 @ returns:      NONE
 @ side effects: paddle velocity
-@ alters regs:  r0, r1, r2, r3  
+@ alters regs:  r0, r1, r3, r9, r10
 
 userinput:
     
@@ -17,7 +17,6 @@ userinput:
     mov r1, #0
 
     inputloop:
-
         @ get the user input keycode
         ldr r3, [r0]
 
@@ -29,20 +28,20 @@ userinput:
         str r1, [r0]
 
         @ test the key UP/DOWN bit
-        tst r3, #0x80
-        bne upKey
+        and r9, r3, #0x80
 
         @ get lower 7 bits
         and r3, r3, #0x7F
-
-        @is a key down (set velocity accordingly)
 
         @ if an up arrow (code = 5)
         cmp r3, #5
         bne testdownarrowDOWN
 
-        mov r2, paddlespeed
-        str r2, [r5, #4]
+        cmp r9, #0
+        ldr r10, [r5, #4]
+        addne r10, r10, paddlespeed
+        subeq r10, r10, paddlespeed
+        str r10, [r5, #4]
 
         b inputloop
 
@@ -51,8 +50,11 @@ userinput:
         cmp r3, #4
         bne testWkeyDOWN
 
-        sub r2, r1, paddlespeed
-        str r2, [r5, #4]
+        cmp r9, #0
+        ldr r10, [r5, #4]
+        addeq r10, r10, paddlespeed
+        subne r10, r10, paddlespeed
+        str r10, [r5, #4]
 
         b inputloop
 
@@ -61,8 +63,11 @@ userinput:
         cmp r3, #119
         bne testSkeyDOWN
 
-        mov r2, paddlespeed
-        str r2, [r5]
+        cmp r9, #0
+        ldr r10, [r5]
+        addne r10, r10, paddlespeed
+        subeq r10, r10, paddlespeed
+        str r10, [r5]
 
         b inputloop
 
@@ -71,8 +76,11 @@ userinput:
         cmp r3, #115
         bne testESCkey
 
-        sub r2, r1, paddlespeed
-        str r2, [r5]
+        cmp r9, #0
+        ldr r10, [r5]
+        addeq r10, r10, paddlespeed
+        subne r10, r10, paddlespeed
+        str r10, [r5]
 
         b inputloop
 
@@ -80,48 +88,8 @@ userinput:
         testESCkey:
         cmp r3, #27
         bne inputloop
-
         hlt
 
-        @ is a key up - set velocity to zero
-        upKey:
-
-        @ get lower 7 bits
-        and r3, r3, #0x7F
-
-        @ if an up arrow (code = 5)
-        cmp r3, #5
-        bne testdownarrowUP
-
-        str r1, [r5, #4]
-
-        b inputloop
-
-        @ if a down arrow (code = 4)
-        testdownarrowUP:
-        cmp r3, #4
-        bne testWkeyUP
-
-        str r1, [r5, #4]
-
-        b inputloop
-
-        @ if a w (code = 119)
-        testWkeyUP:
-        cmp r3, #119
-        bne testSkeyUP
-
-        str r1, [r5]
-
-        b inputloop
-
-        @ if an s (code = 115)
-        testSkeyUP:
-        cmp r3, #115
-        bne testESCkey
-
-        str r1, [r5]
-        b inputloop
 @===============================================================================
 @ MOVEPADDLES:
 @
@@ -145,9 +113,12 @@ movepaddles:
     brl blackoutleftpaddle
 
     @calculate the new position
-
     ldr r1, [r4]
     add r1, r1, r0
+    cmp r1, paddlemaxY
+    movgt r1, paddlemaxY
+    cmp r1, #0
+    movlt, r1, #0
     str r1, [r4]
 
     @ draw paddle at new position
@@ -166,6 +137,10 @@ movepaddles:
 
     ldr r1, [r4, #4]
     add r1, r1, r0
+    cmp r1, paddlemaxY
+    movgt r1, paddlemaxY
+    cmp r1, #0
+    movlt, r1, #0
     str r1, [r4, #4]
 
     @ draw paddle at new position
@@ -509,7 +484,7 @@ newgame:
     @ get the middle coor
     mov r0, paddlemaxY
     lsr r0, #1
-    add r0, r0, #0xF00
+    sub r0, r0, #0xF00
     
     @ store to paddle pos
     str r0, [r4]
@@ -626,7 +601,7 @@ setvars:
 @ arguments:    NONE
 @ returns       NONE
 @ side-effects: r0, r1
- waitforkeypress:
+waitforkeypress:
     push r0
     push r1
 
