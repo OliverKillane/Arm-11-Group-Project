@@ -9,7 +9,7 @@
 @ global reg values:
 @ r13 <- stack pointer (stack_start)
 @ r0 <- the input buffer pointer
-@ r1 <- EMPTY
+@ r1 <- round counter
 @ r2 <- bcurr address
 @ r3 <- EMPTY
 @ r4 <- pcurr address
@@ -21,6 +21,7 @@
 @ loading globals:
 
 brl setvars
+
 
 @ error: text not being drawn
 
@@ -45,11 +46,14 @@ brl update
 
 mainloop:
 
-@blackout, recalculate and redraw the ball
+@ increment the number of rounds
+add r1, r1, #1
+
+@ blackout, recalculate and redraw the ball
 brl blackoutball
 
 @ note: ballupdate calls for the score to be redrawn if updated
-@brl ballupdate
+brl ballupdate
 
 brl ballscorecollision
 

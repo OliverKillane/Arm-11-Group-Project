@@ -129,10 +129,11 @@ paddlereact:
 @ returns:      r12 <- COLLIDE_ENUM
 @ side-effects: None
 checkcollision:
+    push r0         @ r0 to store any temporary variable
     push r9         @ r9 to store ball's x position
     push r10        @ r10 to paddle top y position
     push r11        @ r11 to store ball's y position
-    push r0         @ r0 to store any temporary variable
+    push r14
     @ check if ball has collided with left wall
     ldr r9, [r2]    @ move ball x position into r9
     cmp r9, #0
@@ -236,10 +237,11 @@ checkcollision:
     mov r12, #0
 
     endcheckcollision:
-    pop r0
+    pop r14
     pop r11
     pop r10
     pop r9
+    pop r0
     ret
 
 @===============================================================================
@@ -261,6 +263,7 @@ ballupdate:
     push r0
     push r1
     push r9 @ aux register
+    push r12
     push r14
 
 
@@ -277,9 +280,8 @@ ballupdate:
     str r1, [r2, #4]
 
    
-    push r12
-    brl checkcollision
-
+    @brl checkcollision
+    mov r12, #0
     cmp r12, #0
     beq end_ballupdate
 
@@ -456,6 +458,9 @@ newgame:
 @ returns:      None
 @ side-effects: ball position (), ball velocity
 resetball:
+    push r3 @ Ball X velocity
+    push r5 @ Ball Y velocity
+    push r14
 
     @ set ball x to the center
     mov r0, maxXcoor
@@ -471,7 +476,41 @@ resetball:
     str r0, [r2, #4]
     str r0, [r3, #4]
 
-ret
+    cmp r1, #5
+    movgt r1, #1
+
+    randomspeed:
+        cmp r1, #1
+        moveq r3, totalballspeed
+        moveq r5, #0
+        beq resetend
+
+        mov r3, totalballspeed
+        lsr r3, #1
+        mov r5, r3
+
+        cmp r1, #2
+        beq resetend
+
+        cmp r1, #3
+        rsbeq r5, r5, #0
+        beq resetend
+
+        cmp r1, #4
+        rsbeq r3, r3, #0
+        beq resetend
+
+        rsb r3, r3, #0
+        rsb r5, r5, #0
+ 
+resetend:
+    str r3, [r7]
+    str r5, [r8]
+
+    pop r14
+    pop r5
+    pop r3
+    ret
 
 @===============================================================================
 @ SETVARS:
@@ -500,7 +539,11 @@ orr r13, r13 :fourth8:stack_start
 @ place the input buffer
 mov r0, input_buffer
 
-@ anything you want in r1
+@ round counter
+mov r1 :first8:round_counter
+orr r1, r1 :second8:round_counter
+orr r1, r1 :third8:round_counter
+orr r1, r1 :fourth8:round_counter
 
 @ bcurr address
 mov r2 :first8:bcurr
