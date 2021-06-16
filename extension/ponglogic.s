@@ -329,16 +329,7 @@ ballupdate:
     cmp r12, #5
     beq rightwall
 
-    @ reflect velocity by XY axis
-    ldr r0, [r7]
-    rsb r0, r0, #0
-    str r0, [r7] 
 
-    ldr r0, [r8]
-    rsb r0, r0, #0
-    str r0, [r8]
-    
-    
     cmp r12, #2
     beq leftpaddle
     cmp r12, #3
@@ -377,6 +368,10 @@ ballupdate:
 
     leftpaddle:
 
+        ldr r0, [r7]
+        rsb r0, r0, #0
+        str r0, [r7] 
+
         @ ball current X coord
         ldr r0, [r2]
 
@@ -391,7 +386,11 @@ ballupdate:
         b end_ballupdate
 
     rightpaddle:
-       
+
+        ldr r0, [r7]
+        rsb r0, r0, #0
+        str r0, [r7] 
+     
         @ load ball current X coord
         ldr r0, [r2]
 
@@ -410,7 +409,11 @@ ballupdate:
         b end_ballupdate
     
     topwall:
-            
+
+        ldr r0, [r8]
+        rsb r0, r0, #0
+        str r0, [r8]
+             
         @ ball current Y coord
         ldr r0, [r2, #4]
 
@@ -423,6 +426,11 @@ ballupdate:
         b end_ballupdate
 
     bottomwall:
+
+        ldr r0, [r8]
+        rsb r0, r0, #0
+        str r0, [r8]
+    
         @ load ball current Y coord
         ldr r0, [r2, #4]
 
