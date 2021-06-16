@@ -42,6 +42,9 @@ brl drawrightscore
 @ update the display
 brl update
 
+@ before starting to move the ball
+brl waitforkeydown
+
 @ the main program loop
 mainloop:
 

@@ -628,20 +628,62 @@ setvars:
 @ waits for a keypress
 @ arguments:    NONE
 @ returns       NONE
-@ side-effects: r0, r1
+@ side-effects: r0, r1, r2
 waitforkeypress:
+    push r0
+    push r1
+    push r2
+
+    mov r1, input_buffer
+    
+    waitpressedloop:
+    ldr r0, [r1]
+    cmp r0, #0
+    beq waitpressedloop
+    tst r0, #0x80
+    mov r2, #0
+    str r2, [r1]
+    bne waitpressedloop
+
+
+    waitreleasedloop:
+    ldr r2, [r1]
+    cmp r2, #0
+    beq waitreleasedloop
+    tst r2, #0x80
+    moveq r0, #0
+    streq r0, [r1]
+    beq waitreleasedloop
+    and r2, r2, #0x7F
+    cmp r2, r0
+    mov r2, #0
+    str r2, [r1]
+    bne waitreleasedloop
+
+    pop r2
+    pop r1
+    pop r0
+    ret
+
+@===============================================================================
+@ WAITKEYPRESS:
+@
+@ waits for a keypress
+@ arguments:    NONE
+@ returns       NONE
+@ side-effects: r0, r1
+waitforkeydown:
     push r0
     push r1
 
     mov r1, input_buffer
     
-    waitloop:
+    waitdownloop:
     ldr r0, [r1]
     cmp r0, #0
-    beq waitloop
-
-    mov r0, #0
-    str r0, [r1]
+    beq waitdownloop
+    tst r0, #0x80
+    bne waitdownloop
 
     pop r1
     pop r0
