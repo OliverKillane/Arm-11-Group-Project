@@ -8,12 +8,12 @@
 
 @ global reg values:
 @ r13 <- stack pointer (stack_start)
-@ r0 <- current buffer index
-@ r1 <- EMPTY (for the gui mode later - startscreen, quitmenu etc)
+@ r0 <- the input buffer pointer
+@ r1 <- EMPTY
 @ r2 <- bcurr address
-@ r3 <- bprev address
+@ r3 <- EMPTY
 @ r4 <- pcurr address
-@ r5 <- pprev address
+@ r5 <- EMPTY
 @ r6 <- score address
 @ r7 <- ball x velocity
 @ r8 <- ball y velocity
@@ -22,70 +22,52 @@
 
 brl setvars
 
-@ startup draw the display
-push r0
-push r1
-push r2
-push r3
+@ error: text not being drawn
+
 brl initdraw
-pop r3
-pop r2
-pop r1
-pop r0
 
-@ set initial positions
-push r0
+brl waitforkeypress
+
+brl blackouttext
+
+@ draw the start
+brl drawball
+brl drawleftpaddle
+brl drawrightpaddle
+brl drawleftscore
+brl drawrightscore
+
+
+brl update
+
+
+@ start the new game
 brl newgame
-pop r0
 
-@ the mainloop of the program (get user input, draw next frame)
 mainloop:
 
-@blackout the screen to remove the old frame
-push r0
-push r1
-push r2
-push r3
-brl blackout
-pop r3
-pop r2
-pop r1
-pop r0
+@blackout, recalculate and redraw the ball
+brl blackoutball
 
-@ swap coordinates
-brl swapcoors
-
-@ get user input to paddles, update paddles
-push r0
-push r1
-push r3
-brl paddlereact
-pop r3
-pop r1
-pop r0
-
-@ get next ball position
+@ note: ballupdate calls for the score to be redrawn if updated
 @brl ballupdate
 
-@ check win condition, go back top start if a win
-@ push r0
-@ brl wincheck
-@ pop r0
+brl ballscorecollision
 
-@ draw the display
+brl drawball
 
-push r0
-push r1
-push r2
-push r3
-brl draw
-pop r3
-pop r2
-pop r1
-pop r0
+@ get user input and move the paddles
+brl paddlereact
+
+@check win condition
+brl wincheck
+
+@ update scores
+@ todo
+
+brl update
 
 b mainloop
-@ functions (move to another file later)
 
 @ Includes
 .include ponglogic.s
