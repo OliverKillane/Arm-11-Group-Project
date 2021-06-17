@@ -1,5 +1,7 @@
 CC      = gcc
-CFLAGS  = -Wall -g -I../../lib/stddata/include -Icommandgen -Itokenizer -I. -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -pedantic -fsanitize=address,undefined
+CFLAGS  = -Wall -g -I../../lib/stddata/include -Icommandgen -Itokenizer -I. -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 \
+          -pedantic -Wno-int-conversion -Wno-pointer-to-int-cast
+LINK    = -L../../lib/stddata/bin -lstddata
 
 .PHONY: all clean
 
@@ -18,8 +20,7 @@ all: ../../build/assemble/assemble.o\
 	 ../../build/assemble/instruction_layouts.o\
 	 ../../build/assemble/process_expression.o\
 	 ../../build/assemble/process_alias.o
-	cp ../../build/stddata.o ../../build/assemble/
-	$(CC) $(CFLAGS) $^ ../../build/assemble/stddata.o -o ../../build/assemble/assemble
+	$(CC) $(CFLAGS) $^ -o ../../build/assemble/assemble $(LINK)
 	cp ../../build/assemble/assemble ../../bin/
 
 ../../build/assemble/%.o:

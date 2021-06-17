@@ -4,27 +4,27 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// TYPE DECLARATIONS:
-// type definitions for readability
+/* TYPE DECLARATIONS: */
+/* type definitions for readability */
 typedef uint32_t word;
 typedef uint32_t instruction;
 typedef uint16_t location;
 typedef uint8_t byte;
 
-// 64KB memory (16 bit address)
+/* 64KB memory (16 bit address) */
 #define MEMSIZE (1 << 16)
 
-// maximum word (all 1s)
+/* maximum word (all 1s) */
 #define MAXINT32 0xFFFFFFFF
 
-// Hold the state of the emulator
-//CPSR = NZCV
+/* Hold the state of the emulator */
+/* CPSR = NZCV */
 
 typedef struct {
-    unsigned int N : 1;
-    unsigned int Z : 1;
-    unsigned int C : 1;
-    unsigned int V : 1;
+    bool N : 1;
+    bool Z : 1;
+    bool C : 1;
+    bool V : 1;
 } cpsr;
 
 typedef struct {
@@ -34,24 +34,24 @@ typedef struct {
     word GPIO;
 } machineState;
 
-// declared the CPU that will be used.
+/*  declared the CPU that will be used. */
 extern machineState CPU;
 
-// struct to hold shift function results.
+/*  struct to hold shift function results. */
 typedef struct {
     word result;
     bool carryout;
 } shiftRes;
 
 
-// Register enums for quick access
+/*  Register enums for quick access */
 typedef enum {
     SP = 13,
     LR = 14,
     PC = 15
 } reg;
 
-// condition mnemonics
+/*  condition mnemonics */
 typedef enum {
     EQ = 0,
     NE = 1,
@@ -62,7 +62,7 @@ typedef enum {
     AL = 14
 } condition;
 
-// opcode mnemonics for the processData instruction
+/*  opcode mnemonics for the processData instruction */
 typedef enum {
     AND = 0, EOR, SUB, RSB, ADD,
     TST = 8, TEQ, CMP,
@@ -77,7 +77,7 @@ typedef enum {
     INVALID_REG_ACCESS
 } errors;
 
-// UTILITIES:
+/* UTILITIES: */
 
 /* Return a range of bits.
 @param data Source string of bits
@@ -93,13 +93,14 @@ typedef enum {
 #define GETBIT(data, n) (((data) >> (n)) & 1)
 
 /* 
-Get a pointer to a register.
-@param Reg <- either enum reg or
+Get a pointer to a register. As 4 bits are used for register, max is 15, 
+so we cannot segfault here
+@param Reg <- either enum reg or register number
+@retval    <- pointer to the register
 */
 #define GETREG(reg) (CPU.registers + reg)
 
-
-// INSTRUCTION PROCESSING:
+/* INSTRUCTION PROCESSING: */
 
 /* 
 Load the program into memory
@@ -157,10 +158,10 @@ Execute an arithmetic instruction based on opcode provided
 */
 void processDataInstr(instruction instr);
 
-// EMULATOR DATA ACCESS:
+/*  EMULATOR DATA ACCESS: */
 
 /* return the word (32 bits) starting at byte loc (16 bit location)
- Can never segfault as 16 bit address.
+Can never segfault as 16 bit address.
 @param loc 16bit location in memory
 @retval pointer to word in memory
 */
@@ -168,22 +169,21 @@ word *getmemword(location loc);
 
 
 /* Get the byte at loc (16 bit location)
- Can never segfault as 16 bit address.
+Can never segfault as 16 bit address.
 @param loc 16bit location in memory
 @retval pointer to byte in memory
 */
 byte *getmemloc(location loc);
 
 
-/*  determine if the system the emulator is being run on is big or little endian 
+/* determine if the system the emulator is being run on is big or little endian 
 @retval true if littel endian, false otherwise 
 */
 bool littleendiancheck();
 
-// TERMINAL OUTPUT:
-
-/* 
-Print the state of the CPU to the terminal
+/* TERMINAL OUTPUT: */
+/* Print the state of the CPU to the terminal
 */
 void printState(void);
+
 #endif

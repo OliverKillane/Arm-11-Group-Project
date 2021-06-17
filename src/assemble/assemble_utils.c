@@ -1,4 +1,3 @@
-
 #include "assemble_utils.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -176,7 +175,6 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int
 		char *line = VectorPopBack(lineTokens);
 		if (FunctionGen(symbolTable, lineTokens, programVector, dataVector, currInstr, totalInstructions)) {
 			ReportError(lineNum, filename, line);
-			exit(1);
 		}
 		// free(filename);
 		

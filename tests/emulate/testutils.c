@@ -5,7 +5,7 @@
 #include <string.h>
 #include <assert.h>
 
-// Colours
+/* Pretty output colours */
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
@@ -16,23 +16,24 @@
 
 #define PADLEN 50
 
-// simplifying checking two of same type are equal
+/* simplifying checking two of same type are equal using void pointers, type */
 #define EQUALS(exp, result, typ) (*((typ*) exp) == *((typ*) result))
 #define COMP(exp, result, typ, disp) printf("F -> Result should have been: " disp " but was: " disp DEFAULT, *((typ*) exp), *((typ*) result))
 
-// types used in tests
+/* types used in tests */
 typedef enum {CHAR, INT32, INT16, BOOL} type;
 
-// ints for section number and test (within a section) number
-unsigned int sectionno, testno;
+/* ints for section number and test (within a section) number */
+unsigned int sectionno, testno, nopassed, nofailed;
 
-// setup the section, 
+/* setup tests with starting message */
 void starttests(char * testfile) {
     printf(YELLOW "Starting Tests for: " BLUE "%s" DEFAULT, testfile);
     sectionno = 0;
     testno = 0;
 }
 
+/* setup the section */
 void testsection(char *name) {
     sectionno++;
     testno = 0;
@@ -44,32 +45,50 @@ void testsubsection(char *name) {
     printf(BLUE "\n\n Test Subsection: %s\n" DEFAULT, name);
 }
 
-/* Take expected, result and their types, check they match and print out result.
-    expected    <- 
-*/
 void runtest(void* expected, void* result, type typ, char * description) {
     testno++;
     bool passed;
+
+    /* use type to determine equality */
     switch(typ) {
-        case CHAR: passed = EQUALS(expected, result, char); break;
-        case INT32: passed = EQUALS(expected, result, uint32_t); break;
-        case INT16: passed = EQUALS(expected, result, uint16_t); break;
-        case BOOL: passed = EQUALS(expected, result, bool); break;
+        case CHAR:
+            passed = EQUALS(expected, result, char); 
+            break;
+        case INT32:
+            passed = EQUALS(expected, result, uint32_t); 
+            break;
+        case INT16:
+            passed = EQUALS(expected, result, uint16_t); 
+            break;
+        case BOOL:
+            passed = EQUALS(expected, result, bool); 
+            break;
+        default:
+            passed = false;
     }
 
+    /* switch to pass/fail colour */
     printf(passed?GREEN:RED);
 
+    /*print result*/
     printf("\n    %-3i: %-50s  ", testno, description);
 
     if (passed) {
+
+        /* if passed, increment nopassed and print P */
         printf("P" DEFAULT);
+        nopassed++;
     } else {
+
+        /* if failed, increment failed and print expected, result */
+        nofailed++;
         if (typ == CHAR) {
             COMP(expected, result, char, "%c");
         } else {
             COMP(expected, result, int, "%i");
         }
     }
+    /* reset colours */
     printf(DEFAULT);
 }
 
@@ -79,4 +98,8 @@ void int32test(uint32_t expected, uint32_t result, char * description) {
 
 void booltest(uint32_t expected, uint32_t result, char * description) {
     runtest(&expected, &result, BOOL, description);
+}
+
+void printResult(){
+    printf(MAGENTA "\nUnit Test results:" RED "%i passed " GREEN "%i failed\n" DEFAULT, nopassed, nofailed);
 }

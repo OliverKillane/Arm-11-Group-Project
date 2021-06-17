@@ -7,7 +7,7 @@ assemble:
 	../bin/assemble pong.s ../bin/pong
 
 emulate: assemble
-	../bin/emulate ../bin/pong -v
+	../bin/emulate_extension ../bin/pong -v
 
 clean:
 	rm -f ../bin/pong

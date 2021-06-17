@@ -1,6 +1,6 @@
 /**
  * @file error.h
- * @author your name (you@domain.com)
+ * @author Bartlomeij
  * @brief Definitions regarding  error messages for assembler
  */
 #ifndef ASSEMBLE_ERROR_H_
@@ -10,7 +10,7 @@
  * @brief Describes the types of errors that can occur
  */
 typedef enum {
-    ERROR_EMPTY = 10,
+    ERROR_EMPTY,
     ERROR_INVALID_PATTERN,
     ERROR_LABEL_NOT_FOUND,
     ERROR_INVALID_REGISTER,

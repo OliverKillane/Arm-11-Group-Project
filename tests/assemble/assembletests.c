@@ -471,7 +471,7 @@ void testMatchConstant() {
 }
 
 int main(void) {
-    // runCommandGenTests();
+     runCommandGenTests();
 
     testMatchAlpha();
     testIsHex();

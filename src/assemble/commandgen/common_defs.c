@@ -11,24 +11,24 @@ Map label_masks;
 /* Helper Functions */
 void InitDataProcOpcodes() {
     data_proc_opcodes = NewEmptyMap(UnsafeIntHash, UnsafeIntEq);
-    MapSet(data_proc_opcodes, INSTR_AND, 0b0000);
-    MapSet(data_proc_opcodes, INSTR_EOR, 0b0001);
-    MapSet(data_proc_opcodes, INSTR_SUB, 0b0010);
-    MapSet(data_proc_opcodes, INSTR_RSB, 0b0011);
-    MapSet(data_proc_opcodes, INSTR_ADD, 0b0100);
-    MapSet(data_proc_opcodes, INSTR_ORR, 0b1100);
-    MapSet(data_proc_opcodes, INSTR_MOV, 0b1101);
-    MapSet(data_proc_opcodes, INSTR_TST, 0b1000);
-    MapSet(data_proc_opcodes, INSTR_TEQ, 0b1001);
-    MapSet(data_proc_opcodes, INSTR_CMP, 0b1010);
+    MapSet(data_proc_opcodes, INSTR_AND, 0x0);
+    MapSet(data_proc_opcodes, INSTR_EOR, 0x1);
+    MapSet(data_proc_opcodes, INSTR_SUB, 0x2);
+    MapSet(data_proc_opcodes, INSTR_RSB, 0x3);
+    MapSet(data_proc_opcodes, INSTR_ADD, 0x4);
+    MapSet(data_proc_opcodes, INSTR_ORR, 0xC);
+    MapSet(data_proc_opcodes, INSTR_MOV, 0xD);
+    MapSet(data_proc_opcodes, INSTR_TST, 0x8);
+    MapSet(data_proc_opcodes, INSTR_TEQ, 0x9);
+    MapSet(data_proc_opcodes, INSTR_CMP, 0xA);
 }
 
 void InitShiftCodes() {
     shift_codes = NewEmptyMap(UnsafeIntHash, UnsafeIntEq);
-    MapSet(shift_codes, INSTR_LSL, 0b00);
-    MapSet(shift_codes, INSTR_LSR, 0b01);
-    MapSet(shift_codes, INSTR_ASR, 0b10);
-    MapSet(shift_codes, INSTR_ROR, 0b11);
+    MapSet(shift_codes, INSTR_LSL, 0x0);
+    MapSet(shift_codes, INSTR_LSR, 0x1);
+    MapSet(shift_codes, INSTR_ASR, 0x2);
+    MapSet(shift_codes, INSTR_ROR, 0x3);
 }
 
 void InitLabelMask() {

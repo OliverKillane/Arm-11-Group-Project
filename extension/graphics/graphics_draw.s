@@ -27,9 +27,6 @@
 		push r4
 		brl fill
 
-		mainloop:
-		b mainloop
-
 		@ Drawing the paddles
 		mov r5, :first8:pcurr
 		orr r5, r5, :second8:pcurr
@@ -48,7 +45,9 @@
 		str r4, [r13]
 		brl fill
 
-		mov r0, ml
+		mov r0, width
+		sub r0, r0, ml
+		sub r0, r0, paddlewidth
 		ldr r1, [r5, #0x4]
 		lsl r1, #8
 		add r1, r1, mt
@@ -75,6 +74,7 @@
 		orr r4, r4, :third8:digits
 		orr r4, r4, :fourth8:digits
 		ldr r6, [r5]
+		lsl r6, #2
 		mul r6, r2, r6
 		mla r6, r3, r6, r4
 		str r6, [r13]
@@ -85,6 +85,7 @@
 		mov r2, digits_width
 		mov r3, digits_height
 		ldr r6, [r5, #0x4]
+		lsl r6, #2
 		mul r6, r2, r6
 		mla r6, r3, r6, r4
 		str r6, [r13]
@@ -105,9 +106,9 @@
 		str r2, [r1]
 
 		@ Cleaning everything up
-		sub r13, r13, #0x4
-		pop r6
-		pop r5
+		add r13, r13, #0x4
 		pop r4
+		pop r5
+		pop r6
 		pop r14
 		ret

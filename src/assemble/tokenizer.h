@@ -24,9 +24,6 @@ typedef enum {
     DIRECTIVE_NONE
 } DirectiveType;
 
-static char currentToken[512];
-static int currentTokenLength = 0;
-
 /**
  * @brief returns true if @p c is an alpha character.
  */

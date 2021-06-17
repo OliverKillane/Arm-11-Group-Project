@@ -3,45 +3,58 @@
 #include <ctype.h>
 #include "error.h"
 
-#define RED "\e[31m"
-#define WHITE "\e[37m"
+/* printing colours */
+#define RED "\033[31m"
+#define WHITE "\033[37m"
 
+/* global error_code can be set by subroutines */
 ErrorCodes error_code = ERROR_EMPTY;
 
 void SetErrorCode(ErrorCodes new_error_code) {
+
+    /* assert that there was no previous error and set the error code */
     assert(error_code == ERROR_EMPTY);
     error_code = new_error_code;
 }
 
-Map ErrorMessagesMap() {
-    Map error_messages = NewEmptyMap(UnsafeIntHash, UnsafeIntEq);
-    MapSet(error_messages, ERROR_INVALID_PATTERN, "Instruction pattern not found");
-    MapSet(error_messages, ERROR_LABEL_NOT_FOUND, "Label not found");
-    MapSet(error_messages, ERROR_INVALID_REGISTER, "Invalid register used");
-    MapSet(error_messages, ERROR_CONSTANT_OOB, "Constant out of bounds");
-    MapSet(error_messages, ERROR_SAME_REGISTERS, "Some registers that shouldn't be the same are the same");
-    MapSet(error_messages, ERROR_OFFSET_OOB, "Offset to the instruction out of bounds");
-    MapSet(error_messages, ERROR_CONDITIONAL_SHIFT, "The shift specifier should not be conditional");
-    return error_messages;
-}
-
 void ReportError(int line_num, char* file_name, char* line_contents) {
-    if(error_code == ERROR_EMPTY) {
-        return;
-    }
-    Map error_messages = ErrorMessagesMap();
+    /* error code is in error_code global var */
+    if (error_code != ERROR_EMPTY) {
 
-    while(isspace(*line_contents)) {
-        line_contents++;
-    }
-    printf(
-        "%s:%d: %s\n" RED "error: " WHITE "%s\n", 
-        file_name, 
-        line_num, 
-        line_contents,
-        MapGet(error_messages, (int)error_code)
-    );
+        /* if error code not empty,. print line information */
+        printf("%s:%d: %s\n" RED "error: " WHITE, file_name, line_num, line_contents);
+        
+        /* there is an error which requires printing, print error string */
+        switch(error_code) {
+            case ERROR_INVALID_PATTERN:
+                printf("Instruction pattern not found");
+                break;
+            case ERROR_LABEL_NOT_FOUND:
+                printf("Label not found");
+                break;
+            case ERROR_INVALID_REGISTER:
+                printf("Invalid register used");
+                break;
+            case ERROR_CONSTANT_OOB:
+                printf("Constant out of bounds");
+                break;
+            case ERROR_SAME_REGISTERS:
+                printf("Some registers that shouldn't be the same are the same");
+                break;
+            case ERROR_OFFSET_OOB:
+                printf("Offset to the instruction out of bounds");
+                break;
+            case ERROR_CONDITIONAL_SHIFT:
+                printf("The shift specifier should not be conditional");
+                break;
+            default:
+                break;
+        }
 
-    DeleteMap(error_messages);
-    error_code = ERROR_EMPTY;
+        /* print newline */
+        printf("\n");
+
+        /* exit on the error code */
+        exit(error_code);
+    }
 }

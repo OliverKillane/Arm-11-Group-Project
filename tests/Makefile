@@ -14,8 +14,6 @@ emulate:
 
 stddata:
 	cd ../lib/stddata && $(MAKE) library
-	cp ../lib/stddata/bin/stddata.o ../build/tests/
-
 clean:
 	cd assemble && $(MAKE) clean
 	cd emulate && $(MAKE) clean

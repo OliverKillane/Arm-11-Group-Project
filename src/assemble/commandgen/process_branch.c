@@ -1,10 +1,9 @@
-#include "common_defs.h"
 #include "process_branch.h"
+#include "common_defs.h"
 #include "instruction_layouts.h"
 #include "../tokenizer.h"
 #include "../error.h"
 #include <stddata.h>
-#include <stdio.h>
 
 bool LayoutBranchConstant(
     Map restrict symbols, 

@@ -3,17 +3,16 @@
 #include "../tokenizer.h"
 #include "../error.h"
 #include <stddata.h>
-#include <stdio.h>
 
 bool ValidateToken(Token token, int index) {
     switch(TokenType(token)) {
-        TOKEN_REGISTER:
-            if(TokenRegisterNumber(token) > 15 || TokenRegisterNumber < 0) {
+        case TOKEN_REGISTER:
+            if(TokenRegisterNumber(token) > 15 || TokenRegisterNumber(token) < 0) {
                 SetErrorCode(ERROR_INVALID_REGISTER);
                 return true;
             }
             return false;
-        TOKEN_INSTRUCTION:
+        case TOKEN_INSTRUCTION:
             if(index > 0 &&
                MapQuery(shift_codes, (int)TokenInstructionType(token)) && 
                TokenInstructionConditionType(token) != COND_AL) {

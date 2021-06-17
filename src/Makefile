@@ -16,7 +16,6 @@ emulate_extension:
 
 stddata:
 	cd ../lib/stddata && $(MAKE) library
-	cp ../lib/stddata/bin/stddata.o ../build/
 
 clean:
 	cd ../lib/stddata && $(MAKE) clean
