@@ -9,12 +9,6 @@
     @ Coordinates for the initial "Push any button" text
     .set press_key_x 49
     .set press_key_y 70
-    push_button_erased:
-        .long 1
-    .set read_image_buffer 0x1000000
-    write_image_buffer:
-        .long 0x0
-    image_buffer_0:
-        .include graphics_background_raw.s
-    image_buffer_1:
-        .include graphics_background_raw.s
+    .set image_buffer_ptr 0x1000000
+    image_buffer:
+        .include graphics_background_full_raw.s

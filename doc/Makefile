@@ -1,15 +1,17 @@
-all: Report Checkpoint Emulator_Video_Interface
+EXTRA_SRC =
+TEX = pdflatex
+
+all: Report.pdf Checkpoint.pdf
 
 .phony: all clean
 
-Report:
-	cd Report && $(MAKE)
-
-Checkpoint:
-	cd Checkpoint && $(MAKE)
-
-Emulator_Video_Interface:
-	cd "Emulator Video Interface" && $(MAKE)
+%.pdf: %.tex $(EXTRA_SRC)
+	while( $(TEX) $< ; grep -q "Rerun to get cross" $(<:.tex=.log)) ; \
+	  do true ; \
+	 done
 
 clean:
+	rm -f *.aux
+	rm -f *.log
 	rm -f *.pdf
+	rm -f *.gz

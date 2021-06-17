@@ -1,73 +1,281 @@
 @ This file defines a blackout subroutine used in the main loop
 .text
-	blackout:
-		@ Saving onto the stack
+	blackouttext:
+		@ Setup
 		push r14
-		push r4
+		push r3
+		push r2
+		push r1
+		push r0
 
-		@ Blacking out the text
-		mov r4 :first8:push_button_erased
-		orr r4, r4 :second8:push_button_erased
-		orr r4, r4 :third8:push_button_erased
-		orr r4, r4 :fourth8:push_button_erased
-		ldr r0 [r4]
-		cmp r0, #0
-		beq continue_blackout
-		mov r0, #0
-		str r0 [r4]
+		@ Logic 1
+		mov r0, :first8:background_buffer
+		orr r0, r0, :second8:background_buffer
+		orr r0, r0, :third8:background_buffer
+		orr r0, r0, :fourth8:background_buffer
+		push r0
 
-		mov r0, #0
-		mov r1, #0
-		mov r2, width
-		mov r3, height
+		mov r0, :first8:image_buffer_ptr
+		orr r0, r0, :second8:image_buffer_ptr
+		orr r0, r0, :third8:image_buffer_ptr
+		orr r0, r0, :fourth8:image_buffer_ptr
+		ldr r0 [r0]
+		push r0
+
+		mov r0, press_key_x
+		mov r1, press_key_y
+		mov r2, press_key_width
+		mov r3, press_key_height
 		brl reset
-		b end_blackout
 
-		continue_blackout:
-		@ Blacking out the ball
-		mov r4, :first8:bprev
-		orr r4, r4, :second8:bprev
-		orr r4, r4, :third8:bprev
-		orr r4, r4, :fourth8:bprev
-		ldr r0, [r4]
-		ldr r1, [r4, #0x4]
-		lsl r0, #8
-		lsl r1, #8
+		add r13, r13, #0x8
+
+		@ Logic 2
+		mov r0, :first8:background_buffer
+		orr r0, r0, :second8:background_buffer
+		orr r0, r0, :third8:background_buffer
+		orr r0, r0, :fourth8:background_buffer
+		push r0
+
+		mov r0, :first8:image_buffer_ptr
+		orr r0, r0, :second8:image_buffer_ptr
+		orr r0, r0, :third8:image_buffer_ptr
+		orr r0, r0, :fourth8:image_buffer_ptr
+		ldr r0 [r0]
+		push r0
+
+		mov r0, score_left_x
+		mov r1, score_left_y
+		rsb r2, r0, score_right_x
+		mov r3, digits_height
+		brl reset
+
+		add r13, r13, #0x8
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+
+		ret
+
+	blackoutball:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
+		mov r0, :first8:background_buffer
+		orr r0, r0, :second8:background_buffer
+		orr r0, r0, :third8:background_buffer
+		orr r0, r0, :fourth8:background_buffer
+		push r0
+
+		mov r0, :first8:image_buffer_ptr
+		orr r0, r0, :second8:image_buffer_ptr
+		orr r0, r0, :third8:image_buffer_ptr
+		orr r0, r0, :fourth8:image_buffer_ptr
+		ldr r0 [r0]
+		push r0
+
+		ldr r0, [r2]
+		ldr r1, [r2, #0x4]
+		lsr r0, #7
+		lsr r1, #7
+		and r2, r0, #1
+		and r3, r1, #1
+		add r0, r2, r0, lsr #1
+		add r1, r3, r1, lsr #1
 		add r0, r0, ml
 		add r1, r1, mt
+
 		mov r2, ball_width
 		mov r3, ball_height
+		
 		brl reset
 
-		@ Blacking out the paddles
-		mov r4, :first8:pprev
-		orr r4, r4, :second8:pprev
-		orr r4, r4, :third8:pprev
-		orr r4, r4, :fourth8:pprev
+		add r13, r13, #0x8
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	blackoutleftpaddle:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
+		mov r0, :first8:background_buffer
+		orr r0, r0, :second8:background_buffer
+		orr r0, r0, :third8:background_buffer
+		orr r0, r0, :fourth8:background_buffer
+		push r0
+
+		mov r0, :first8:image_buffer_ptr
+		orr r0, r0, :second8:image_buffer_ptr
+		orr r0, r0, :third8:image_buffer_ptr
+		orr r0, r0, :fourth8:image_buffer_ptr
+		ldr r0 [r0]
+		push r0
+		
 		mov r0, ml
 		ldr r1, [r4]
-		lsl r1, #8
+		lsr r1, #8
 		add r1, r1, mt
+
 		mov r2, paddlewidth
 		mov r3, paddleheight
+
 		brl reset
+
+		add r13, r13, #0x8
+		
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	blackoutrightpaddle:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic
+		mov r0, :first8:background_buffer
+		orr r0, r0, :second8:background_buffer
+		orr r0, r0, :third8:background_buffer
+		orr r0, r0, :fourth8:background_buffer
+		push r0
+
+		mov r0, :first8:image_buffer_ptr
+		orr r0, r0, :second8:image_buffer_ptr
+		orr r0, r0, :third8:image_buffer_ptr
+		orr r0, r0, :fourth8:image_buffer_ptr
+		ldr r0 [r0]
+		push r0
 
 		mov r0, width
 		sub r0, r0, ml
 		sub r0, r0, paddlewidth
 		ldr r1, [r4, #0x4]
-		lsl r1, #8
+		lsr r1, #8
 		add r1, r1, mt
+
 		mov r2, paddlewidth
 		mov r3, paddleheight
+
 		brl reset
+
+		add r13, r13, #0x8
 		
-		@ Blacking out the score
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	blackoutleftscore:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic 1
+		mov r0, :first8:background
+		orr r0, r0, :second8:background
+		orr r0, r0, :third8:background
+		orr r0, r0, :fourth8:background
+		push r0
+
+		mov r0, :first8:background_buffer
+		orr r0, r0, :second8:background_buffer
+		orr r0, r0, :third8:background_buffer
+		orr r0, r0, :fourth8:background_buffer
+		push r0
+
 		mov r0, score_left_x
 		mov r1, score_left_y
 		mov r2, digits_width
 		mov r3, digits_height
 		brl reset
+
+		add r13, r13, #0x8
+
+		@ Logic 2
+		mov r0, :first8:background_buffer
+		orr r0, r0, :second8:background_buffer
+		orr r0, r0, :third8:background_buffer
+		orr r0, r0, :fourth8:background_buffer
+		push r0
+
+		mov r0, :first8:image_buffer_ptr
+		orr r0, r0, :second8:image_buffer_ptr
+		orr r0, r0, :third8:image_buffer_ptr
+		orr r0, r0, :fourth8:image_buffer_ptr
+		ldr r0 [r0]
+		push r0
+
+		mov r0, score_left_x
+		mov r1, score_left_y
+		mov r2, digits_width
+		mov r3, digits_height
+		brl reset
+
+		add r13, r13, #0x8
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
+		pop r14
+		ret
+
+	blackoutrightscore:
+		@ Setup
+		push r14
+		push r3
+		push r2
+		push r1
+		push r0
+
+		@ Logic 1
+		mov r0, :first8:background
+		orr r0, r0, :second8:background
+		orr r0, r0, :third8:background
+		orr r0, r0, :fourth8:background
+		push r0
+
+		mov r0, :first8:background_buffer
+		orr r0, r0, :second8:background_buffer
+		orr r0, r0, :third8:background_buffer
+		orr r0, r0, :fourth8:background_buffer
+		push r0
 		
 		mov r0, score_right_x
 		mov r1, score_right_y
@@ -75,8 +283,34 @@
 		mov r3, digits_height
 		brl reset
 
-		@ Cleaning everything up
-		end_blackout:
-		pop r4
+		add r13, r13, #0x8
+
+		@ Logic 2
+		mov r0, :first8:background
+		orr r0, r0, :second8:background
+		orr r0, r0, :third8:background
+		orr r0, r0, :fourth8:background
+		push r0
+
+		mov r0, :first8:image_buffer_ptr
+		orr r0, r0, :second8:image_buffer_ptr
+		orr r0, r0, :third8:image_buffer_ptr
+		orr r0, r0, :fourth8:image_buffer_ptr
+		ldr r0 [r0]
+		push r0
+
+		mov r0, score_right_x
+		mov r1, score_right_y
+		mov r2, digits_width
+		mov r3, digits_height
+		brl reset
+
+		add r13, r13, #0x8
+
+		@ Finish
+		pop r0
+		pop r1
+		pop r2
+		pop r3
 		pop r14
 		ret
