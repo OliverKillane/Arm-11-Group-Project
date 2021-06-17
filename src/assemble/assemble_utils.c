@@ -62,7 +62,6 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 
 	int lineNum = 1;
 
-	printf("reading file '%s'\n", filename);
 	file = fopen(filename, "r");
 	if(file == NULL) {
 		fprintf(stderr, "Couldn't open file %s\n", filename);
@@ -122,11 +121,6 @@ void readFileLines(char *filename, List textLines, List dataLines) {
 			}
 		}
 		lineNum++;
-		// line = NULL;
-		
-		// if (preservedLine != NULL) {
-		// 	free(preservedLine);
-		// }
 	}
 	if (preservedLine != NULL) {
 		free(preservedLine);
@@ -175,9 +169,7 @@ Vector tokensToBinary(Map symbolTable, List listOfTokens, Vector dataVector, int
 		char *line = VectorPopBack(lineTokens);
 		if (FunctionGen(symbolTable, lineTokens, programVector, dataVector, currInstr, totalInstructions)) {
 			ReportError(lineNum, filename, line);
-		}
-		// free(filename);
-		
+		}		
 		
 		currInstr++;		
 	}

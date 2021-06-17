@@ -49,7 +49,6 @@ int main(int argc, char **argv) {
 	LISTFOR(textLines, iter) {
 		free(ListIteratorGet(iter));
 		ListIteratorIncr(&iter);
-		// free(ListIteratorGet(iter));
 		ListIteratorIncr(&iter);
 		free(ListIteratorGet(iter));
 	}
@@ -62,9 +61,6 @@ int main(int argc, char **argv) {
 
 	LISTFOR(textTokens, iter1) {
 		Vector line = ListIteratorGet(iter1);
-		// VectorPopBack(line);
-		// free(VectorPopBack(line));
-		// VectorPopBack(line);
 		VECTORFOR(line, iter2) {
 			
 			Token token = VectorIteratorGet(iter2);
