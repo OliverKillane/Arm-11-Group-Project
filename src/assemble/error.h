@@ -10,7 +10,7 @@
  * @brief Describes the types of errors that can occur
  */
 typedef enum {
-    ERROR_EMPTY = 10,
+    ERROR_EMPTY,
     ERROR_INVALID_PATTERN,
     ERROR_LABEL_NOT_FOUND,
     ERROR_INVALID_REGISTER,

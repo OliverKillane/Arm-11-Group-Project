@@ -22,10 +22,10 @@ typedef uint8_t byte;
 //CPSR = NZCV
 
 typedef struct {
-    unsigned int N : 1;
-    unsigned int Z : 1;
-    unsigned int C : 1;
-    unsigned int V : 1;
+    bool N : 1;
+    bool Z : 1;
+    bool C : 1;
+    bool V : 1;
 } cpsr;
 
 /* the emulator state */
@@ -33,8 +33,6 @@ extern word registers[16];
 extern cpsr CPSR;
 extern byte *memory; 
 extern word GPIO;
-
-// declared the CPU that will be used.
 
 // struct to hold shift function results.
 typedef struct {
@@ -103,18 +101,31 @@ extern modes emulatorMode;
 */
 #define GETBIT(data, n) (((data) >> (n)) & 1)
 
+/* REGISTER AND MEMORY HELPERS: */
+
 /* 
 Get a pointer to a register.
 @param Reg <- either enum reg or
 */
 #define GETREG(reg) (registers + reg)
 
+/*
+Get a pointer to a byte in memory
+@param loc the location (0 to MEMSIZE - 1)
+@retval The byte pointer to the location loc
+*/
 #define GETMEMLOC(loc) (memory + loc)
 
+
+/*
+Get a pointer to a word in memory
+@param loc the location (0 to MEMSIZE - 1)
+@retval The word pointer to the location loc
+*/
 #define GETMEMWORD(loc) ((word*) (memory + loc))
 
 
-// INSTRUCTION PROCESSING:
+/* INSTRUCTION PROCESSING: */
 
 /* 
 Load the program into memory
@@ -177,7 +188,8 @@ void processDataInstr(instruction instr);
 */
 bool littleendiancheck(void);
 
-/* free the memory associated with the CPU struct.
+/* 
+Free the memory associated with the CPU state.
 */
 void freeCPU(void);
 
@@ -188,11 +200,12 @@ Print the state of the CPU to the terminal
 */
 void printState(void);
 
-// VIDEO OUTPUT:
-/* Window Size, in pixels */
+/* VIDEO OUTPUT: */
+/* Output Size, in pixels */
 #define HEIGHT 108
 #define WIDTH 192
 
+/* Window size (scaled up by 4x)*/
 #define WINDOW_HEIGHT 432
 #define WINDOW_WIDTH 768
 
@@ -202,8 +215,10 @@ void printState(void);
 #define INPUT_BUFFER_SIZE 64
 
 
-/* the 3 main variables required, the window, the renderer to draw to the window, 
- * and the texture to be drawn by the renderer */
+/*
+The 3 main variables required, the window to display, the renderer to draw to the window, 
+and the texture to be drawn by the renderer (which will be derived from emulator memory).
+*/
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;
 extern SDL_Texture *texture;

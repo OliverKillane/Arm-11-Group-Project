@@ -3,38 +3,28 @@
 #include <ctype.h>
 #include "error.h"
 
+/* printing colours */
 #define RED "\e[31m"
 #define WHITE "\e[37m"
 
-
-/*  
-  improvement note: this code is merely a fill in:
-  currently to declare en error:
-    if function, setErrorCode, return true
-    then once true is received, it calls reportError
-    report error immediately exits, but always on 1
-
-    to replace:
-     if an error, call (error, line_num, file_name, line_contents, error_code)
-     it immediately exits.
-*/
-
+/* global error_code can be set by subroutines */
 ErrorCodes error_code = ERROR_EMPTY;
 
 void SetErrorCode(ErrorCodes new_error_code) {
+
+    /* assert that there was no previous error and set the error code */
     assert(error_code == ERROR_EMPTY);
     error_code = new_error_code;
 }
 
 void ReportError(int line_num, char* file_name, char* line_contents) {
-
-        /* error code is in error_code global var */
+    /* error code is in error_code global var */
     if (error_code != ERROR_EMPTY) {
 
         /* if error code not empty,. print line information */
         printf("%s:%d: %s\n" RED "error: " WHITE, file_name, line_num, line_contents);
         
-        /* there is an error which requires printing */
+        /* there is an error which requires printing, print error string */
         switch(error_code) {
             case ERROR_INVALID_PATTERN:
                 printf("Instruction pattern not found");
@@ -58,8 +48,10 @@ void ReportError(int line_num, char* file_name, char* line_contents) {
                 printf("The shift specifier should not be conditional");
         }
 
-        /* print newline and reset error code */
+        /* print newline */
         printf("\n");
-        error_code = ERROR_EMPTY;
+
+        /* exit on the error code */
+        exit(error_code);
     }
 }
