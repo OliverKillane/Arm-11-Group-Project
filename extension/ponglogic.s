@@ -181,7 +181,7 @@ checkcollision:
     
     ldr r10, [r4]               @ left paddleTop y position
     mov r12, paddlemargin
-    sub r10, r10, r12, lsl #8
+    add r10, r10, r12, lsl #8
     ldr r11, [r2, #4]           @ ball y pos
     add r11, r11, #0xC00        @ bottom of the ball
     cmp r11, r10
