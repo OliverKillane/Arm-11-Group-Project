@@ -4,8 +4,8 @@
 #include "error.h"
 
 /* printing colours */
-#define RED "\e[31m"
-#define WHITE "\e[37m"
+#define RED "\033[31m"
+#define WHITE "\033[37m"
 
 /* global error_code can be set by subroutines */
 ErrorCodes error_code = ERROR_EMPTY;
@@ -46,6 +46,9 @@ void ReportError(int line_num, char* file_name, char* line_contents) {
                 break;
             case ERROR_CONDITIONAL_SHIFT:
                 printf("The shift specifier should not be conditional");
+                break;
+            default:
+                break;
         }
 
         /* print newline */

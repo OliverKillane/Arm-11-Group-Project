@@ -1,7 +1,7 @@
 CC      = gcc
 CFLAGS  = -Wall -g -o3  -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c11 -pedantic 
 INCLUDE = -I../../lib/SDL2/include
-LINK =  -L/../../lib/SDL2 -lSDL2 -lm -ldl -lpthread -lrt
+LINK =  -L../../lib/SDL2 -lSDL2x86_64 -lm -ldl -lpthread -lrt
 PROFILETARGET = 
 
 .PHONY: all clean

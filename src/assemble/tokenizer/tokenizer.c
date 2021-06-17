@@ -7,6 +7,9 @@
 #include <ctype.h>
 #include "stddata.h"
 
+static char currentToken[512];
+static int currentTokenLength = 0;
+
 bool matchAlpha(char c) {
     return isalpha(c) != 0;
 }
@@ -447,7 +450,7 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                             DeleteToken(matchedConstant);
                             currentDirectiveType = DIRECTIVE_NONE;
                         } else if (currentDirectiveType == DIRECTIVE_SET) {
-                            printf("Label set %s %d\n", currentDirectiveLabel, matchedConstant->constant.value);
+                            printf("Label set %s %lld\n", currentDirectiveLabel, matchedConstant->constant.value);
                             MapSet(symbolTable, currentDirectiveLabel, matchedConstant->constant.value);
                             DeleteToken(matchedConstant);
                             // printf("%s %d\n", currentDirectiveLabel, MapGet(symbolTable, currentDirectiveLabel));

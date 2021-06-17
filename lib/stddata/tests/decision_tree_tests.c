@@ -5,7 +5,6 @@
 #include <list_iterator.h>
 #include <assert.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 /* Helper Functions */
 
@@ -58,7 +57,6 @@ void DecisionTreeAddingSequencesVector() {
     for(int i = 0; i < sequences_count; i++) {
         assert(DecisionTreeQuery(tree, sequences[i]) == values[i]);
     }
-    fprintf(stderr, "%d\n", DecisionTreeSize(tree));
     assert(DecisionTreeSize(tree) == sequences_count);
     DeleteDecisionTree(tree);
     for(int i = 0; i < sequences_count; i++) {
@@ -95,7 +93,6 @@ void DecisionTreeAddingSequencesList() {
     for(int i = 0; i < sequences_count; i++) {
         assert(DecisionTreeQuery(tree, sequences[i]) == values[i]);
     }
-    fprintf(stderr, "%d\n", DecisionTreeSize(tree));
     assert(DecisionTreeSize(tree) == sequences_count);
     DeleteDecisionTree(tree);
     for(int i = 0; i < sequences_count; i++) {

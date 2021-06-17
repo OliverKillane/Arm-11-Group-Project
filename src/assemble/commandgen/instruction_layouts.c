@@ -97,7 +97,7 @@ void InitSingleGroupTokens() {
     SetInsert(single_group_tokens, INSTR_HLT);
 }
 
-void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, int, int), int num_indicies, 
+void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, Vector, int, int), int num_indicies, 
     void* layout_args_indicies[], void* bracket_layout_result, ...) {
     va_list args;
     va_start(args, bracket_layout_result);
@@ -140,7 +140,13 @@ void AddSingleLayout(char* layout_str, bool(*func)(Map, Vector, Vector, int, int
         ListPushBack(layout_tokens, ListIteratorGet(iter));
     }
 
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wpedantic"
+
     DecisionTreeInsert(instruction_layouts, layout, func);
+
+    #pragma GCC diagnostic pop
+
     if(num_indicies != 0) {
         Vector layout_args = NewFilledVector(num_indicies, layout_args_indicies);
         DecisionTreeInsert(data_layouts, layout, layout_args);
@@ -164,6 +170,7 @@ void ProcessDataLayout(Vector tokens, int n, ...) {
     VECTORFOR(tokens, tokens_iter) {
         switch(TokenType(VectorIteratorGet(tokens_iter))) {
             case TOKEN_EXCLAMATION:
+            case TOKEN_LABEL:
             case TOKEN_BRACE:
                 VectorIteratorDecr(&layout_args_iter);
                 break;

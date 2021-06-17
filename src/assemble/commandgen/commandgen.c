@@ -2,6 +2,7 @@
 #include "../tokenizer.h"
 #include "../error.h"
 #include "instruction_layouts.h"
+#include "process_expression.h"
 #include <stddata.h>
 
 bool FunctionGen(
@@ -19,7 +20,14 @@ bool FunctionGen(
     if(ProcessExpression(symbols, tokens)) {
         return true;
     }
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wpedantic"
+
     bool(*process_function)(Map, Vector, Vector, Vector, int, int) = DecisionTreeQuery(instruction_layouts, tokens);
+
+    #pragma GCC diagnostic pop
+
     if(process_function == NULL) {
         SetErrorCode(ERROR_INVALID_PATTERN);
         return true;

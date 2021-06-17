@@ -1,6 +1,6 @@
 CC=gcc
 CSANITIZERS= -fsanitize=address,return,unreachable,null,bounds
-CFLAGS= -g -O3 -Wall -pedantic -std=c17 -Iinclude
+CFLAGS= -g -fPIC -O3 -Wall -pedantic -std=c17 -Iinclude -Wno-int-conversion
 
 default: clean test library
 
@@ -59,6 +59,7 @@ library: build/vector.o build/stack.o build/vector_iterator.o build/list_node_ut
 		 build/list.o build/list_iterator.o build/set.o build/queue.o build/deque.o\
 		 build/set_iterator.o build/map.o build/map_iterator.o build/hash_utils.o\
 		 build/decision_tree.o
-	ld -relocatable $^ -o bin/stddata.o
+	
+	ar rcs bin/libstddata.a $^
 
 .PHONY: clean default library
