@@ -1,6 +1,5 @@
-@ This file stores the image data for the background
 .data
-    background:
+    background_buffer:
         .long 0xff1bc1ef
 		.long 0xff1bc0ef
 		.long 0xff1abfef

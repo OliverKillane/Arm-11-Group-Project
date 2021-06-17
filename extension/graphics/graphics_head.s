@@ -7,3 +7,4 @@
 .include graphics_digits.s
 .include graphics_paddle.s
 .include graphics_text.s
+.include graphics_background_buffer.s

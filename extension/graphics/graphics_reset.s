@@ -1,6 +1,6 @@
 .text
-reset:
-	
+@===============================================================================
+@ RESET:	
 	@ function parameters: 
 	@ r0  <- x0
 	@ r1  <- y0
@@ -8,7 +8,7 @@ reset:
 	@ r3  <- height (Y axis)
 
 	@ internal registers for local variables: 
-    @ r4  <- write_image_buffer register
+    @ r4  <- image_buffer_ptr register
 	@ r5  <- X-axis iterator
 	@ r6  <- Y-axis iterator
 	@ r8  <- X-axis target pixel index
@@ -16,7 +16,11 @@ reset:
 	@ r10 <- array iterator index
     @ r11 <- auxiliary register 
     @ r12 <- background register
-		
+
+	@ Effect: Reset area of width x height beginning at (x0, y0) 
+	@ to background values.
+
+reset:		
 	@ Saving onto the stack	
     push r4
     push r5
@@ -44,29 +48,10 @@ reset:
 	mla r10, r1, r11, r0
 
 	@ load background values into register
-    mov r12, :first8:background
-    orr r12, r12, :second8:background
-    orr r12, r12, :third8:background
-    orr r12, r12, :fourth8:background
+	ldr r12 [r13, #0x24]
 
-	@ load write_image_buffer values into register
-    mov r4, :first8:write_image_buffer
-    orr r4, r4, :second8:write_image_buffer
-    orr r4, r4, :third8:write_image_buffer
-    orr r4, r4, :fourth8:write_image_buffer
-	ldr r4 [r4]
-
-	@ ensure X coordinate is within image bounds
-	boundX_reset:
-		cmp r8, width
-		ble boundY_reset
-		mov r8, width 
-
-	@ ensure Y coordinate is within image bounds
-	boundY_reset:
-		cmp r9, height
-		ble condX_reset
-		mov r9, height
+	@ load image_buffer_ptr values into register
+    ldr r4 [r13, #0x20]
 
 	condY_reset:
 		cmp r6, r9

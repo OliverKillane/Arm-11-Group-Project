@@ -1,6 +1,6 @@
 .text
-fill:
-	
+@===============================================================================
+@ FILL:
 	@ Function parameters: 
 	@ r0  <- x0 
 	@ r1  <- y0 
@@ -9,7 +9,7 @@ fill:
 	@ r13 <- memory pointer register
 
 	@ Internal registers for local variables: 
-    @ r4  <- write_image_buffer register	
+    @ r4  <- image_buffer_ptr register	
 	@ r5  <- X-axis iterator
 	@ r6  <- Y-axis iterator
 	@ r7  <- background pixel register
@@ -18,7 +18,13 @@ fill:
 	@ r10 <- array iterator index
     @ r11 <- auxiliary register 
 	@ r12 <- background register
-	
+
+	@ Effects: paste image (whose pointer is held in r13) onto the background
+	@ at coordinates (x0, y0) (held in registers r0 and r1).
+	@ The function features alpha channel mixing between image and background.
+
+fill:
+		
 	@ Saving onto the stack
 	push r4
 	push r5
@@ -45,12 +51,8 @@ fill:
 	mov r11, width
 	mla r10, r1, r11, r0
 
-	@ load write_image_buffer values into register
-    mov r4, :first8:write_image_buffer
-    orr r4, r4, :second8:write_image_buffer
-    orr r4, r4, :third8:write_image_buffer
-    orr r4, r4, :fourth8:write_image_buffer
-	ldr r4, [r4]
+	@ load image_buffer_ptr values into register
+    ldr r4, [r13, #0x24]
 
 	@ ensure X coordinate is within image bounds
 	boundX_fill:
@@ -80,7 +82,7 @@ fill:
 		b condY_fill	
 
 	loop_fill:
-		ldr r11, [r13, #0x24]
+		ldr r11, [r13, #0x28]
 
 		push r3
 		push r2

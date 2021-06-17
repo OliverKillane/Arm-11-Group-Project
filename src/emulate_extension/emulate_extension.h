@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "SDL.h"
+#include <SDL.h>
 
 // TYPE DECLARATIONS:
 // type definitions for readability

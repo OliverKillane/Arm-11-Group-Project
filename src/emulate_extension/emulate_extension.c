@@ -89,7 +89,11 @@ int main(int argc, char** argv) {
   }
 
   /* set up machine initial state (all zero, stack pointer at max location*/
+<<<<<<< HEAD
   CPSR = (cpsr) {.N = false, .Z = false, .C = false, .V = false};
+=======
+  CPSR = (cpsr) {.N = 0, .Z = 0, .C = 0, .V = 0};
+>>>>>>> pong_graphics
   memory = calloc(MEMSIZE, 1);
   assert(memory);
   memset(registers, 0, 64);
