@@ -3,6 +3,7 @@
 #include <string.h>
 #include <assert.h>
 #include "emulate_extension.h"
+#include "icon_data.c"
 
 /* mode type of the emulator */
 modes emulatorMode;
@@ -15,6 +16,7 @@ word GPIO;
 
 /* globals for video */
 SDL_Window *window;
+SDL_Surface *icon;
 SDL_Renderer *renderer;
 SDL_Texture *texture;
 byte* video_pointer;
@@ -566,6 +568,11 @@ void setupWindow(char *title){
     SDL_WINDOW_SHOWN
   );
 
+  /* add an icon to the window */
+  icon = SDL_CreateRGBSurfaceFrom(icon_data, 512, 512, 32, 512 * 4, 0x0000FF00, 0x00FF0000, 0xFF000000, 0x000000FF);
+  SDL_SetWindowIcon(window, icon);
+
+
   /* initialise the renderer
    * magic number -1: use first available driver supporting flags
    */
@@ -663,6 +670,7 @@ void destroyVideo(){
   SDL_DestroyTexture(texture);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
+  SDL_FreeSurface(icon);
 
   /* end SDL */
   SDL_Quit();

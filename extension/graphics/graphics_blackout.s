@@ -8,7 +8,7 @@
 		push r1
 		push r0
 
-		@ Logic
+		@ Logic 1
 		mov r0, :first8:background_buffer
 		orr r0, r0, :second8:background_buffer
 		orr r0, r0, :third8:background_buffer
@@ -22,10 +22,32 @@
 		ldr r0 [r0]
 		push r0
 
-		mov r0, #0
-		mov r1, #1
-		mov r2, width
-		mov r3, height
+		mov r0, press_key_x
+		mov r1, press_key_y
+		mov r2, press_key_width
+		mov r3, press_key_height
+		brl reset
+
+		add r13, r13, #0x8
+
+		@ Logic 2
+		mov r0, :first8:background_buffer
+		orr r0, r0, :second8:background_buffer
+		orr r0, r0, :third8:background_buffer
+		orr r0, r0, :fourth8:background_buffer
+		push r0
+
+		mov r0, :first8:image_buffer_ptr
+		orr r0, r0, :second8:image_buffer_ptr
+		orr r0, r0, :third8:image_buffer_ptr
+		orr r0, r0, :fourth8:image_buffer_ptr
+		ldr r0 [r0]
+		push r0
+
+		mov r0, score_left_x
+		mov r1, score_left_y
+		rsb r2, r0, score_right_x
+		mov r3, digits_height
 		brl reset
 
 		add r13, r13, #0x8
@@ -264,10 +286,10 @@
 		add r13, r13, #0x8
 
 		@ Logic 2
-		mov r0, :first8:background_buffer
-		orr r0, r0, :second8:background_buffer
-		orr r0, r0, :third8:background_buffer
-		orr r0, r0, :fourth8:background_buffer
+		mov r0, :first8:background
+		orr r0, r0, :second8:background
+		orr r0, r0, :third8:background
+		orr r0, r0, :fourth8:background
 		push r0
 
 		mov r0, :first8:image_buffer_ptr

@@ -164,22 +164,24 @@ movepaddles:
 @   5 - RIGHT WALL
 @   6 - BOTTOM_WALL
 @ arguments:    None
-@ returns:      r12 <- COLLIDE_ENUM
+@ returns:      r10 <- COLLIDE_ENUM
 @ side-effects: None
 checkcollision:
     push r0         @ r0 to store any temporary variable
     push r9         @ r9 to store ball's x position
-    push r10        @ r10 to paddle top y position
     push r11        @ r11 to store ball's y position
+    push r12
     push r14
 
     checkleftpaddle:
     
-    @ if ((ballY + ballHeight) >= paddleTop && ballY <= (paddltTop + paddleHeight) && ballX <= paddleWidth) {
+    @ if ((ballY + ballHeight) >= paddleTop + paddleMargin && ballY <= (paddltTop + paddleHeight - paddleMargin) && ballX <= paddleWidth) {
     @     return 2
     @ }
-          
+    
     ldr r10, [r4]               @ left paddleTop y position
+    mov r12, paddlemargin
+    sub r10, r10, r12, lsl #8
     ldr r11, [r2, #4]           @ ball y pos
     add r11, r11, #0xC00        @ bottom of the ball
     cmp r11, r10
@@ -188,6 +190,7 @@ checkcollision:
     ldr r11, [r2, #4]           @ ball y pos
     mov r0, paddleheight        @ move paddle height into r0 to be shifted during addition
     add r10, r10, r0, lsl #8    @ calculates the bottom of the left paddle.
+    sub r10, r10, r12, lsl #9
     cmp r11, r10
     bgt checkrightpaddle
 
@@ -197,24 +200,27 @@ checkcollision:
     cmp r9, r0
     bgt checkrightpaddle
 
-    mov r12, #2
+    mov r10, #2
     b endcheckcollision
 
     checkrightpaddle:
 
-    @ if ((ballY + ballHeight) >= paddleTop && ballY <= (paddltTop + paddleHeight) && (ballX + ballWidth) >= (maxXcoor - paddleWidth)) {
+    @ if ((ballY + ballHeight) >= paddleTop + paddleMargin && ballY <= (paddltTop + paddleHeight - paddleMargin) && (ballX + ballWidth) >= (maxXcoor - paddleWidth)) {
     @     return 4
     @ }
 
     ldr r10, [r4, #4]           @ right paddleTop y position
+    mov r12, paddlemargin
     ldr r11, [r2, #4]           @ ball y pos
     add r11, r11, #0xC00        @ bottom of the ball
+    sub r11, r11, r12, lsl #8
     cmp r11, r10
     blt checkleft
 
     ldr r11, [r2, #4]            @ y of ball
     mov r0, paddleheight        @ move paddle height into r0 to be shifted during addition
     add r10, r10, r0, lsl #8    @ calculates the bottom of the left paddle.
+    sub r10, r10, r12, lsl #8
     cmp r11, r10
     bgt checkleft
 
@@ -228,7 +234,7 @@ checkcollision:
     cmp r9, r0
     blt checkleft
 
-    mov r12, #4
+    mov r10, #4
     b endcheckcollision
 
 
@@ -237,14 +243,14 @@ checkcollision:
     cmp r9, #0
     bgt checkright
 
-    mov r12, #1
+    mov r10, #1
     b endcheckcollision
 
     checkright: 
     add r9, r9, #0xC00
     cmp r9, maxXcoor
     blt checkbottom
-    mov r12, #5
+    mov r10, #5
     b endcheckcollision
 
     checkbottom:
@@ -257,7 +263,7 @@ checkcollision:
     add r9, r9, #0xC00   @ bottom of the ball
     cmp r9, maxYcoor
     blt checktop
-    mov r12, #6
+    mov r10, #6
     b endcheckcollision
 
     checktop:
@@ -269,16 +275,16 @@ checkcollision:
     ldr r9, [r2, #4]    @ y coor of ball
     cmp r9, #0
     bge endbottomcheck
-    mov r12, #3
+    mov r10, #3
     b endcheckcollision
 
     endbottomcheck:
-    mov r12, #0
+    mov r10, #0
 
     endcheckcollision:
     pop r14
+    pop r12
     pop r11
-    pop r10
     pop r9
     pop r0
     ret
@@ -302,7 +308,7 @@ ballupdate:
     push r0
     push r1
     push r9 @ aux register
-    push r12
+    push r10
     push r14
 
 
@@ -320,32 +326,37 @@ ballupdate:
 
    
     brl checkcollision
-    cmp r12, #0
+    cmp r10, #0
     beq end_ballupdate
 
-    cmp r12, #1
+    cmp r10, #1
     beq leftwall
-    cmp r12, #5
+    cmp r10, #5
     beq rightwall
 
 
-    cmp r12, #2
+    cmp r10, #2
     beq leftpaddle
-    cmp r12, #3
+    cmp r10, #3
     beq topwall
-    cmp r12, #4
+    cmp r10, #4
     beq rightpaddle
-    cmp r12, #6
+    cmp r10, #6
     beq bottomwall
 
     leftwall:
-
+        brl blackoutleftpaddle
+        brl blackoutrightpaddle
 
         @ Player 2 score +1
         ldr r0, [r6, #4]
         add r0, r0, #1
         str r0, [r6, #4] 
-        brl resetball
+
+        brl resetballpaddles
+
+        brl drawleftpaddle
+        brl drawrightpaddle
 
         mov r0 :first8:scorechanged
         orr r0, r0, :second8:scorechanged
@@ -358,11 +369,19 @@ ballupdate:
 
     rightwall:
 
+        brl blackoutleftpaddle
+    brl blackoutrightpaddle
+
         @ Player 1 score +1
         ldr r0, [r6]
         add r0, r0, #1
         str r0, [r6] 
-        brl resetball
+        
+        
+        brl resetballpaddles
+
+        brl drawleftpaddle
+        brl drawrightpaddle
 
         mov r0 :first8:scorechanged
         orr r0, r0, :second8:scorechanged
@@ -443,7 +462,7 @@ ballupdate:
     end_ballupdate:
         @ stack clean up
         pop r14
-        pop r12
+        pop r10
         pop r9
         pop r1
         pop r0
@@ -496,27 +515,18 @@ newgame:
     str r0, [r6]
     str r0, [r6, #4]
 
-    @ reset paddles to middle
-    @ get the middle coor
-    mov r0, maxYcoor - 0x1E00
-    lsr r0, #1
-    
-    @ store to paddle pos
-    str r0, [r4]
-    str r0, [r4, #4]
-
     @ move ball to the center
-    brl resetball
+    brl resetballpaddles
 
-    brl drawball
     brl drawleftpaddle
     brl drawrightpaddle
+    brl drawball
 
     pop r14
     ret
 
 @===============================================================================
-@ RESETBALL:
+@ RESETBALLPADDLES:
 @
 @ place ball in starting position and the ball velocity random
 @ arguments:    None
@@ -524,7 +534,7 @@ newgame:
 @ side-effects: ball position, ball velocity
 @ alters regs:  r0
 @ const-used:   r2 (bcurr address)
-resetball:
+resetballpaddles:
     push r9
     push r14
     ldr r9, [r12]
@@ -546,9 +556,9 @@ resetball:
     orrne r7, r7, #0x200
     movne r8, r7
 
-    moveq r7, #0x3F
-    orreq r7, r7 #0x300
-    moveq r8 #0x1E0
+    moveq r8, #0x3F
+    orreq r8, r8 #0x300
+    moveq r7 #0x1E0
 
     tst r9, #1
     rsbeq r7, r7, #0
@@ -556,10 +566,17 @@ resetball:
     tst r9, #2
     rsbeq r8, r8, #0
 
-    add r9, r9, #1
-    cmp r9, #8
-    movge r9, #0
+    add r9, r9, #5
     str r9, [r12] 
+
+    @ reset paddles to middle
+    @ get the middle coor
+    mov r9, maxYcoor - 0x1E00
+    lsr r9, #1
+    
+    @ store to paddle pos
+    str r9, [r4]
+    str r9, [r4, #4]
 
     pop r14
     pop r9

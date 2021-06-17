@@ -1,7 +1,7 @@
 CC      = gcc
 CFLAGS  = -Wall -g -o3  -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c11 -pedantic 
 INCLUDE = -I../../lib/SDL2/include
-LINK = -L/usr/local/lib -lSDL2 -Wl,--no-undefined -lm -ldl -Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lpthread -lrt
+LINK = -L/usr/local/lib -lSDL2 -lSDL2_image -Wl,--no-undefined -lm -ldl -Wl,-rpath,/opt/vc/lib -L/opt/vc/lib -lpthread -lrt
 PROFILETARGET = ../../bin/stresstest
 
 .PHONY: all clean

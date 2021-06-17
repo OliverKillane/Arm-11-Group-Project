@@ -30,11 +30,12 @@
 	.set height 108
 	.set paddlewidth 5
 	.set paddleheight 30
+	.set paddlemargin 4
 	.set mt 2
 	.set mb 2
 	.set ml 5 
 	.set mr 5
-	.set paddlespeed 0x150
+	.set paddlespeed 0x180
 	.set paddlemaxY 0x4A00
 
 	@ the maximum coordinates for the ml, mr mb mt and width/height
