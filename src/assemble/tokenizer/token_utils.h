@@ -133,6 +133,9 @@ Token NewSignToken(bool is_plus);
  */
 Token NewBraceToken(bool is_open);
 
+/**
+ * @brief Creates a new token of type TOKEN_EXCLAMATION.
+ */
 Token NewExclamationToken();
 
 
@@ -189,6 +192,11 @@ int TokenRegisterNumber(Token token);
  */
 char* TokenLabel(Token token);
 
+/**
+ * @brief Returns the label type of a provided token.
+ * 
+ * @warning asserts token is of type TOKEN_LABEL
+ */
 LabelType TokenLabelType(Token token);
 
 bool TokenIsPlus(Token token);

@@ -63,8 +63,19 @@ ConditionType matchConditionType(char *str);
  * @brief Matches @p str to a selection of instruction types.
  */
 Token matchInstructionToken(char *str);
+/**
+ * @brief Converts a null terminated @p str to an integer and returns it.
+ * @warning Will throw assert if integer is not formatted correctly.
+ */
 long long matchDecimal(char *str);
+/**
+ * @brief Converts a null terminated @p str to a hex number and returns it as an integer.
+ * @warning Will throw assert if hex number is not formatted correctly.
+ */
 long long matchHex(char *str);
+/**
+ * @brief Matches @p str as a register token formatted as 'r' + 0|16.
+ */
 Token matchRegister(char *str);
 /**
  * @brief matches a constant type token with the null-terminated string @p str .
@@ -74,7 +85,10 @@ Token matchConstant(char *str);
  * @brief copies the null-terminated string @p token and adds it as a key to @p symbolTable with @p currentLine as the value.
  */
 void addTokenToSymbolTable(Map symbolTable, int currentLine, char *token);
+/**
+ * @brief Tokenizes a line of text into tokens, and handles any directives by mutating dataVector. 
+ * The tokenizer is a finite state machine that can be seen in the project report.
+ */
 Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dataVector, char *filename, int lineNumber);
-void tokenizeDataLine(char *line, Map symbolTable, int *currentAddress, Vector dataVector);
 
 #endif /* ASSEMBLE_TOKENIZER_H_ */

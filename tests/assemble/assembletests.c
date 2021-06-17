@@ -27,13 +27,20 @@ bool listOfStringsAreEqual(List list1, List list2) {
         && !ListIteratorEqual(list2iter, ListEnd(list2)) ) {
 
         char *str1 = ListIteratorGet(list1iter);
+        
         char *str2 = ListIteratorGet(list2iter);
+
+        // printf("1: %s, 2:%s\n", str1, str2);
+        printf("str1 %s\n", str1);
+        printf("str2 %s\n\n", str2);
 
         if (!stringsAreEqual(str1, str2)) {
             return false;
         }
 
         ListIteratorIncr(&list1iter);
+        ListIteratorIncr(&list2iter);
+        ListIteratorIncr(&list2iter);
         ListIteratorIncr(&list2iter);
     }
 
@@ -209,24 +216,27 @@ void testReadFileLines() {
     ListPushBack(expected, "mov r3,#0x100\n");
     ListPushBack(expected, "str r2,[r3]\n");
 
-
-    List test = readFileLines("./fact.s");
+    List test = NewEmptyList();
+    List data = NewEmptyList();
+    readFileLines("./fact.s", test, data);
 
     assert(listOfStringsAreEqual(expected, test));
 
-    DeleteList(expected);
-    LISTFOR(test, iter) {
-        free(ListIteratorGet(iter));
-    }
-    DeleteList(test);
+    // DeleteList(expected);
+    // LISTFOR(test, iter) {
+    //     free(ListIteratorGet(iter));
+    // }
+    // DeleteList(test);
 }
 
 void testTokenize() {
-    List lines = readFileLines("./tokenTests.s");
+    List lines = NewEmptyList();
+    List data = NewEmptyList();
+    readFileLines("./tokenTests.s", lines, data);
     Map symbolTable = NewEmptyMap(StringHash, StringEq);
     int totalInstructions = 0;
 
-    List tokens = tokenize(lines, symbolTable, &totalInstructions);
+    List tokens = tokenize(lines, symbolTable, &totalInstructions, data);
 
     List expectedTokens = NewEmptyList();
 
@@ -250,7 +260,7 @@ void testTokenize() {
 
     lineTokens = NewEmptyVector();
     VectorPushBack(lineTokens, NewInstructionToken(COND_NE, INSTR_BRN));
-    VectorPushBack(lineTokens, NewLabelToken("loop"));
+    VectorPushBack(lineTokens, NewLabelToken("loop", LABEL_FULL));
     ListPushBack(expectedTokens, lineTokens);
 
     lineTokens = NewEmptyVector();
@@ -261,44 +271,46 @@ void testTokenize() {
 
     assert(listOfVectorsOfTokensAreEqual(expectedTokens, tokens));
 
-    MAPFOR(symbolTable, iter) {
- 	    free((char*)(MapIteratorGet(iter).key));
-  	}
-	DeleteMap(symbolTable);
+    // MAPFOR(symbolTable, iter) {
+ 	//     free((char*)(MapIteratorGet(iter).key));
+  	// }
+	// DeleteMap(symbolTable);
 
-	LISTFOR(lines, iter) {
-		free(ListIteratorGet(iter));
-	}
-	DeleteList(lines);
+	// LISTFOR(lines, iter) {
+	// 	free(ListIteratorGet(iter));
+	// }
+	// DeleteList(lines);
 
-	LISTFOR(expectedTokens, iter1) {
-		Vector line = ListIteratorGet(iter1);
-		VECTORFOR(line, iter2) {
-			Token token = VectorIteratorGet(iter2);
-			DeleteToken(token);
-		}
-		DeleteVector(line);
-	}
-	DeleteList(expectedTokens);
+	// LISTFOR(expectedTokens, iter1) {
+	// 	Vector line = ListIteratorGet(iter1);
+	// 	VECTORFOR(line, iter2) {
+	// 		Token token = VectorIteratorGet(iter2);
+	// 		DeleteToken(token);
+	// 	}
+	// 	DeleteVector(line);
+	// }
+	// DeleteList(expectedTokens);
 
-    LISTFOR(tokens, iter1) {
-		Vector line = ListIteratorGet(iter1);
-		VECTORFOR(line, iter2) {
-			Token token = VectorIteratorGet(iter2);
-			DeleteToken(token);
-		}
-		DeleteVector(line);
-	}
-	DeleteList(tokens);
+    // LISTFOR(tokens, iter1) {
+	// 	Vector line = ListIteratorGet(iter1);
+	// 	VECTORFOR(line, iter2) {
+	// 		Token token = VectorIteratorGet(iter2);
+	// 		DeleteToken(token);
+	// 	}
+	// 	DeleteVector(line);
+	// }
+	// DeleteList(tokens);
 
 }
 
 void testTokensToBinary() {
     Map symbolTable = NewEmptyMap(StringHash, StringEq);
-    List lines = readFileLines("./fact.s");
+    List lines = NewEmptyList();
+    List data = NewEmptyList();
+    readFileLines("./fact.s", lines, data);
     int totalInstructions = 0;
-    List tokens = tokenize(lines, symbolTable, &totalInstructions);
-    Vector binaryTokens = tokensToBinary(symbolTable, tokens, totalInstructions);
+    List tokens = tokenize(lines, symbolTable, &totalInstructions, data);
+    Vector binaryTokens = tokensToBinary(symbolTable, tokens, data, totalInstructions);
 
     const int factBinary[] =
         { 0xe3a00001, 0xe3a01005, 0xe0020091,
@@ -314,26 +326,26 @@ void testTokensToBinary() {
 
     assert(correct);
 
-    MAPFOR(symbolTable, iter) {
- 	    free((char*)(MapIteratorGet(iter).key));
-  	}
-	DeleteMap(symbolTable);
+    // MAPFOR(symbolTable, iter) {
+ 	//     free((char*)(MapIteratorGet(iter).key));
+  	// }
+	// DeleteMap(symbolTable);
 
-	LISTFOR(lines, iter) {
-		free(ListIteratorGet(iter));
-	}
-	DeleteList(lines);
+	// LISTFOR(lines, iter) {
+	// 	free(ListIteratorGet(iter));
+	// }
+	// DeleteList(lines);
 
-	LISTFOR(tokens, iter1) {
-		Vector line = ListIteratorGet(iter1);
-		VECTORFOR(line, iter2) {
-			Token token = VectorIteratorGet(iter2);
-			DeleteToken(token);
-		}
-		DeleteVector(line);
-	}
-	DeleteList(tokens);
-    DeleteVector(binaryTokens);
+	// LISTFOR(tokens, iter1) {
+	// 	Vector line = ListIteratorGet(iter1);
+	// 	VECTORFOR(line, iter2) {
+	// 		Token token = VectorIteratorGet(iter2);
+	// 		DeleteToken(token);
+	// 	}
+	// 	DeleteVector(line);
+	// }
+	// DeleteList(tokens);
+    // DeleteVector(binaryTokens);
 }
 
 void testMatchAlpha() {
