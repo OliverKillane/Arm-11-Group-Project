@@ -379,13 +379,10 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                     addCharToToken(line[0]);
                 } else {
                     addCharToToken('\0');
-                    // printf("heyy %s\n", currentToken);
                     currentDirectiveType = matchDirective(currentToken);
                     if (currentDirectiveType == DIRECTIVE_SET) {
-                        // printf("wow matched set directive\n");
                         currentState = TOKENIZER_INSTR_LABEL_REG;
                     } else if (currentDirectiveType == DIRECTIVE_LONG) {
-                        // printf("wow matched long directive\n");
                         currentState = TOKENIZER_CONSTANT;
                     }
                     resetToken();
@@ -396,7 +393,6 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                     addCharToToken(line[0]);
                 } else if (line[0] == ':') {
                     addCharToToken('\0');
-                    printf("Label set %s %d\n", currentToken, currentLine);
                     addTokenToSymbolTable(symbolTable, currentLine, currentToken);
                     resetToken();
                     currentState = TOKENIZER_START;
@@ -445,15 +441,12 @@ Vector tokenizeTextLine(char *line, Map symbolTable, int currentLine, Vector dat
                         if (currentDirectiveType == DIRECTIVE_NONE) {
                             VectorPushBack(tokenList, matchedConstant);
                         } else if (currentDirectiveType == DIRECTIVE_LONG) {
-                            // printf("%d\n", matchedConstant->constant.value);
                             VectorPushBack(dataVector, matchedConstant->constant.value);
                             DeleteToken(matchedConstant);
                             currentDirectiveType = DIRECTIVE_NONE;
                         } else if (currentDirectiveType == DIRECTIVE_SET) {
-                            printf("Label set %s %lld\n", currentDirectiveLabel, matchedConstant->constant.value);
                             MapSet(symbolTable, currentDirectiveLabel, matchedConstant->constant.value);
                             DeleteToken(matchedConstant);
-                            // printf("%s %d\n", currentDirectiveLabel, MapGet(symbolTable, currentDirectiveLabel));
                             currentDirectiveType = DIRECTIVE_NONE;
                         }
                         resetToken();

@@ -304,18 +304,18 @@ void testTokenize() {
 	}
 	DeleteList(expectedTokens);
 
-    // LISTFOR(tokens, iter1) {
-	// 	Vector line = ListIteratorGet(iter1);
-    //     VectorPopBack(line);
-    //     VectorPopBack(line);
-        
-	// 	VECTORFOR(line, iter2) {
-	// 		Token token = VectorIteratorGet(iter2);
-	// 		DeleteToken(token);
-	// 	}
-	// 	DeleteVector(line);
-	// }
-	// DeleteList(tokens);  
+    LISTFOR(tokens, iter1) {
+		Vector line = ListIteratorGet(iter1);
+        VectorPopBack(line);
+        VectorPopBack(line);
+        VectorPopBack(line);
+		VECTORFOR(line, iter2) {
+			Token token = VectorIteratorGet(iter2);
+			DeleteToken(token);
+		}
+		DeleteVector(line);
+	}
+	DeleteList(tokens);  
 
 }
 
@@ -341,6 +341,36 @@ void testTokensToBinary() {
     }
 
     assert(correct);
+
+    DeleteVector(binaryTokens);
+
+    MAPFOR(symbolTable, iter) {
+ 	    free((char*)(MapIteratorGet(iter).key));
+  	}
+	DeleteMap(symbolTable);
+
+	LISTFOR(lines, iter) {
+		free(ListIteratorGet(iter));
+		ListIteratorIncr(&iter);
+		ListIteratorIncr(&iter);
+		free(ListIteratorGet(iter));
+	}
+	DeleteList(lines);
+
+	LISTFOR(data, iter) {
+		free(ListIteratorGet(iter));
+	}
+	DeleteList(data);
+
+    LISTFOR(tokens, iter1) {
+		Vector line = ListIteratorGet(iter1);
+		VECTORFOR(line, iter2) {
+			Token token = VectorIteratorGet(iter2);
+			DeleteToken(token);
+		}
+		DeleteVector(line);
+	}
+	DeleteList(tokens);  
 
 }
 
@@ -484,8 +514,8 @@ int main(void) {
     testTokenize();
     printf("Tokenize tests passed\n");
 
-    // testTokensToBinary();
-    // printf("Tokens to binary tests passed\n");
+    testTokensToBinary();
+    printf("Tokens to binary tests passed\n");
 
-    // printf("Assemble tests passed\n");
+    printf("Assemble tests passed\n");
 }
