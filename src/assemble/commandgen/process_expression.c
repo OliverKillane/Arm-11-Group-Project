@@ -3,7 +3,6 @@
 #include "../tokenizer.h"
 #include "../error.h"
 #include <stddata.h>
-#include <stdio.h>
 
 bool ValidateToken(Token token, int index) {
     switch(TokenType(token)) {

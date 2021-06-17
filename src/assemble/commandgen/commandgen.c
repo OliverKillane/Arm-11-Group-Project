@@ -3,7 +3,6 @@
 #include "../error.h"
 #include "instruction_layouts.h"
 #include <stddata.h>
-#include <stdio.h>
 
 bool FunctionGen(
     Map restrict symbols, 

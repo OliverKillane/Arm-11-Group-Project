@@ -10,7 +10,6 @@
 #include <stddata.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include <stdio.h>
 
 DecisionTree instruction_layouts;
 DecisionTree data_layouts;

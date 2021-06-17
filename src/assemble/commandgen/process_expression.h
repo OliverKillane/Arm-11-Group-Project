@@ -7,6 +7,7 @@
 #define ASSEMBLE_COMMANDGEN_PROCESS_EXPRESSION_H_
 
 #include <stddata.h>
+#include <stdbool.h>
 
 /**
  * @brief Converts label expressions into constants of type CONST_ANY in-place
