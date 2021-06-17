@@ -21,6 +21,8 @@
 		.long 0  @ right player score
 	scorechanged:
 		.long 1
+	loopiterator:
+		.long 0	
 	
 
 @ Common Constants

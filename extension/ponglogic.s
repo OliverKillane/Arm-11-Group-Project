@@ -525,8 +525,10 @@ newgame:
 @ alters regs:  r0
 @ const-used:   r2 (bcurr address)
 resetball:
+    push r9
     push r14
-
+    ldr r9, [r12]
+    
     @ set ball x to the center
     mov r0, maxXcoor
     lsr r0, #1
@@ -538,24 +540,29 @@ resetball:
     lsr r0, #1
     sub r0, r0, #0x600
     str r0, [r2, #4]
+ 
+    tst r9, #4
+    movne r7, #0xA7
+    orrne r7, r7, #0x200
+    movne r8, r7
 
-        
-    tst r12, #1
-    moveq r7, #0xA7
-    orreq r7, r7, #0x200
-    moveq r8, r7
+    moveq r7, #0x3F
+    orreq r7, r7 #0x300
+    moveq r8 #0x1E0
 
-    movne r7, #0x3F
-    orrne r7, r7 #0x300
-    movne r8 #0x1E0
-
-    tst r12, #2
+    tst r9, #1
     rsbeq r7, r7, #0
 
-    tst r12, #4
+    tst r9, #2
     rsbeq r8, r8, #0
 
+    add r9, r9, #1
+    cmp r9, #8
+    movge r9, #0
+    str r9, [r12] 
+
     pop r14
+    pop r9
     ret
 
 @===============================================================================
@@ -621,7 +628,10 @@ setvars:
     @ r11: NOTHING
 
     @ r12: global loop counter
-    mov r12, #0
+    mov r12 :first8:loopiterator
+    orr r12, r12, :second8:loopiterator
+    orr r12, r12, :third8:loopiterator
+    orr r12, r12, :fourth8:loopiterator
 
     @ r13: stack_pointer
     mov r13 :first8:stack_start
