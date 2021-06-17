@@ -26,24 +26,21 @@ int main(){
 
     int32test(GETBITS(testWord, 5, 0), 0, "Can get lengths of 0 bits");
     int32test(GETBITS(testWord, 5, 0), 0, "Can get lengths of 1 bit");
-    int32test(GETBITS(testWord, 3, 3), 0, "");
-    int32test(GETBITS(testWord, 7, 5), 0x1E, ""); //11110
-    int32test(GETBITS(testWord, 7, 2), 0x2, ""); //10,
-    int32test(GETBITS(testWord, 27, 2), 0x1, ""); //01,
-    int32test(GETBITS(testWord, 19, 6), 0x26, ""); //100110,
-    int32test(GETBITS(testWord, 0, 7), 0x41, ""); //1000001,
+    int32test(GETBITS(testWord, 3, 3), 0, "Normal test");
+    int32test(GETBITS(testWord, 7, 5), 0x1E, "Normal test"); //11110
+    int32test(GETBITS(testWord, 7, 2), 0x2, "Normal test"); //10,
+    int32test(GETBITS(testWord, 27, 2), 0x1, "Normal test"); //01,
+    int32test(GETBITS(testWord, 19, 6), 0x26, "Normal test"); //100110,
+    int32test(GETBITS(testWord, 0, 7), 0x41, "Normal test"); //1000001,
 
 
     testsection("GETBIT Tests");
 
-    int32test(GETBIT(testWord, 7), 0, "");
-    int32test(GETBIT(testWord, 0), 1, "");
-    int32test(GETBIT(testWord, 31), 1, "");
-    int32test(GETBIT(testWord, 27), 1, "");
-
-    testsection("getProgram Tests");
-
-    testsection("runProgram Tests");
+    
+    int32test(GETBIT(testWord, 0), 1, "Can get the LSB");
+    int32test(GETBIT(testWord, 31), 1, "Can get the MSB");
+    int32test(GETBIT(testWord, 27), 1, "Normal test");
+    int32test(GETBIT(testWord, 7), 0, "Normal test");
 
     testsection("checkCond Tests");
 
@@ -173,12 +170,6 @@ int main(){
 
     SETCPSR(0, 0, 0, 1);
     booltest(checkCond(inst), true, "AL test");
-
-    testsection("processInstr Tests");
-
-    testsection("branchInstr Tests");
-
-    testsection("singleDataTransInstr Tests");
 
     testsection("shiftOperation Tests");
 
@@ -332,9 +323,6 @@ int main(){
     int32test(1 + (3 << 30), holder.result, "ROR Register 1 (7) by Reg 8 (2) result");
     booltest(1, holder.carryout, "ROR Register 1 (7) by Reg 8 (2) carryout");
 
-
-
-    testsection("MultiplyInstr Tests");
 
     testsection("processDataInstr Tests");
 
