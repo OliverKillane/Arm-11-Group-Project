@@ -1,6 +1,6 @@
 .text
-fill:
-	
+@===============================================================================
+@ FILL:
 	@ Function parameters: 
 	@ r0  <- x0 
 	@ r1  <- y0 
@@ -18,7 +18,13 @@ fill:
 	@ r10 <- array iterator index
     @ r11 <- auxiliary register 
 	@ r12 <- background register
-	
+
+	@ Effects: paste image (whose pointer is held in r13) onto the background
+	@ at coordinates (x0, y0) (held in registers r0 and r1).
+	@ The function features alpha channel mixing between image and background.
+
+fill:
+		
 	@ Saving onto the stack
 	push r4
 	push r5

@@ -34,15 +34,18 @@ brl newgame
 
 @ the main program loop
 mainloop:
+@ load scorechanged variable
 mov r0 :first8:scorechanged
 orr r0, r0, :second8:scorechanged
 orr r0, r0, :third8:scorechanged
 orr r0, r0, :fourth8:scorechanged
 ldr r1, [r0]
 
+@ if score hasn't changed don't wait for key press 
 cmp r1, #0
 beq notwaitforkeydown
 
+@ display score and stop ball until a key is pressed
 push r1
 push r0
 brl blackoutleftscore

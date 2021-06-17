@@ -1,6 +1,6 @@
 .text
-reset:
-	
+@===============================================================================
+@ RESET:	
 	@ function parameters: 
 	@ r0  <- x0
 	@ r1  <- y0
@@ -16,7 +16,11 @@ reset:
 	@ r10 <- array iterator index
     @ r11 <- auxiliary register 
     @ r12 <- background register
-		
+
+	@ Effect: Reset area of width x height beginning at (x0, y0) 
+	@ to background values.
+
+reset:		
 	@ Saving onto the stack	
     push r4
     push r5

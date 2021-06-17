@@ -167,6 +167,8 @@ movepaddles:
 @ returns:      r10 <- COLLIDE_ENUM
 @ side-effects: None
 checkcollision:
+
+    @ push onto stack
     push r0         @ r0 to store any temporary variable
     push r9         @ r9 to store ball's x position
     push r11        @ r11 to store ball's y position
@@ -179,9 +181,12 @@ checkcollision:
     @     return 2
     @ }
     
-    ldr r10, [r4]               @ left paddleTop y position
+    @ left paddleTop y position
+    ldr r10, [r4]
+
     mov r12, paddlemargin
     sub r10, r10, r12, lsl #8
+    
     ldr r11, [r2, #4]           @ ball y pos
     add r11, r11, #0xC00        @ bottom of the ball
     cmp r11, r10
@@ -205,7 +210,8 @@ checkcollision:
 
     checkrightpaddle:
 
-    @ if ((ballY + ballHeight) >= paddleTop + paddleMargin && ballY <= (paddltTop + paddleHeight - paddleMargin) && (ballX + ballWidth) >= (maxXcoor - paddleWidth)) {
+    @ if ((ballY + ballHeight) >= paddleTop + paddleMargin && ballY <= (paddltTop + paddleHeight - paddleMargin) 
+    @ && (ballX + ballWidth) >= (maxXcoor - paddleWidth)) {
     @     return 4
     @ }
 
@@ -282,6 +288,7 @@ checkcollision:
     mov r10, #0
 
     endcheckcollision:
+    @ clean up stack
     pop r14
     pop r12
     pop r11
@@ -292,18 +299,15 @@ checkcollision:
 @===============================================================================
 @ BALLUPDATE:
 @
+@ Determine if ball has hit a bat, alter velocity accordingly.
+@ Change current ball position based off of the new velocity.
+@ Add current ball positions with the velocity vectors.
+@ Check that ball has hit the margins.
+@
 @ arguments:    None
 @ returns:      None
-@ side-effects: ball position, points
+@ side-effects: ball position, points, velocity
 ballupdate:
-    @ determine if ball has hit a bat, alter velocity accordingly
-
-    @ change current ball position based off of the new velocity.
-
-    @ add current ball positions with the velocity vectors
-
-    @ check that ball has hit the margins
-    
     @ push registers onto stack
     push r0
     push r1
@@ -324,7 +328,7 @@ ballupdate:
     str r0, [r2]
     str r1, [r2, #4]
 
-   
+    @ check for collisions
     brl checkcollision
     cmp r10, #0
     beq end_ballupdate
@@ -333,8 +337,6 @@ ballupdate:
     beq leftwall
     cmp r10, #5
     beq rightwall
-
-
     cmp r10, #2
     beq leftpaddle
     cmp r10, #3
@@ -345,6 +347,7 @@ ballupdate:
     beq bottomwall
 
     leftwall:
+        @ erase paddles
         brl blackoutleftpaddle
         brl blackoutrightpaddle
 
@@ -353,11 +356,12 @@ ballupdate:
         add r0, r0, #1
         str r0, [r6, #4] 
 
+        @ reset and redraw paddles
         brl resetballpaddles
-
         brl drawleftpaddle
         brl drawrightpaddle
 
+        @ update scorechanged variable
         mov r0 :first8:scorechanged
         orr r0, r0, :second8:scorechanged
         orr r0, r0, :third8:scorechanged
@@ -368,21 +372,21 @@ ballupdate:
         b end_ballupdate
 
     rightwall:
-
+        @ erase paddles
         brl blackoutleftpaddle
-    brl blackoutrightpaddle
+        brl blackoutrightpaddle
 
         @ Player 1 score +1
         ldr r0, [r6]
         add r0, r0, #1
         str r0, [r6] 
         
-        
+        @ reset and redraw paddles
         brl resetballpaddles
-
         brl drawleftpaddle
         brl drawrightpaddle
 
+        @ update scorechanged variable
         mov r0 :first8:scorechanged
         orr r0, r0, :second8:scorechanged
         orr r0, r0, :third8:scorechanged
@@ -393,7 +397,7 @@ ballupdate:
         b end_ballupdate
 
     leftpaddle:
-
+        @ reflect X velocity
         rsb r7, r7, #0
 
         @ ball current X coord
@@ -411,6 +415,7 @@ ballupdate:
 
     rightpaddle:
 
+        @ reflect X velocity
         rsb r7, r7, #0
      
         @ load ball current X coord
@@ -428,7 +433,7 @@ ballupdate:
         b end_ballupdate
     
     topwall:
-
+        @ reflect Y velocity
         rsb r8, r8, #0
              
         @ ball current Y coord
@@ -443,7 +448,7 @@ ballupdate:
         b end_ballupdate
 
     bottomwall:
-
+        @ reflect Y velocity
         rsb r8, r8, #0
     
         @ load ball current Y coord
@@ -471,25 +476,35 @@ ballupdate:
 @===============================================================================
 @ WINCHECK:
 @
+@ checks if any of the players has won
 @ arguments:    None
 @ returns:      None
 @ side-effects: ball position, points, paddlepositions
 @ alters regs:  r0
 wincheck:
+    @ push onto stack
     push r14
+
+    @ load left score
     ldr r0, [r6]
+
+    @ check for win
     cmp r0, #10
     blt checkrightscore
     brl newgame
     b wincheckend
 
     checkrightscore:
+    @ load right score
     ldr r0, [r6, #4]
+
+    @ check for win
     cmp r0, #10
     blt wincheckend
     brl newgame
 
     wincheckend:
+    @ clean up stack
     pop r14
     ret
 
@@ -532,7 +547,7 @@ newgame:
 @ arguments:    None
 @ returns:      None
 @ side-effects: ball position, ball velocity
-@ alters regs:  r0
+@ alters regs:  r0, r12
 @ const-used:   r2 (bcurr address)
 resetballpaddles:
     push r9
@@ -551,6 +566,7 @@ resetballpaddles:
     sub r0, r0, #0x600
     str r0, [r2, #4]
  
+    @ randomize starting velocity
     tst r9, #4
     movne r7, #0xA7
     orrne r7, r7, #0x200
@@ -578,6 +594,7 @@ resetballpaddles:
     str r9, [r4]
     str r9, [r4, #4]
 
+    @ stack clean up
     pop r14
     pop r9
     ret
@@ -673,36 +690,37 @@ waitforkeypress:
     mov r1, input_buffer
     
     waitpressedloop:
-    ldr r0, [r1]
-    cmp r0, #0
-    beq waitpressedloop
-    tst r0, #0x80
-    mov r2, #0
-    str r2, [r1]
-    bne waitpressedloop
+        ldr r0, [r1]
+        cmp r0, #0
+        beq waitpressedloop
+        tst r0, #0x80
+        mov r2, #0
+        str r2, [r1]
+        bne waitpressedloop
 
 
     waitreleasedloop:
-    ldr r2, [r1]
-    cmp r2, #0
-    beq waitreleasedloop
-    tst r2, #0x80
-    moveq r0, #0
-    streq r0, [r1]
-    beq waitreleasedloop
-    and r2, r2, #0x7F
-    cmp r2, r0
-    mov r2, #0
-    str r2, [r1]
-    bne waitreleasedloop
+        ldr r2, [r1]
+        cmp r2, #0
+        beq waitreleasedloop
+        tst r2, #0x80
+        moveq r0, #0
+        streq r0, [r1]
+        beq waitreleasedloop
+        and r2, r2, #0x7F
+        cmp r2, r0
+        mov r2, #0
+        str r2, [r1]
+        bne waitreleasedloop
 
+    @ stack clean up
     pop r2
     pop r1
     pop r0
     ret
 
 @===============================================================================
-@ WAITKEYPRESS:
+@ WAITFORKEYDOWN:
 @
 @ waits for a keypress
 @ arguments:    NONE
@@ -715,10 +733,11 @@ waitforkeydown:
     mov r1, input_buffer
     
     waitdownloop:
-    ldr r0, [r1]
-    cmp r0, #0
-    beq waitdownloop
+        ldr r0, [r1]
+        cmp r0, #0
+        beq waitdownloop
 
+    @ stack clean up
     pop r1
     pop r0
     ret
