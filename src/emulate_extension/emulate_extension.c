@@ -27,98 +27,98 @@ word input;
 /* TEST allows for test suite to run unit tests without double definition of main */
 #ifndef TEST
 int main(int argc, char** argv) {
-  emulatorMode = DEFAULT;
+    emulatorMode = DEFAULT;
 
-  /* EXTENSION: take another argument to determine if video is on or off (-v), set accordingly */
-  /* create the window */
+    /* EXTENSION: take another argument to determine if video is on or off (-v), set accordingly */
+    /* create the window */
 
-  char *filename = NULL;
+    char *filename = NULL;
 
-  /* get the arguments, filename */
-  for (int arg = 1; arg < argc; arg++) {
-    if (strcmp(argv[arg], "-v") == 0) {
+    /* get the arguments, filename */
+    for (int arg = 1; arg < argc; arg++) {
+        if (strcmp(argv[arg], "-v") == 0) {
 
-      /* enable video and keyboard input */
-      emulatorMode |= VIDEO;
-      printf("VIDEO OUTPUT ON\n");
+            /* enable video and keyboard input */
+            emulatorMode |= VIDEO;
+            printf("VIDEO OUTPUT ON\n");
 
-    } else if (strcmp(argv[arg], "-g") == 0) {
+        } else if (strcmp(argv[arg], "-g") == 0) {
 
-      /* show GPIO bits */
-      emulatorMode |= GPIO_EXTENDED;
-      printf("GPIO PIN OUTPUT ON\n");
+            /* show GPIO bits */
+            emulatorMode |= GPIO_EXTENDED;
+            printf("GPIO PIN OUTPUT ON\n");
 
     } else if (strcmp(argv[arg], "-n") == 0) {
 
-      /* Do not print non-zero memory at the end of program */
+        /* Do not print non-zero memory at the end of program */
 	    emulatorMode |= NO_MEM;
-      printf("MEMORY OUTPUT OFF\n");
+        printf("MEMORY OUTPUT OFF\n");
 
 	} else if (strcmp(argv[arg], "-h") == 0) {
 
-    /* Display the help section*/
-	  printf("emulate_extension [flags] [file]\n -v (video mode)\n -g (extended gpio)\n -n (no memory output)\n -h (this help)");
-	  exit(EXIT_SUCCESS);
+        /* Display the help section*/
+	    printf("emulate_extension [flags] [file]\n -v (video mode)\n -g (extended gpio)\n -n (no memory output)\n -h (this help)");
+	    exit(EXIT_SUCCESS);
 
 	} else {
-      if (argv[arg][0] != '-') {
+        if (argv[arg][0] != '-') {
 
-        /* if filename not set, set*/
-        if (!filename) {
-          filename = argv[arg];
+            /* if filename not set, set*/
+            if (!filename) {
+                filename = argv[arg];
+            } else {
+
+                /*FATAL ERROR: multiple filenames*/
+                printf("Error: Can only load one filename %s, but %s was also provided.", filename, argv[arg]);
+                exit(INVALID_ARGUMENTS);
+            }
         } else {
 
-          /*FATAL ERROR: multiple filenames*/
-          printf("Error: Can only load one filename %s, but %s was also provided.", filename, argv[arg]);
-          exit(INVALID_ARGUMENTS);
+            /* FATAL ERROR: flag -[something] used, is not v,g,n or h */
+            printf("Error: invalid flag %s used. Only flags are -v (video) and -g (extended GPIO)", argv[arg]);
+            exit(INVALID_ARGUMENTS);
+            }
         }
-      } else {
-
-        /* FATAL ERROR: flag -[something] used, is not v,g,n or h */
-        printf("Error: invalid flag %s used. Only flags are -v (video) and -g (extended GPIO)", argv[arg]);
-        exit(INVALID_ARGUMENTS);
-      }
     }
-  }
 
-  if (!filename) {
+    if (!filename) {
 
-    /* FATAL ERROR: no file was provided*/
-    printf("Error: no file provided.\n");
-    exit(INVALID_ARGUMENTS);
-  }
+        /* FATAL ERROR: no file was provided*/
+        printf("Error: no file provided.\n");
+        exit(INVALID_ARGUMENTS);
+    }
 
-  /* set up machine initial state (all zero, stack pointer at max location*/
-  CPSR = (cpsr) {.N = false, .Z = false, .C = false, .V = false};
-  memory = calloc(MEMSIZE, 1);
-  assert(memory);
-  memset(registers, 0, 64);
-  GPIO = 0;
+    /* set up machine initial state (all zero, stack pointer at max location*/
+    CPSR = (cpsr) {.N = false, .Z = false, .C = false, .V = false};
+    memory = calloc(MEMSIZE, 1);
+    assert(memory);
+    memset(registers, 0, 64);
+    GPIO = 0;
   
-  if (emulatorMode & VIDEO) {
-    /* EXTENSION: set up the window, initialise */
-    setupWindow(filename);
+    if (emulatorMode & VIDEO) {
+        /* EXTENSION: set up the window, initialise */
+        setupWindow(filename);
     
-    /* draw the first frame */
-    updateOutput();
-  }
+        /* draw the first frame */
+        updateOutput();
+    }
   
-  /*load, run and display final state */
-  loadProgram(filename);
-  runProgram();
-  printState();
+    /*load, run and display final state */
+    loadProgram(filename);
+    runProgram();
+    printState();
 
-  /* CPU memory is the only memory on the heap allocated, so it must be freed */
-  freeCPU();
+    /* CPU memory is the only memory on the heap allocated, so it must be freed */
+    freeCPU();
 
-  if (emulatorMode & VIDEO) {
+    if (emulatorMode & VIDEO) {
 
     /* EXTENSION: destory the window, textures associated with window */
-    destroyVideo();
-  }
+        destroyVideo();
+    }
 
-  /* exit successfully */
-  return EXIT_SUCCESS;
+    /* exit successfully */
+    return EXIT_SUCCESS;
 }
 #endif
 
