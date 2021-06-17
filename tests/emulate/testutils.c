@@ -101,5 +101,5 @@ void booltest(uint32_t expected, uint32_t result, char * description) {
 }
 
 void printResult(){
-    printf(MAGENTA "\nUnit Test results: " RED "%i passed " GREEN "%i failed\n" DEFAULT, nopassed, nofailed);
+    printf(MAGENTA "\n\nUnit Test results: " GREEN "%i passed " RED "%i failed\n\n" DEFAULT, nopassed, nofailed);
 }
