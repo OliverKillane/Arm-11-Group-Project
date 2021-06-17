@@ -46,11 +46,7 @@ fill:
 	mla r10, r1, r11, r0
 
 	@ load image_buffer_ptr values into register
-    mov r4, :first8:image_buffer_ptr
-    orr r4, r4, :second8:image_buffer_ptr
-    orr r4, r4, :third8:image_buffer_ptr
-    orr r4, r4, :fourth8:image_buffer_ptr
-	ldr r4, [r4]
+    ldr r4, [r13, #0x24]
 
 	@ ensure X coordinate is within image bounds
 	boundX_fill:
@@ -80,7 +76,7 @@ fill:
 		b condY_fill	
 
 	loop_fill:
-		ldr r11, [r13, #0x24]
+		ldr r11, [r13, #0x28]
 
 		push r3
 		push r2

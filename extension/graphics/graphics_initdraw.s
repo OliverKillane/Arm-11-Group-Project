@@ -26,18 +26,19 @@
         orr r0, r0 :third8:press_key
         orr r0, r0 :fourth8:press_key
         push r0
+        push r2
+
         mov r0 press_key_x
         mov r1 press_key_y
         mov r2 press_key_width
         mov r3 press_key_height
         brl fill
         
-        add r13, r13, #0x4
+        add r13, r13, #0x8
 
         @ Update the screen
         ldr r0, [r4]
         str r0, [r4]
-
 
         @ Cleaning everything up
         pop r0

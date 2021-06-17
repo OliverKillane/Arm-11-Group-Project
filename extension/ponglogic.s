@@ -498,9 +498,8 @@ newgame:
 
     @ reset paddles to middle
     @ get the middle coor
-    mov r0, paddlemaxY
+    mov r0, maxYcoor - 0x1E00
     lsr r0, #1
-    sub r0, r0, #0xF00
     
     @ store to paddle pos
     str r0, [r4]

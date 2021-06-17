@@ -11,4 +11,4 @@
     .set press_key_y 70
     .set image_buffer_ptr 0x1000000
     image_buffer:
-        .include graphics_background_raw.s
+        .include graphics_background_full_raw.s

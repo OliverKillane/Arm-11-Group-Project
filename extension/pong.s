@@ -45,12 +45,12 @@ beq notwaitforkeydown
 
 push r1
 push r0
+brl blackoutleftscore
+brl blackoutrightscore
 brl drawleftscore
 brl drawrightscore
 brl update
 brl waitforkeydown
-brl blackoutleftscore
-brl blackoutrightscore
 pop r0
 pop r1
 

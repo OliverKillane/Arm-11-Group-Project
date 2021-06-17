@@ -28,15 +28,15 @@
 	.set height 108
 	.set paddlewidth 5
 	.set paddleheight 30
-	.set mt 5
-	.set mb 5
+	.set mt 2
+	.set mb 2
 	.set ml 5 
 	.set mr 5
-	.set paddlespeed 0x200
-	.set paddlemaxY 0x4400
+	.set paddlespeed 0x150
+	.set paddlemaxY 0x4A00
 
 	@ the maximum coordinates for the ml, mr mb mt and width/height
-	.set maxYcoor 0x6200
+	.set maxYcoor 0x6800
 	.set maxXcoor 0xB600
 
 	@ the input buffer start
