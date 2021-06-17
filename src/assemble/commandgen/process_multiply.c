@@ -1,5 +1,5 @@
-#include "common_defs.h"
 #include "process_multiply.h"
+#include "common_defs.h"
 #include "instruction_layouts.h"
 #include "../tokenizer.h"
 #include "../error.h"

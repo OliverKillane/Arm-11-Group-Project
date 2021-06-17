@@ -1,10 +1,9 @@
+#include "process_data_processing.h"
 #include "common_defs.h"
 #include "instruction_layouts.h"
 #include "../tokenizer.h"
 #include "../error.h"
-#include "process_data_processing.h"
 #include <stddata.h>
-#include <stdio.h>
 
 bool process_immediate_error;
 

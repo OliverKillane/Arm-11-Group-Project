@@ -1,6 +1,6 @@
+#include "process_shift.h"
 #include "common_defs.h"
 #include "instruction_layouts.h"
-#include "process_shift.h"
 #include "../tokenizer.h"
 #include "../error.h"
 #include <stddata.h>
