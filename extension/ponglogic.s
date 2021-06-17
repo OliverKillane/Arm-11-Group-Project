@@ -185,8 +185,7 @@ checkcollision:
     ldr r10, [r4]
 
     mov r12, paddlemargin
-    sub r10, r10, r12, lsl #8
-    
+    add r10, r10, r12, lsl #8
     ldr r11, [r2, #4]           @ ball y pos
     add r11, r11, #0xC00        @ bottom of the ball
     cmp r11, r10
@@ -223,7 +222,7 @@ checkcollision:
     cmp r11, r10
     blt checkleft
 
-    ldr r11, [r2, #4]            @ y of ball
+    ldr r11, [r2, #4]           @ y of ball
     mov r0, paddleheight        @ move paddle height into r0 to be shifted during addition
     add r10, r10, r0, lsl #8    @ calculates the bottom of the left paddle.
     sub r10, r10, r12, lsl #8
@@ -231,7 +230,8 @@ checkcollision:
     bgt checkleft
 
     ldr r9, [r2]                @ x of ball
-    add r9, r9, #0xC00              @ far right of ball
+    add r9, r9, #0xC00          @ far right of ball
+
     @ calculate maxXcoor - paddlewidth
     mov r10, paddlewidth            
     mov r0, maxXcoor
@@ -265,7 +265,7 @@ checkcollision:
     @     return 6
     @ }
 
-    ldr r9, [r2, #4]    @ y coor of ball
+    ldr r9, [r2, #4]     @ y coor of ball
     add r9, r9, #0xC00   @ bottom of the ball
     cmp r9, maxYcoor
     blt checktop
@@ -278,7 +278,7 @@ checkcollision:
     @     return 3
     @ }
 
-    ldr r9, [r2, #4]    @ y coor of ball
+    ldr r9, [r2, #4]     @ y coor of ball
     cmp r9, #0
     bge endbottomcheck
     mov r10, #3
