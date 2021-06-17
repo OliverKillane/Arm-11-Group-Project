@@ -1,5 +1,5 @@
 CC      = gcc
-CFLAGS  = -Wall -g -o3  -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c11 -pedantic 
+CFLAGS  = -Wall -g -o3  -D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17 -pedantic 
 INCLUDE = -I../../lib/SDL2/include
 SDLLIB = -lSDL2x86_64 #-lSDL2x86_64 or -lSDL2arm32
 LINK =  -L../../lib/SDL2/ $(SDLLIB) -lm -ldl -lpthread -lrt
