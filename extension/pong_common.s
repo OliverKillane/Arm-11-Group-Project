@@ -30,7 +30,7 @@
 	.set height 108
 	.set paddlewidth 5
 	.set paddleheight 30
-	.set paddlemargin 4
+	.set paddlemargin 2
 	.set mt 2
 	.set mb 2
 	.set ml 5 
