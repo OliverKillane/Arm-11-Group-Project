@@ -75,9 +75,9 @@ brl wincheck
 @ update the display
 brl update
 
-add r12, r12, #1
-cmp r12, #8
-movge r12, #0
+@ add r12, r12, #1
+@ cmp r12, #8
+@ movge r12, #0
 b mainloop
 
 @ Includes
