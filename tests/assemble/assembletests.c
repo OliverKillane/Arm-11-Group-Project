@@ -214,11 +214,16 @@ void testReadFileLines() {
 
     assert(listOfStringsAreEqual(expected, test));
 
+
+	LISTFOR(test, iter) {
+		free(ListIteratorGet(iter));
+	}
+	DeleteList(test);
+
     DeleteList(expected);
-    LISTFOR(test, iter) {
-        free(ListIteratorGet(iter));
-    }
-    DeleteList(test);
+
+	
+
 }
 
 void testTokenize() {
@@ -291,6 +296,7 @@ void testTokenize() {
 	}
 	DeleteList(tokens);
 
+
 }
 
 void testTokensToBinary() {
@@ -333,7 +339,8 @@ void testTokensToBinary() {
 		DeleteVector(line);
 	}
 	DeleteList(tokens);
-    DeleteVector(binaryTokens);
+
+	DeleteVector(binaryTokens);
 }
 
 void testMatchAlpha() {
@@ -459,7 +466,7 @@ void testMatchConstant() {
 }
 
 int main(void) {
-    // runCommandGenTests();
+    runCommandGenTests();
 
     testMatchAlpha();
     testIsHex();
