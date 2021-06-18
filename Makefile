@@ -1,6 +1,6 @@
-.PHONY: all assemble emulate tests pong clean
+.PHONY: all assemble emulate emulate_extension doc tests pong clean
 
-all: assemble emulate tests pong doc
+all: assemble emulate emulate_extension tests doc pong
 
 assemble:
 	cd src && $(MAKE) assemble
@@ -8,10 +8,13 @@ assemble:
 emulate:
 	cd src && $(MAKE) emulate
 
+emulate_extension:
+	cd src && $(MAKE) emulate_extension
+
 tests:
 	cd tests && $(MAKE)
 
-pong: assemble emulate
+pong: assemble emulate_extension
 	cd extension && $(MAKE)
 
 doc:

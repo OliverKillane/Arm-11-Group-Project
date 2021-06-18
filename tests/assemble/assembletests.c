@@ -234,11 +234,12 @@ void testReadFileLines() {
 
 void testTokenize() {
     List lines = NewEmptyList();
-    List data = NewEmptyList();
-    readFileLines("./tokenTests.s", lines, data);
+    List datalines = NewEmptyList();
+    readFileLines("./tokenTests.s", lines, datalines);
     Map symbolTable = NewEmptyMap(StringHash, StringEq);
     int totalInstructions = 0;
 
+    Vector data = NewEmptyVector();
     List tokens = tokenize(lines, symbolTable, &totalInstructions, data);
 
     List expectedTokens = NewEmptyList();
@@ -288,10 +289,11 @@ void testTokenize() {
 	}
 	DeleteList(lines);
 
-	LISTFOR(data, iter) {
+	LISTFOR(datalines, iter) {
 		free(ListIteratorGet(iter));
 	}
-	DeleteList(data);
+	DeleteList(datalines);
+    DeleteVector(data);
 
 	LISTFOR(expectedTokens, iter1) {
 		Vector line = ListIteratorGet(iter1);
@@ -322,9 +324,11 @@ void testTokenize() {
 void testTokensToBinary() {
     Map symbolTable = NewEmptyMap(StringHash, StringEq);
     List lines = NewEmptyList();
-    List data = NewEmptyList();
-    readFileLines("./fact.s", lines, data);
+    List datalines = NewEmptyList();
+    readFileLines("./fact.s", lines, datalines);
     int totalInstructions = 0;
+
+    Vector data = NewEmptyVector();
     List tokens = tokenize(lines, symbolTable, &totalInstructions, data);
     Vector binaryTokens = tokensToBinary(symbolTable, tokens, data, totalInstructions);
 
@@ -337,7 +341,7 @@ void testTokensToBinary() {
     assert(binaryTokens -> size == 9);
     bool correct = true;
     for (int i=0; i<8; i++) {
-        correct = correct && (factBinary[i] == VectorGet(binaryTokens, i));
+        correct = correct && (factBinary[i] == (int)VectorGet(binaryTokens, i));
     }
 
     assert(correct);
@@ -357,10 +361,11 @@ void testTokensToBinary() {
 	}
 	DeleteList(lines);
 
-	LISTFOR(data, iter) {
+	LISTFOR(datalines, iter) {
 		free(ListIteratorGet(iter));
 	}
-	DeleteList(data);
+	DeleteList(datalines);
+    DeleteVector(data);
 
     LISTFOR(tokens, iter1) {
 		Vector line = ListIteratorGet(iter1);

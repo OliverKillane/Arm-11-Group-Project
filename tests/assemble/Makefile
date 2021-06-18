@@ -1,7 +1,7 @@
 CC      = gcc
 CSANITIZERS = -fsanitize=address,undefined
 CFLAGS  = -Wall -g -I../../lib/stddata/include -I../../src/assemble -I../../src/assemble/tokenizer -I../../src/assemble/commandgen\
-		-D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17  -Wno-int-conversion -Wno-pointer-to-int-cast
+		-D_POSIX_SOURCE -D_DEFAULT_SOURCE -std=c17  -Wno-int-conversion -Wno-pointer-to-int-cast -fsanitize=address,undefined
 
 LINK = -L../../lib/stddata/bin -lstddata
 

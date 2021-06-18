@@ -20,9 +20,7 @@
 		.long 0  @ left player score
 		.long 0  @ right player score
 	scorechanged:
-		.long 1
-	loopiterator:
-		.long 0	
+		.long 1	
 	
 
 @ Common Constants
@@ -41,6 +39,12 @@
 	@ the maximum coordinates for the ml, mr mb mt and width/height
 	.set maxYcoor 0x6800
 	.set maxXcoor 0xB600
+	
+	@ max speeds
+	.set minrandomYspeed 0x200
+	.set maxrandomYspeed 0x360
+	.set maxYspeed 0x3B0
+	.set maxspeed 0x3C0
 
 	@ the input buffer start
 	.set input_buffer 0x3000000

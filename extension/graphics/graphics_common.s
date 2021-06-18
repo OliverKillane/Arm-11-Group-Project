@@ -8,7 +8,7 @@
     .set score_right_y 5
     @ Coordinates for the initial "Push any button" text
     .set press_key_x 49
-    .set press_key_y 70
+    .set press_key_y 55
     .set image_buffer_ptr 0x1000000
     image_buffer:
         .include graphics_background_full_raw.s

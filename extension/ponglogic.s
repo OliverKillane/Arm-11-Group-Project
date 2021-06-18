@@ -397,38 +397,96 @@ ballupdate:
         b end_ballupdate
 
     leftpaddle:
-        @ reflect X velocity
-        rsb r7, r7, #0
-
-        @ ball current X coord
-        ldr r0, [r2]
-
-        @ updated ball X coord = 
-        @ 2 x paddle width - current ball X-coord
-        rsb r0, r0, #0
-        mov r1, paddlewidth
-        add r0, r0, r1, lsl #9
-
+        mov r0, paddlewidth
+        lsl r0, #8
         str r0, [r2]
+
+        @ calculating the factor for the speed
+        ldr r0, [r2, #4] @ ball y coord
+        ldr r1, [r4]     @ left paddle position
+        sub r0, r0, r1
+        add r0, r0, #0x600 
+        mov r1, paddleheight
+        lsr r1, #1
+        sub r0, r0, r1, lsl #8
+        add r1, r1, #0x6
+        brl div
+
+        mov r1, #0
+        cmp r0, #0
+        rsblt r0, r0, #0
+        movlt r1, #1
+
+        lsl r0, #8
+        brl sqrt
+
+        cmp r1, #0
+        rsbgt r0, r0, #0
+
+        @ calculating the speeds
+        mov r8, :first8:maxYspeed
+        orr r8, r8 :second8:maxYspeed
+
+        mul r8, r0, r8
+        asr r8, #8
+        
+        mul r0, r8, r8
+
+        mov r3, maxspeed
+        mul r1, r3, r3
+        sub r0, r1, r0
+        brl sqrt
+
+        mov r7, r0
 
         b end_ballupdate
 
     rightpaddle:
-
-        @ reflect X velocity
-        rsb r7, r7, #0
-     
-        @ load ball current X coord
-        ldr r0, [r2]
-
-        @ updated ball X coord = 
-        @ 2 x (width - paddle width - ball width) - current ball X-coord
-        mov r1, maxXcoor - 0xC00
-        rsb r0, r0, r1, lsl #1
+        mov r0, maxXcoor
         mov r1, paddlewidth
-        sub r0, r0, r1, lsl #9
-
+        add r1, r1, #0xC
+        sub r0, r0, r1, lsl #8
         str r0, [r2]
+
+        @ calculating the factor for the speed
+        ldr r0, [r2, #4] @ ball y coord
+        ldr r1, [r4, #4] @ right paddle position
+        sub r0, r0, r1
+        add r0, r0, #0x600 
+        mov r1, paddleheight
+        lsr r1, #1
+        sub r0, r0, r1, lsl #8
+        add r1, r1, #0x6
+        brl div
+
+        mov r1, #0
+        cmp r0, #0
+        rsblt r0, r0, #0
+        movlt r1, #1
+
+        lsl r0, #8
+        brl sqrt
+
+        cmp r1, #0
+        rsbgt r0, r0, #0
+        
+        
+        @ calculating the speeds
+        mov r8, :first8:maxYspeed
+        orr r8, r8 :second8:maxYspeed
+
+        mul r8, r0, r8
+        asr r8, #8
+        
+        mul r0, r8, r8
+
+        mov r3, maxspeed
+        mul r1, r3, r3
+        sub r0, r1, r0
+        brl sqrt
+
+        rsb r0, r0, #0
+        mov r7, r0
 
         b end_ballupdate
     
@@ -547,12 +605,10 @@ newgame:
 @ arguments:    None
 @ returns:      None
 @ side-effects: ball position, ball velocity
-@ alters regs:  r0, r12
+@ alters regs:  r0, r1 r12
 @ const-used:   r2 (bcurr address)
 resetballpaddles:
-    push r9
     push r14
-    ldr r9, [r12]
     
     @ set ball x to the center
     mov r0, maxXcoor
@@ -567,36 +623,47 @@ resetballpaddles:
     str r0, [r2, #4]
  
     @ randomize starting velocity
-    tst r9, #4
-    movne r7, #0xA7
-    orrne r7, r7, #0x200
-    movne r8, r7
 
-    moveq r8, #0x3F
-    orreq r8, r8 #0x300
-    moveq r7 #0x1E0
+    mov r8, :first8:maxrandomYspeed
+    mov r8, :second8:maxrandomYspeed
+    mov r0, minrandomYspeed
+    sub r8, r8, r0
+    mov r1, r12, lsr #2
+    and r1, r1 #0xFF
+    mul r8, r1, r8
+    add r8, r0, r8, lsr #8
 
-    tst r9, #1
+    mov r0, maxspeed
+    mul r1, r0, r0
+    mul r0, r8, r8
+    sub r0, r1, r0
+    brl sqrt
+    mov r7, r0
+
+    tst r12, #1
     rsbeq r7, r7, #0
 
-    tst r9, #2
+    tst r12, #2
     rsbeq r8, r8, #0
 
-    add r9, r9, #5
-    str r9, [r12] 
+    mul r0, r12, r12
+    mov r12 r0, lsr #8
+    mov r0, #0x10000
+    sub r0, r0, #1
+    and r12, r12, r0
+
 
     @ reset paddles to middle
     @ get the middle coor
-    mov r9, maxYcoor - 0x1E00
-    lsr r9, #1
+    mov r0, maxYcoor - 0x1E00
+    lsr r0, #1
     
     @ store to paddle pos
-    str r9, [r4]
-    str r9, [r4, #4]
+    str r0, [r4]
+    str r0, [r4, #4]
 
     @ stack clean up
     pop r14
-    pop r9
     ret
 
 @===============================================================================
@@ -662,10 +729,8 @@ setvars:
     @ r11: NOTHING
 
     @ r12: global loop counter
-    mov r12 :first8:loopiterator
-    orr r12, r12, :second8:loopiterator
-    orr r12, r12, :third8:loopiterator
-    orr r12, r12, :fourth8:loopiterator
+    mov r12, #420
+    orr r12, r12 #0x6900
 
     @ r13: stack_pointer
     mov r13 :first8:stack_start
@@ -740,4 +805,83 @@ waitforkeydown:
     @ stack clean up
     pop r1
     pop r0
+    ret
+
+@===============================================================================
+@ DIV:
+@
+@ divides two integers (r0/r1)
+@ arguments:    r0 <- dividend, r1 <- divisor
+@ returns       r0 <- quotient, r1 <- remainder
+@ side-effects: r0, r1
+div:
+    push r4
+    push r3
+    push r2
+
+    mov r2, #31
+    mov r3, #0 @ Quotient
+    mov r4, #0
+    cmp r0, #0
+    eorlt r4, r4, #1
+    rsblt r0, r0, #0
+    cmp r1, #0
+    eorlt r4, r4, #1
+    rsblt r1, r1, #0
+
+
+    divloop:
+        cmp r1, r0, lsr r2
+        suble r0, r0, r1, lsl r2
+        lsl r3, #1
+        orrle r3, r3, #1
+
+        cmp r2, #0
+        sub r2, r2, #1
+        bgt divloop
+
+    mov r1, r0
+    mov r0, r3
+    cmp r4, #0
+    rsbne r0, r0, #0
+
+    pop r2
+    pop r3
+    pop r4
+    ret
+
+@===============================================================================
+@ SQRT:
+@
+@ finds the square root of r0
+@ arguments:    r0
+@ returns       r0 <- square root
+@ side-effects: r0
+sqrt:
+    push r14
+    push r4
+    push r3
+    push r2
+    push r1
+
+    mov r2, #31
+    mov r3, #1
+    mov r4, r0
+
+    sqrtloop:
+        mov r0, r4
+        mov r1, r3
+        brl div
+        add r3, r3, r0
+        lsr r3, #1
+        
+        cmp r2, #0
+        sub r2, r2, #1
+        bgt sqrtloop
+
+    pop r1
+    pop r2
+    pop r3
+    pop r4
+    pop r14
     ret
