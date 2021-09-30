@@ -7,10 +7,12 @@ SDL2 is statically linked with the extended emulator, if you require an ARM32 in
 
 ### Emulator Structure
 The emulator pipeline works as follows:
- - Read the assembled binary into memory.
- - Decode and execute each instruction individually (no pipelining).
- - Handle any errors, process I/O.
- - Update the state of the machine.
+ - Take program arguments for GPIO, memory dump, video output etc.
+ - Read the assembled binary into memory (assumed little endian format), can run of both big and little endian systems.
+ - Fetch, decode and execute each instruction, taking into account the ARm 3 stage pipeline.
+ - Update memory, registers and upon video pointer write update the output display.
+ - Take keyboard input and allow program interaction through special memory location.
+ - Handle any errors with useful messages.
 
 ### Assembler Structure
 The assembler pipeline works as follows:
